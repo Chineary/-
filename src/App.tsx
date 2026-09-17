@@ -19,6 +19,7 @@ type View='basic'|'research'|'collaborators';
 const ids=(s:string)=>s?.split(';').map(s=>s.trim()).filter(Boolean)??[];
 const unique=(s:string[])=>[...new Set(s)].sort((a,b)=>a.localeCompare(b,'zh-CN'));
 const links=(s:string)=>s?.match(/https?:\/\/[^\s；，。<>]+/g)??[];
+const asset=(path:string)=>`./${path}`;
 const palette=['#167766','#447eae','#b7637d','#ba852d','#759460','#7a73a4','#5b9598','#8d8579'];
 function Badge({children,tone='neutral'}:{children:ReactNode;tone?:string}){return <span className={`badge ${tone}`}>{children}</span>;}
 function External({href,children}:{href:string;children:ReactNode}){return <a href={href} target="_blank" rel="noreferrer" className="external">{children}<ArrowUpRight size={14}/></a>;}
@@ -45,7 +46,7 @@ export default function App(){
   const [query,setQuery]=useState(''),[department,setDepartment]=useState('全部院系'),[interest,setInterest]=useState('全部方向'),[admission,setAdmission]=useState('全部招生状态');
   const [showFilters,setShowFilters]=useState(false),[showSources,setShowSources]=useState(false),[showIssues,setShowIssues]=useState(false),[paperId,setPaperId]=useState<string|null>(null);
   const [selectedPerson,setSelectedPerson]=useState<string|null>(null);
-  useEffect(()=>{fetch('/data/advisors.json').then(r=>{if(!r.ok)throw new Error(`数据加载失败（${r.status}）`);return r.json();}).then(d=>{setData(d.advisors);setAdvisorId(d.advisors[0]?.id??'');}).catch(e=>setError(e.message));},[]);
+  useEffect(()=>{fetch(asset('data/advisors.json')).then(r=>{if(!r.ok)throw new Error(`数据加载失败（${r.status}）`);return r.json();}).then(d=>{setData(d.advisors);setAdvisorId(d.advisors[0]?.id??'');}).catch(e=>setError(e.message));},[]);
   const advisor=data.find(a=>a.id===advisorId);
   const visible=data.filter(a=>(a.info['姓名']+a.info['中文名']).toLowerCase().includes(query.toLowerCase())&&(department==='全部院系'||a.info['院系']===department)&&(interest==='全部方向'||a.info['研究兴趣和方向'].split('；').includes(interest))&&(admission==='全部招生状态'||(admission==='有申请说明'?a.info['是否招收PhD'].startsWith('是'):!a.info['是否招收PhD'].startsWith('是'))));
   const matching=visible.some(a=>a.id===advisorId);
@@ -69,7 +70,7 @@ export default function App(){
       </>}</main>
     </div>
     {paper&&<PaperDetail paper={paper} advisor={advisor} onClose={()=>setPaperId(null)}/>}
-    {showSources&&<Modal title="来源与材料" onClose={()=>setShowSources(false)} wide><div className="notice"><Info size={17}/><div><strong>统计范围</strong><p>{String(advisor.coverage.description??'当前已整理的公开记录；非完整成果统计。')}</p></div></div><h3>原始材料</h3><div className="download-list"><a href="/data/导师信息汇总.csv" download><FileText size={17}/>导师信息汇总.csv<ArrowDownToLine size={16}/></a>{advisor.files.map(f=><a key={f.url} href={f.url} download><FileText size={17}/>{f.name}<ArrowDownToLine size={16}/></a>)}<a href="/data/cv.pdf" target="_blank" rel="noreferrer"><FileText size={17}/>导师公开 CV<ExternalLink size={16}/></a></div><h3>公开来源</h3><div className="source-list">{links(advisor.info['资料来源网址']).map(url=><External key={url} href={url}>{url}</External>)}</div><h3>核验状态</h3><p className="long-copy">{advisor.info['核验状态']}</p><h3>最近采集</h3><p>{advisor.info['抓取日期']} · CV 版本：2026-01-27</p></Modal>}
+    {showSources&&<Modal title="来源与材料" onClose={()=>setShowSources(false)} wide><div className="notice"><Info size={17}/><div><strong>统计范围</strong><p>{String(advisor.coverage.description??'当前已整理的公开记录；非完整成果统计。')}</p></div></div><h3>原始材料</h3><div className="download-list"><a href={asset('data/导师信息汇总.csv')} download><FileText size={17}/>导师信息汇总.csv<ArrowDownToLine size={16}/></a>{advisor.files.map(f=><a key={f.url} href={asset(f.url)} download><FileText size={17}/>{f.name}<ArrowDownToLine size={16}/></a>)}<a href={asset('data/cv.pdf')} target="_blank" rel="noreferrer"><FileText size={17}/>导师公开 CV<ExternalLink size={16}/></a></div><h3>公开来源</h3><div className="source-list">{links(advisor.info['资料来源网址']).map(url=><External key={url} href={url}>{url}</External>)}</div><h3>核验状态</h3><p className="long-copy">{advisor.info['核验状态']}</p><h3>最近采集</h3><p>{advisor.info['抓取日期']} · CV 版本：2026-01-27</p></Modal>}
     {showIssues&&<Issues advisor={advisor} onClose={()=>setShowIssues(false)} onPaper={openPaper}/>}
   </div>;
 }
