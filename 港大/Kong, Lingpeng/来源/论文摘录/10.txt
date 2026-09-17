@@ -1,0 +1,184 @@
+                                         Linearized Relative Positional Encoding
+
+                                         2
+                                             Zhen Qin 2,3 Weixuan Sun 2 Kaiyue Lu 4 Hui Deng                      3
+                                                                                                                      Dongxu Li   2
+                                                                                                                                      Xiaodong Han
+                                         4
+                                             Yuchao Dai 5 Lingpeng Kong 1,2 Yiran Zhong∗
+                                         1                               2                3
+                                             Shanghai AI Laboratory        OpenNLPLab       Australian National University
+                                         4                                          5
+                                             Northwestern Polytechnical University    The University of Hong Kong
+
+
+
+                                                                                                 Abstract
+
+
+
+
+arXiv:2307.09270v1 [cs.CL] 18 Jul 2023
+                                                    Relative positional encoding is widely used in vanilla and linear transformers to repre-
+                                                    sent positional information. However, existing encoding methods of a vanilla transformer
+                                                    are not always directly applicable to a linear transformer, because the latter requires a
+                                                    decomposition of the query and key representations into separate kernel functions. Never-
+                                                    theless, principles for designing encoding methods suitable for linear transformers remain
+                                                    understudied. In this work, we put together a variety of existing linear relative positional
+                                                    encoding approaches under a canonical form and further propose a family of linear rela-
+                                                    tive positional encoding algorithms via unitary transformation. Our formulation leads to a
+                                                    principled framework that can be used to develop new relative positional encoding methods
+                                                    that preserve linear space-time complexity. Equipped with different models, the proposed
+                                                    linearized relative positional encoding (LRPE) family derives effective encoding for vari-
+                                                    ous applications. Experiments show that compared with existing methods, LRPE achieves
+                                                    state-of-the-art performance in language modeling, text classification, and image classifi-
+                                                    cation. Meanwhile, it emphasizes a general paradigm for designing broadly more relative
+                                                    positional encoding methods that are applicable to linear transformers. The code is available
+                                                    at https://github.com/OpenNLPLab/Lrpe.
+
+
+                                         1      Introduction
+                                         Transformers have achieved remarkable progress in natural language processing (Devlin et al., 2019; Radford
+                                         et al., 2019; Brown et al., 2020), computer vision (Dosovitskiy et al., 2020; Liu et al., 2021; Arnab et al., 2021)
+                                         and audio processing (Karita et al., 2019; Zhang et al., 2020; Gulati et al., 2020; Sun et al., 2022). As an
+                                         important ingredient in transformers, positional encoding assigns a unique representation for each position of
+                                         a token in a sequence so that the transformers can break the permutation invariance property. Among these
+                                         encoding methods, absolute positional encoding (Vaswani et al., 2017; Sukhbaatar et al., 2015; Devlin et al.,
+                                         2019; Liu et al., 2020) maps each individual position index into a continuous encoding. Whereas relative
+                                         positional encoding (Shaw et al., 2018; Su et al., 2021; Horn et al., 2021; Liutkus et al., 2021; Huang et al.,
+                                         2020; Raffel et al., 2019) generates encoding for each query-key pair, representing their relative positional
+                                         offset. We focus on relative positional encoding as they are not constrained by input lengths (Chen, 2021)
+                                         while showing superior performance (Shaw et al., 2018).
+                                         Linear transformers (Chen, 2021; Qin et al., 2022b;a; Liu et al., 2022; Lu et al., 2022) attract more attention
+                                         recently as they can achieve linear space-time complexity with respect to input sequence length while main-
+                                         taining comparable performance with vanilla transformers. Most existing linear transformers use absolute
+                                         positional encoding methods to encode positional information, since most existing relative positional encod-
+                                         ing methods are designed for vanilla transformers and are not directly applicable to linear transformers. The
+                                         main cause behind this limitation is that linear transformers decompose key and value representations in
+                                         the self-attention modules into separate kernel functions to achieve linear space-time complexity. Such an
+                                         additional requirement on the decomposibility is not always satisfied by existing relative positional encoding
+                                         methods. On the other hand, despite some individual works (Qin et al., 2022b; Chen, 2021), general princi-
+                                         ples for designing relative positional encoding for linear transformers remain largely understudied. A recent
+                                              ∗ Indicates the corresponding author. Email: zhongyiran@gmail.com
+
+
+
+
+                                                                                                      1
+               Softmax
+      d                                                 d
+
+
+ n         ×   d*d    ×               ×             n       ×            ×           ×              ×
+                                                                d*d          d*d
+
+               𝑤𝑡−𝑠                                              𝑤𝑡            𝑤𝑠
+     Q                       KT            V            Q                                   KT           V
+
+          O(n2d + n2d)≈O(n2)                                             O(nd2 + nd2 )≈O(n)
+Figure 1: Illustration of existing relative positional encoding (left) and the proposed LRPE (right). Q, K,
+and V are all in the shape of n by d, where n is input length and d is feature dimension. Tensors in the
+same dashed line box are associated for computation. In the vanilla relative positional encoding, query key
+attention has to be calculated first, leading to a quadratic complexity. Wt−s refers to relative positional
+encoding, where t, s are two positional indices on the query and key, respectively. Our LRPE achieves a
+decomposable encoding, i.e., Wt and Ws are only dependent on positions of the query and key, making
+it fully compatible with linear transformers. When dealing with long sequences, d ≪ n, the computation
+complexity is dominated by n, rendering d negligible.
+
+
+
+work, RoPE Su et al. (2021) proposes a new set of multiplicative encoding solutions based on rotational
+positional encoding and can be applied to linear transformers. In Appendix D.1, we show that RoPE can
+be seen as a special form of LRPE.
+In this work, we aim to bridge this gap and study the principal framework to develop relative positional
+encoding applicable to linear transformers. To this end, we start by presenting a canonical form of relative
+positional encoding, which reveals that differences in existing encoding methods boil down to choices of
+a set of query, key, and relative positional matrix primitives. By properly selecting and composing these
+primitives, we could derive various existing encoding methods for transformers.
+Taking advantage of the canonical form, we introduce the main contribution of our work, i.e., a special family
+of relative positional encoding methods called linearized relative positional encoding (LRPE). Specifically, we
+supply a sufficient condition for designing compatible encoding methods, especially for linear transformers,
+and prove that the linearized relative positional encoding is a unitary transformation. The benefits of using
+unitary transformation are twofold. On one side, since it is derived from the decomposable positional matrix,
+it can maintain the linear space-time complexity as shown in Fig. 1. Second, the unitary transformation
+property allows us to effectively derive the family of closed-form solutions. In particular, we show that a
+number of encoding methods pertain to the LRPE family, including those used in RoPE (Su et al., 2021)
+and PermuteFormer (Chen, 2021).
+Furthermore, LRPE sheds light on a simple yet flexible theoretical paradigm to develop new effective rela-
+tive positional encoding. To demonstrate this, we derive non-exhaustively three additional LRPE encoding
+methods by parameterizing the generic solution differently, including solutions living in either real or complex
+domains. Since unitary transformations are special cases of a relative positional matrix, LRPE is applicable
+to linear transformers and exclusively suitable within encoder and/or decoder layers. We experimentally
+demonstrate the effectiveness of the LRPE family on autoregressive and bidirectional language modeling,
+text classification, and image classification. Results show that LRPE achieves superior capability in repre-
+senting relative positional information, commonly resulting in unrivaled performance than previous encoding
+methods.
+In summary, our main contributions are as follows:
+     • We present a canonical form of relative positional encoding, which derives most existing relative
+       positional encoding methods as its special case, including those used in linear transformers.
+     • Based on the canonical form, we propose linearized relative position encoding (LRPE), a simple yet
+       principal formulation to derive an encoding family that respects the linear space-time complexity
+
+
+                                                        2
+        in linear transformers. We show several existing relative positional encoding methods in linear
+        transformers are in LRPE family. We also provide additional solutions from this generic form.
+      • Experiments on various downstream tasks, such as language modeling, text classification, and image
+        classification show that the LRPE family is more robust and consistently produces better results
+        across tasks than previous relative encoding methods, are flexible in being plugged into encoder
+        and/or decoder layers in linear models. In addition, it is generic to derive existing and potentially
+        new encoding methods.
+
+2     Background and Preliminary
+
+In this section, we provide preliminary knowledge and describe related work to facilitate the rest discussions.
+In the following, we denote the k-th row of matrix M as mTk , the d-dimensional identity matrix as Id . We
+omit the subscript d when it is unambiguous from the context. The complete list of notations can be found
+in Appendix A.
+
+2.1   Transformer and its linearization
+
+We first briefly review vanilla transformer (Vaswani et al., 2017) and its linearization (Katharopoulos et al.,
+2020). The key component of transformer models is the self-attention block, which involves three matrices
+Q (Query), K (Key) and V(Value); each of them is a linear projection taking X ∈ Rn×d as input:
+
+                                 Q = XWQ , K = XWK , V = XWV ∈ Rn×d .                                         (1)
+
+The output O ∈ Rn×d is computed using the Softmax weighted sum:
+                                                      √
+                                   O = Softmax(QKT / d)V.                                                     (2)
+
+The computation overhead of the vanilla transformer grows quadratically with respect to the sequence length
+n, which becomes the bottleneck for transformers to handle long input sequences. Linearization of self-
+attention aims to reduce the computation complexity to linear (Katharopoulos et al., 2020; Ke et al., 2021;
+Qin et al., 2022b; Vyas et al., 2020; Peng et al., 2021; Xiong et al., 2021; Sun et al., 5555), typically achieved
+                                                   ¯
+via a decomposable kernel function ϕ : Rd → Rd . Specifically, the output of linear attention is computed as:
+
+                                          O = ∆−1 ϕ(Q)[ϕ(K)T V],
+                                                                                                              (3)
+                                          ∆ = diag(ϕ(Q)[ϕ(K)T 1n ]).
+
+The key property of linear attention is the decomposability of the kernel function. This enables to compute
+ϕ(K)T V ∈ Rd×d first, which leads to the O(nd2 ) complexity, further reducing to O(n) with longer inputs
+(d ≪ n). See Appendix B for a detailed discussion.
+
+2.2   Positional encoding
+
+Self-attention is capable of parallel sequence processing but cannot capture positional information of each
+token. To address this issue, positional encoding methods are proposed, which can be generally categorized
+into two groups: absolute positional encoding and relative positional encoding.
+Absolute positional encoding employs handcraft functions (Vaswani et al., 2017; Sukhbaatar et al., 2015)
+or learnable encoding lookup tables P ∈ Rn×d (Devlin et al., 2019; Liu et al., 2020) to represent position
+indices as encodings. These encodings are then combined with the context vector additively:
+
+                                   qs = WQ (xs + ps ), ks = WK (xs + ps ),
+                                                                                                              (4)
+                                              vs = WV (xs + ps ),
+
+where the encoding formulation only depends on the absolute position index s, and the positional encoding
+size is restricted by the input sequence length.
+
+
+                                                        3
+

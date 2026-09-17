@@ -1,0 +1,193 @@
+           DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces
+                   for Accelerated Seq2Seq Diffusion Models
+
+      Shansan Gong1 Mukai Li1 Jiangtao Feng2 Zhiyong Wu3 Lingpeng Kong1
+        1
+          The University of Hong Kong 2 Independent Researcher 3 Shanghai AI Lab
+        sansa933@connect.hku.hk jiangtaofeng0906@gmail.com lpk@cs.hku.hk
+
+
+
+                       Abstract                                                                     Forward process
+
+                                                                                   Discrete noise
+    Diffusion models have gained prominence in
+
+                                                                 Training stage
+                                                                                                         𝑞(z𝑡 |z𝑡−1 )
+    generating high-quality sequences of text. Nev-                                                     Continuous noise
+                                                                                                                                   x𝑡
+    ertheless, current approaches predominantly
+    represent discrete text within a continuous dif-                                           z𝑡     𝑝𝜃 (z𝑡−1 |ොz𝑡 )
+    fusion space, which incurs substantial compu-                                   zො𝑡              Jointly Denoise        z𝑡−1   y𝑡
+    tational overhead during training and results in                               Discrete noise
+    slower sampling speeds. In this paper, we intro-
+
+
+                                                                  Sampling stage                                                   m Soft absorbing state
+    duce a soft absorbing state that facilitates the
+    diffusion model in learning to reconstruct dis-                                                  …                  …
+    crete mutations based on the underlying Gaus-                                              z𝑠
+    sian space, thereby enhancing its capacity to                                   zො𝑠                  s    z𝜆             z𝑡
+    recover conditional signals. During the sam-                                            Jointly Denoise with DPM-Solver++
+    pling phase, we employ state-of-the-art ODE
+    solvers within the continuous space to expedite                                                 Reverse process
+
+    the sampling process. Comprehensive exper-               Figure 1: Training and sampling stages with discrete
+    imental evaluations reveal that our proposed             noise, which helps the two stages align better.
+    method effectively accelerates the training con-
+    vergence by 4x and generates samples of simi-
+    lar quality 800x faster, rendering it significantly
+                                                             the Minimum Bayes Risk (MBR) decoding strat-
+    closer to practical application. 1
+                                                             egy (Koehn, 2004) to enhance generation quality,
+1   Introduction                                             resulting in a doubling of time consumption.
+                                                                In order to further narrow the gap between diffu-
+After diffusion models gained significant attention          sion models and the prevailing autoregressive mod-
+in the vision domain (Ho et al., 2020), progress             els, we aim to propose an accelerated version of
+has been made in applying them to text genera-               DiffuSeq for both the training and sampling stages.
+tion tasks, including constrained text generation            For training, in addition to GPU acceleration tech-
+in Diffusion-LM (Li et al., 2022) and sequence-              niques such as FP16, an improved training scheme
+to-sequence (Seq2Seq) text generation in Dif-                can enable the model to better represent knowledge
+fuSeq (Gong et al., 2023). Numerous subsequent               and learn data distribution more quickly (Hang
+studies demonstrate that diffusion models have               et al., 2023). For sampling, a well-trained diffu-
+achieved results comparable to traditional autore-           sion model can achieve similar quality within a
+gressive models and non-autoregressive models in             single sampling and without the need for MBR de-
+tasks such as machine translation (Yuan et al., 2022;        coding, thus saving generation time. Furthermore,
+Gao et al., 2022; Zheng et al., 2023) and summa-             we can borrow the state-of-the-art ODE sampler
+rization (Lin et al., 2022; Zhang et al., 2023; Ma-          DPM-solver++ (Lu et al., 2022a,b) which is already
+habadi et al., 2023; Zhou et al., 2023). However,            applied in fast image generation. The progress in
+most of these works suffer from slow convergence             discrete text diffusion models (Zheng et al., 2023)
+during training and slow generation speed, partic-           exhibits its superiority in using fewer sampling
+ularly considering that these approaches require             steps, thus intuitively inspiring us to bridge the gap
+   1                                                         between continuous and discrete spaces.
+     The code is released at https://github.com/
+Shark-NLP/DiffuSeq/tree/diffuseq-v2.                            Based on the BERT (Zhang et al., 2019) and
+                                                          9868
+                Findings of the Association for Computational Linguistics: EMNLP 2023, pages 9868–9875
+                         December 6-10, 2023 ©2023 Association for Computational Linguistics
+BART (Lewis et al., 2020), as well as the absorb-           distribution over the vocabulary. D3PM (Austin
+ing state in D3PM (Austin et al., 2021), we propose         et al., 2021) specifies q(xt |xt−1 ) through a transi-
+incorporating an extra learned soft absorbing state         tion matrix, and makes it to be a point mass with the
+and discretely adding it with Gaussian noise to             probability on an absorbing state [MASK]. Zheng
+jointly denoise the noise from two sources. The             et al. (2023) further derive an equivalent reparam-
+processes are illustrated in Figure 1. Specifically,        eterization to the discrete diffusion process. The
+after posing Gaussian noise, we randomly replace            resulting formulation is more amenable to train-
+the continuous vector of the sequence with the ab-          ing and leads to much-improved generation quality.
+sorbing state. The ratio is set according to the            However, discrete diffusion models may miss the
+time step. This approach bridges the gap between            opportunity to directly leverage the existing tech-
+continuous and discrete diffusion processes and             niques from continuous diffusion models.
+also makes the training and inference stages better
+aligned. It also facilitates the integration of the         3     Methods
+DPM-solver++ and reduces the number of required             In DiffuSeq, it formulates Seq2Seq tasks as con-
+sampling steps. In summary, our contributions are:          ditional generation and learns p(wx |wy ), where
+                                                            wx and wy refer to the input and target sequence
+    1. We introduce the learned soft absorbing state
+                                                            separately. We follow the notation, concatenating
+       to help continuous diffusion models converge
+                                                            two sequences as zt = xt ⊕ yt , where xt and yt
+       faster and eliminate the need for MBR decod-
+                                                            represent parts of zt that belong to wx and wy ,
+       ing to ensure quality during sampling.
+                                                            respectively. To accelerate continuous diffusion
+    2. We adapt the DPM-solver++ to our enhanced            models as well as leverage the absorbing state of
+       diffusion text generation approach and demon-        discrete diffusion models, we add learnable soft
+       strate its feasibility in accelerating the genera-   absorbing state into DiffuSeq. We first combine the
+       tion speed experimentally.                           continuous Gaussian noise and discrete absorbing
+                                                            noise, and then jointly denoise them. The detailed
+2     Preliminaries                                         derivations can be found in Appendix A.
+2.1 Continuous Diffusion Models                             3.1    Training Stage
+Ho et al. (2020) and Song et al. (2020) formulate           Forward process with soft absorbing state In
+diffusion models in continuous space including              continuous space, we first add Gaussian Q
+                                                                                                    noise ϵ for
+forward and reverse processes. The forward pro-             each time step with αt = 1 − βt , ᾱt = ti=1 αi :
+cess gradually corrupts data point x0 into a stan-                           √          √
+dard Gaussian noise xT ∼ N (0, I). For each for-                        zt = ᾱt z0 + 1 − ᾱt ϵ.            (1)
+ward step t ∈ [1, 2, ..., T ], the √
+                                   perturbation is fol-     Considering the i-th token in the hidden represen-
+lowed by q(xt |xt−1 ) = N (xt ; 1 − βt xt−1 , βt I),        tation zt of the word sequence, we replace its rep-
+with βt ∈ (0, 1) as different scales. After the for-        resentation with our soft absorbing state m at a
+ward process, the reverse denoising process tries           certain probability. The soft absorbing state m is
+to gradually reconstruct the original data x0 via           in the same hidden dimension as word embeddings
+sampling from xT by learning a diffusion model              and is also jointly learned along with the whole
+fθ (xt , t). Diffusion-LM (Li et al., 2022) and Dif-        diffusion process.
+fuSeq (Gong et al., 2023) design an embedding                                     (
+function E MB(w) to map the discrete text w into                                   m if ρ = 1
+a continuous space and operate clamping on xt                              ẑit =               ,           (2)
+                                                                                   zit if ρ = 0
+to map it back to word embedding space at each
+sampling step to reduce rounding errors.                    where ρ = Bernoulli(βt ∗ γ), and γ is the
+                                                            [MASK] ratio when t = T . This operation keeps
+2.2 Discrete Diffusion Models                               the diffusion model in continuous space but dis-
+For discrete diffusion probabilistic models, each xt        cretely replaces the representation of some tokens
+is a discrete random variable as one-hot vectors in         in the sequence, and the replacement probability is
+{0, 1}K , indicating the current state of each token,       also scaled to the time step, same with βt . Noted
+where K is the size of the vocabulary. Multinomial          that these two kinds of noise are posed partially on
+diffusion (Ho et al., 2020) adopts a uniform noise          the target yt space in the manner of DiffuSeq.
+                                                        9869
+Table 1: Sequence-to-sequence text generation results on QQP. All results are reported without MBR decoding
+if not specified. The best result is bolded, and the gray columns are excluded from comparison considering the
+fairness. The sampling step of BG-DiffuSeq is 20. The relative improvement ↑ is computed between our speedup
+version (step=2) and the DiffuSeq (MBR=1).
+
+                        Continuous space                         Discrete Space (step=10)                                Mixed space (ours)
+                 DiffuSeq DiffuSeq             BG-       Multi-      RDM+          D3PM- RDM+ Original Speedup Speedup
+                                                                                                                                                  ↑
+                   (MBR=1)       (MBR=10)     DiffuSeq   nomial      Multinomial   absorbing   absorbing   (step=2000)   (step=10)   (step=2)
+
+ BLEU              0.1884         0.2413      0.2077 0.2025          0.2315        0.2245      0.2313      0.2411        0.2210      0.2115     12.3%
+ R-L               0.5327         0.5880      0.5652 0.5516          0.5712        0.5677      0.5735      0.5930        0.5732      0.5651      6.1%
+ BertScore         0.7965         0.8365      0.8057 0.7966          0.8375        0.8281      0.8416      0.8393        0.8207      0.8036     0.8%
+ Speed (it/s)       0.51           0.05        60.3          106.4    108.6         116.1      121.0         1.07         208.3      406.5      ≈ 800×
+
+
+
+Jointly denoise The reverse process is to jointly                                  quality and boost the training convergence? RQ2:
+reconstruct the corrupted data point. The simplified                               To what extent does the DPM ODE solver improve
+loss function is almost the same with DiffuSeq,                                    sampling speed and affect the performance?
+except for zt in different noise strategies:
+                        " T                                                        4.1      Experiment setup
+                         X
+    min LVLB = min               ||y0 − f˜θ (ẑt , t)||2 +                         Dataset We adopt QQP 2 for paraphrasing the
+     θ              θ
+                           t=2                                          (3)
+                                                             i                     sentence to the same semantic content, which is
+                ||E MB(wy ) − f˜θ (ẑ1 , 1)||2 + R(||z0 ||2 ) .                    lightweight to train and has been widely used in
+3.2 Sampling Stage                                                                 many Seq2Seq text diffusion models.
+Previous continuous text diffusion models adopt                                    Baselines We choose DiffuSeq (Gong et al.,
+clamp operation to make the vector predictions                                     2023), BG-DiffuSeq (Tang et al., 2023) as the rep-
+more precise and reduce rounding errors (Li et al.,                                resentative of continuous diffusion models. The
+2022) during sampling. However, this operation                                     latter is the enhanced version of DiffuSeq, target-
+is not deployed in the training stage, and the gap                                 ing bridging the gap between training and sampling
+between training and sampling (Tang et al., 2023)                                  to generate high-quality texts within fewer steps.
+may hinder the performance and the further opti-                                   We choose multinomial (Hoogeboom et al., 2021),
+mization for sampling speed.                                                       D3PM-absorbing (Austin et al., 2021), and a repa-
+   On the contrary, for our methods, during sam-                                   rameterized version of them (Zheng et al., 2023)
+pling, the same discrete noise in Eq. (2) is sprinkled                             as the representative of discrete diffusion models,
+in the continuous Gaussian noise, which bridges                                    with fewer diffusion steps for training.
+the training and inference in discrete space. Using
+the exact solution of diffusion ODEs proposed by                                   Implementation details We follow the training,
+DPM-solver++ (Lu et al., 2022a,b), given an initial                                sampling, and evaluation implementation of Dif-
+value zs at time s > 0, we have:                                                   fuSeq3 . The experiment is deployed on NVIDIA
+                        Z λt                                                       A100 80G GPUs, with 2 GPUs for training. More
+              σt
+        zt = zs + σ t        eλ fθ (ẑλ , λ) dλ,   (4)                             details can be seen in Appendix C.2.
+             σs           λs
+where the λ is a strictly decreasing function of t, σt                             4.2      Main results
+is monotonic to βt , and fθ (ẑλ , λ) is aligned with                              As seen from Table 1, original DiffuSeq relies on
+training objectives. The integral term can be analyt-                              the MBR decoding to ensure generation quality.
+ically computed by repeatedly applying integration-                                By contrast, our method in the original sampling
+by-parts n times, and we can just approximate the                                  version achieves comparable performance without
+first several orders and drop the high-order error                                 applying MBR by sampling 10 times, which signif-
+terms. We use second order in the experiment.                                      icantly saves the time for generating high-quality
+                                                                                   texts. Even the speedup version (step=2) still out-
+4        Experiments
+                                                                                   performs DiffuSeq (MBR=1) a lot, according to the
+We try to validate two main research questions.                                       2
+                                                                                        https://www.kaggle.com/c/
+RQ1: Can the soft absorbing state added in con-                                    quora-question-pairs
+tinuous diffusion models improve the generation                                       3
+                                                                                        https://github.com/Shark-NLP/DiffuSeq
+
+                                                                           9870
+

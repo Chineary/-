@@ -1,0 +1,174 @@
+                                         A Contrastive Framework for Neural Text Generation
+
+
+                                                            Yixuan Su♠    Tian Lan♦ Yan Wang♦ Dani Yogatama♣
+                                                                        Lingpeng Kong♥ Nigel Collier♠
+                                                               ♠
+                                                                 Language Technology Lab, University of Cambridge
+                                                                         ♦                   ♣
+                                                                           Tencent AI Lab      DeepMind
+                                                          ♥
+                                                            Department of Computer Science, The University of Hong Kong
+
+
+
+
+arXiv:2202.06417v3 [cs.CL] 26 Sep 2022
+                                                                         {ys484,nhc30}@cam.ac.uk
+                                                       lantiangmftby@gmail.com, yanwang.branden@gmail.com
+                                                               dyogatama@deepmind.com, lpk@cs.hku.hk
+
+
+
+                                                                                        Abstract
+
+                                                    Text generation is of great importance to many natural language processing ap-
+                                                    plications. However, maximization-based decoding methods (e.g., beam search)
+                                                    of neural language models often lead to degenerate solutions—the generated text
+                                                    is unnatural and contains undesirable repetitions. Existing approaches introduce
+                                                    stochasticity via sampling or modify training objectives to decrease the probabilities
+                                                    of certain tokens (e.g., unlikelihood training). However, they often lead to solutions
+                                                    that lack coherence. In this work, we show that an underlying reason for model
+                                                    degeneration is the anisotropic distribution of token representations. We present a
+                                                    contrastive solution: (i) SimCTG, a contrastive training objective to calibrate the
+                                                    model’s representation space, and (ii) a decoding method—contrastive search—to
+                                                    encourage diversity while maintaining coherence in the generated text. Extensive
+                                                    experiments and analyses on three benchmarks from two languages demonstrate
+                                                    that our proposed approach significantly outperforms current state-of-the-art text
+                                                    generation methods as evaluated by both human and automatic metrics.1
+
+
+                                         1      Introduction
+                                         Open-ended neural text generation with Transformer [52] is an indispensable component in various
+                                         natural language applications, such as story generation [11, 43], contextual text completion [36],
+                                         and dialogue systems [48]. However, the conventional approach of training a language model with
+                                         maximum likelihood estimation (MLE) and decoding the most likely sequence is often not sufficient
+                                         [14, 54]. Specifically, this modelling formulation often leads to the problem of degeneration, i.e., the
+                                         generated texts from the language model tend to be dull and contain undesirable repetitions at different
+                                         levels (e.g., token-, phrase-, and sentence-level) [8]. To alleviate this problem, previous solutions
+                                         modify the decoding strategy by sampling from less likely vocabularies [11, 14]. While reducing
+                                         the generated repetition, these sampling methods introduce another critical problem (semantic
+                                         inconsistency)—the sampled text tends to diverge from or even contradict to the original semantics
+                                         defined by the human-written prefix [3]. Another approach addresses the degeneration problem by
+                                         modifying the model’s output vocabulary distribution with unlikelihood training [54].
+                                         In this work, we argue that the degeneration of neural language models stems from the anisotropic
+                                         distribution of token representations, i.e., their representations reside in a narrow subset of the entire
+                                         space [10, 9, 44]. In Figure 1(a), we showcase a cosine similarity matrix of token representations
+                                         (taken from the output layer of the Transformer) produced by GPT-2. We see that the cosine
+                                         similarities between tokens within a sentence are over 0.95, meaning that these representations are
+                                         1
+                                             Our code and models are publicly available at https://github.com/yxuansu/SimCTG.
+
+
+                                         36th Conference on Neural Information Processing Systems (NeurIPS 2022).
+    Figure 1: Token cosine similarity matrix of (a) GPT-2 and (b) SimCTG. (best viewed in color)
+
+close to each other. Such high similarity is undesirable as it can naturally cause the model to generate
+repetitive tokens at different steps. In an ideal setting, the token representations should follow an
+isotropic distribution, i.e., the token similarity matrix should be sparse and the representations of
+distinct tokens should be discriminative as shown in Figure 1(b). Moreover, during the decoding
+process, the sparseness of the token similarity matrix of the generated text should be preserved to
+avoid model degeneration.
+Based on the above motivations, we present SimCTG (a simple contrastive framework for neural text
+generation) that encourages the model to learn discriminative and isotropic token representations.
+We also present a novel decoding strategy to complement SimCTG, contrastive search. The key
+intuitions behind contrastive search are: (i) at each decoding step, the output should be selected
+from the set of most probable candidates predicted by the model to better maintain the semantic
+coherence between the generated text and the human-written prefix, and (ii) the sparseness of the
+token similarity matrix of the generated text should be preserved to avoid degeneration.
+We conduct comprehensive experiments on three widely used benchmarks. We show that our approach
+is generalizable to different tasks and different languages (§4 and §5) as well as different model
+sizes (§4.3 and Appendix D). Specifically, the experimental results verify that SimCTG improves the
+intrinsic qualities of the language model, as evaluated by perplexity and token prediction accuracy
+(§4.2 and Appendix D). Moreover, we demonstrate that the proposed contrastive search significantly
+outperforms previous state-of-the-art decoding methods in both human and automatic evaluations (§4
+and §5). Furthermore, we provide in-depth analyses to get better insights on the inner-workings of
+our proposed approach (§6).
+
+2     Background
+2.1   Language Modelling
+
+The goal of language modelling is to learn a probability distribution pθ (x) over a variable-length text
+sequence x = {x1 , ..., x|x| }, where θ denotes model parameters. Typically, the maximum likelihood
+estimation (MLE) objective is used to train the language model which is defined as
+                                                  |x|
+                                              1 X
+                                 LMLE = −            log pθ (xi |x<i ).                             (1)
+                                             |x| i=1
+
+However, as observed in many recent studies [10, 9, 44], training with likelihood maximization
+objective often yields an anisotropic distribution of model representations (especially for Transformer-
+based models) that undermines the model’s capacity.
+
+2.2   Open-ended Text Generation
+
+In this work, we focus on studying the task of open-ended text generation due to its generality
+in various applications, such as story generation [11, 43], contextual text completion [36], poetry
+generation [23], and dialogue systems [48]. Formally, conditioned on a human-written prefix (i.e.,
+
+
+                                                   2
+context) x, the task is to decode a continuation x̂ from the language model and the resulting text
+is {x1 , .., x|x| , x̂|x|+1 , ..., x̂|x|+|x̂| }. Typically, there are two classes of methods used for decoding,
+which are (1) deterministic methods and (2) stochastic methods.
+Deteriminstic Methods. Two widely used deterministic approaches are greedy and beam search
+which aim to select the text continuation with highest probability based on the model’s probability
+distribution pθ . However, solely maximizing the output probability often leads to dullness [22] and
+degeneration [11, 14] in the generated text.
+Stochastic Methods. To remedy the issues of deterministic decoding, several approaches have
+been proposed to sample from pθ . To avoid sampling from the unreliable tail of distribution, Fan
+et al. [11] proposed   top-k sampling which draws sample from the vocabulary subset V (k) that
+maximizes v∈V (k) pθ (v|x). Here, |V (k) |= k and x is the prefix context. Differently, the current
+             P
+state-of-the-art nucleus sampling [14] draws sample from the smallest vocabulary subset U with
+totalPprobability mass above a threshold p ∈ [0, 1]; i.e., U is the smallest vocabulary subset such
+that v∈U pθ (v|x) ≥ p. While the sampling approaches help to alleviate model degeneration, the
+intrinsic stochasticity in these methods could cause the semantic meaning of the sampled text to
+diverge from or even contradict to the human-written prefix [3].
+
+3       Methodology
+In this section, we first present how to apply contrastive learning to calibrate the representation space
+of the language model. Then, we introduce our proposed contrastive search decoding algorithm.
+
+3.1      Contrastive Training
+
+Our goal is to encourage the language model to learn discriminative and isotropic token representa-
+tions. To this end, we introduce a contrastive objective LCL into the training of the language model.
+Specifically, given a variable-length sequence x = {x1 , ..., x|x| }, the LCL is defined as
+                                        |x| |x|
+                                1      X    X
+                  LCL =                         max{0, ρ − s(hxi , hxi ) + s(hxi , hxj )},                 (2)
+                           |x|×(|x|−1) i=1
+                                                 j=1,j6=i
+
+where ρ ∈ [−1, 1] is a pre-defined margin and hxi is the representation of token xi produced by the
+model. The similarity function s computes the cosine similarity between token representations as
+                                                                h>xi hxj
+                                            s(hxi , hxj ) =                 .                              (3)
+                                                              khxi k·khxj k
+Intuitively, by training with LCL , the model learns to pull away the distances between representations
+of distinct tokens.2 Therefore, a discriminative and isotropic model representation space can be
+obtained. The overall training objective LSimCTG is then defined as
+                                               LSimCTG = LMLE + LCL ,                                      (4)
+where the maximum likelihood estimation (MLE) objective LMLE is described in Eq. (1). Note that,
+when the margin ρ in LCL equals to 0, the LSimCTG degenerates to the vanilla MLE objective LMLE .
+
+3.2      Contrastive Search
+
+We propose a novel decoding method, contrastive search. At each decoding step, the key ideas
+of contrastive search are (i) the generated output should be selected from the set of most probable
+candidates predicted by the model; and (ii) the generated output should be discriminative enough with
+respect to the previous context. In this way, the generated text can (i) better maintain the semantic
+coherence with respect to the prefix while (ii) avoiding model degeneration.
+Formally, given the previous context x<t , at time step t, the selection of the output xt follows
+                     n                                                                         o
+     xt = arg max (1 − α) × pθ (v|x<t ) − α × (max{s(hv , hxj ) : 1 ≤ j ≤ t − 1}) ,                        (5)
+             v∈V (k)              | {z }               |                  {z                 }
+                                           model confidence                     degeneration penalty
+
+2
+    By definition, the cosine similarity s(hxi , hxi ) of the identical token xi is 1.0.
+
+
+                                                              3
+

@@ -1,0 +1,245 @@
+                                                         DreamReasoner-8B: Block-Size Curriculum Learning for
+                                                                    Diffusion Reasoning Models
+
+                                                        Zirui Wu1,2 , Lin Zheng1 , Jiacheng Ye1 , Shansan Gong1 , Xueliang Zhao1 ,
+                                                                         Yansong Feng2 , Wei Bi, Lingpeng Kong1 *
+                                                                     1
+                                                                       The University of Hong Kong 2 Peking University
+                                                                           ziruiwu@pku.edu.cn, lpk@cs.hku.hk
+
+
+
+                                                                   Abstract                               Diffusion language models have emerged as a
+                                                                                                       promising alternative, offering parallel token gener-
+
+
+
+
+arXiv:2606.19257v1 [cs.CL] 17 Jun 2026
+                                                 Block diffusion language models accelerate            ation, bidirectional context modeling, and flexible
+                                                 decoding through parallel block-wise denois-          decoding strategies (Sahoo et al., 2024; Gong et al.,
+                                                 ing, yet whether they can be reliably scaled
+                                                                                                       2025a; Nie et al., 2025b; Ye et al., 2025). Among
+                                                 for long chain-of-thought (CoT) reasoning
+                                                 remains unresolved. To this end, we develop
+                                                                                                       these, block diffusion (Arriola et al., 2025; Bie
+                                                 DreamReasoner-8B, an open-source block                et al., 2025, 2026) provides a principled structural
+                                                 diffusion reasoning model, and conduct a              solution that interpolates between pure diffusion
+                                                 systematic study of how training and inference        and pure autoregressive generation. By partitioning
+                                                 block sizes affect long-CoT reasoning. Our            the output sequence into contiguous blocks, block
+                                                 analysis reveals a stark performance disparity:       diffusion handles inter-block dependencies autore-
+                                                 training with large block sizes yields remark-        gressively and intra-block tokens in parallel via
+                                                 ably poor reasoning, whereas small block sizes
+                                                                                                       bidirectional diffusion denoising, thereby enabling
+                                                 preserve effective reasoning. To bridge this
+                                                 granularity gap, we propose block-size cur-           a flexible trade-off between sequential coherence
+                                                 riculum learning, which gradually transitions         and generation parallelism. Nevertheless, open-
+                                                 training from fine-grained to coarse-grained          source reasoning-capable diffusion models still lag
+                                                 block sizes, thereby overcoming this limitation       behind AR counterparts on standard benchmarks
+                                                 and enabling strong reasoning performance             (Wang et al., 2025; Cheng et al., 2025), and these
+                                                 that generalizes across diverse inference             models typically exhibit substantial performance
+                                                 block sizes. On mathematical and code
+                                                                                                       degradation as block size increases as shown in Fig-
+                                                 reasoning benchmarks, DreamReasoner-8B
+                                                 achieves results competitive with leading open
+                                                                                                       ure 1, undermining the efficiency gains promised
+                                                 autoregressive models such as Qwen3-8B. This          by coarse-grained block decoding.
+                                                 work establishes a practical foundation for              In this work, we study whether larger blocks
+                                                 efficient, reasoning-capable diffusion language       can be made useful for reasoning in diffusion lan-
+                                                 models. We release our model at https:                guage models. Specifically, we investigate whether
+                                                 //github.com/DreamLM/DreamReasoner.                   block diffusion models can be trained to reason
+                                                                                                       effectively with large block sizes, and identify the
+                                         1       Introduction                                          training and decoding strategies that enable this. To
+                                                                                                       answer this question, we train DreamReasoner-8B,
+                                         Autoregressive (AR) language models have
+                                                                                                       an open 8B-parameter block-diffusion reasoning
+                                         become the dominant paradigm for complex rea-
+                                                                                                       model, and systematically evaluate how training
+                                         soning, owing to their strong sequential coherence
+                                                                                                       block size, inference block size, and decoding strat-
+                                         and the demonstrated ability to generate extended
+                                                                                                       egy interact. Rather than treating block size as a
+                                         chains of thought (OpenAI, 2026; DeepSeek-AI,
+                                                                                                       fixed architectural constant, we analyze it as a scal-
+                                         2026; Team et al., 2026). Yet the strict left-to-right
+                                                                                                       ing axis that jointly affects reasoning quality and
+                                         factorization in AR decoding fundamentally limits
+                                                                                                       decoding efficiency.
+                                         parallelism during inference. This efficiency bottle-
+                                                                                                          Our analysis reveals several key findings: First,
+                                         neck has motivated increasing interest in alternative
+                                                                                                       naively training with a large block size leads to
+                                         architectures that can preserve reasoning quality
+                                                                                                       degradation in reasoning performance while small
+                                         while enabling greater generation parallelism.
+                                                                                                       block sizes preserve reasoning capabilities. Second,
+                                             *    Corresponding author.                                block-size curriculum learning that gradually tran-
+
+                                                                                                   1
+                                                                                                             AIME 2025                                                                      LiveCodeBench
+  Qwen3-8B-Base                       Continue pre-training                                                                                                                  60                                                2.0
+        Initialization                                                                 70
+                                                                                                                                                    2.4
+                                                                                                                                                                             50
+                                                                                       60                                                                                                                                      1.8
+  DreamReasoner-8B-Base                     Block Size: 32; Context: 4K
+  Reproducible foundation                                                                                                                           2.2
+                                                                                       50                                                                                    40
+
+
+
+                                                                          Pass@1 (%)                                                                            Pass@1 (%)
+                                                                                                                                                                                                                               1.6
+            General           π      Math            </> Code                          40
+                                                                                                                                                    2.0   TPF                30                                                      TPF
+   MMLU, ARC, PIQA, …         GSM8K, MATH            HumanEval, MBPP
+                                                                                       30                                                                                                                                      1.4
+                                                                                                                                                                             20
+                                                                                                                                                    1.8
+                                                                                       20
+                                                                                                                                                                                                                               1.2
+                                                                                                                                                                             10
+          SFT with block-size curriculum learning (4 → 32）                             10
+                                                                                                                                                    1.6
+                                                                                       0                                                                                     0                                                 1.0
+                                                                                            4       8              16                          32                                 4   8           16                      32
+  DreamReasoner-8B                     Block Size: 4~32; Context: 16K
+  Strong long-CoT reasoning                                                                                    Block Size                                                                       Block Size
+
+                         AIME24/25               LiveCodeBench
+                                                                                                DreamReasoner-8B            SDAR-30B-A3B-Sci              Qwen3-8B-Thinking                  TPF (Ours)      TPF (SDAR)
+
+
+
+
+Figure 1: Overview and performance of DreamReasoner-8B. Left: the training pipeline of DreamReasoner-8B-
+Base and DreamReasoner-8B through block-size curriculum learning. Right: DreamReasoner-8B maintains high
+accuracy close to the Qwen3-8B-Thinking baseline while its efficiency (measured by TPF1 ) improves with larger
+block sizes. In contrast, SDAR-30B-A3B-Sci shows lower efficiency and its accuracy degrades sharply as the block
+size increases, highlighting the superior balance between performance and computational cost achieved by our model.
+
+
+sitions training from fine-grained to coarse-grained                                                                                • We introduce RelaxedConfidence, an ana-
+block sizes can overcome the degradation associ-                                                                                      lytical decoding probe revealing that relax-
+ated with large-block training. Third, curriculum-                                                                                    ing the commitment threshold for tokens sur-
+trained models achieve substantial efficiency gains                                                                                   rounded by reliable neighbors enables earlier
+from large-block inference without sacrificing rea-                                                                                   and broader parallel decoding.
+soning quality. On mathematical and code reason-
+ing benchmarks, DreamReasoner-8B achieves per-                                                                                 2      Preliminaries
+formance competitive with leading open autoregres-                                                                            Full-sequence discrete diffusion processes jointly
+sive models such as Qwen3-8B-Thinking (Yang                                                                                   model all token positions in an input sequence.
+et al., 2025a), substantially outperforming prior                                                                             This provides bidirectional context and flexible de-
+block diffusion models of comparable scale.                                                                                   coding orders, but it also couples denoising across
+   Nevertheless, we find that the gain in decoding                                                                            the entire sequence, which can slow training conver-
+efficiency remains fundamentally bottlenecked                                                                                 gence on large corpora (Ni et al., 2025; Prabhude-
+by conservative token-level confidence thresholds                                                                             sai et al., 2025) and make long-form generation
+during decoding. To analyze this bottleneck,                                                                                  vulnerable to error accumulation. Block diffusion
+we introduce RelaxedConfidence, an analytical                                                                                 mitigates these issues by combining autoregres-
+decoding probe that examines how contiguous                                                                                   sive sequence decomposition with local parallel
+spans of high-confidence tokens can be committed                                                                              denoising, enabling scalable training and efficient
+earlier through relaxed thresholds. This yields                                                                               inference (Han et al., 2023; Arriola et al., 2025; Bie
+average TPF (tokens per forward pass) gains of                                                                                et al., 2025; Cheng et al., 2025; Fu et al., 2026).
+22.5% and 54.5% in the thinking and answering                                                                                     Let x0 denote the clean input sequence, and
+phases without compromising reasoning fidelity.                                                                               partition it into K contiguous blocks x0 =
+   Our contributions are summarized as follows:                                                                               (b10 , b20 , . . . , bK
+                                                                                                                                                    0 ), each containing B tokens. We use
+                                                                                                                              superscripts to index blocks and subscripts to index
+    • We systematically investigate block size as
+                                                                                                                              diffusion time steps; thus bkt = (xk,1                  k,B
+                                                                                                                                                                         t , . . . , xt ) de-
+      a scaling axis for diffusion reasoning mod-
+                                                                                                                              notes the state of the k-th block at time t, and bk0 is
+      els, demonstrating that large-block training is
+                                                                                                                              its clean state. Block diffusion preserves an autore-
+      brittle at scale, whereas curriculum learning
+                                                                                                                              gressive factorization across blocks while modeling
+      substantially stabilizes large-block generation.
+                                                                                                                              each block conditional with a local bidirectional
+    • We release DreamReasoner-8B, an open                                                                                    diffusion process:
+      block-diffusion reasoning model that achieves                                                                                                                                   K
+      competitive reasoning performance on par
+                                                                                                                                                                                      Y
+                                                                                                                                                      pθ (x0 ) =                            pθ (bk0 | b<k
+                                                                                                                                                                                                       0 ),                          (1)
+      with Qwen3-8B-Thinking.                                                                                                                                                         k=1
+    1
+    We regard the TPF of autoregressive models as 1. For
+SDAR, we report TPF only at block size 4, since its accuracy                                                                   where b<k0   := (b10 , . . . , bk−1
+                                                                                                                                                               0 ). Each conditional
+                                                                                                                                    k    <k
+degrades substantially at larger block sizes.                                                                                  pθ (b0 | b0 ) is parameterized by a local diffusion
+
+                                                                                                                        2
+Table 1: Base model performance comparison on standard benchmarks. Best results are shown in bold, and
+second-best results are underlined.
+
+     Model        DreamReasoner-8B     Dream-v0-7B         LLaDA-8B        Qwen3-8B    MiMo-7B    OLMo3-7B     Qwen2.5-7B
+     Type            Block Diffusion      Diffusion         Diffusion          AR         AR          AR           AR
+                                                           General Tasks
+     MMLU                  75.4             69.5              65.9            76.9        69.8        64.5         71.9
+     ARC-E                 87.0             83.9              71.8            81.6        76.5        80.6         77.4
+     ARC-C                 63.5             59.8              47.5            56.9        51.6        53.5         51.5
+     HellaSwag             76.6             73.3              72.7            78.6        77.5        74.1         78.9
+     PIQA                  81.2             75.8              75.8            79.4        79.9        78.6         79.8
+     WinoGrande            74.2             74.5              74.5            77.5        75.9        73.5         76.1
+     RACE                  43.8             44.7              38.7            42.3        38.6        40.1         41.9
+                                                          Math & Science
+     GSM8K                 83.4             77.2              70.9            86.5        73.8        76.5         78.9
+     MATH                  55.8             39.6              30.7            52.7        35.8        41.5         41.1
+     GPQA                  42.9             36.6              30.4            41.1         –          36.6         35.5
+                                                                  Code
+     HumanEval             69.5             57.9              32.9            68.9        51.8        43.9         56.7
+     MBPP                  71.7             56.2              39.0            72.4        69.2        66.7         63.6
+
+
+
+process that processes all tokens within bk in paral-                  2026), we first initialize from Qwen3-8B-Base
+lel. The process uses an absorbing corruption pro-                     (Yang et al., 2025a) and continually pre-train
+cedure with a dedicated absorbing token [MASK].                        DreamReasoner-8B-Base as a block-diffusion
+For the k-th block, the forward process corrupts                       model, establishing a reproducible foundation
+only the target block while keeping the prefix con-                    for subsequent fine-tuning. We use the block-
+text clean. Generation reverses this process: start-                   diffusion loss objective in Eq. 2 with block size
+ing from a fully masked block state, the model                         32 throughout continual pretraining.
+iteratively predicts pθ (xk,i   <k k
+                          0 | b0 , bt ) for masked
+                                                                       Data composition. We assemble a pretrain-
+positions and refines them in parallel, conditioned
+                                                                       ing corpus by curating high-quality, open-source
+on fixed preceding blocks b<k 0 as context.
+                                                                       datasets used by open-source language models, in-
+Training objective. The objective can be re-                           cluding OLMo 3 (Olmo et al., 2026) and Nemotron
+duced to a weighted cross-entropy on the masked                        Nano V3 (NVIDIA et al., 2025). The data mixture
+positions for each block (Arriola et al., 2025;                        is designed to enhance reasoning capabilities, and
+Cheng et al., 2025; Bie et al., 2025), conditioned on                  the final training corpus contains 160B tokens.
+the clean previous context b<k0 . Let αt ∈ (0, 1) de-
+                           ′                      α′t                  Baselines. We compare DreamReasoner-8B-
+note the noise schedule, αt := dα dt , and wt
+                                    t
+                                              := 1−α  t                Base against two categories of open-source base-
+denote the loss weight at time step t. Aggregating                     lines with settings listed in Appendix A: (i) Au-
+over all K blocks yields:                                              toregressive base models, including Qwen3-8B-
+                      K
+                     X                                               Base (Yang et al., 2025a), MiMo-7B-Base (Xiaomi
+ L(θ) = −Et,b0 ,bt         wt log pθ bk0 | b<k   k
+                                                                      et al., 2025), OLMo3-7B-Base (Olmo et al., 2026),
+                                            0 , bt        , (2)
+                     k=1                                               and Qwen2.5-7B-Base (Yang et al., 2025b); and (ii)
+                                                                       Diffusion base models, including the full-sequence
+where t ∼ U(0, 1), b0 = {bk0 }K   k=1 represents the                   diffusion models Dream-v0-7B-Base (Ye et al.,
+block sequence of the clean input data, and bt =                       2025) and LLaDA-8B-Base (Nie et al., 2025b).2
+{bkt }K
+      k=1 is its corrupted version at time t. For each
+                                                                       Reasoning capabilities. DreamReasoner-8B-
+block, only masked tokens contribute to the loss
+                                                                       Base demonstrates performance competitive with
+with their context provided by clean prefix blocks.
+                                                                       autoregressive baselines, exhibiting particular
+3   DreamReasoner-8B-Base                                              strength in reasoning-intensive benchmarks for
+                                                                           2
+                                                                             We do not compare with LLaDA-2.0 (Bie et al., 2025)
+Following previous practice (Gong et al., 2025a;                       and SDAR-8B (Cheng et al., 2025) since their base models
+Ye et al., 2025; Cheng et al., 2025; Fu et al.,                        are not open-sourced.
+
+
+                                                                   3
+

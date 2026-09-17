@@ -1,0 +1,20 @@
+﻿序号,姓名,中文名,院系,职称,岗位类型（研究型/教学型/礼聘等）,是否研究型教师,学校主页,个人主页,Google Scholar网址,Google Scholar总被引次数,引用统计日期,CV网址,ORCID网址,DBLP网址,教育经历（本硕博院校信息及获取学位时间）,任职,院内及联聘职务,研究兴趣和方向,实验室/课题组名称及网址,是否招收PhD,招生人数及招生方向,资料来源网址,抓取日期,核验状态
+1,"Kong, Lingpeng",孔令鹏,人工智能与数据科学系（本地导师名单）；计算机科学系（个人主页与CV）；当前归属待核验,助理教授（Assistant Professor）,研究型（依据公开研究与博士指导信息）,是,https://ai.hku.hk/index.php/people/academic-staff,https://ikekonglp.github.io/,Scholar 主页待核验,未获取,未获取,https://ikekonglp.github.io/lingpenk_cv.pdf,https://orcid.org/0000-0002-9033-2724,待核验,"北京语言大学；计算机科学本科（B.E.）；入学时间未公开，2011年毕业；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+卡内基梅隆大学；计算机科学硕士（M.S.）；入学时间未公开，2015年毕业；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+卡内基梅隆大学；计算机科学博士（Ph.D.）；入学时间未公开，2017年毕业；论文：Neural Representation Learning in Linguistic Structured Prediction；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页","清华大学；研究实习；2010；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+NEC中国研究院；研究实习；2011；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+IBM中国系统与科技实验室；软件工程师；2011-2012；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+哈佛大学；研究实习；2015；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+华盛顿大学；研究实习；2015-2017；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+Google Research；研究实习；2016；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+Google DeepMind；研究实习；2017；具体工作内容未公开；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+Google DeepMind；研究科学家；2017-2019；研究方向见对应署名论文；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+Google DeepMind；高级研究科学家；2019-2020；研究方向见对应署名论文；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页
+香港大学；助理教授；2020-至今（CV日期2026-01-27）；自然语言处理与机器学习研究、教学和博士指导；https://ikekonglp.github.io/lingpenk_cv.pdf 第1页",HKU NLP Lab 共同负责人（co-director）；其他联聘职务未公开,自然语言处理；机器学习；表示学习；结构化预测；生成模型,香港大学自然语言处理实验室（HKU NLP Lab）；https://hkunlp.github.io/,是（常设申请说明；具体年度名额待核验）,"个人联系页欢迎PhD申请，原文“Generally, I take 1(±1.0) student(s) every year”；此为通常规模，不是2026/27承诺名额。具体年度人数与招生方向未公开。公告日期未公开，访问日期2026-09-17。建议申请者介绍研究兴趣及对近期论文的思考。往年说明提到early recruitment的May 1，不作为当前截止日期。来源：https://ikekonglp.github.io/contact.html","https://ikekonglp.github.io/
+https://ikekonglp.github.io/lingpenk_cv.pdf
+https://ikekonglp.github.io/contact.html
+https://hkunlp.github.io/people/
+https://aclanthology.org/people/lingpeng-kong/
+https://pub.orcid.org/v3.0/0000-0002-9033-2724/person
+https://ai.hku.hk/index.php/people/academic-staff
+https://www.cs.hku.hk/people/academic-staff",2026-09-17,部分已核验。个人主页、CV、课题组页交叉确认姓名、职称、教育任职与实验室；ORCID由ACL作者页链接并核对姓名。中文名由任务指定。院系冲突待核验：本地导师名单为AI系，个人主页/CV为CS系；两个官方目录返回403。招生为当前可见常设说明，年度有效性与名额待核验。2026-09-17访问Scholar .com和.com.hk均超时，个人ID未确认，总被引次数未获取；DBLP返回反爬页面。

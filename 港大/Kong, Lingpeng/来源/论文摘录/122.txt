@@ -1,0 +1,215 @@
+                     Bayesian Optimization of Text Representations
+         Dani Yogatama Lingpeng Kong                                    Noah A. Smith
+           School of Computer Science                           Computer Science & Engineering
+            Carnegie Mellon University                             University of Washington
+            Pittsburgh, PA 15213, USA                               Seattle, WA 98195, USA
+       {dyogatama,lingpenk}@cs.cmu.edu                           nasmith@cs.washington.edu
+
+                      Abstract                              with other “nuisances” that interact with these de-
+                                                            cisions, like hyperparameter selection. For exam-
+    When applying machine learning to prob-                 ple, using higher-order n-grams means more fea-
+    lems in NLP, there are many choices to                  tures and a need for stronger regularization and
+    make about how to represent input texts.                more training iterations. Generally, these decisions
+    They can have a big effect on perfor-                   about instance representation are made by humans,
+    mance, but they are often uninteresting                 heuristically; our work seeks to automate them, not
+    to researchers or practitioners who simply              unlike Daelemans et al. (2003), who proposed to
+    need a module that performs well. We ap-                use genetic algorithms to optimize representational
+    ply sequential model-based optimization                 choices.
+    over this space of choices and show that it                Our technique instantiates sequential model-
+    makes standard linear models competitive                based optimization (SMBO; Hutter et al., 2011).
+    with more sophisticated, expensive state-of-            SMBO and other Bayesian optimization ap-
+    the-art methods based on latent variables or            proaches have been shown to work well for hyper-
+    neural networks on various topic classifica-            parameter tuning (Bergstra et al., 2011; Hoffman
+    tion and sentiment analysis problems. Our               et al., 2011; Snoek et al., 2012). Though popular
+    approach is a first step towards black-box              in computer vision (Bergstra et al., 2013), these
+    NLP systems that work with raw text and                 techniques have received little attention in NLP.
+    do not require manual tuning.
+                                                               We apply it to logistic regression on a range of
+1   Introduction                                            topic and sentiment classification tasks. Consis-
+                                                            tently, our method finds representational choices
+NLP researchers and practitioners spend a consid-           that perform better than linear baselines previously
+erable amount of time comparing machine-learned             reported in the literature, and that, in some cases,
+models of text that differ in relatively uninteresting      are competitive with more sophisticated non-linear
+ways. For example, in categorizing texts, should            models trained using neural networks.
+the “bag of words” include bigrams, and is tf-idf
+weighting a good idea? In learning word embed-              2    Problem Formulation and Notation
+dings, distributional similarity approaches have
+been shown to perform competitively with neural             Let the training data consist of a collection of pairs
+network models when the hyperparameters (e.g.,              dtrain = hhd.i1 , d.o1 i, . . . , hd.in , d.on ii, where
+context window, subsampling rate, smoothing con-            each input d.i ∈ I is a text document and each
+stant) are carefully tuned (Levy et al., 2015). These       output d.o ∈ O, the output space. The overall
+choices matter experimentally, often leading to big         training goal is to maximize a performance func-
+differences in performance, with little consistency         tion f (e.g., classification accuracy, log-likelihood,
+across tasks and datasets in which combination of           F1 score, etc.) of a machine-learned model, on a
+                                                                                                   0
+choices works best. Unfortunately, these differ-            held-out dataset, ddev ∈ (I × O)n .
+ences tell us little about language or the problems            Classification proceeds in three steps: first,
+that machine learners are supposed to solve.                x : I → RN maps each input to a vector rep-
+   We propose that these decisions can be auto-             resentation. Second, a predictive model (typi-
+mated in a similar way to hyperparameter selection          cally, its parameters) is learned from the inputs
+(e.g., choosing the strength of a ridge or lasso regu-      (now transformed into vectors) and outputs: L :
+larizer). Given a particular text dataset and classi-       (RN × O)n → (RN → O). Finally, the resulting
+fication task, we show a technique for optimizing           classifier c : I → O is fixed as L(dtrain ) ◦ x (i.e.,
+over the space of representational choices, along           the composition of the representation function with
+
+
+                                                       2100
+      Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing, pages 2100–2105,
+              Lisbon, Portugal, 17-21 September 2015. c 2015 Association for Computational Linguistics.
+the learned mapping).                                    Algorithm 1 SMBO algorithm
+   Here we consider linear classifiers of the form          Input: number of trials T , target function f
+c(d.i) = arg maxo∈O wo> x(d.i), where the param-            p1 = initial surrogate model
+eters wo ∈ RN , for each output o, are learned              Initialize y ∗
+using logistic regression on the training data. We          for t = 1 to T do
+let w denote the concatenation of all wo . Hence               xt ← arg maxx A(x; pt , y ∗ )
+the parameters can be understood as a function of              yt ← evaluate f (xt )
+the training data and the representation function              Update y ∗
+x. The performance function f , in turn, is a func-            Estimate pt given x1:t and y1:t
+tion of the held-out data ddev and x—also w and             end for
+dtrain , through x. For simplicity, we will write
+“f (x)” when the rest are clear from context.
+                                                         and exploration. We use a criterion called Expected
+   Typically, x is fixed by the model designer, per-
+                                                         Improvement (EI; Jones, 2001),1 which is the ex-
+haps after some experimentation, and learning fo-
+                                                         pectation (under the current surrogate model pt )
+cuses on selecting the parameters w. For logistic
+                                                         that f (x) = y will exceed f (x∗ ) = y ∗ :
+regression and many other linear models, this train-
+                                                                          Z ∞
+ing step reduces to convex optimization in N |O|                     ∗
+                                                          A(x; pt , y ) =      max(y − y ∗ , 0)pt (y | x)dy
+dimensions—a solvable problem that is costly for                               −∞
+large datasets and/or large output spaces. In seek-
+ing to maximize f with respect to x, we do not wish      where x∗ is chosen depending on the surrogate
+to carry out training any more times than necessary.     model, discussed below. (For now, think of it as
+   Choosing x can be understood as a problem of          a strongly-performing “benchmark” discovered in
+selecting hyperparameter values. We therefore turn       earlier iterations.) Other options for the acquisition
+to Bayesian optimization, a family of techniques         function include maximum probability of improve-
+that can be used to select hyperparameter values         ment (Jones, 2001), minimum conditional entropy
+intelligently when solving for parameters (w) is         (Villemonteix et al., 2009), Gaussian process up-
+costly.                                                  per confidence bound (Srinivas et al., 2010), or a
+                                                         combination of them (Hoffman et al., 2011).
+3   Bayesian Optimization
+                                                         Surrogate Model. As a surrogate model, we use
+Our approach is based on sequential model-based          a tree-structured Parzen estimator (TPE; Bergstra
+optimization (SMBO; Hutter et al., 2011). It itera-      et al., 2011).2 This is a nonparametric approach to
+tively chooses representation functions x. On each       density estimation. We seek to estimate pt (y | x)
+round, it makes this choice through a probabilistic      where y = f (x), the performance function that is
+model of f , then evaluates f —we call this a “trial.”   expensive to compute exactly.
+                                                                                     ( The TPE approach
+As in any iterative search algorithm, the goal is to                                       p<
+                                                                                            t (x),    if y<y ∗
+balance exploration of options for x with exploita-      seeks pt (y | x) ∝ pt (y) ·                             , where
+                                                                                           p≥
+                                                                                            t (x),    if y≥y ∗
+tion of previously-explored options, so that a good                ≥
+                                                         p<t and pt are densities estimated using observa-
+choice is found in a small number of trials.
+                                                         tions from previous trials that are less than and
+   More concretely, in the tth trial, xt is selected
+                                                         greater than y ∗ , respectively. In TPE, y ∗ is defined
+using an acquisition function A and a “surrogate”
+                                                         as some quantile of the observed y from previous
+probabilistic model pt . Second, f is evaluated
+                                                         trials; we use 15-quantiles.
+given xt —an expensive operation which involves
+                                                            As shown by Bergstra et al. (2011), the Ex-
+training to learn parameters w and assessing per-
+                                                         pected Improvement in TPE can be written as:
+formance on the held-out data. Third, the surrogate
+                                                             1
+model is updated. See Algorithm 1; details on A                EI is the most widely used acquisition function that has
+                                                         been shown to work well on a range of tasks.
+and pt follow.                                               2
+                                                               Another common approach to the surrogate is the Gaus-
+                                                         sian process (Rasmussen and Williams, 2006; Hoffman et al.,
+Acquisition Function. A good acquisition func-           2011; Snoek et al., 2012). Like Bergstra et al. (2011), our
+tion returns high values for x when either the value     preliminary experiments found the TPE to perform favorably.
+f (x) is predicted to be high, or the uncertainty        Further TPE’s tree-structured configuration space is advanta-
+                                                         geous, because it allows nested definitions of hyperparameters,
+about f (x)’s value is high; balancing between           which we exploit in our experiments (e.g., only allows bigrams
+these is the classic tradeoff between exploitation       to be chosen if unigrams are also chosen).
+
+
+                                                    2101
+         Hyperparameter              Values                           (often an SVM with a linear kernel with represen-
+         nmin                        {1, 2, 3}
+         nmax                        {nmin , . . . , 3}               tation selected by experts) and the best-published
+         weighting scheme            {tf, tf-idf, binary}             method overall. In the following, “SVM” always
+         remove stop words?          {True, False}                    means “linear SVM.” All methods were trained
+         regularization              {`1 , `2 }
+         regularization strength     [10−5 , 105 ]                    and evaluated on the same training/testing splits
+         convergence tolerance       [10−5 , 10−3 ]                   as baselines; in cases where standard development
+                                                                      sets were not available, we used a random 20% of
+Table 1: The set of hyperparameters considered in our ex-             the training data as a development set.
+periments. The top half are hyperparameters related to text
+representation, while the bottom half are logistic regression         Stanford sentiment treebank (Socher et al.,
+hyperparameters, which also interact with the chosen repre-
+sentation.                                                            2013)—Table 2. A sentence-level sentiment
+                                                                      analysis dataset of rottentomatoes.com movie re-
+                                                −1                  views: http://nlp.stanford.edu/sentiment. We use the
+A(x; pt , y ∗ )   ∝
+                              p< (x)
+                           γ + t≥ (1 − γ)              , where        binary classification task where the goal is to pre-
+                              pt (x)                                  dict whether a review is positive or negative (no
+γ = pt (y < y ∗ ), fixed at 0.15 by definition of                     neutral). Our logistic regression model outperforms
+y ∗ (above). Here, we prefer x with high probability                  the baseline SVM reported by Socher et al. (2013),
+under p≥                                  <
+         t (x) and low probability under pt (x). To                   who used only unigrams but did not specify the
+maximize this quantity, we draw many candidates                       weighting scheme for their SVM baseline. While
+according to p≥ t (x) and evaluate them according                     our result is still below the state-of-the-art based
+     <       ≥
+to pt (x)/pt (x). Note that p(y) does not need to                     on the the recursive neural tensor networks (Socher
+be given an explicit form. To compute p<  t (x) and                   et al., 2013) and the paragraph vector (Le and
+p≥
+ t  (x), we  associate each hyperparameter   with a                   Mikolov, 2014), we show that logistic regression is
+node in the graphical model and multiply individ-                     comparable with recursive and matrix-vector neu-
+ual probabilities at every node—see Bergstra et al.                   ral networks (Socher et al., 2011; Socher et al.,
+(2011) for details.                                                   2012).
+4    Experiments                                                               Method                                Acc.
+                                                                               Naı̈ve Bayes                          81.8
+We fix L to logistic regression. We optimize text                              SVM                                   79.4
+representation based on the types of n-grams used,                             Vector average                        80.1
+                                                                               Recursive neural networks             82.4
+the type of weighting scheme, and the removal of                               LR (this work)                        82.4
+stopwords; we also optimize the regularizer and                                Matrix-vector RNN                     82.9
+training convergence criterion, which interact with                            Recursive neural tensor networks      85.4
+                                                                               Paragraph vector                      87.8
+the representation. See Table 1 for a complete list.
+   Note that even with this limited number of
+                                                                      Table 2: Comparisons on the Stanford sentiment treebank
+options, the number of possible combinations is                       dataset. Scores are as reported by Socher et al. (2013) and Le
+huge,3 so exhaustive search is computationally ex-                    and Mikolov (2014). Test size = 6, 920.
+pensive. In all our experiments for all datasets, we
+limit ourselves to 30 trials per dataset. The only
+                                                                      Amazon electronics (McAuley and Leskovec,
+preprocessing we applied was downcasing.
+                                                                      2013)—Table 3. A binary sentiment analy-
+   We always use a development set to evaluate
+                                                                      sis dataset of Amazon electronics product re-
+f (x) during learning and report the final result on
+                                                                      views: http://riejohnson.com/cnn data.html. The best-
+an unseen test set. We summarize the hyperparam-
+                                                                      performing methods on this dataset are based on
+eters selected by our method, and the accuracies
+                                                                      convolutional neural networks (Johnson and Zhang,
+achieved (on test data) in Table 5. We discuss com-
+                                                                      2015).4 Our method is on par with the second-
+parisons to baselines for each dataset in turn. For
+                                                                      best of these, outperforming all of the reported
+each of our datasets, we select supervised, non-
+                                                                      feed-forward neural networks and SVM variants
+ensemble classification methods from previous lit-
+                                                                      Johnson and Zhang used as baselines. They varied
+erature as baselines. In each case, we emphasize
+comparisons with the best-published linear method                         4
+                                                                            These are convolutional neural networks with a recti-
+                                                                      fier activation function, trained under `2 regularization with
+   3
+     It is actually infinite since the reg. strength and conv. tol-   stochastic gradient descent. The authors also consider an
+erance are continuous values, but we could discretize them.           extension based on parallel CNN that we do not include here.
+
+
+                                                                 2102
+

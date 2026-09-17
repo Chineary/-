@@ -1,0 +1,201 @@
+                                         Published as a conference paper at ICLR 2026
+
+
+
+
+                                         PERSONA:        DYNAMIC    AND    C OMPOSITIONAL
+                                         I NFERENCE -T IME P ERSONALITY C ONTROL VIA ACTI -
+                                         VATION V ECTOR A LGEBRA
+
+                                          Xiachong Feng1,2 , Liang Zhao1 , Weihong Zhong1 , Yichong Huang1 , Yuxuan Gu1 ,
+                                          Lingpeng Kong2† , Xiaocheng Feng1† , Bing Qin1†
+                                          1
+                                            Harbin Institute of Technology 2 The University of Hong Kong
+                                          fengxc@hku.hk
+
+
+
+
+arXiv:2602.15669v1 [cs.AI] 17 Feb 2026
+                                                                                          A BSTRACT
+
+                                                      Current methods for personality control in Large Language Models rely on static
+                                                      prompting or expensive fine-tuning, failing to capture the dynamic and composi-
+                                                      tional nature of human traits. We introduce PERSONA, a training-free frame-
+                                                      work that achieves fine-tuning level performance through direct manipulation of
+                                                      personality vectors in activation space. Our key insight is that personality traits ap-
+                                                      pear as extractable, approximately orthogonal directions in the model’s represen-
+                                                      tation space that support algebraic operations. The framework operates through
+                                                      three stages: P ERSONA -BASE extracts orthogonal trait vectors via contrastive
+                                                      activation analysis; P ERSONA -A LGEBRA enables precise control through vector
+                                                      arithmetic (scalar multiplication for intensity, addition for composition, subtrac-
+                                                      tion for suppression); and P ERSONA -F LOW achieves context-aware adaptation by
+                                                      dynamically composing these vectors during inference. On PersonalityBench, our
+                                                      approach achieves a mean score of 9.60, nearly matching the supervised fine-
+                                                      tuning upper bound of 9.61 without any gradient updates. On our proposed
+                                                      P ERSONA -E VOLVE benchmark for dynamic personality adaptation, we achieve
+                                                      up to 91% win rates across diverse model families. These results provide evi-
+                                                      dence that aspects of LLM personality are mathematically tractable, opening new
+                                                      directions for interpretable and efficient behavioral control1 .
+
+
+                                         1       I NTRODUCTION
+
+                                         Personality control in Large Language Models (LLMs) is essential for human-centric applications
+                                         including healthcare (Guo et al., 2024; He et al., 2025; Ju et al., 2025), education (OpenAI, 2025;
+                                         Anthropic, 2025), and social simulation (Mou et al., 2024; Feng et al., 2025). In these domains, the
+                                         personality exhibited by an LLM directly influences user trust, engagement, and decision-making
+                                         (Dong et al., 2025). However, existing methods fail to achieve both precise control and computa-
+                                         tional efficiency: prompting (Jiang et al., 2024; Yeo et al., 2025; La Cava & Tagarelli, 2025) suffers
+                                         from instability and inconsistency, while fine-tuning (Pan & Zeng, 2023; Liu et al., 2024) requires
+                                         substantial resources for each personality configuration. More fundamentally, both approaches treat
+                                         personality as static and monolithic, unable to capture the dynamic, compositional nature of human
+                                         behavioral traits (Chapman et al., 2011).
+                                         We introduce PERSONA, a training-free framework that achieves fine-tuning level performance
+                                         through direct manipulation of personality vectors in activation space. Our key insight is that per-
+                                         sonality traits appear as extractable, approximately orthogonal directions in the model’s represen-
+                                         tation space that support algebraic operations. This geometric perspective transforms personality
+                                         control from a problem of text engineering or gradient optimization to one of vector arithmetic in
+                                         high-dimensional space. Remarkably, without any gradient updates, our approach achieves a mean
+                                         score of 9.60 on PersonalityBench, nearly matching the supervised fine-tuning upper bound of 9.61.
+                                             †
+                                                 Corresponding author.
+                                             1
+                                                 Code and data are publicly available at © code
+
+
+                                                                                                  1
+Published as a conference paper at ICLR 2026
+
+
+
+
+The PERSONA framework operates through three integrated stages. First, P ERSONA -BASE ex-
+tracts orthogonal trait vectors corresponding to the Big Five (OCEAN) model (Roccas et al., 2002)
+through contrastive activation analysis, providing evidence that personality dimensions are (approx-
+imately) linearly encoded in selected activation layers (Turner et al., 2023; Marks & Tegmark, 2024;
+Rimsky et al., 2024). Second, P ERSONA -A LGEBRA demonstrates that these vectors support pre-
+cise mathematical operations: scalar multiplication controls trait intensity, vector addition enables
+multi-trait composition, and subtraction allows targeted trait suppression. Third, P ERSONA -F LOW
+achieves context-aware adaptation by dynamically composing these vectors during inference, en-
+abling real-time personality modulation without predefined scripts.
+To systematically evaluate dynamic personality control, we introduce P ERSONA -E VOLVE, a bench-
+mark comprising 800 multi-turn dialogue scenarios where models must maintain consistent personas
+while adapting to evolving conversational contexts. Experimental results demonstrate the effective-
+ness of our approach: on P ERSONA -E VOLVE, we achieve up to 91% win rates across diverse model
+families (Qwen, Llama, Mistral) in trait adherence, role consistency, and response authenticity. On
+the external PersonalityBench (Deng et al., 2025), our training-free method matches supervised
+fine-tuning performance while maintaining lower variance (0.74), confirming both effectiveness and
+stability in diverse conversational contexts.
+Our contributions are threefold:
+       • P ERSONA -BASE: Personality traits can be represented as approximately orthogonal, ex-
+         tractable vectors in activation space via contrastive analysis, enabling training-free control
+         that matches fine-tuning performance (9.60 vs 9.61 on PersonalityBench).
+       • P ERSONA -A LGEBRA and P ERSONA -F LOW: Personality vectors support algebraic op-
+         erations (scaling, addition, subtraction) with predictable outcomes and dynamic context-
+         aware adaptation during inference, achieving up to 91% win rates across model families.
+       • P ERSONA -E VOLVE: A comprehensive benchmark of 800 multi-turn dialogue scenarios
+         for evaluating dynamic personality control, assessing trait adherence, role consistency, and
+         response authenticity.
+
+
+2     T HE PERSONA F RAMEWORK
+
+This section presents the PERSONA framework for compositional personality control in LLMs. We
+introduce four integrated components: P ERSONA -BASE (§2.2) extracts orthogonal OCEAN trait
+vectors; P ERSONA -A LGEBRA (§2.3) enables trait composition via vector arithmetic; P ERSONA -
+F LOW (§2.4) performs dynamic inference-time steering; and P ERSONA -E VOLVE (§2.5) benchmarks
+contextual personality adaptation. We begin by providing a comprehensive overview of the frame-
+work architecture before examining each component in detail.
+
+
+2.1   F RAMEWORK OVERVIEW
+
+           P ERSONA -E VOLVE                The PERSONA framework operates through four
+          Evaluation & Benchmarking         tightly integrated components, as illustrated in Figure 1.
+                                            P ERSONA -BASE extracts orthogonal personality vec-
+             P ERSONA -F LOW                tors corresponding to the ten poles of the Big Five di-
+          Dynamic Personality Control       mensions   from the model’s activation space, providing
+                                            the fundamental building blocks for personality con-
+                                            trol. P ERSONA -A LGEBRA leverages these vectors to
+          P ERSONA -A LGEBRA                enable compositional personality manipulation through
+           Compositional Operations
+                                            mathematical operations: scalar multiplication for trait
+                                            intensity control, vector addition for trait combination,
+             P ERSONA -BASE                 and subtraction for trait suppression. P ERSONA -F LOW
+          Orthogonal Vector Extraction      applies these operations dynamically during inference
+                                            through a predict-then-steer mechanism that adapts per-
+ Figure 1: The PERSONA framework.           sonality based on conversational context. P ERSONA -
+E VOLVE validates the framework through systematic benchmarks that assess trait expressiveness,
+role consistency, and personality coherence across diverse scenarios.
+
+
+                                                  2
+Published as a conference paper at ICLR 2026
+
+
+
+
+2.2     P ERSONA -BASE : F OUNDATIONAL P ERSONALITY V ECTORS
+
+P ERSONA -BASE establishes a systematic library of orthogonal personality vectors that serve as fun-
+damental building blocks for personality control. These vectors form the foundation for all algebraic
+operations and enable modular construction of complex personalities, making their quality critical
+to the framework’s effectiveness.
+
+2.2.1    V ECTOR E XTRACTION M ETHOD
+
+We adopt the OCEAN model, an empir-              Table 1: OCEAN personality vectors with opposing
+ically validated framework in psychology         trait poles for each dimension.
+that describes personality through five core      Dimension           Abbr.        High Pole            Low Pole
+dimensions: Openness, Conscientiousness,          Openness             O          v Inventive         v Consistent
+Extraversion, Agreeableness, and Neuroti-         Conscientiousness    C         v Dependable          v Careless
+                                                  Extraversion         E           v Outgoing          v Solitary
+cism. Each dimension spans a continuum            Agreeableness        A       v Compassionate     v Self-interested
+between opposing traits, shown in Table 1.        Neuroticism          N           v Nervous             v Calm
+
+Detailed definitions for each trait pole are
+provided in Appendix A.3.
+To extract personality vectors for the ten trait poles, we employ the automated pipeline from Persona
+Vectors (Chen et al., 2025a). This method isolates trait representations within the model’s activation
+space through contrastive prompting. The extraction process consists of three stages:
+First, a frontier LLM generates necessary artifacts from trait descriptions: (1) five pairs of con-
+trastive system prompts that either elicit or suppress the trait, (2) forty evaluation questions designed
+to evoke trait-relevant behavior, with half used for extraction and half for validation, and (3) an eval-
+uation rubric for GPT-4.1-mini to score trait expression from 0 to 100. Detailed prompts, examples
+and generated data are provided in Appendix A.1. The robustness of this approach to the choice
+of generator LLM is examined in Appendix A.2. Second, the model generates responses to these
+questions under both positive and negative prompt conditions. During generation, we collect inter-
+nal residual stream activations from each response. Finally, we compute the persona vector as the
+difference between mean activations from trait-expressing and -suppressing response groups. This
+yields a directional vector representing the target trait. Following Chen et al. (2025a), we select
+vectors from the most effective model layer. The empirical justification for single-layer steering and
+the selection of the optimal layer is provided in Appendix A.4.
+For downstream use, we steer the model by residual addition at the selected layer. Given a persona
+vector vl from layer l, we modify the residual stream as hl ← hl + α vl , where α is the steering
+coefficient and hl denotes the residual activation at layer l. Positive/negative α amplifies/suppresses
+the associated trait pole; we use this operation consistently in §2.3 and §2.4.
+
+2.2.2    O RTHOGONALITY VALIDATION
+                                                 Table 2: GPT-4.1-mini evaluated trait expression
+To validate the extracted vectors, we evalu-     scores (0-100) for responses steered with varying co-
+ate their effectiveness through causal steer-    efficients. Darker shades indicate stronger expression.
+ing (Turner et al., 2023; Rimsky et al., 2024)
+on the held-out evaluation questions, steer-      Trait                    Type         Steering Coefficient (α)
+ing activations as above (hl ← hl + α vl ).                                          −1.0        0.0   +1.0        +2.0
+Table 2 shows each vector reliably in-            Inventive                   O+      42.3     63.3     88.4       96.1
+duces its corresponding trait, with expres-       Consistent                  O-      27.2     51.1     69.2       79.5
+sion scores increasing monotonically with         Dependable                  C+      68.9     93.5     93.7       92.7
+positive coefficients. Negative coefficients      Careless                    C-       0.7      2.8     83.8       96.2
+effectively suppress traits, consistent with      Outgoing                    E+      23.2     45.4     85.0       97.7
+behavioral disabling methods (Arditi et al.,      Solitary                    E-       9.2     30.5     46.3       62.4
+2024), as reported previously.
+                                                  Compassionate               A+      71.8     90.8     95.9       97.1
+We observe asymmetric steering effects            Self-interested             A-       4.8      7.7     12.6       20.8
+for certain traits. Traits aligned with the       Nervous                     N+       6.6     13.0     45.6       96.8
+model’s training objectives (e.g., depend-        Calm                        N-      54.8     96.1     96.6       95.5
+able) show ceiling effects at baseline, lim-
+
+
+                                                    3
+

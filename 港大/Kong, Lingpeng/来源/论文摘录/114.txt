@@ -1,0 +1,176 @@
+                                         A M UTUAL I NFORMATION M AXIMIZATION P ERSPEC -
+                                         TIVE OF L ANGUAGE R EPRESENTATION L EARNING
+
+                                          Lingpeng Kong♠ , Cyprien de Masson d’Autume♠ , Wang Ling♠ , Lei Yu♠ , Zihang Dai♥♣
+                                          Dani Yogatama♠
+                                          DeepMind♠ , Carnegie Mellon University♥ , Google Brain♣
+                                          London, United Kingdom
+                                          {lingpenk,cyprien,lingwang,leiyu,zihangd,dyogatama}@google.com
+
+
+
+
+arXiv:1910.08350v2 [cs.CL] 26 Nov 2019
+                                                                                     A BSTRACT
+                                                  We show state-of-the-art word representation learning methods maximize an ob-
+                                                  jective function that is a lower bound on the mutual information between different
+                                                  parts of a word sequence (i.e., a sentence). Our formulation provides an alternative
+                                                  perspective that unifies classical word embedding models (e.g., Skip-gram) and
+                                                  modern contextual embeddings (e.g., BERT, XLNet). In addition to enhancing our
+                                                  theoretical understanding of these methods, our derivation leads to a principled
+                                                  framework that can be used to construct new self-supervised tasks. We provide an
+                                                  example by drawing inspirations from related methods based on mutual informa-
+                                                  tion maximization that have been successful in computer vision, and introduce a
+                                                  simple self-supervised objective that maximizes the mutual information between a
+                                                  global sentence representation and n-grams in the sentence. Our analysis offers a
+                                                  holistic view of representation learning methods to transfer knowledge and trans-
+                                                  late progress across multiple domains (e.g., natural language processing, computer
+                                                  vision, audio processing).
+
+
+                                         1   I NTRODUCTION
+                                         Advances in representation learning have driven progress in natural language processing. Performance
+                                         on many downstream tasks have improved considerably, achieving parity with human baselines in
+                                         benchmark leaderboards such as SQuAD (Rajpurkar et al., 2016; 2018) and GLUE (Wang et al.,
+                                         2019). The main ingredient is the “pretrain and fine-tune” approach, where a large text encoder
+                                         is trained on an unlabeled corpus with self-supervised training objectives and used to initialize a
+                                         task-specific model. Such an approach has also been shown to reduce the number of training examples
+                                         that is needed to achieve good performance on the task of interest (Yogatama et al., 2019).
+                                         In contrast to first-generation models that learn word type embeddings (Mikolov et al., 2013; Pen-
+                                         nington et al., 2014), recent methods have focused on contextual token representations—i.e., learning
+                                         an encoder to represent words in context. Many of these encoders are trained with a language
+                                         modeling objective, where the representation of a context is trained to be predictive of a target token
+                                         by maximizing the log likelihood of predicting this token (Dai & Le, 2015; Howard & Ruder, 2018;
+                                         Radford et al., 2018; 2019). In a vanilla language modeling objective, the target token is always
+                                         the next token that follows the context. Peters et al. (2018) propose an improvement by adding a
+                                         reverse objective that also predicts the word token that precedes the context. Following this trend,
+                                         current state-of-the-art encoders such as BERT (Devlin et al., 2018) and XLNet (Yang et al., 2019)
+                                         are also trained with variants of the language modeling objective: masked language modeling and
+                                         permutation language modeling.
+                                         In this paper, we provide an alternative view and show that these methods also maximize a lower
+                                         bound on the mutual information between different parts of a word sequence. Such a framework
+                                         is inspired by the InfoMax principle (Linsker, 1988) and has been the main driver of progress in
+                                         self-supervised representation learning in other domains such as computer vision, audio processing,
+                                         and reinforcement learning (Belghazi et al., 2018; van den Oord et al., 2019; Hjelm et al., 2019;
+
+
+                                                                                           1
+Bachman et al., 2019; O’Connor & Veeling, 2019). Many of these methods are trained to maximize
+a particular lower bound called InfoNCE (van den Oord et al., 2019)—also known as contrastive
+learning (Arora et al., 2019). The main idea behind contrastive learning is to divide an input data
+into multiple (possibly overlapping) views and maximize the mutual information between encoded
+representations of these views, using views derived from other inputs as negative samples. In §2, we
+provide an overview of representation learning with mutual information maximization. We then show
+how the skip-gram objective (§3.1; Mikolov et al. 2013), masked language modeling (§3.2; Devlin
+et al. 2018), and permutation language modeling (§3.3; Yang et al. 2019), fit in this framework.
+In addition to providing a principled theoretical understanding that bridges progress in multiple areas,
+our proposed framework also gives rise to a general class of word representation learning models
+which serves as a basis for designing and combining self-supervised training objectives to create better
+language representations. As an example, we show how to use this framework to construct a simple
+self-supervised objective that maximizes the mutual information between a sentence and n-grams in
+the sentence (§4). We combine it with a variant of the masked language modeling objective and show
+that the resulting representation performs better, particularly on tasks such as question answering and
+linguistics acceptability (§5).
+
+2       M UTUAL I NFORMATION M AXIMIZATION
+Mutual information measures dependencies between random variables. Given two random variables
+A and B, it can be understood as how much knowing A reduces the uncertainty in B or vice versa.
+Formally, the mutual information between A and B is:
+                        I(A, B) = H(A) − H(A | B) = H(B) − H(B | A).
+Consider A and B to be different views of an input data (e.g., a word and its context, two different
+partitions of a sentence). Consider a function f that takes A = a and B = b as its input. The goal of
+training is to learn parameters of the function f that maximizes I(A, B).
+Maximizing mutual information directly is generally intractable when the function f consists of
+modern encoders such as neural networks (Paninski, 2003), so we need to resort to a lower bound
+on I(A, B). One particular lower bound that has been shown to work well in practice is InfoNCE
+(Logeswaran & Lee, 2018; van den Oord et al., 2019),1 which is based on Noise Contrastive
+Estimation (NCE; Gutmann & Hyvarinen, 2012).2 InfoNCE is defined as:
+                                                                     
+                                                      X
+           I(A, B) ≥ Ep(A,B) fθ (a, b) − Eq(B̃) log    exp fθ (a, b̃) + log | B̃ |,      (1)
+                                                           b̃∈B̃
+
+where a and b are different views of an input sequence, fθ ∈ R is a function parameterized by θ
+(e.g., a dot product between encoded representations of a word and its context, a dot product between
+encoded representations of two partitions of a sentence), and B̃ is a set of samples drawn from a
+proposal distribution q(B̃). The set B̃ contains the positive sample b and |B̃| − 1 negative samples.
+Learning representations based on this objective is also known as contrastive learning. Arora et al.
+(2019) show representations learned by such a method have provable performance guarantees and
+reduce sample complexity on downstream tasks.
+We note that InfoNCE is related to cross-entropy. When B̃ always includes all possible values of
+the random variable B (i.e., B̃ = B) and they are uniformly distributed, maximizing InfoNCE is
+analogous to maximizing the standard cross-entropy loss:
+                                                                    
+                                                    X
+                           Ep(A,B) fθ (a, b) − log    exp fθ (a, b̃) .                     (2)
+                                                        b̃∈B
+    1
+     Alternative bounds include Donsker-Vardhan representation (Donsker & Varadhan, 1983) and Jensen-
+Shannon estimator (Nowozin et al., 2016), but we focus on InfoNCE here.
+   2
+     See van den Oord et al. (2019); Poole et al. (2019) for detailed derivations of InfoNCE as a bound on
+mutual information.
+
+
+                                                    2
+Eq. 2 above shows that InfoNCE is related to maximizing pθ (b | a), and it approximates the
+summation over elements in B (i.e., the partition function) by negative sampling. As a function of the
+negative samples, the InfoNCE bound is tighter when B̃ contains more samples (as can be seen in
+Eq. 1 above by inspecting the log |B̃| term). Approximating a softmax over a large vocabulary with
+negative samples is a popular technique that has been widely used in natural language processing in
+the past. We discuss it here to make the connection under this framework clear.
+
+
+3     M ODELS
+
+We describe how Skip-gram, BERT, and XLNet fit into the mutual information maximization
+framework as instances of InfoNCE. In the following, we assume that fθ (a, b) = gψ (b)> gω (a),
+where θ = {ω, ψ}. Denote the vocabulary set by V and the size of the vocabulary by V . For word
+representation learning, we seek to learn an encoder parameterized by ω to represent each word in a
+sequence x = {x1 , x1 , . . . , xT } in d dimensions. For each of the models we consider in this paper, a
+and b are formed by taking different parts of x (e.g., a := x0 and b := xT ).
+
+
+3.1   S KIP - GRAM
+
+We first start with a simple word representation learning model Skip-gram (Mikolov et al., 2013).
+Skip-gram is a method for learning word representations that relies on the assumption that a good
+representation of a word should
+                                  be predictive
+                                                of its context. The objective function that is maximized
+in Skip-gram is: Ep(xi ,xij ) p(xij | xi ) , where xi is a word token and xij is a context word of xi .
+
+Let b be the context word to be predicted xij and a be the input word xi . Recall that fθ (a, b) is
+gψ (b)> gω (a). The skip-gram objective function can be written as an instance of InfoNCE (Eq. 1)
+where gψ (b) and gω (a) are embedding lookup functions that map each word type to Rd . (i.e.,
+gψ (b), gω (a) : V → Rd ).
+p(xij | xi ) can either be computed using a standard softmax over the entire vocabulary or with
+negative sampling (when the vocabulary is very large). These two approaches correspond to different
+choices of B̃. In the softmax approach, B̃ is the full vocabulary set V and each word in V is
+uniformly distributed. In negative sampling, B̃ is a set of negative samples drawn from e.g., a unigram
+distribution.
+While Skip-gram has been widely accepted as an instance contrastive learning (Mikolov et al., 2013;
+Mnih & Kavukcuoglu, 2013), we include it here to illustrate its connection with modern approaches
+such as BERT and XLNet described subsequently. We can see that the two views of an input sentence
+that are considered in Skip-gram are two words that appear in the same sentence, and they are encoded
+using simple lookup functions.
+
+
+3.2   BERT
+
+Devlin et al. (2018) introduce two self-supervised tasks for learning contextual word representations:
+masked language modeling and next sentence prediction. Previous work suggests that the next
+sentence prediction objective is not necessary to train a high quality BERT encoder and the masked
+language modeling appears to be the key to learn good representations (Liu et al., 2019; Joshi et al.,
+2019; Lample & Conneau, 2019), so we focus on masked language modeling here. However, we also
+show how next sentence prediction fits into our framework in Appendix A.
+In masked language modeling, given a sequence of word tokens of length T , x = {x1 , . . . , xT },
+BERT replaces 15% of the tokens in the sequence with (i) a mask symbol 80% of the time, (ii) a
+random word 10% of the time, or (iii) its original word. For each replaced token, it introduces a term
+in the masked language modeling training objective to predict the original word given the perturbed
+sequence x̂i = {x1 , . . . , x̂i , . . . , xT } (i.e., the sequence x masked at xi ). This training objective can
+be written as: Ep(xi ,x̂i ) [p(xi | x̂i )].
+
+
+                                                       3
+

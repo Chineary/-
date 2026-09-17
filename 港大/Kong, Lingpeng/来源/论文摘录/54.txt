@@ -1,0 +1,185 @@
+                                                  Retrieved Sequence Augmentation for Protein Representation Learning
+
+
+                                               Chang Ma 1 Haiteng Zhao 2 Lin Zheng 1 Jiayi Xin 1 Qintong Li 1 Lijun Wu 3 Zhihong Deng 2 Yang Lu 4
+                                                                                   Qi Liu 1 Lingpeng Kong 1
+
+
+                                                                   Abstract                               1. Introduction
+
+
+
+
+arXiv:2302.12563v1 [q-bio.BM] 24 Feb 2023
+                                                                                                          Proteins are the basic yet intricate building blocks of life,
+                                                Protein language models have excelled in a vari-          performing a vast array of functions within organisms, in-
+                                                ety of tasks, ranging from structure prediction to        cluding catalyzing metabolic reactions, DNA replication,
+                                                protein engineering. However, proteins are highly         responding to stimuli, providing structure to cells, and trans-
+                                                diverse in functions and structures, and current          porting molecules from one location to another (Garrett &
+                                                state-of-the-art models including the latest version      Grisham, 2016). Central to the enigma of these building
+                                                of AlphaFold rely on Multiple Sequence Align-             blocks is the complex knowledge of protein relationships in
+                                                ments (MSA) to feed in the evolutionary knowl-            their sequences, structures, and functions, which is a conse-
+                                                edge. Despite their success, heavy computational          quence of the interplay between physics and evolution (Sad-
+                                                overheads, as well as the de novo and orphan pro-         owski & Jones, 2009). Experimental and theoretical efforts
+                                                teins remain great challenges in protein represen-        have been made to unveil the structures and functions of
+                                                tation learning. In this work, we show that MSA-          emergent proteins (Korendovych & DeGrado, 2020; An-
+                                                augmented models inherently belong to retrieval-          ishchenko et al., 2021), yet few methods can keep pace with
+                                                augmented methods. Motivated by this finding,             the rapid accumulation of sequences (Roy et al., 2010).
+                                                we introduce Retrieved Sequence Augmentation              Recently, protein language models (Rives et al., 2019; Lin
+                                                (RSA) for protein representation learning with-           et al., 2022; Elnaggar et al., 2021; Jumper et al., 2021)
+                                                out additional alignment or pre-processing. RSA           have achieved remarkable progress in predicting protein
+                                                links query protein sequences to a set of se-             functions and structures from sequences. Protein language
+                                                quences with similar structures or properties in          models create a distribution of amino acids that matches
+                                                the database and combines these sequences for             the co-occurrence probability in their natural state, thereby
+                                                downstream prediction. We show that protein lan-          capturing structural and evolutionary knowledge. In these
+                                                guage models benefit from the retrieval enhance-          approaches, all protein knowledge is implicitly stored in the
+                                                ment on both structure prediction and property            parameters, and the quality of the language model distribu-
+                                                prediction tasks, with a 5% improvement on MSA            tion is highly dependent on pre-training and parameter scale.
+                                                Transformer on average while being 373× faster.           For example, ESM-2 (Lin et al., 2022) shows that evolution-
+                                                In addition, we show that our model can transfer          ary depth saturates at lower model scales, and scaling up to
+                                                to new protein domains better and outperforms             a model size of billions is inevitable for protein modeling.
+                                                MSA Transformer on de novo protein prediction.            To this end, we study enhancing the prediction of language
+                                                Our study fills a much-encountered gap in protein         models with a simple retrieval-based augmentation.
+                                                prediction and brings us a step closer to demys-
+                                                tifying the domain knowledge needed to under-             Previous work (Khandelwal et al., 2019; Goyal et al., 2022;
+                                                stand protein sequences. Code is available on             Guu et al., 2020b; Wang et al., 2022) in natural language
+                                                https://github.com/HKUNLP/RSA.                            processing and machine learning has demonstrated that in-
+                                                                                                          troducing related input sequences can effectively introduce
+                                                                                                          domain knowledge without excessive backbone parameter
+                                                                                                          size. In protein learning, a similar approach Multiple Se-
+                                                1
+                                                  Department of Computer Science, The University of       quence Alignment (MSA) has been adopted to introduce
+                                            Hong Kong 2 School of Intelligence Science and Technology,    evolutionary knowledge into models by augmenting input
+                                            Peking University 3 Microsoft Research Asia 4 Department of
+                                            Computer Science, University of Waterloo. Correspondence      with aligned homologous sequences. MSA has improved
+                                            to: Chang Ma <changma@connect.hku.hk>, Lingpeng Kong          deep learning performance on various models (Rao et al.,
+                                            <lpk@cs.hku.hk>.                                              2021; Jumper et al., 2021; Marks et al., 2011; Hong et al.,
+                                                                                                          2022), yet its success is often attributed to the alignment
+                              Protein Property Prediction via Retrieved Sequence Augmentation
+
+process that highlights co-evolution – especially the align-
+ment process that is central to direct-coupling analysis meth-
+ods (Morcos et al., 2011; Marks et al., 2011; Kamisetty
+et al., 2013). The most common practice for constructing
+MSA (Remmert et al., 2012; Altschul & Koonin, 1998; John-
+son et al., 2010) is to build a Hidden Markov Model (HMM)
+profile for the entire sequence space of databases and then
+iteratively search for homologous sequences. Despite ef-
+forts to accelerate MSA construction (Remmert et al., 2012;
+Deorowicz et al., 2016; Hauser et al., 2016), this process is
+notoriously slow – it takes HHblits (Remmert et al., 2012)
+10 seconds to perform a single iteration search on Pfam with
+64 CPUs – and requires pre-computing of a HMM profile.
+These considerations motivate us to rethink the role of
+MSA as a retrieval-based augmentation. Viewing MSA                Figure 1. Illustration of speed up by RSA retrieval compared to
+as a retrieval-augmentation method, it can be decomposed          MSA on secondary structure prediction dataset with 8678 se-
+into two processes: retrieval and alignment. As shown in          quences. Accelerated MSA refers to the MSA Transformer with
+                                                                  MSA sequences retrieved by our RSA retriever.
+Figure 1, the speed bottleneck of MSA is the alignment
+time, which is constrained by a quadratic complexity of
+O(LD) (Remmert et al., 2012), where D is the database                • Employing probabilistic analysis, we develop a uni-
+size, and L is the protein length. Meanwhile, dense retriev-           fied framework that uses retrieval knowledge to en-
+ers can be accelerated and use only a 100th of the time MSA            hance protein language models. Our theory along
+needs to align a sequence (Hong et al., 2021; Johnson et al.,          with our experiments strikes two novel perspectives:
+2019b). Moreover, the language of proteins encodes not                 (1) MSA-augmented methods are essentially retrieval-
+only evolutionary knowledge but also other sources of infor-           augmented language models. Their performance can
+mation including structural and functional properties (Xia             be explained by the injection of evolutionary knowl-
+et al., 2009; O’Sullivan et al., 2004). Multiple sources of            edge. (2) The O(N 2 ) complex alignment process is
+knowledge can be used to aid protein understanding when                less necessary for deep protein language models.
+evolutionary knowledge is not available for orphan proteins
+and de novo (designed) proteins (Perdigão et al., 2015; Ste-        • We show that pre-trained dense retrievers can be faster
+fani, 2004; Anishchenko et al., 2021). Residue alignment               and perform well in extracting homologous sequences
+imitates the mutation process in proteins, but empirically,            and structurally similar sequences.
+present large language models have the potential to directly
+capture the evolutionary relationship between sequences              • We leverage the retrieval augmentation framework to
+without alignment information (Riesselman et al., 2019).               develop a new, fast method RSA. Unlike previous meth-
+In light of these bottlenecks, We propose a simple yet effec-          ods that combine protein language models with exter-
+tive Retrieved Sequence Augmentation (RSA) method as a                 nal knowledge, our method performs retrieval on-the-
+general framework for augmenting protein sequences with                fly and requires no additional pre-training. We show
+related sequences from an unlabeled database. Specifically,            that our model performs better than or competitively
+RSA uses a pre-trained dense sequence retriever to retrieve            with previous SOTAs. The result promises new op-
+protein sequences that are similar to the query sequence               portunities in using retrieval augmentation as a new
+both in terms of homology as well as structure. These se-              paradigm in protein learning. Code and data are avail-
+quences are learned together with original input to help               able in the supplementary material.
+the model cover external knowledge and transfer to new
+domains. Extensive experiments on six tasks, including sec-
+ondary structure prediction, contact prediction, homology         2. Related Work
+prediction, stability prediction, subcellular localization, and   Retrieval-Augmented Language Models The scaling
+protein-protein interaction demonstrate the effectiveness of      laws of language models indicate that scaling up model size
+our model. In addition, RSA overcomes the speed limit             and training data are central to better performance (Kaplan
+of MSA methods by directly inputting a batch of retrieved         et al., 2020). However, larger language models are expen-
+sequences into protein language models without performing         sive to pre-train and may even be computationally heavy in
+the alignment process. Our main contributions are:                inference. Retrieval-augmented language models (Guu et al.,
+                                                                  2020a; He et al., 2021a; Borgeaud et al., 2022) can achieve
+                                Protein Property Prediction via Retrieved Sequence Augmentation
+
+comparable performance on smaller models and are com-             mentations. We also offer a new holistic view on understand-
+putationally more efficient by injecting external knowledge.      ing these models, that is the retrieved protein sequences
+Our RSA method is motivated by retrieval-augmented lan-           enhance the performance of pre-trained protein models by
+guage models (Guu et al., 2020a; He et al., 2021a), though        providing evolutionary knowledge in a similar way as the
+we specifically focus on injecting protein knowledge and          MSA sequences do.
+adapt the model for token-level tasks and better efficiency.
+                                                                  Inspired by Guu et al. (2020a) and the probabilistic form of
+Protein Language Models To model and further under-               MSA Transformer, we propose a general framework, protein
+stand the protein sequence data, language models are intro-       retrieval augmentation, that aims to unify several state-of-
+duced to train on mass data (Heinzinger et al., 2019; Alley       the-art evolution augmentation methods. Specifically, we
+et al., 2019). Large scale pre-training enables language          consider these methods as learning a downstream predictor
+models to learn structural and evolutionary knowledge (El-        p(y|x) based on an aggregation of homologous protein rep-
+naggar et al., 2021; Jumper et al., 2021; Lin et al., 2022).      resentations R1...N . From the view of retrieval, p(y|x) is
+Despite these successes, many important applications still        decomposed into two steps: retrieve and predict. For a given
+require MSAs and other external knowledge (Rao et al.,            input x, the retrieve step first finds possibly helpful protein
+2021; Jumper et al., 2021; He et al., 2021b; Zhang et al.,        sequence r from a sequence corpus R and then predict the
+2021; Ju et al., 2021; Rao et al., 2020). MSAs have been          output y conditioning on this retrieved sequence. We treat
+shown effective in improving representation learning, de-         r as a latent variable and in practice, we approximately
+spite being extremely slow and costly in computation. Hu          marginalized it out with top-N retrieved sequences:
+et al. (2022) and Hong et al. (2021) use dense retrieval
+                                                                                                           N
+to accelerate multiple sequence augmentation, while still                     X                            X
+                                                                   p(y|x) =         p(y|x, r)p(r|x) ≈            p(y|x, rn )p(rn |x).
+dependent on alignment procedures. Recent work (Fang
+                                                                              r∈R                          n=1
+et al., 2022; Lin et al., 2022; Wu et al., 2022; Chowdhury
+                                                                                                                                   (1)
+et al., 2022) explores MSA-free language models though
+additional pre-training is involved. We take this step further    The probability p(r|x) denotes the possibility that r is sam-
+to investigate retrieval-augmented protein language models        pled from the retriever given x. Intuitively it measures
+that finds a balance between large scale pre-training and         the similarity between the two sequences r and x. This
+external knowledge.                                               framework also applies to the MSA-based augmentation
+                                                                  methods. We explain in detail using a state-of-the-art MSA-
+3. Problem Statement and Notations                                augmentation model MSA Transformer (Rao et al., 2021) as
+                                                                  an example. In MSA Transformer, the layers calculate self-
+The task of protein representation learning is to learn em-       attention both row-wise and column-wise. Column-wise
+beddings of protein sequences that can be transferred to          attention is defined as follows, given WQ , WK , WV , WO
+downstream tasks with finetuning. For a protein x with L          as the parameters in a typical attention function:
+amino acids, it can be denoted as x = [o1 , o2 , ...oL ], where
+each token oi denotes one of the 25 essential amino acids.                    N
+                                                                              X          Rs (i)WQ (Rn (i)WK )T
+We implement the embedding functions using BERT-style              Rs (i) =         σ(             √           )Rn (i)WV WO ,
+                                                                                                 N d
+Transformer encoder Embed(x) = [h1 , h2 , ...hL ]T , where                    n=1
+
+     R
+hi ∈ d is a d-dimensional token representation for oi . For                                                                (2)
+token property prediction (i.e., secondary structure predic-      where Rn (i) denotes the i-th token representation of the
+tion), pairwise prediction (i.e., contact prediction), and se-    n-th MSA sequence after performing the row-wise attention.
+quence property prediction (i.e., protein engineering) tasks,     Note that in MSA input, the first sequence r1 is defined as
+the probabilities are obtained through pooling operations         the original sequence x. Then for a token prediction task,
+defined below:                                                    we define the i-th position output as y and the predicted
+                                                                  distribution p(y|x) can be expressed as:
+       p(yToken |oi ) = FFN(hi ),
+                                                                                  N
+       p(yPairwise |oi , oj ) = FFN([hi ; hj ]),                                  X          R1 WQ (Rn WK )T
+                                                                    p(y|x) =            σ(          √        )(Rn WV WO Wy )
+       p(ySequence |x) = FFN(Mean([h1 , h2 , ...hL ]).                                            N d
+                                                                                  n=1
+                                                                                  N
+                                                                                  X                       N
+                                                                                                          X
+4. MSA Transformer as a Retrieval                                             =         p(y|x, rn )λn =         p(y|x, rn )p(rn |x),
+                                                                                  n=1                     n=1
+   Augmentation Method                                                                                                             (3)
+                                                                                  R (i)WQ (Rn (i)WK )T
+In this section, we introduce a unified probabilistic frame-      where λn = σ( 1        N d
+                                                                                            √          ) is the weighting norm
+work to connect the MSA-based models with retrieval aug-          that represents the similarity of retrieved sequence rn and
+

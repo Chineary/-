@@ -1,0 +1,216 @@
+            Reasoning Does Not Necessarily Improve Role-Playing Ability
+
+
+                            Xiachong Feng♡♠ , Longxu Dou♠ * , Lingpeng Kong♡ *
+                                ♡
+                                  The University of Hong Kong, ♠ Sea AI Lab
+                            fengxc@hku.hk, doulx@sea.com, lpk@cs.hku.hk
+
+
+
+
+                          Abstract                               Context
+                                                                 Tom: Captain, your boat has been stolen.
+    The application of role-playing large language
+                                                                 Zero-shot role-playing with GPT-4-Turbo
+    models (LLMs) is rapidly expanding in both                   Not stolen, mate—temporarily misplaced. And I always
+    academic and commercial domains, driving                     get my ship back, savvy?
+    an increasing demand for high-precision role-                Role-playing with chain-of-thought using GPT-4-Turbo
+    playing models. Simultaneously, the rapid ad-                [Reasoning process omitted] So the Pearl’s decided to go
+    vancement of reasoning techniques has con-                   on a little adventure without me—no matter, I’ll just steal
+                                                                 her back.
+    tinuously pushed the performance boundaries                  Role-playing with OpenAI o1-mini
+    of LLMs. This intersection of practical role-                [Reasoning process omitted] Stolen, you say, mate—why,
+    playing demands and evolving reasoning ca-                   I’d be far more worried for the soul foolish enough to filch
+    pabilities raises an important research ques-                the Pearl, savvy?
+    tion: “Can reasoning techniques enhance the
+    role-playing capabilities of LLMs?” To address              Table 1: Jack Sparrow role-playing example. (Jack Spar-
+    this, we conduct a comprehensive study using                row is a cunning and eccentric pirate captain known for
+    6 role-playing benchmarks, 24 LLMs, and 3                   his flamboyant, witty, and often rambling speech that
+    distinct role-playing strategies, comparing the             conceals sharp intelligence beneath a layer of drunken
+    effectiveness of direct zero-shot role-playing,             charm). It can be observed that direct zero-shot prompt-
+    role-playing with Chain-of-Thought (CoT), and               ing of GPT yields better results, aligning more closely
+    role-playing using reasoning-optimized LLMs.                with Jack Sparrow’s character traits.
+    Our findings reveal that CoT may reduce
+    role-playing performance, reasoning-optimized
+    LLMs are unsuitable for role-playing, reason-               and commercial applications. In the academic do-
+    ing ability disrupts the role-playing scaling law,          main, they offer novel possibilities for social simu-
+    large models still lack proficiency in advanced             lation experiments (Mou et al., 2024). In industry,
+    role-playing, and Chinese role-playing perfor-              role-specific assistants, emotional companionship
+    mance surpasses English role-playing perfor-                AI, and intelligent game NPCs (Park et al., 2023;
+    mance. Furthermore, based on extensive ex-
+                                                                Xu et al., 2024) hold significant potential for fur-
+    perimental results, we propose two promising
+    future research directions: Role-aware CoT for              ther development and commercialization. At the
+    improving role-playing LLMs and Reinforce-                  same time, reasoning capabilities in LLMs have
+    ment Learning for role-playing LLMs, aiming                 been further enhanced through Chain-of-Thought
+    to enhance the adaptability, consistency, and               (CoT) reasoning (Wei et al., 2022) and reinforce-
+    effectiveness of role-playing LLMs for both                 ment learning (Guo et al., 2025), enabling them to
+    research and real-world applications1 .                     tackle increasingly complex problems.
+                                                                   This situation prompts us to explore a previously
+1   Introduction
+                                                                unanswered research question: “Can reasoning
+Large language models (LLMs), leveraging their                  techniques enhance the role-playing capabilities of
+strong foundational capabilities and advanced                   large language models?” The answer to this ques-
+instruction-following abilities, have become the                tion could provide valuable insights for the future
+cornerstone of role-playing AI models (Chen et al.,             application of reasoning techniques in role-playing
+2024b; Tseng et al., 2024). These role-playing                  LLMs, potentially paving a new path for their de-
+LLMs present new opportunities in both research                 velopment and advancement.
+    * Corresponding Authors.                                       To address this question, we carefully select six
+    1
+        Our code is available at xcfcode/rolecompass.           role-playing datasets and conduct experiments us-
+                                                          10301
+                   Findings of the Association for Computational Linguistics: ACL 2025, pages 10301–10314
+                          July 27 - August 1, 2025 ©2025 Association for Computational Linguistics
+ing 24 widely used open-source and proprietary           forcement Learning for Role-Playing LLMs. Third,
+models. These models include API-based closed-           to address the fragmented nature of prior work with
+source models such as GPT-4-Turbo (Achiam                inconsistent evaluation standards, we integrate all
+et al., 2023), popular open-source models like           datasets and experimental methods into OpenCom-
+Qwen2.5 (Yang et al., 2024), and reinforce-              pass, enabling one-click execution and providing
+ment learning-optimized reasoning models such            a standardized experimental framework and code-
+as DeepSeek-R1 (Guo et al., 2025). All experi-           base for future research2 .
+ments are conducted using OpenCompass (Contrib-
+utors, 2023) to ensure evaluation consistency, sta-      2     Evaluation Framework
+bility, and reproducibility. Specifically, we utilize
+                                                         The evaluation framework for LLM-based role-
+six role-playing benchmarks: RoleBench (Wang
+                                                         playing agents primarily consists of the following
+et al., 2023b), InCharacter (Wang et al., 2024), So-
+                                                         components: the LLM itself (M), character pro-
+cialBench (Chen et al., 2024a), CharacterEval (Tu
+                                                         file (P), evaluation task (T ), evaluation metric (E),
+et al., 2024), HPD (Chen et al., 2023), and CroSS-
+                                                         and, when applicable, a reference standard answer
+MR (Yuan et al., 2024). These benchmarks cover
+                                                         (A). In this study, we focus on whether reasoning
+both multiple-choice and text generation tasks and
+                                                         techniques (R) can enhance the role-playing capa-
+include English and Chinese, making the evalu-
+                                                         bilities of LLMs. Therefore, the overall evaluation
+ation linguistically diverse. For evaluation, we
+                                                         process can be formalized as follows:
+employ both traditional metrics (e.g., Accuracy,
+ROUGE, and Exact Match) and LLM-as-a-Judge                  Given an LLM M, a predefined character profile
+methods (e.g., prompt-based evaluation and reward        P, an evaluation task T , and an evaluation metric
+model scoring), ensuring a broad assessment scope        E, the role-playing performance of M is assessed
+to enhance the robustness of our conclusions. Fur-       by generating responses conditioned on P and T .
+thermore, we define three role-playing approaches:       The generated outputs are then evaluated using E,
+direct zero-shot role-playing, role-playing with         which quantifies alignment with the intended role.
+Chain-of-Thought (CoT), and role-playing using           Additionally, reasoning techniques R are incorpo-
+reasoning-optimized LLMs. This comprehensive             rated into M to examine their impact on enhancing
+setup allows us to systematically investigate the        role-playing abilities. Formally, the evaluation pro-
+impact of reasoning techniques on role-playing per-      cess can be expressed as: S = E(M(P, T , R), A)
+formance. Table 1 presents a specific example,           where S represents the final performance score,
+demonstrating that the first setting, direct zero-shot   capturing the effectiveness of M in role-playing
+role-playing, achieves the best performance.             under the given conditions. A higher S indicates
+   Through extensive experiments, our findings re-       stronger role-playing capabilities. If A is unavail-
+veal several key insights that can inform the fu-        able or unnecessary, the evaluation metric E can be
+ture design of role-playing LLMs: (1) CoT may            adapted to rely on alternative assessment criteria,
+reduce role-playing performance; (2) Reasoning-          such as LLM-as-a-Judge.
+optimized LLMs are unsuitable for role-playing;
+                                                         3     Experimental Setting
+(3) Reasoning ability disrupts the role-playing scal-
+ing law; (4) The Qwen series is well-suited for          In this section, we introduce the benchmarks, mod-
+role-playing; (5) Chinese role-playing performance       els, metrics, and reasoning methods used in our
+surpasses English role-playing performance; (6)          experiments. All relevant code has been integrated
+Large models still lack proficiency in advanced          into the OpenCompass (Contributors, 2023) library
+role-playing.                                            to facilitate efficient replication by researchers.
+   Our study makes three key contributions. First,
+through extensive experiments on six role-playing        3.1        Role-playing Benchmarks
+datasets and 24 models, we reveal that reasoning
+                                                         We select six role-playing benchmarks to ensure
+techniques do not necessarily enhance the role-
+                                                         the reliability of our experimental results, includ-
+playing capabilities of LLMs. Second, our results
+                                                         ing: RoleBench (Wang et al., 2023b): Generates
+provide a comprehensive analysis of the current
+                                                         responses to both general and role-specific ques-
+state and limitations of role-playing LLMs, leading
+                                                         tions based on role information. HPD (Chen et al.,
+to two promising research directions: Role-Aware
+CoT for Improving Role-Playing LLMs and Rein-                  2
+                                                                   All code will be open-sourced upon publication.
+
+                                                    10302
+ Dataset                            Task Type         Evaluation Metric           Task                               Language   #Characters   #Samples
+                                                                                                                     EN         95            32833
+                                                      Automatic                   General Question Answering
+ RoleBench (Wang et al., 2023b)     Generation                                                                       ZH         5             1690
+                                                      (ROUGE)
+                                                                                  Role-specific Question Answering   EN         95            7534
+                                                      Automatic                                                      EN         1             149
+ HPD (Chen et al., 2023)            Generation                                    Response Generation
+                                                      (ROUGE)                                                        ZH         1             167
+                                                      LLM-as-a-Judge
+ CharacterEval (Tu et al., 2024)    Generation                                    Response Generation                ZH         77            4564
+                                                      (Pretrained Reward Model)
+                                                      Automatic
+ C RO SS-MR (Yuan et al., 2024)     Multiple-choice                               Motivation Recognition             EN         126           445
+                                                      (Accuracy)
+                                                                                                                     EN         23            988
+                                                                                  Role Knowledge Understanding
+                                                                                                                     ZH         15            405
+                                                      Automatic
+                                    Multiple-choice                                                                  EN         8             740
+                                                      (Accuracy)                  Behavioral Style Understanding
+                                                                                                                     ZH         8             323
+ Socialbench (Chen et al., 2024a)                                                                                    EN         79            731
+                                                                                  Social Preference Recognition
+                                                                                                                     ZH         101           1185
+                                                                                                                     EN         47            728
+                                                                                  Long Conversation Memorization
+                                                      Automatic                                                      ZH         35            620
+                                    Generation
+                                                      (Exact Match)
+                                                                                                                     EN         46            463
+                                                                                  Short Conversation Memorization
+                                                                                                                     ZH         27            310
+                                                      LLM-as-a-Judge              16Personalities Identification     EN         32            32
+ InCharacter (Wang et al., 2024)    Generation
+                                                      (Prompting)
+                                                                                  BFI Identification                 EN         32            32
+
+
+                                                          Table 2: Benchmark statistics.
+
+
+2023): Produces responses by leveraging the pro-                                  of which are widely recognized and scalable eval-
+vided Harry Potter character information and re-                                  uation approaches. Automated metrics include
+lated character details. CharacterEval (Tu et al.,                                ROUGE, Accuracy, and Exact Match, which are
+2024): Generates responses based on detailed char-                                well-established and widely accepted in the field
+acter information, including background experi-                                   as classical evaluation benchmarks. LLM-as-a-
+ences and personality traits. CroSS-MR (Yuan                                      Judge further encompasses two methodologies: the
+et al., 2024): Recognizes a role’s behavioral mo-                                 Pretrained Reward Model and Prompting-based
+tivations based on the provided character profile.                                Scoring. The Pretrained Reward Model is trained
+SocialBench (Chen et al., 2024a): Understands                                     on annotated datasets and assigns scores to spec-
+a role’s knowledge, behavioral style, social pref-                                ified dimensions during evaluation. In contrast,
+erences, and fine-grained memory based on the                                     Prompting-based Scoring leverages prompt engi-
+given role information. InCharacter (Wang et al.,                                 neering techniques and the extensive knowledge
+2024): Assesses a character’s personality through                                 base of LLMs to dynamically and adaptively gen-
+questionnaire-based interviews3 . Detailed bench-                                 erate relevant scores, providing a more flexible and
+mark statistics are provided in Table 2.                                          responsive evaluation mechanism. In Appendix B,
+                                                                                  we provide a detailed explanation of the evaluation
+3.2 Backbone LLMs                                                                 metrics used for each benchmark.
+Our experiments include a total of 24 models, com-
+prising 2 closed-source models and 22 open-source
+models. These models originate from six different                                 3.4     Role-playing Methods
+companies, including state-of-the-art models such
+                                                                                  In this study, we employ three approaches to guide
+as GPT-4-Turbo and DeepSeek-R1. The detailed
+                                                                                  LLMs in performing role-playing tasks: R1 : Direct
+list of models is provided in Appendix A.
+                                                                                  zero-shot role-playing using an LLM, where the
+3.3 Evaluation Metrics                                                            model generates responses without reasoning steps.
+                                                                                  R2 : Role-playing with chain-of-thought (CoT) rea-
+Our evaluation incorporates two types of metrics:
+                                                                                  soning, where an LLM explicitly engages in step-
+automated metrics and LLM-as-a-Judge, both
+                                                                                  by-step reasoning before executing the role-playing
+    3
+      InCharacter benchmark comprises 14 types of assess-                         task. R3 : Role-playing using reasoning-optimized
+ment questionnaires. In this study, we select the most classic                    LLMs, such as QwQ-32B-Preview and DeepSeek-
+ones: 16Personalities and BFI for reporting results. Mean-
+while, all other questionnaires are also implemented in the                       R1, which autonomously engage in deep reasoning
+code.                                                                             before generating responses.
+                                                                          10303
+

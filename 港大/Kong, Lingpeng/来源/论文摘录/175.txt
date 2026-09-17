@@ -1,0 +1,223 @@
+                                         Preprint.
+
+
+
+
+                                         SoftSkill: Behavioral Compression for Contextual Adaptation
+                                                     Xijia Tao♠,*     Yihua Teng♡,*    Xinyu Fu♡,*   Ziru Liu♡      Kecheng Chen♣
+                                                         Yuzhi Zhao♢       Suiyun Zhang♡       Rui Liu♡,†     Lingpeng Kong♠,†
+                                             ♠ The University of Hong Kong        ♡ Huawei Research         ♣ City University of Hong Kong
+                                                                    ♢ Huazhong University of Science and Technology
+
+                                                                     * Equal contribution    † Corresponding authors
+
+
+
+
+                                                                                      Abstract
+
+
+
+
+arXiv:2606.20333v1 [cs.AI] 18 Jun 2026
+                                                 Agent skills are commonly deployed as natural-language Markdown files
+                                                 that encode answer policies, evidence-use habits, and task procedures.
+                                                 These files are readable and portable, but they are consumed indirectly: for
+                                                 each task instance, a frozen language model must translate a long textual
+                                                 artifact into generation-time behavior. This paper asks whether a natural-
+                                                 language skill can instead initialize a compact continuous context object,
+                                                 refined by a trainable soft delta while the base model remains frozen. We
+                                                 propose S OFT S KILL, a frozen-backbone method that tunes such soft skills
+                                                 with next-token prediction and deploys them as latent behavioral priors at
+                                                 inference time. In our main single-round setting, a length-32 S OFT S KILL
+                                                 prefix on Qwen3.5–4B improves over no-skill prompting by 8.3 points on
+                                                 SearchQA, 42.1 points on LiveMath, and 1.3 points on DocVQA. Relative to
+                                                 SkillOpt, S OFT S KILL improves accuracy by 5.2 points on SearchQA and 12.5
+                                                 points on LiveMath, while replacing hundreds to thousands of Markdown
+                                                 skill tokens with a few virtual tokens. We further study agentic execution as
+                                                 a harder boundary case, where sparse trajectory imitation provides useful
+                                                 signal but does not yet robustly compress long-horizon procedural behavior.
+                                                 Code: https://github.com/xijia-tao/SoftSkill
+
+
+                                         1   Introduction
+
+                                         Large language models increasingly act through execution harnesses that expose files, tools,
+                                         verifiers, browser state, and long-horizon interaction traces. In these settings, adaptation
+                                         is not only a matter of asking the model the right question. A useful agent must know
+                                         when to inspect evidence, how to call tools, how to verify intermediate outputs, and which
+                                         domain-specific failure modes to avoid. Recent agent-learning and “skill” systems make
+                                         this adaptation explicit by packaging reusable procedural knowledge into natural-language
+                                         memories, executable skills, or Markdown files that are loaded at inference time (Shinn
+                                         et al., 2023; Zhao et al., 2024; Wang et al., 2023; Zhang et al., 2025; Yang et al., 2026).
+                                         Textual skills have an important advantage: they are readable, editable, and easy to route
+                                         through progressive disclosure (Zhang et al., 2025). They also have an important limitation.
+                                         The text is not the behavior itself. At inference time, the model must repeatedly internalize
+                                         the skill, decide which parts matter for the current instance, and translate those instructions
+                                         into hidden-state dynamics that shape token generation. A skill may be semantically correct
+                                         yet inefficient, poorly aligned with the model’s internal control directions, or verbose enough
+                                         to consume context and output budget.
+                                         This paper frames skill adaptation as compact contextual adaptation, or behavioral compres-
+                                         sion in the limited sense that a learned prefix can replace a longer skill artifact at inference
+                                         time. Rather than optimizing only the external Markdown artifact, we ask whether task-
+                                         successful answer behavior can be distilled into a compact continuous prefix that remains
+                                         in the model context. In the main QA setting, the object being compressed is answer style,
+                                         evidence reliance, and direct final-answer behavior; in the agentic stress test, we additionally
+                                         probe whether trajectory patterns from successful tool-use examples can be internalized. A
+
+
+                                                                                         1
+Preprint.
+
+
+
+
+                1     Skill Representations                        2   NTP Training / Selection Loop                                   3   Inference-time Usage
+
+  A     No Skill                                               1               Collect successful trajectories                     Replace skill section with soft skill
+                Task
+               prompt                      Frozen LM           2                                                              SkillOpt (hard text)                      SoftSkill (ours)
+                                            (frozen)                           Skill document
+                                                                                                                                  System                                   System
+                      No prior behavior
+                                                                                                                                  prompt                                   prompt
+                                                               3                             Initialize prefix p₀ with NL
+                                                                                                                              ## Skill                  replace
+  B     SkillOpt (hard text)                                                                 skill embedding                                              with         < soft prefix p >
+                                                                                                                              •…
+  ## Skill                                                     4
+  • Extract evidence                                                      Minimize next-token prediction loss
+                                 Task                                                                                          Task request                            Task request
+  • Verify against context                      Frozen LM                   ℒₙₜₚ = -Σ log Pθ(xₜ | x<t, p₀+Δp)
+  • Plan before acting          prompt
+                                                 (frozen)
+  • ...
+                                                                                      Optimize soft delta only
+                                                                                      p = p₀ + Δp on successful
+     Interpretable and editable, but long (300–2000+ tokens)                                                                     Frozen LM                                Frozen LM
+                                                                                      trajectories
+                                                                                                                               (acts as agent)                          (acts as agent)
+                                                                                            + Δp (learned)
+ C     SoftSkill-NTP (main)                                                                                                                        Example: ALFWorld
+                                                                             Backbone frozen
+                                          p₀                                                                                    Obs₀       You are in the kitchen. A mug is on the counter.
+            Skill document      init
+             (Markdown)                                                                                                       Thought₁     I should pick up the mug.
+                                                                                                 Pass -> Continue
+                                                                          Validation gate                                      Action₁     go to counter
+        tune                                                                (optional)
+                      +       Task                                                               Fail -> Revert to previous     Obs₁       You are at the counter.
+                             prompt        Frozen LM
+        p = p₀ + Δp                                                                              best checkpoint              Thought₂     Now I can take the mug.
+                                            (frozen)
+                                                                                                                               Action₂     take mug
+               Readable skill initializes metadata;            5       ▧ Export tuned soft skill with best
+            compact tuned prefix is used at inference                  validation accuracy                                             Obs (env)       Thought (LM)      Action (LM)
+
+
+
+
+Figure 1: S OFT S KILL initializes a compact soft prefix from skill text, tunes only the soft delta
+with next-token prediction, and selects the deployed checkpoint by held-out task validation.
+
+
+soft skill is therefore not a reward model in the usual inference-time sense–it does not score
+candidate outputs–but a latent behavioral prior that biases generation toward actions and
+answers that previously received supervision.
+SkillOpt (Yang et al., 2026) is the closest text-space point of departure. It treats a skill file as
+an external trainable state for a frozen agent: a separate optimizer model observes scored
+rollouts, proposes bounded textual edits, and accepts an edited skill only when it improves
+held-out validation performance. We use SkillOpt as a strong baseline and as a source of
+skill metadata or initialization in the agentic setting. However, S OFT S KILL is not primarily
+a continuous version of SkillOpt. SkillOpt optimizes what the agent reads; S OFT S KILL
+optimizes a small part of the conditioning state through which the frozen model enacts
+behavior. This distinction matters because a natural-language skill that works well for one
+model may not be equally effective for another model with different scale, pretraining data,
+tokenizer, or post-training behavior. The training step is therefore not only a cost of the
+method: it is the mechanism by which a readable skill is internalized into a model-specific
+behavioral prior.
+We propose S OFT S KILL, a training procedure for learning a soft prefix embedding for
+contextual agent adaptation. Given a natural-language skill document, we first map the skill
+into an initial embedding prefix, then tune only a soft delta to this prefix from ground-truth
+answers or logged successful trajectories while keeping the target model weights frozen.
+Our main empirical setting is single-round QA, where the target behavior is answer style
+and direct final-answer generation. We additionally study agentic execution as a harder
+regime in which the prefix must encode procedural tool-use behavior. We report these
+regimes separately because their supervision, failure modes, and empirical strength differ.
+The central empirical questions are:
+
+          1. Can a short learned prefix replace a long textual skill while preserving or improving
+             held-out success?
+          2. How much of the gain comes from the learned delta rather than the text initialization
+             alone?
+          3. Where is S OFT S KILL useful compared with hard skills, mean-pooled prefixes, and
+             LoRA?
+
+
+                                                                                             2
+Preprint.
+
+
+
+
+Our contribution is a study of compact latent behavioral priors for frozen-backbone QA.
+The evidence is strongest on SearchQA and LiveMath, where a 32-token S OFT S KILL prefix
+exceeds SkillOpt with Qwen3.5–4B while replacing hundreds or thousands of Markdown
+skill tokens. DocVQA provides a supported vision-QA prompt-start result that remains
+close to SkillOpt, but we do not claim a DocVQA placement ablation because the vision
+implementation does not insert prefixes at the skill-section slot. LoRA remains a strong
+baseline, especially on SearchQA, so the claim is not that soft skills uniformly dominate
+adapter tuning; rather, they provide a compact contextual deployment path when no
+adapter-serving path is desired. Agentic tasks are treated as a separate stress test for
+trajectory source, prefix length, and validation-selected prefix checkpoints rather than as the
+main headline result. The method preserves some operational advantages of skill systems–
+reusable artifacts, validation-guided selection, and optional human-readable metadata–
+while testing whether low-dimensional continuous context can distill refinements that are
+costly to express, parse, or regenerate as Markdown.
+
+2     Method
+
+2.1   Problem Setup
+
+Let f be a frozen language model used inside an execution harness H. A task instance
+x ∈ D can produce an interaction trajectory τ = H( f , x, s, p) and a scalar task score R(τ ),
+which we use for validation and test evaluation. The hard skill s is a Markdown document
+inserted into the agent context. The soft skill is a sequence of m virtual token embeddings
+with hidden dimension d, decomposed as
+                                        p = p0 + ∆p,
+where p0 is a text-derived initialization and only the soft delta ∆p is trainable. In the
+main experiments, training is supervised next-token prediction over answers or successful
+trajectories:
+                                        "                                  #
+                                               T
+             ∆p⋆ = arg min E( x,y)∼Dtrain − ∑ log p f (yt | y<t , x, s, p0 + ∆p) ,          (1)
+                         ∆p                   t =1
+
+subject to frozen model weights. Held-out task reward is not optimized online in the
+main method; it is used to select the deployed checkpoint and to report validation and test
+performance.
+
+2.2   Soft Skills as Behavioral Compression
+
+The prefix is trained to summarize behavior that would otherwise be expressed through
+long instructions, demonstrations, or generated rationales. In the main QA setting, a natural-
+language skill document initializes the prefix and next-token prediction tunes a soft delta
+using direct answer targets. In the agentic stress test, the same NTP objective is applied to
+successful trajectories. Reward-based refinement is a possible extension for agentic tasks,
+but it is not required for the core claim. The learned object is a small contextual control
+vector: it remains present during generation and biases the frozen model toward behaviors
+that were useful during supervised training.
+This view separates S OFT S KILL from an inference-time reward model. A reward model
+evaluates candidate behavior; a soft skill preconditions behavior before tokens are sampled.
+It also separates S OFT S KILL from ordinary prompt tuning. The prefix is attached to a
+reusable skill or task family, selected by held-out execution performance, and evaluated
+through task accuracy and deployment-cost diagnostics.
+
+2.3   Initialization and Skill Metadata
+
+The first design choice is initialization. An unstructured non-text prefix may require many
+trajectories before it expresses useful procedural knowledge. We therefore initialize pθ from
+
+
+                                              3
+

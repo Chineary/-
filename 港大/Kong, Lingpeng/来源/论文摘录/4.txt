@@ -1,0 +1,153 @@
+                                                      SyntaxNet Models for the CoNLL 2017 Shared Task
+                                                       Chris Alberti, Daniel Andor, Ivan Bogatyy, Michael Collins, Dan Gillick,
+                                                           Lingpeng Kong∗, Terry Koo, Ji Ma, Mark Omernick, Slav Petrov,
+                                                                     Chayut Thanapirom, Zora Tung, David Weiss
+
+
+
+
+arXiv:1703.04929v1 [cs.CL] 15 Mar 2017
+                                                                                               Google Inc
+                                                                                              New York, NY
+
+
+
+                                                                                                   Abstract
+                                                  We describe a baseline dependency parsing system for the CoNLL2017 Shared Task. This system,
+                                               which we call “ParseySaurus,” uses the DRAGNN framework [Kong et al., 2017] to combine transition-
+                                               based recurrent parsing and tagging with character-based word representations. On the v1.3 Universal
+                                               Dependencies Treebanks, the new system outpeforms the publicly available, state-of-the-art “Parsey’s
+                                               Cousins” models by 3.47% absolute Labeled Accuracy Score (LAS) across 52 treebanks.
+
+
+                                         1 Introduction
+                                         Universal Dependencies1 are growing in popularity due to the cross-lingual consistency and large language
+                                         coverage of the provided data. The initiative has been able to connect researchers across the globe and now
+                                         includes 64 treebanks in 45 languages. It is therefore not surprising that the Conference on Computational
+                                         Natural Language Learning (CoNLL) in 2017 will feature a shared task on “Multilingual Parsing from Raw
+                                         Text to Universal Dependencies.”
+                                             To facilitate further research on multilingual parsing and to enable even small teams to participate in the
+                                         shared task, we are releasing baseline implementations corresponding to our best models. This short paper
+                                         describes (1) the model structure employed in these models, (2) how the models were trained and (3) an em-
+                                         pirical evaluation comparing these models to those in Andor et al. [2016]. Our model uses on the DRAGNN
+                                         framework [Kong et al., 2017] to improve upon Andor et al. [2016] with dynamically constructed, recurrent
+                                         transition-based models. The code as well as the pretrained models is available at the SyntaxNet github
+                                         repository.2 .
+                                             We note that this paper describes the parsing model used in the baseline. Further releases will describe
+                                         any changes to the segmentation model compared to SyntaxNet.
+
+
+                                         2 Character-based representation
+                                         Recent work has shown that learned sub-word representations can improve over both static word embed-
+                                         dings and manually extracted feature sets for describing word morphology. Jozefowicz et al. [2016] use a
+                                         convolutional model over the characters in each word for language modeling. Similarly, Ling et al. [2015a,b]
+                                         use a bidirectional LSTM over characters in each word for parsing and machine translation.
+                                           ∗
+                                             Carnegie Mellon University, Pittsburgh, PA.
+                                           1
+                                             http://universaldependencies.org/
+                                           2
+                                              https://github.com/tensorflow/models/tree/master/syntaxnet
+
+
+                                                                                                           1
+     Chung et al. [2016] take a more general approach. Instead of modeling each word explicitly, they allow
+the model to learn a hierarchical “multi-timescale” representation of the input, where each layer corresponds
+to a (learned) larger timescale.
+     Our modeling approach is inspired by this multi-timescale architecture in that we generate our compu-
+tation graph dynamically, but we define the timescales explicitly. The input layer operates on characters and
+the subsequent layer operates on words, where the word representation is simply the hidden state computed
+by the first layer at each word boundary. In principle, this structure permits fully dynamic word represen-
+tations based on left context (unlike previous work) and simplifies recurrent computation at the word level
+(unlike previous work with standard stacked LSTMs [Gillick et al., 2015]).
+     More related work [Kim et al., 2015, Miyamoto and Cho, 2016, Lankinen et al., 2016, Ling et al., 2015a]
+describes alternate neural network architectures for combining character- and word-level modeling for var-
+ious tasks. Like Ballesteros et al. [2015], we use character-based LSTMs to improve the Stack-LSTM
+Dyer et al. [2015] model for dependency parsing, but we share a single LSTM run over the entire sentence.
+
+
+3 Model
+Our model combines the recurrent multi-task parsing model of Kong et al. [2017] with character-based
+representations learned by a LSTM. Given a tokenized text input, the model processes as follows:
+    • A single LSTM processes the entire character string (including whitespace)3 left-to-right. The last
+      hidden state in a given token (as given by the word boundaries) is used to represent that word in
+      subsequent parts of the model.
+    • A single LSTM processes the word representations (from the first step) in right-to-left order. We call
+      this the “lookahead” model.
+    • A single LSTM processes the lookahead representations right-to-left. This LSTM has a softmax layer
+      which is trained to predict POS tags, and we refer to it as the “tagger” model.
+    • The recurrent compositional parsing model [Kong et al., 2017] predicts parse tree left-to-right using
+      the arc-standard transition system. Given a stack s and a input pointer to the buffer i, the parser
+      dynamically links and concatenates the following input representations:
+           – Recurrently, the two steps that last modified the so and s1 (either SHIFT or REDUCE opera-
+             tions).
+           – From the tagger layer, the hidden representations for s0 , s1 , and i.
+           – From the lookahead layer, the hidden representation for i.
+           – All are projected to 64 dimensions before concatenating.
+           – The parser also extracts 12 discrete features for previously predicted parse labels, the same as in
+             Kong et al. [2017].
+       At inference time, we use beam decoding in the parser with a beam size of 8. We do not use local
+       normalization, and instead train the models with “self-normalization” (see below).
+     This model is implemented using the DRAGNN framework in TensorFlow. All code is publicly available
+at the SyntaxNet repository. The code provides tools to visualize the unrolled structure of the graph at run-
+time.
+   3
+     In our UD v1.3 experiments, the raw text string is not available. Since we use gold segmentations, the whitespace is artificially
+induced, and functions as a “new word” signal for languages with no naturally occuring whitespace.
+
+
+
+
+                                                                  2
+3.1 Training
+We train using the multi-task, maximum-likelihood “stack-propagation” method described in Kong et al.
+[2017] and Zhang and Weiss [2016]. Specifically, we use the gold labels to alternate between two updates:
+
+   1. TAGGER: We unroll the first three LSTMs and backpropagate gradients computed from the POS tags.
+
+   2. PARSER: We unroll the entire model, and backpropagate gradients computed from the oracle parse
+      sequence.
+
+    We use the following schedule: pretrain TAGGER for 10,000 iterations. Then alternate TAGGER and
+PARSER updates at a ratio of 1:8 until convergence.
+    To optimize for beam decoding, we regularize the softmax objective to be “self-normalized.”Vaswani et al.
+[2013], Andreas and Klein [2015]. With this modification to the softmax, the log scores of the model are
+encouraged (but not constrained) to sum to one. We find that this helps mitigate some of the bias induced
+by local normalization Andor et al. [2016], while being fast and efficient to train.
+
+3.2 Hyperparameters
+Like the ratio above, many hyperparameters, including design decisions, were tuned to find reasonable
+values before training all 64 baseline models. While the full recipe can be deciphered from the code, here
+are some key points for practitioners:
+
+   • We use Layer Normalization [Ba et al., 2016] in all of our networks, both LSTM and the recurrent
+     parser’s Relu network cell.
+
+   • We always project the LSTM hidden representations down from 256→64 when we pass from one
+     component to another.
+
+   • We use moving averages of parameters at inference time.
+
+   • We use the following ADAM recipe: β1 = β2 = 0.9, and set ǫ to be one of 10−3 , 10−4 , 10−5
+     (typically 10−4 ).
+
+   • We normalize all gradients to have unit norm before applying the ADAM updates.
+
+   • We use dropout both recurrently and on the inputs, at the same rate (typically 0.7 or 0.8).
+
+   • We use a minibatch size of 4, with 4 asynchronous training threads doing asynchronous SGD.
+
+
+4 Comparison to Parsey’s Cousins
+Since the test set is not available for the contest, we use v1.3 of the Universal Dependencies treebanks to
+compare to prior state-of-the-art on 52 languages. Our results are in Table 1. We observe that the new model
+outperforms the original SyntaxNet baselines, sometimes quite dramatically (e.g. on Latvian, by close to
+12% absolute LAS.) We note that this is not an exhaustive experiment, and further study is warranted in the
+future. Nonethelss, these results show that the new baselines compare very favorably to at least one publicly
+available state-of-the-art baseline.
+
+
+
+
+                                                     3
+

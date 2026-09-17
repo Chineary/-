@@ -1,0 +1,207 @@
+                                                                         The Devil in Linear Transformer
+                                                                ? Zhen Qin1 , ? Xiaodong Han1 , Weixuan Sun2,3 , Dongxu Li2 ,
+
+                                                                      Lingpeng Kong4,5 , Nick Barnes2 ,                                  Yiran Zhong4
+                                                                 1                               2
+                                                               SenseTime Research, Australian National University,
+                                               3
+                                                   OPPO Research Institute, 4 Shanghai AI Laboratory, 5 The University of Hong Kong
+                                                                https://github.com/OpenNLPLab/Transnormer
+
+
+                                                               Abstract                                                                                             TransNormer T2
+                                                                                                                                                                    TransNormer T1
+
+
+
+
+                                                                                                     Long-Range Arena Score
+                                                                                                                              64
+                                             Linear transformers aim to reduce the                                            62                                 FLASH      cosFormer
+                                                                                                                                                       LS
+                                             quadratic space-time complexity of vanilla                                                       FLASH_quad
+                                                                                                                              60
+
+
+
+
+arXiv:2210.10340v1 [cs.CL] 19 Oct 2022
+                                             transformers. However, they usually suffer                                                                               Reformer
+                                             from degraded performances on various tasks                                      58                                                          Performer
+                                                                                                                                                            Nystorm
+                                             and corpora. In this paper, we examine                                           56
+                                             existing kernel-based linear transformers                                             Transformer                                           Linformer
+                                             and identify two key issues that lead to such                                    54
+                                                                                                                                                        a
+
+
+
+
+                                             performance gaps: 1) unbounded gradients in                                           2      4       6     8      10     12     14     16       18
+                                             the attention computation adversely impact                                                           Speed (steps per sec)
+                                             the convergence of linear transformer models;
+                                             2) attention dilution which trivially distributes          Figure 1: T RANS N ORMER has smaller memory foot-
+                                             attention scores over long sequences while ne-             prints (circle sizes) and produces clearly favorable
+                                             glecting neighbouring structures. To address               speed (x-axis) and overall scores (y-axis), when evalu-
+                                             these issues, we first identify that the scaling           ated on the challenging Long-Range Arena benchmark
+                                             of attention matrices is the devil in unbounded            than the vanilla transformer and other competing meth-
+                                             gradients, which turns out unnecessary in                  ods.
+                                             linear attention as we show theoretically
+                                             and empirically. To this end, we propose a
+                                             new linear attention that replaces the scaling             its quadratic space-time complexity with respect
+                                             operation with a normalization to stabilize
+                                                                                                        to the input length. Various prior works attempt
+                                             gradients. For the issue of attention dilution,
+                                             we leverage a diagonal attention to confine                to alleviate this inefficiency (Zaheer et al., 2020;
+                                             attention to only neighbouring tokens in early             Beltagy et al., 2020; Tay et al., 2020a; Kitaev et al.,
+                                             layers. Benefiting from the stable gradients               2020; Child et al., 2019; Liu et al., 2022; Sun et al.,
+                                             and improved attention, our new linear trans-              2022b). In this work, we focus on a particular sub-
+                                             former model, T RANS N ORMER, demonstrates                 set of these methods, known as kernel-based lin-
+                                             superior performance on text classification                ear transformers (Choromanski et al., 2020; Wang
+                                             and language modeling tasks, as well as on the             et al., 2020; Katharopoulos et al., 2020; Peng et al.,
+                                             challenging Long-Range Arena benchmark,
+                                                                                                        2020; Qin et al., 2022) considering their desirable
+                                             surpassing vanilla transformer and existing
+                                             linear variants by a clear margin while being              linear space-time complexity.
+                                             significantly more space-time efficient. The                  Despite their space-time efficiency, linear trans-
+                                             code is available at T RANS N ORMER.                       formers are not always in favor for practical adop-
+                                                                                                        tion, largely due to the degraded performance than
+                                         1   Introduction                                               the vanilla model. To address this issue, we take
+                                         Transformer models show great performance on                   a close look at existing kernel-based linear trans-
+                                         a wide range of natural language processing and                formers and identify two deficiencies that lead to
+                                         computer vision tasks (Qin et al., 2022; Sun et al.,           such a performance gap.
+                                         2022b; Cheng et al., 2022a,b; Zhou et al., 2022).             Unbounded gradients. Most existing linear trans-
+                                         One issue of the vanilla transformer model lies in            formers inherit attention formulation from the
+                                         ?
+                                                                                                       vanilla transformer, which scales attention scores
+                                          Equal contribution.  The corresponding author (Email:
+                                         zhongyiran@gmail.com). This work was done when Weixuan        to ensure they are bounded within [0, 1]. However,
+                                         Sun and Yiran Zhong were in the SenseTime Research.           we theoretically show that such a scaling strategy
+renders unbounded gradients for linear transformer      GLUE than vanilla model and other competing
+models. As a result, the unbounded gradients em-        methods. In addition, on the challenging Long-
+pirically lead to unstable convergence as our pre-      Range Arena benchmark, T RANS N ORMER also
+liminary experiments suggest.                           shows favorable results while being faster and more
+Attention dilution. Previous works (Titsias, 2016;      scalable with longer inputs during both training
+Jang et al., 2016; Gao and Pavel, 2017; Qin et al.,     and inference time.
+2022; Sun et al., 2022b,a) suggest that in vanilla
+transformer, softmax attention maps tend to be lo-      2   Background and related work
+cal. In contrast, as shown in Fig 2, we observe that    We first briefly review vanilla transformer (Vaswani
+linear transformers often trivially distribute atten-   et al., 2017) and its efficient variants. The key com-
+tion scores over the entire sequence even in early      ponent of transformers is the self-attention, which
+layers. Due to this issue, which we refer as atten-     operates on query Q, key K and value V matrices;
+tion dilution, important local information is less      each of them is the image of a linear projection
+well preserved in linear models, resulting in infe-     taking X ∈ Rn×d as input:
+rior performance. This negative impact of attention
+dilution is also evidenced by the performance drop          Q = XWQ , K = XWK , V = XWV ∈ Rn×d ,          (1)
+in our controlled experiments if partly replacing
+vanilla attention in transformer layers with linear     with n the input length, d the hidden dimension.
+attention ones.                                         The output O ∈ Rn×d is formulated as:
+   To mitigate these issues, we propose a linear                                      √
+                                                                     O = Softmax(QKT / d)V,               (2)
+transformer model, called T RANS N ORMER, which
+shows better performance than vanilla transformer       where the Softmax(·) step renders quadratic space-
+on a wide range of task while being significantly       time complexity with respect to the input length,
+faster during runtime, as shown in Fig. 1.              making it prohibitive for vanilla transformer to
+   To avoid the unbounded gradients, we introduce       scale to long input sequences. To address this
+N ORM ATTENTION, which gets rid of scaling over         issue, numerous efficient transformers have been
+attention matrices while appending an additional        explored in the literature. These methods can be
+normalization only after the attention layer. The       generally categorized into two families, i.e., pattern
+choice of the normalization operator is unrestricted,   based methods and kernel based methods.
+for example, LayerNorm (Ba et al., 2016) or RM-            Pattern based methods (Zaheer et al., 2020; Belt-
+SNorm (Zhang and Sennrich, 2019) both serve the         agy et al., 2020; Tay et al., 2020a; Kitaev et al.,
+purpose. We show empirical results demonstrat-          2020; Child et al., 2019) sparsify the attention cal-
+ing that with N ORM ATTENTION, the gradients are        culation with handcrafted or learnable masking pat-
+more stable during training, which in turn leads to     terns. Kernel-based methods adopt kernel functions
+more consistent convergence.                            to decompose softmax attention, which reduces the
+   To alleviate the attention dilution issue, we mod-   theoretical space-time complexity to linear. In this
+ify the vanilla attention and allow each token to       paper, we refer the kernel-based variants as linear
+only attend to its neighbouring tokens, resulting       transformers for simplicity.
+in a diagonal attention. To mimic the behaviors            In the kernel-based methods (Choromanski et al.,
+on local semantics of the vanilla transformer, we       2020; Katharopoulos et al., 2020; Peng et al., 2020;
+employ the diagonal attention on early layers while     Qin et al., 2022; Zheng et al., 2022; Wang et al.,
+using N ORM ATTENTION for later ones. In this           2020), a kernel function φ(·) maps queries and keys
+way, we encourage the model to capture both local       to their hidden representations. Then the output of
+and global language context. Note that our diag-        the linear attention can be rewritten as:
+onal attention can be efficiently computed such                      O = ∆−1 φ(Q)[φ(K)T V],
+that the overall linear space-time complexity of                                                          (3)
+                                                                     ∆ = diag(φ(Q)[φ(K)T 1n ]).
+T RANS N ORMER is preserved.
+   We perform extensive experiments on standard         where the product of keys and values are com-
+tasks, where T RANS N ORMER demonstrates lower          puted to avoid the quadratic n × n matrix. Ex-
+language modeling perplexities on WikiText-103          isting methods mainly differ in the design of kernel
+and overall higher text classification accuracy on      functions. For example, Choromanski et al. (2020)
+and Katharopoulos et al. (2020) adopt activation                       Given the above definitions, the gradients of the
+function 1 + elu to process query and key. Wang                     attention matrix P is derived as:
+et al. (2020) assumes attention matrices are low-                              ∂pij   f 0 (sik )
+rank. Peng et al. (2020) and Zheng et al. (2022)                                    =            (1j=k pij − pij pik )      (7)
+                                                                               ∂sik   f (sik )
+approximate softmax under constrained theoretical
+bounds. Qin et al. (2022) propose a linear alterna-                 Therefore, for the vanilla attention, the partial
+                                                                               ∂pij
+tive to the attention based on empirical properties                 derivative ∂sik is:
+of the softmax function.
+   These methods focus on either approximating                              f 0 (x) = exp(x) = f (x)
+                                                                             ∂pij
+or altering the softmax operator while preserving                                   = 1j=k pij − pij pik
+                                                                             ∂sik                                           (8)
+its properties. Compared with the vanilla trans-                                      (
+                                                                                        pik − pik pik ∈ [0, 1/4] j = k
+former, these methods often trade performance for                                   =
+                                                                                        −pij pik ∈ [−1/4, 0]     j 6= k
+efficiency, usually resulting in worse task perfor-
+mance. In this paper, we argue that there are two                   and it is bounded as:
+essential reasons leading to such a performance
+gap, discussed in detail as follows.                                                         ∂pij  1
+                                                                                                  ≤ .                       (9)
+                                                                                             ∂sik  4
+3     The devil in linear attention                                 However, for linear attentions, we have:
+In this section, we motivate the design principles of                         f 0 (x) = 1
+T RANS N ORMER by providing theoretical evidence                               ∂pij       1
+                                                                                      =      (1j=k pij − pij pik )
+for the unbounded gradients, and empirical results                             ∂sik     sik                                (10)
+                                                                                        (
+showing the adverse influence of attention dilution.                                        1
+                                                                                               (pik − pik pik ) j = k
+                                                                                      = s1ik
+                                                                                           sik
+                                                                                               (−p ij pik )       j 6= k
+3.1    Unbounded gradients
+Few work on linear transformers analyzes their gra-                 and3
+                                                                                          ∂pij     1
+dients during training. Our first key observation is                                           ≤         .                 (11)
+                                                                                          ∂sik   4|sik |
+that kernel-based linear attention suffer from un-
+bounded gradients, causing unstable convergence                     Since |sik |−1 = |φ(qi )φ(kj )T |−1 can be arbitrar-
+during training. In the following, we highlight the                 ily large, the gradient of linear attention has no
+main theoretical results while referring readers to                 upper bound. On the other hand, we can also show
+Appendix D for the full derivation.                                 that the gradient of linear attention has no lower
+   Consider a self-attention module, either vanilla                 bound4 :
+or linear attention. Its attention matrix P ∈ Rn×n                  Proposition 3.1. ∀M > 0, there exists qi , kj ∈
+can be represented in the following unified form 1 :                Rd , j = 1, . . . , n, such that:
+
+              pij = Pn
+                      f (sij )
+                                  , f : R → R.               (4)
+                                                                                           ∂pij
+                                                                                                > M.                       (12)
+                     k=1 f (sik )                                                          ∂sik
+  Vanilla and linear attention differ mainly in their                  The unbounded gradients lead to less stable op-
+computation of token-wise similarities sij 2 . In                   timization and worse convergence results in our
+vanilla attention, sij is computed as:                              preliminary studies.
+                            √
+              sij = qTi kj / d, f (x) = exp(x),              (5)    3.2    Attention dilution
+                                                                    It is a known property of vanilla attention to em-
+while for linear attentions, sij can be decomposed                  phasize on neighbouring tokens (Titsias, 2016;
+using a kernel function φ, such that:                               Qin et al., 2022). However, this property does not
+                                                                    directly inherit to the linear transformer variants.
+               sij = φ(qi )T φ(kj ), f (x) = x.              (6)
+                                                                       To quantify the attention dilution issue, we intro-
+1
+  Here we assume that f (sij ) ≥ 0, the conclusion is satisfied     duce a metric called locally accumulated attention
+  in most cases.
+2                                                                   3
+  Note that sij is not directly computed in linear attention, but     A detailed proof of the upper bound can be found at Ap-
+  can still be represented in this unified form, see Appendix D       pendix B.
+                                                                    4
+  for more detailed derivation                                        The proof can be found in Appendix C.
+

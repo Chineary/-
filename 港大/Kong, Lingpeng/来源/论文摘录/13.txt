@@ -1,0 +1,216 @@
+  Syntactic Structure Distillation Pretraining for Bidirectional Encoders
+
+                      Adhiguna Kuncoro∗♠♦ Lingpeng Kong∗♠ Daniel Fried∗♣
+                    Dani Yogatama♠ Laura Rimell♠ Chris Dyer♠ Phil Blunsom♠♦
+                                                        ♠
+                                  DeepMind, London, UK
+                            ♦
+               Department of Computer Science, University of Oxford, UK
+         ♣
+           Computer Science Division, University of California, Berkeley, CA, USA
+ {akuncoro,lingpenk,dyogatama,laurarimell,cdyer,pblunsom}@google.com
+                            dfried@cs.berkeley.edu
+
+                           Abstract                                            dels have also been shown to perform remark-
+                                                                               ably well at syntactic grammaticality judgment
+       Textual representation learners trained on large
+                                                                               tasks (Goldberg, 2019), and encode substantial
+       amounts of data have achieved notable success
+                                                                               amounts of syntax in their learned representa-
+       on downstream tasks; intriguingly, they have
+                                                                               tions (Liu et al., 2019a; Tenney et al., 2019a,b;
+       also performed well on challenging tests of
+                                                                               Hewitt and Manning, 2019; Jawahar et al., 2019).
+       syntactic competence. Hence, it remains an
+                                                                               Intriguingly, success on these syntactic tasks
+       open question whether scalable learners like
+                                                                               has been achieved by Transformer architectures
+       BERT can become fully proficient in the
+                                                                               (Vaswani et al., 2017) that lack explicit notions of
+       syntax of natural language by virtue of data
+                                                                               hierarchical syntactic structures.
+       scale alone, or whether they still benefit from
+                                                                                  Based on such evidence, it would be tempting
+       more explicit syntactic biases. To answer
+                                                                               to conclude that data scale alone is all we need to
+       this question, we introduce a knowledge
+                                                                               learn the syntax of natural language. Nevertheless,
+       distillation strategy for injecting syntactic
+                                                                               recent findings that systematically compare the
+       biases into BERT pretraining, by distilling
+                                                                               syntactic competence of models trained at varying
+       the syntactically informative predictions of a
+                                                                               data scales suggest that model inductive biases are
+       hierarchical—albeit harder to scale—syntactic
+                                                                               in fact more important than data scale for acquiring
+       language model. Since BERT models masked
+                                                                               syntactic competence (Hu et al., 2020). Two
+       words in bidirectional context, we propose to
+                                                                               natural questions, therefore, are the following:
+       distill the approximate marginal distribution
+                                                                               Can representation learners that work well at scale
+       over words in context from the syntactic LM.
+                                                                               still benefit from explicit syntactic biases? And
+       Our approach reduces relative error by 2–21%
+                                                                               where exactly would such syntactic biases be
+       on a diverse set of structured prediction tasks,
+                                                                               helpful in different language understanding tasks?
+       although we obtain mixed results on the
+                                                                               Here we work towards answering these questions
+       GLUE benchmark. Our findings demonstrate
+                                                                               by devising a new pretraining strategy that injects
+       the benefits of syntactic biases, even for
+                                                                               syntactic biases into a BERT (Devlin et al., 2019)
+       representation learners that exploit large
+                                                                               learner that works well at scale. We hypothesize
+       amounts of data, and contribute to a better
+                                                                               that this approach can improve the competence of
+       understanding of where syntactic biases are
+                                                                               BERT on various tasks, which provides evidence
+       helpful in benchmarks of natural language
+                                                                               for the benefits of syntactic biases in large-scale
+       understanding.
+                                                                               models.
+                                                                                  Our approach is based on the prior work of
+1 Introduction                                                                 Kuncoro et al. (2019), who devised an effective
+                                                                               knowledge distillation (KD; Bucilǎ et al., 2006;
+Large-scale textual representation learners trained                            Hinton et al., 2015) procedure for improving
+with variants of the language modeling (LM) obj-                               the syntactic competence of scalable LMs that
+ective have achieved remarkable success on down-                               lack explicit syntactic biases. More concretely,
+stream tasks (Peters et al., 2018; Devlin et al.,                              their KD procedure utilized the predictions of
+2019; Yang et al., 2019). Furthermore, these mo-                               an explicitly hierarchical (albeit hard to scale)
+   ∗
+   Equal contribution.                                                         syntactic LM, recurrent neural network grammars
+                                                                         776
+
+             Transactions of the Association for Computational Linguistics, vol. 8, pp. 776–794, 2020. https://doi.org/10.1162/tacl a 00345
+                       Action Editor: James Henderson. Submission batch: 6/2020; Revision batch: 8/2020; Published 12/2020.
+                               c 2020 Association for Computational Linguistics. Distributed under a CC-BY 4.0 license.
+(RNNGs; Dyer et al., 2016) (§2) as a syntactically       CoLA), but performs slightly worse on the rest
+informed learning signal for a sequential LM that        of GLUE. These findings allude to a partial
+works well at scale.                                     dissociation between model performance on
+   Our setup nevertheless presents a new chal-           GLUE, and on structured prediction benchmarks
+lenge: Here the BERT student is a denoising              of NLU.
+autoencoder that models a collection of con-                Altogether, our findings: (i) showcase the bene-
+ditionals for words in bidirectional context, while      fits of syntactic biases, even for representation
+the RNNG teacher is an autoregressive LM that            learners that leverage large amounts of data, (ii)
+predicts words in a left-to-right fashion, that is       help better understand where syntactic biases are
+tφ (xi |x<i ). This mismatch crucially means that        most helpful, and (iii) make a case for designing
+the RNNG’s estimate of tφ (xi |x<i ) may fail to         approaches that not only work well at scale, but
+take into account the right context x>i that is          also integrate stronger notions of syntactic biases.
+accessible to the BERT student (§3). Hence, we
+propose an approach where the BERT student               2 Recurrent Neural Network Grammars
+distills the RNNG’s marginal distribution over
+words in context, tφ (xi |x<i , x>i ). We develop        Here we briefly describe the RNNG (Dyer et al.,
+an efficient yet effective approximation for this        2016) that we use as the teacher model. An RNNG
+quantity, since exact inference is expensive owing       is a syntactic LM that defines the joint prob-
+to the RNNG’s left-to-right parameterization.            ability of surface strings x and phrase-structure
+   Our structure-distilled BERT model differs            nonterminals y, henceforth denoted as tφ (x, y),
+from the standard BERT model only in its pre-            through a series of structure-building actions that
+training objective, and thus retains the scalability     traverse the tree in a top–down, left-to-right fash-
+afforded by Transformer architectures and special-       ion. Let N and Σ denote the set of phrase-structure
+ized hardwares like TPUs. In fact, our approach          non-terminals and word terminals, respectively.
+maintains compatibility with standard BERT pipe-         At each time step, the decision over the next action
+lines; the structure-distilled BERT models can           at ∈ {NT(n), GEN(w), REDUCE}, where n ∈
+simply be loaded as pretrained BERT weights,             N and w ∈ Σ, is parameterized by a stack LSTM
+which can then be fine-tuned in the exact same           (Dyer et al., 2015) that encodes partial constit-
+fashion.                                                 uents. The choice of at yields these transitions:
+   We hypothesize that the stronger syntactic
+biases from our new pretraining procedure are               • at ∈ {NT(n), GEN(w)} would push the cor-
+useful for a variety of natural language under-               responding non-terminal or word embeddings
+standing (NLU) tasks that involve structured                  —en or ew —onto the stack;
+output spaces—including tasks like semantic role
+labeling (SRL) and coreference resolution that are          • at = REDUCE would pop the top k
+not explicitly syntactic in nature. We thus evaluate          elements up to the last incomplete non-
+our models on six diverse structured prediction               terminal, compose these elements with a
+tasks, including phrase-structure parsing (in-                separate bidirectional LSTM, and lastly push
+domain and out-of-domain), dependency parsing,                the composite phrase embedding ephrase back
+SRL, coreference resolution, and a combinatory                onto the stack. The hierarchical inductive
+categorial grammar (CCG) supertagging probe, in               bias of RNNGs can be attributed to this
+addition to the GLUE benchmark (Wang et al.,                  composition function,1 which recursively
+2019). On the structured prediction tasks, our                combines smaller units into larger ones.
+structure-distilled BERTBASE reduces relative
+                                                         RNNGs attempt to maximize the probability of
+error by 2% to 21%. These gains are more pro-
+                                                         correct action sequences relative to each gold
+nounced in the low-resource scenario, suggesting
+                                                         tree.2
+that stronger syntactic biases help improve sample
+                                                            1
+efficiency (§4).                                               Not all syntactic LMs have hierarchical biases; Choe
+   Despite the gains on the structured prediction        and Charniak (2016) modeled strings and phrase structures
+                                                         sequentially with LSTMs. This model can be understood as
+tasks, we achieve mixed results on GLUE: Our             a special case of RNNGs without the composition function.
+approach yields improvements on the corpus of                2
+                                                               Unsupervised RNNGs (Kim et al., 2019) exist, although
+linguistic acceptability (Warstadt et al., 2018,         they perform worse on measures of syntactic competence.
+
+
+                                                   777
+Extension to Subwords. Here we extend the
+RNNG to operate over subword units (Sennrich
+et al., 2016) to enable compatibility with the
+BERT student. As each word can be split into
+an arbitrary-length sequence of subwords, we                            Figure 1: An example of the masked LM task, where
+preprocess the phrase-structure trees to include                        [MASK] = chase, and window is an attractor (red). We
+an additional nonterminal symbol that represents                        suppress phrase-structure annotations and corruptions
+                                                                        on the context tokens for clarity.
+a word sequence, as illustrated by the example ‘‘(S
+(NP (WORD the) (WORD d ##og)) (VP (WORD
+ba ##rk ##s)))’’, where tokens prefixed by ‘‘##’’                       is not a left-to-right LM like the RNNG, but rather
+are subword units.3                                                     a denoising autoencoder that models a collection
+                                                                        of conditionals for words in bidirectional context
+3 Approach                                                              (Eq. 1).
+We begin with a brief review of the BERT                                   We now present two strategies for dealing
+objective, before outlining our structure distil-                       with this challenge. The first, naı̈ve approach
+lation approach.                                                        is to ignore this difference, and let the BERT
+                                                                        student distill the RNNG’s marginal next-word
+3.1 BERT Pretraining Objective                                          distribution for each w ∈ Σ based on the left
+The aim of BERT pretraining is to find model                            context alone, that is tφ (w|x<i ). Although this
+parameters θ̂B that would maximize the prob-                            approach is surprisingly effective (§4.3), we
+ability of reconstructing parts of x = x1 , · · · ,                     illustrate an issue in Figure 1 for ‘‘The dogs
+xk conditional on a corrupted version c(x) =                            by the window [MASK=chase] the cat’’.
+c(x1 ), · · · , c(xk ), where c(·) denotes the                             The RNNG’s strong syntactic biases mean that
+stochastic corruption protocol of Devlin et al.                         we can expect tφ (w|The dogs by the window) to
+(2019) that is applied to each word xi ∈ x.                             assign high probabilities to plural verbs like bark,
+Formally:                                                               chase, fight, and run that are consistent with the
+                   X                                                    agreement controller dogs—despite the presence
+θ̂B = arg min          − log pθ (xi |c(x1 ), · · · , c(xk )),           of a singular attractor (Linzen et al., 2016),
+           θ
+                 i∈M (x)                                                window, that can distract the model into predicting
+                                             (1)                        singular verbs like chases. Nevertheless, some
+where M (x) ⊆ {1, · · · , k} denotes the indices                        plural verbs that are favored based on the left
+of masked tokens that serve as reconstruction                           context alone, such as bark and run, are in fact poor
+targets.4 This masked LM objective is then                              alternatives when considering the right context
+combined with a next-sentence prediction loss                           (e.g., ‘‘The dogs by the window bark/run the cat’’
+that predicts whether the two segments in x are                         are syntactically illicit). Distilling tφ (w|x<i ) thus
+contiguous sequences.                                                   fails to take into account the right context x>i
+                                                                        that is accessible to the BERT student, and runs
+3.2 Motivation
+                                                                        the risk of encouraging the student to assign high
+Because the RNNG teacher is an expert on                                probabilities for words that fit poorly with the
+syntactic generalizations (Kuncoro et al., 2018;                        bidirectional context.
+Futrell et al., 2019; Wilcox et al., 2019), we adopt
+                                                                           Hence, our second approach is to learn from
+a structure distillation procedure (Kuncoro et al.,
+                                                                        teacher distributions that not only: (i) reflect the
+2019) that enables the BERT student to learn from
+                                                                        strong syntactic biases of the RNNG teacher, but
+the RNNG’s syntactically informative predictions.
+                                                                        also (ii) consider both the left and right context
+Our setup nevertheless means that the two models
+                                                                        when predicting w ∈ Σ. Formally, we propose
+here crucially differ in nature: The BERT student
+                                                                        to distill the RNNG’s marginal distribution over
+   3
+      An alternative here is to represent each phrase as a flat         words in bidirectional context, tφ (w|x<i , x>i ),
+sequence of subwords, although our preliminary experiments              henceforth referred to as the posterior probability
+indicate that this approach yields worse perplexity.
+    4
+      In practice, the corruption protocol c(·) and the recon-
+                                                                        for generating w under all available information.
+struction targets M (x) are intertwined; M (x) denotes the              We now demonstrate that this quantity can, in fact,
+indices of tokens in x (∼ 15%) that were altered by c(x).               be computed from left-to-right LMs like RNNGs.
+
+                                                                  778
+

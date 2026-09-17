@@ -1,0 +1,226 @@
+                                                  Developing and Utilizing a Large-Scale Cantonese Dataset for
+                                                           Multi-Tasking in Large Language Models
+                                            Jiyue Jiang♡ , Alfred Kar Yin Truong♠ , Yanyu Chen♡ , Qinghang Bao♠ , Sheng Wang♠ ,
+                                                   Pengan Chen♠ , Jiuming Wang♡ , Lingpeng Kong♠ , Yu Li♡ , Chuan Wu♠
+                                                    ♡
+                                                       The Chinese University of Hong Kong, ♠ The University of Hong Kong
+                                                                  {jiangjy, jmwang}@link.cuhk.edu.hk,
+                                                      alfred.truong@gmail.com, redbaron.chen@connect.polyu.hk,
+                                                            {bill6176, u3009618, cpa2001}@connect.hku.hk,
+                                                              liyu@cse.cuhk.edu.hk, {lpk, cwu}@cs.hku.hk
+
+                                                               Abstract                          resource language within the domain of NLP. This
+                                                                                                 is mainly due to the dominance of Mandarin, the
+                                             High-quality data resources play a crucial role
+                                                                                                 lack of uniformity within the Cantonese-speaking
+                                             in learning large language models (LLMs), par-
+                                                                                                 community, and the diversity of character encoding
+
+
+
+
+arXiv:2503.03702v1 [cs.CL] 5 Mar 2025
+                                             ticularly for low-resource languages like Can-
+                                             tonese. Despite having more than 85 million         and input methods. In addition, overseas Cantonese
+                                             native speakers, Cantonese is still considered      speakers tend to use English, which further hinders
+                                             a low-resource language in the field of natural     the development of Cantonese in the NLP domain.
+                                             language processing (NLP) due to factors such          The rich colloquial vocabulary of Cantonese,
+                                             as the dominance of Mandarin, lack of cohesion      its English loanwords, and the widespread phe-
+                                             within the Cantonese-speaking community, di-
+                                                                                                 nomenon of code-switching make corpus collection
+                                             versity in character encoding and input meth-
+                                             ods, and the tendency of overseas Cantonese         and processing more complex. Compared to Mod-
+                                             speakers to prefer using English. In addition,      ern Standard Chinese, there is a significant dispar-
+                                             rich colloquial vocabulary of Cantonese, En-        ity between spoken and written Cantonese; many
+                                             glish loanwords, and code-switching character-      colloquial expressions lack a standardized written
+                                             istics add to the complexity of corpus collection   form. Furthermore, Cantonese writing involves
+                                             and processing. To address these challenges,        the conversion between traditional and simplified
+                                             we collect Cantonese texts from a variety of        characters, as well as the use of unique Cantonese
+                                             sources, including open source corpora, Hong
+                                             Kong-specific forums, Wikipedia, and Com-
+                                                                                                 characters and words (Yu et al., 2022b; Xiang et al.,
+                                             mon Crawl data. We conduct rigorous data            2024). These factors increase the difficulty of text
+                                             processing through language filtering, quality      data normalization and processing. These chal-
+                                             filtering, content filtering, and de-duplication    lenges have led to a scarcity of high-quality Can-
+                                             steps, successfully constructing a high-quality     tonese corpora, limiting the performance enhance-
+                                             Cantonese corpus of over 2 billion tokens for       ment of LLMs in the Cantonese context.
+                                             training large language models. We further re-         To address these issues, we collect diverse
+                                             fined the model through supervised fine-tuning
+                                                                                                 Cantonese text data to construct a high-quality
+                                             (SFT) on curated Cantonese tasks, enhancing
+                                             its ability to handle specific applications. Upon   Cantonese dataset. Data sources include open-
+                                             completion of the training, the model achieves      source corpora, Hong Kong-specific forums such
+                                             state-of-the-art (SOTA) performance on four         as LIHKG1 , OpenRice2 , the Cantonese version of
+                                             Cantonese benchmarks. After training on our         Wikipedia3 , and Common Crawl data4 , etc. Dur-
+                                             dataset, the model also exhibits improved per-      ing the data collection process, we pay attention
+                                             formance on other mainstream language tasks.        to the variations in Cantonese usage across dif-
+                                                                                                 ferent regions and platforms. We utilize custom
+                                        1    Introduction
+                                                                                                 web crawlers and data extraction tools to efficiently
+                                        High-quality data resources are essential for the        gather large amounts of text from these sources.
+                                        advancement of large language models (Jiang et al.,         To ensure the quality and purity of the data, we
+                                        2024), particularly for languages with limited dig-      establish and executed a stringent data processing
+                                        ital resources, such as Cantonese. Although Can-         workflow. First, we perform language filtering on
+                                        tonese boasts over 85 million native speakers (Xi-          1
+                                                                                                      https://lihkg.com/
+                                        ang et al., 2024; Jiang et al., 2024), predominantly        2
+                                                                                                      https://www.openrice.com/
+                                        located in southern China and among Chinese com-            3
+                                                                                                      https://dumps.wikimedia.org/zh_yuewiki/
+                                                                                                    4
+                                        munities worldwide, it remains classified as a low-           https://commoncrawl.org/
+    Data Collection                                      Pre-training Data Processing
+                                                                                                           Quality Filter                Content Filter
+                         LIHKG                            Data
+                                                                                                        (Heuristic screening)
+                                                          Merge                                                                       Filter out Jigsaw toxic,
+
+
+
+
+     Pre-training Data
+                                                                           Language Filter
+                         OpenRice                                                                       Use N-Grams + pure            comment dataset,
+                                                                        Select Cantonese data
+                                                         Raw Data                                       number/English/simplifi       including NSFW and
+                                          Pre-training                  using Fast-langid.
+                         Apple Daily                                                                    ed text filtering, etc.       toxic.
+
+                         Hong Kong 01
+                                                         Processed
+                                                           Data                                                    Content Deduplication
+                         HuggingFace
+                                                                                                    Use MinHash and LSH to extract document deduplication
+                                                                            Data Merge              and extract paragraph deduplication.
+                         Wikipedia                        YueData
+
+                         Common Crawl                     Processed
+                                                            Data
+                             Cons. Prompts                                                                        Evaluation
+                                                                            Cantonese LLM                         Yue-Benchmark
+                         HuggingFace                                                                                    Yue-TruthfulQA          72.38%
+                                                         Base LLM
+                         Wikipedia                                                                                       Yue-GSM8K             86.46%
+
+
+
+
+     SFT Data
+                                                                                                                         Yue-ARC-C              94.65%
+                         Common Crawl                                     YueTung is pre-trained
+                                                         Pre-training                                                    Yue-MMLU               92.56%
+                                                                          based on YueData.         result
+                         MOSS*                                                                                     Mainstream Language Benchmarks
+                         YeungNLP*              SFT      Supervised       YueTung-instruct is SFT                      Eng.-TruthfulQA          93.14%
+                                                         Fine-tuning      based on SFT data.                             Eng.-GSM8K             86.26%
+                         Github ……                                                                                       Eng.-ARC-C             95.25%
+                                                          YueTung       YueTung and YueTung-instruct.                      CMMLU                93.58%
+     * means translated into Cantonese.
+
+
+
+Figure 1: Overview of our work. We construct Cantonese pre-training and SFT data, apply language and quality
+filters to the former, and derive the latter from it. The base model of YueTung is the Qwen-2.5-7b model, which is
+trained on the YueData. YueTung achieve SOTA performance on Cantonese benchmarks, and its performance on
+mainstream language benchmarks not only did not decline but actually improved.
+
+
+the collected texts using language identification                                     2        Large-Scale Cantonese Data: YueData
+models to ensure only Cantonese content is re-
+                                                                                      2.1       Pre-Trained Cantonese Data
+tained. Next, we conduct quality filtering based
+on a series of heuristic rules to select high-quality                                2.1.1 Pre-Trained Data Collection
+texts. We also apply specialized classifiers to de-                                  Although there are many challenges in gathering
+tect and remove harmful content, such as toxic                                       Cantonese text, we build a large-scale corpus with
+language and sensitive information. In addition,                                     a focus on spoken Cantonese, and proceed in two
+techniques like MinHash and Locality Sensitive                                       phases: corpus collection and post-processing.
+Hashing (LSH) (Paulevé et al., 2010) are used for
+deduplication, ensuring the corpus’s uniqueness                                      Corpus Collection Cantonese text is gathered
+and diversity. After pre-training the model on this                                  from the following sources: (1) open-source cor-
+extensive corpus, we apply SFT using additional                                      pora; (2) HK transcriptions; (3) HK online publi-
+Cantonese datasets to further enhance its perfor-                                    cations; (4) HK online forums; (5) Chinese entries
+mance on downstream tasks.                                                           from Common Crawl13 .
+                                                                                        We focuse on leveraging existing open-source re-
+   Through these efforts, we successfully build a                                    sources and subsequently scraping Cantonese data
+high-quality Cantonese corpus containing over 2                                      from Hong Kong-centric resources known to be of
+billion tokens, laying a solid foundation for train-                                 high quality and which predominantly employ less
+ing large language models. In model performance                                      formal language, resembling spoken Cantonese.
+evaluations, our model achieve industry-leading                                      The emphasis on these resources is partly due to
+performance on four Cantonese benchmark tests,                                       familiarity with the sources and the status of Hong
+accurately handling Cantonese-specific vocabulary                                    Kong Cantonese as a de facto standard14 . In addi-
+and expressions while generating fluent and nat-                                          13
+                                                                                          https://commoncrawl.org/
+ural text. Notably, after training with our data,                                         14
+                                                                                          HK Cantonese has great reach among Cantonese speaking
+the model also demonstrate performance improve-                                       communities as (1) HK has a relatively large and uniform
+ments on other mainstream language tasks, proving                                     speaker base, (2) emigration from HK seeded many overseas
+                                                                                      diasporas, and (3) HK was an early producer of Cantonese
+that high-quality Cantonese data contributes to the                                   media (movies, TV dramas, and pop culture), thereby widely
+overall performance enhancement of the model.                                         consumed and recognized.
+                                                              Total                       Record Char Distribution
+       Source               Record type
+                                                      chars             records     min     median    mean      max
+       Wikipedia            page contents           40,398,140          137,342      4         91      294    60,004
+       raptorkwok           cantonese_sentences    664,993,424         30,150,987    0         16       22     2,328
+       Apple Daily          html articles           54,156,758           81,081     200       535      668    21,298
+       LIHKG (1-2.8m)       threads               1,582,487,817        2,873,877     7        360      551    80,687
+       LIHKG (2.8m-3.8m)    sub-threads            839,667,516         29,563,007    0         13       28     4,705
+       OpenRice             restaurant reviews     490,181,056         1,234,262     0        315      397    477,672
+
+Table 1: Custom scraped corpora, count of characters is language and punctuation agnostic (statistics are indicative).
+
+          Corpus Name                                 Size                    Source
+                  5
+          CanCorp (Lee and Wong, 1998)                1M tokens               child speech research
+          HKCAC (Leung and Law, 2002)                 170K tokens             phone-in programs and radio
+          HKCancor6 (Wong and Luke, 2015)             230K tokens             speech and radio programs
+          HKCC (Chin, 2015)                           1M tokens               audio from 1940-1970 HK movies
+          UD_Cantonese-HK7 (Nivre et al., 2017)       –                       film subtitles and LegCo proceedings
+          MyCanCorp8 (Liesenfeld, 2018)               20 hours of audio       Malaysian Cantonese speech
+          Common Voice zh-HK9 (Ardila et al., 2019)   109 hours of audio      Mozilla audio collection program
+          DRCD10 (Shao et al., 2019)                  10K paragraphs          Wikipedia
+          CantoMap11 (Winterstein et al., 2020)       106K tokens             12.8hrs of speech
+          MDCC12 (Yu et al., 2022a)                   73.6 hours of audio     clean speech from audiobooks
+
+                                Table 2: Open-source corpora from previous studies.
+
+
+tion, we interface with Common Crawl to amass a               ing colloquial text. Another significant dataset is
+broader corpus of Chinese text.                               AlienKevin/LIHKG19 , comprising around 2.8 mil-
+   Open-source corpora: (1) Wikipedia serves as               lion discussion threads extracted from LIHKG20 ,
+a primary source due to its comprehensive data                a popular Hong Kong forum akin to Reddit where
+availability. The Wikipedia pages are system-                 users engage in informal discussions, frequently
+atically archived, categorized by language, and               using vernacular and slang.
+are accessible for batch downloading15 . Specif-                 HK transcriptions: governmental bodies and
+ically, the Cantonese language content is desig-              TV/movie subtitles. Transcriptions of RTHK radio
+nated as zh_yuewiki16 , from which the extraction             programs and HK Legco discussions exist and are
+of page contents is straightforward. (2) Prior re-            of good quality29 . Although we find some transcrip-
+search: We reviewed data utilized in existing stud-           tions, we cannot find large accessible repositories
+ies on Cantonese linguistics and NLP as refer-                of them, and so we do not make use of this re-
+enced in Table 3. These corpora, however, are                 source (it could prove fruitful for more resourceful
+typically limited in size, often comprising less              researchers). Another potential source of spoken
+than a million characters. Given our need for                 text includes TV and movie subtitles. One can ei-
+more extensive datasets, these were not included              ther (1) grab pre-generated files: there are online
+in our study. (3) Huggingface: This platform                  forums that host .srt extension files that media
+hosts numerous large-scale datasets17 , though the            players use to display closed captions, and these
+origins of these datasets are not always trans-               files are either created by original content creators
+parent. Noteworthy within the context of Can-                 or the open-source community; or (2) generate
+tonese language resources are several datasets, in-           closed captions with ASR tools: open-source and
+cluding raptorkwok/cantonese_sentences18 , which              paid ASR tools can extract text from audio while
+includes approximately 30.2 million sentences                 proprietary tools30 can also be leveraged.
+likely sourced from educational materials featur-
+                                                                  19
+                                                                    https://huggingface.co/datasets/AlienKevin/
+  15
+     https://dumps.wikimedia.org/backup-index.                LIHKG
+html                                                             20
+                                                                    https://lihkg.com/
+  16                                                             29
+     https://dumps.wikimedia.org/zh_yuewiki/                        Both are government organizations and are transcribed
+  17
+     https://huggingface.co/datasets                          from spoken language, so are unlikely to be vulgar, overly
+  18                                                          formal, or overly informal
+     https://huggingface.co/datasets/raptorkwok/
+                                                                 30
+cantonese_sentences                                                 Automatic transcription by Google of YouTube videos
+

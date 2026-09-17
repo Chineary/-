@@ -1,0 +1,191 @@
+                                         Published as a conference paper at ICLR 2025
+
+
+
+
+                                         M O S: U NLEASHING PARAMETER E FFICIENCY OF
+                                         L OW-R ANK A DAPTATION WITH M IXTURE OF S HARDS
+                                          Sheng Wang∗ , Liheng Chen∗ , Pengan Chen                        Jingwei Dong
+                                          School of Computing and Data Science                            School of Electrical Engineering
+                                          The University of Hong Kong                                     Xi’an Jiaotong University
+                                          {u3009618, clh648, cpa2001}@connect.hku.hk                      dongjingwei@stu.xjtu.edu.cn
+
+
+                                          Boyang Xue, Jiyue Jiang
+                                          Department of Systems Engineering and Engineering Management
+
+
+
+
+arXiv:2410.00938v2 [cs.LG] 15 Feb 2025
+                                          The Chinese University of Hong Kong
+                                          byxue@se.cuhk.edu.hk, jiangjy@link.cuhk.edu.hk
+
+
+                                          Lingpeng Kong, Chuan Wu
+                                          School of Computing and Data Science
+                                          The University of Hong Kong
+                                          {lpk, cwu}@cs.hku.hk
+
+
+
+                                                                                      A BSTRACT
+                                                    The rapid scaling of large language models necessitates more lightweight fine-
+                                                    tuning methods to reduce the explosive GPU memory overhead when numerous
+                                                    customized models are served simultaneously. Targeting more parameter-efficient
+                                                    low-rank adaptation (LoRA), parameter sharing presents a promising solution.
+                                                    Empirically, our research into high-level sharing principles highlights the indis-
+                                                    pensable role of differentiation in reversing the detrimental effects of pure shar-
+                                                    ing. Guided by this finding, we propose Mixture of Shards (M O S), incorporating
+                                                    both inter-layer and intra-layer sharing schemes, and integrating four nearly cost-
+                                                    free differentiation strategies, namely subset selection, pair dissociation, vector
+                                                    sharding, and shard privatization. Briefly, it selects a designated number of shards
+                                                    from global pools with a Mixture-of-Experts (MoE)-like routing mechanism be-
+                                                    fore sequentially concatenating them to low-rank matrices. Hence, it retains all
+                                                    the advantages of LoRA while offering enhanced parameter efficiency, and effec-
+                                                    tively circumvents the drawbacks of peer parameter-sharing methods. Our empir-
+                                                    ical experiments demonstrate approximately 8× parameter savings in a standard
+                                                    LoRA setting. The ablation study confirms the significance of each component.
+                                                    Our insights into parameter sharing and M O S method may illuminate future de-
+                                                    velopments of more parameter-efficient finetuning methods. The code is officially
+                                                    available at https://github.com/Forence1999/MoS.
+
+
+                                         1       I NTRODUCTION
+                                         With the remarkable capabilities, large language models (LLMs) (Dubey et al., 2024; Team et al.,
+                                         2023; Jiang et al., 2023) are adapted for various downstream applications (Shao et al., 2023; 2024).
+                                         Among parameter-efficient finetuning (PEFT) methods (Houlsby et al., 2019; Liu et al., 2022), low-
+                                         rank adaptation (LoRA) (Hu et al., 2021) reparameterizes the weight updates with two trainable
+                                         low-rank matrices, and has gained the most popularity with reduced resource consumption, compet-
+                                         itive performance, low-cost task switching, etc. Nevertheless, with the continuous applicability of
+                                         scaling law (Achiam et al., 2023), the size of LLMs increases rapidly for even better performance,
+                                         intensifying the need for more lightweight finetuning methods. For instance, GPT4o allows cus-
+                                         tomization to its vast user base1 , incurring intense challenges to serve numerous customized models
+                                             ∗
+                                                 Equal Contribution.
+                                             1
+                                                 https://openai.com/index/gpt-4o-fine-tuning/
+
+
+                                                                                             1
+Published as a conference paper at ICLR 2025
+
+
+
+
+simultaneously. Assuming a scenario with a Llama2-70B-sized model and 10,000 active users, each
+allocated a LoRA module with the rank of 16, only the parameters of LoRAs would occupy 3.36
+TB of GPU memory, an onerous burden for service providers. This underscores the need for a more
+lightweight solution than LoRA, while retaining its advantages.
+As a promising solution, parameter sharing has been extensively explored (Kopiczko et al., 2023;
+Renduchintala et al., 2023; Wang et al., 2024b). Specifically, VeRA (Kopiczko et al., 2023) adopts
+inter-layer sharing of frozen matrices with trainable vectors; however, it results in limited model
+capacity and necessitates an excessively high rank. Subsequently, Tied LoRA (Renduchintala et al.,
+2023) mitigates these constraints by permitting shared matrices to be trainable. Yet, its tying mecha-
+nism restricts applicability to linear layers of different dimensions. More recently, PRoLoRA (Wang
+et al., 2024b) showcases enhanced parameter efficiency by reusing submatrices within a single lin-
+ear layer, thereby circumventing the above restrictions. However, its limited focus on intra-layer
+sharing constrains efficiency potential, and promises a hybrid approach integrating both intra-layer
+and inter-layer sharing. Besides, while these methods, with their intuitive designs, have shown the
+benefits of parameter sharing on enhanced parameter efficiency, the fundamental principles have not
+been discussed yet to guide the future development of parameter sharing strategies.
+Targeting enhanced parameter efficiency, we first analyze the factors influencing parameter sharing
+performance in the context of LoRA. Our empirical findings indicate that improving the parameter
+efficiency of LoRA requires a careful balance between sharing and differentiation. While parame-
+ter sharing can significantly decrease the number of trainable parameters, the negative effects (i.e.,
+possible performance degradation) of excessive sharing necessitate differentiation strategies to mit-
+igate these drawbacks. Guided by this insight, we propose a more parameter-efficient LoRA-based
+method called Mixture of Shards (M O S). It features a global sharing scheme to achieve a higher
+sharing ratio, along with four nearly cost-free differentiation techniques: subset selection, pair dis-
+sociation, vector sharding, and shard privatization. Briefly, our method selects a designated number
+of shards from global pools with a Mixture-of-Experts (MoE)-like routing mechanism (Jacobs et al.,
+1991), and sequentially concatenate them to construct the low-rank matrices.
+Empirically, we validate its superior performance compared to peer methods in scenarios with
+fixed trainable parameter count, and demonstrate an eightfold parameter reduction in performance-
+targeted situations. A thorough ablation analysis of each differentiation strategy reveals that all
+contribute to unleashing the parameter efficiency of M O S, despite their nearly cost-free property.
+Notably, pair dissociation and shard privatization boost the efficiency more significantly through
+increased combination diversity and exclusive differentiation, respectively, whereas vector sharding
+provides only limited gains in diversity. With the intuitive design, our method retains all the ad-
+vantages of LoRA while circumventing the drawbacks of peer methods. The markedly improved
+parameter efficiency alleviates the burden on service providers when numerous LoRA-based cus-
+tomized models are served simultaneously.
+In summary, our main contributions are as follows:
+
+       • We introduce a more parameter-efficient finetuning method named Mixture of Shards
+         (M O S), which facilitates the concurrent serving of numerous customized models with the
+         saliently reduced GPU memory overhead.
+       • Our exploration into high-level sharing principles highlights the balance between sharing
+         and differentiation to enhance parameter efficiency, providing valuable insights for the fu-
+         ture advancement of parameter-sharing methods.
+       • Extensive experiments empirically confirm the significant parameter savings achieved by
+         M O S, and validate the necessity and relative importance of each differentiation strategy.
+       • To the best of our knowledge, we are the first to apply MoE-like mechanism for parameter
+         savings in a single-task LoRA. Besides, our dissociated perspective may also inspire further
+         parameter reduction for LoRA-based multitasking scenarios.
+
+2   S HARING & D IFFERENTIATION
+
+Drawing inspiration from the inter-layer shared VeRA (Kopiczko et al., 2023) and intra-layer shared
+PRoLoRA (Wang et al., 2024b), we seek to create a unified sharing mechanism that leverages both
+
+
+                                                  2
+Published as a conference paper at ICLR 2025
+
+
+
+
+           (a) LoRA                        (b) Pure Sharing          (c) Pure Sharing (Differentiated)
+Figure 1: Illustration of vanilla LoRA, pure sharing, and differentiated pure sharing methods. The
+rank of vanilla LoRA is denoted as r, while that of pure sharing is boosted to rL through the
+aggregation of trainable parameters among L Transformer blocks. In Figure 1c, the colored squares
+between the low-rank matrices A and B signify scalars and boolean values for random scaling and
+subset selection strategies, respectively.
+
+
+perspectives, promising further enhanced parameter efficiency. To guide this development more
+clearly, we start with reparameterizing the vanilla LoRA, followed by analyzing the impact of high-
+level factors (i.e., sharing and differentiation) on model performance under a specified number of
+trainable parameters. All relevant approaches are illustrated in Figure 1 for an intuitive comparison.
+Reparameterization of LoRA. LoRA (Hu et al., 2021) efficiently adapts LLMs by updating the
+frozen pretrained weights with low-rank decomposition. Specifically, given a pretrained weight
+W0 ∈ Ro×h , its weight update ∆W is approximated as the product of two trainable matrices A ∈
+Rr×h and B ∈ Ro×r , where the rank r is times smaller than h and o for parameter saving. Similar
+to Kopiczko et al. (2023), this product can be further reparameterized as the sum of outer products
+of the corresponding row and column vectors. Formally, the whole process can be presented as:
+                                                                   r
+                                                                   X
+                      W = W0 + ∆W = W0 + BA = W0 +                       bi ⊗ ai ,                  (1)
+                                                                   i=1
+
+where W is the updated weight, and ai and bi denote the i-th row and column vectors of low-rank
+matrices A and B, respectively. This reparameterization trick enables the weight update to be the
+linear combination of outer products of multiple vector pairs, which will be extensively utilized in
+our subsequent analysis. Generally, LoRA will be applied to each linear layers in all the Transformer
+blocks of a model (Vaswani et al., 2017) for better performance (Dettmers et al., 2023), which is also
+applied to our analysis by default.
+Pure parameter sharing does not necessarily boost up the parameter efficiency of LoRA. Al-
+though VeRA and PRoLoRA achieve better performance than LoRA via parameter sharing, we
+demonstrate that this causality is not universally applicable. To facilitate our subsequent compar-
+isons, we introduce a straightforward sharing scheme, detailed in Sec. 3.1. Briefly, this scheme
+shares the low-rank matrices A and B across all Transformer blocks for each type of linear layer.
+As shown in Table 1, we set the same low-level trainable parameter budget for all methods, eliminat-
+ing the disturbance of parameter redundancy and enabling clear comparison of their representation
+
+Table 1: Results of LLaMA2-7B with different sharing and differentiation methods across diverse
+instruction following datasets. “+ Random Scaling” and “+ Subset Selection” denote the individual
+integration of them into the “Pure Sharing” scheme, respectively. The details of these benchmarks
+are elaborated in Sec. 4.
+                                        MMLU     BBH     GSM8K       TyDi QA         HumanEval
+       Method         Rank   # Param.                                                            Avg.
+                                         EM       EM          EM    F1       EM        P@1
+       LoRA             2     5.00M     44.77    36.22    26.28    48.67    35.70      18.24     34.98
+    Pure Sharing       64     5.00M     43.61    35.15    26.54    49.12    36.04      15.53     34.33
+    + Random Scaling 64       5.00M     43.98    35.30    29.04    49.03    35.73      15.58     34.77
+    + Subset Selection 64     5.00M     45.56    36.76    28.18    50.33    37.22      18.64     36.12
+
+
+
+                                                  3
+

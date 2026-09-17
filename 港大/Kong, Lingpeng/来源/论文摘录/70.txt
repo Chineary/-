@@ -1,0 +1,217 @@
+                                                       Training-Free Long-Context Scaling of Large Language Models
+
+
+                                               Chenxin An * 1 2 Fei Huang 2 Jun Zhang Shansan Gong 1 Xipeng Qiu 3 Chang Zhou 2 Lingpeng Kong 1
+
+
+                                                                   Abstract                                      Recent advances have shown that the long-context ability
+                                                The ability of Large Language Models (LLMs)                      can be improved by further training a short-context model
+                                                to process and generate coherent text is markedly                on long text sequences (Ruoss et al., 2023; Rozière et al.,
+
+
+
+
+arXiv:2402.17463v2 [cs.CL] 29 May 2024
+                                                weakened when the number of input tokens ex-                     2023). The impressive performance of Llama2 Long (Xiong
+                                                ceeds their pretraining length. Given the expen-                 et al., 2023), which is trained from a mix of long text data
+                                                sive overhead of finetuning large-scale models                   and the original Llama2 (Touvron et al., 2023b) pre-training
+                                                with longer sequences, we propose Dual Chunk                     corpus, stands as a testament to this approach. Nevertheless,
+                                                Attention (DCA), which enables L LAMA 2 70B                      due to the limited accessibility of these training corpora
+                                                to support context windows of more than 100k                     and the prohibitive cost of long-context finetuning, current
+                                                tokens without continual training. By decom-                     open-source models often fall short in performance when
+                                                posing the attention computation for long se-                    compared to the proprietary counterparts, and are generally
+                                                quences into chunk-based modules, DCA man-                       available in smaller sizes (e.g., 7B/13B).
+                                                ages to effectively capture the relative positional              Given these constraints, approaches that do not require addi-
+                                                information of tokens within the same chunk                      tional training for context scaling in LLMs become particu-
+                                                (Intra-Chunk) and across distinct chunks (Inter-                 larly attractive. Recent training-free methods, including LM-
+                                                Chunk), as well as integrates seamlessly with                    infinite (Han et al., 2023) and StreamingLLM (Xiao et al.,
+                                                Flash Attention. In addition to its impressive                   2023), have shown that LLMs trained on a limited context
+                                                extrapolation capability, DCA achieves perfor-                   window can efficiently process text of infinite length (Zhang
+                                                mance on practical long-context tasks that is com-               et al., 2023; 2024; Xiao et al., 2024; Qin et al., 2024). As-
+                                                parable to or even better than that of finetuned                 suming that LLMs are unable to generalize to texts longer
+                                                models. When compared with proprietary mod-                      than the training length, these models handle extended se-
+                                                els, our training-free 70B model attains 94% of                  quences by selectively retaining essential local information.
+                                                the performance of gpt-3.5-16k, indicating                       Such paradigms effectively maintain a low Perplexity (PPL),
+                                                it is a viable open-source alternative. All code                 yet they lose long-range dependencies. To retain the global
+                                                and data used in this work are released at https:                information, another perspective is to effectively extrapolate
+                                                //github.com/HKUNLP/ChunkLlama.                                  to sequence lengths that surpass those encountered during
+                                                                                                                 their training (Sun et al., 2022; Kazemnejad et al., 2023;
+                                                                                                                 Liu et al., 2023b; Chi et al., 2023). Popular techniques
+                                         1. Introduction                                                         for Llama-based models, including Position Interpolation
+                                         The ability to comprehend and process long-context infor-               (PI) (Chen et al., 2023b) and NTK-Aware RoPE (NTK) (Lo-
+                                         mation is essential for large language models (LLMs) (Ope-              calLLaMA, 2023b;a), are adaptations of Rotary Positional
+                                         nAI, 2023; Touvron et al., 2023a;b; Bai et al., 2023; An-               Encodings (RoPE) (Su et al., 2022). These scaled positional
+                                         thropic, 2023) to cater to a wide range of applications effec-          encodings necessitate fewer finetuning steps compared to
+                                         tively. These include analyzing and responding to inquiries             the original RoPE, and their training costs can be further
+                                         within sizable PDFs, retaining extended dialogue history,               reduced via methods such as YaRN (Peng et al., 2023) and
+                                         and empowering interactive chatbots (Wei et al., 2023; Lee              CLEX (Chen et al., 2023a). However, in a training-free set-
+                                         et al., 2023; Rula & D’Souza, 2023; Saad-Falcon et al.,                 ting, we find that these approaches usually lead to a notable
+                                         2023; Lv et al., 2024).                                                 increase in PPL especially in input lengths that are more
+                                                                                                                 than twice the training length (§4, Table 1).
+                                           *
+                                             Work done during internship at Alibaba Group 1 The University
+                                         of Hong Kong 2 Alibaba Group 3 Fudan University. Correspondence         In this paper, we introduce Dual Chunk Attention (DCA),
+                                         to: Chenxin An <cxan23@connect.hku.hk>.                                 a new training-free framework to extrapolate the context
+                                                                                                                 window of LLMs. We avoid linearly downscaling the posi-
+                                         Proceedings of the 41 st International Conference on Machine            tion indices or increasing the base frequency in RoPE (Su
+                                         Learning, Vienna, Austria. PMLR 235, 2024. Copyright 2024 by
+                                         the author(s).                                                          et al., 2022). Instead, we opt to reuse the original position
+
+                                                                                                             1
+                                    Training-Free Context Scaling of Large Language Models
+
+indices with their embeddings from the pretrained model,                3. Long-Context Understanding. We evaluate DCA on a
+yet to redesign the construction of the relative position ma-              suite of long-context understanding benchmarks in both
+trix in such a way that it can accurately reflect the relative             zero-shot and few-shot settings. The results suggest that
+position of two tokens as faithfully as possible. Inspired by              our training-free models achieve performance comparable
+efficient chunk-based attention patterns (Child et al., 2019;              to, or even surpassing, that of existing state-of-the-art
+Song et al., 2023; Ratner et al., 2023; He et al., 2024), DCA              models built through costly continual training.
+segments self-attention computations for a long sequence
+into small chunks, each chunk being smaller than the size               2. Background
+of the pretraining window. DCA consists of three com-
+ponents: (1) intra-chunk attention, tailored for processing             2.1. Positional Encoding
+tokens within the same chunk; (2) inter-chunk attention, for
+                                                                        The original positional embedding from the Transformer
+processing tokens between distinct chunks; and (3) succes-
+                                                                        model (Vaswani et al., 2017) maps absolute position indices
+sive chunk attention, for processing tokens in successive,
+                                                                        to a d-dimensional feature space, and incorporates this into
+distinct chunks. These respective treatments help the model
+                                                                        the input layer. The input x, associated with the position
+effectively capture both long-range and short-range depen-
+                                                                        index i, is expressed as: xi = x + f (i), where f : N → Rd
+dencies in a sequence. In addition to that, the chunk-based
+                                                                        is the (positional) embedding function.
+attention calculation can be seamlessly integrated with Flash
+Attention 2 (Dao et al., 2022; Dao, 2023), a key element for            One of the most prevalent positional encoding methods
+long-context scaling in the open-source community.1                     for LLMs is the Rotary Positional Encoding (RoPE) (Su
+                                                                        et al., 2022). RoPE eschews the conventional approach of
+We present a comprehensive evaluation of our models on
+                                                                        infusing positional information into the input layer. Instead,
+a diverse range of tasks that include language modeling,
+                                                                        it directly incorporates this information into the attention
+passkey retrieval, and real-world long-context applications
+                                                                        layer. For a sequence of l tokens, we denote the position
+that span question answering (Pang et al., 2022; Kočiský
+                                                                        indices for keys and queries3 as follows:
+et al., 2018; Dasigi et al., 2021; An et al., 2023) and sum-
+marization (Zhong et al., 2021). Unlike previous work that                              Pk = Pq = [0, 1, . . . , l − 1].              (1)
+is usually limited to verification on 7B/13B models, the sig-
+nificant training efficiency of our method makes it possible            We abuse the notation f for the embedding function of
+to validate on 70B models, ensuring robust conclusions. To              RoPE, which accepts a query vector q or a key vector k,
+verify the model’s long-context ability independent of po-              and the respective position index as arguments. For example,
+tential data exposure during pretraining, we used this paper            we have qi = f (q, Pq [i]) and kj = f (k, Pk [j]), where [i]
+itself as the input and crafted a series of questions for the           denotes the i-th element of the list. In the most straight-
+models.2 Our empirical results reveal the following insights:           forward case, we have P [i] = i. The function f 4 outputs a
+                                                                        modified query or key vector that encapsulates the position
+1. Extrapolation. On language modeling, DCA marks a
+                                                                        index, ensuring that the inner product between the i-th query
+   significant advance for training-free approaches. It first
+                                                                        and the j-th key (for i ≥ j) captures the relative positional
+   shows that LLMs with a 4k context window can be ex-
+                                                                        information Pq [i] − Pk [j]. Although RoPE takes absolute
+   panded to more than 32k without training, maintaining
+                                                                        position indices as input, the result of the inner product
+   a negligible increase in PPL, whereas previous methods
+                                                                        of q, k only contains relative position information (i.e., we
+   typically falter at context lengths beyond 8k. Furthermore,
+                                                                        have q⊤          ⊤
+                                                                               i kj = qm kn whenever m−n = i−j). The relative
+   we demonstrate that Llama2 70B, when integrated with
+                                                                        position matrix M introduced by RoPE during self-attention
+   DCA, showcases an exceptional extrapolation capability
+                                                                        can be described as a Toeplitz matrix, as shown in Figure 1.
+   to handle context sizes exceeding 100k tokens.
+                                                                        Each element M [i][j] = Pq [i] − Pk [j] signifies the relative
+2. Orthogonality. DCA is orthogonal to existing popular                 position between qi (the i-th query) and kj (the j-th key).
+   scaled positional encodings such as PI (Chen et al., 2023b)
+   and NTK (LocalLLaMA, 2023b;a). We empirically show                   2.2. Extrapolation of RoPE
+   that existing long-context LLMs, which have already sup-
+   ported a 32k context window, can further extrapolate to              Recent work (Chen et al., 2023b; Chowdhury & Caragea,
+   a 192k context length while maintaining high passkey                 2023; Chen et al., 2023a) has demonstrated that LLMs with
+   retrieval accuracy and low perplexity.                               the original RoPE lack robust length extrapolation capabil-
+                                                                        ities, typically resulting in performance degradation when
+    1
+       Without Flash Attention, the maximum input tokens for
+                                                                            3
+ Llama2 7B/13B is about 16k, and for Llama2 70B, it is 5k when                Queries and keys are usually derived by projecting the input
+ tested on two A100 80G GPUs in our experiments                         x through a learnable linear layer.
+     2                                                                      4
+       We invite interested readers to examine the results in Ta-             A typical implementation of f can be found in model-
+ bles 6,7                                                               ing llama.py Line 211 apply rotary pos emb()
+
+                                                                    2
+                                                                        Training-Free Context Scaling of Large Language Models
+                                       𝑃"
+                                       0    0                                                         (b)) that enables attention calculations between different
+                                       1    1   0                                                     chunks, albeit with less precision for distant token positions.
+                                       2    2   1   0                                                 Finally, we introduce successive-chunk attention, a variant
+
+
+              𝑃" : Position ids of 𝒒
+                                       3    3   2   1   0
+                                       4    4   3   2   1   0
+                                                                                                      of inter-chunk attention depicted in Figure 2 (c), which is
+                                       5    5   4   3   2   1   0                                     specifically applied when two chunks are adjacent in order
+                                       6    6   5   4   3   2   1   0                                 to preserve locality. An ablation study to show how these
+                                       7    7   6   5   4   3   2   1   0
+                                                                                                      attention mechanisms influence PPL and passkey retrieval
+                                       8    8   7   6   5   4   3   2   1   0
+                                       9    9   8   7   6   5   4   3   2   1    0
+                                                                                                      accuracy can be found in Figure 4.
+                                       10   10 9    8   7   6   5   4   3   2    1   0
+                                       11   11 10   9   8   7   6   5   4   3    2   1    0           3.1. Intra-Chunk Attention
+                                       𝑃! 0     1   2   3   4   5   6   7   8    9   10   11
+                                                        𝑃! : Position ids of 𝒌
+Figure 1. Visualization of the Relative Position Matrix M utiliz-                                     Intra-Chunk Attention is employed to calculate the inner
+ing standard RoPE. The pretraining context window is 6 and the                                        product of queries and keys within the same chunk. For a
+input sequence length is 12. The x-axis Pk indicates the position                                     long sequence of length l, we partition the sequence into
+indices of keys, while the y-axis Pq corresponds to the position in-                                  n = sl chunks, ensuring that the position indices within
+dices of queries. Each matrix entry M [i][j] represents the relative                                  each chunk will not exceed the chunk size s. Figure 2
+positional offset Pq [i] − Pk [j].                                                                    (a) illustrates the process of segmenting a sequence of 12
+                                                                                                      tokens exceeding the pretraining length 10 into 2 chunks,
+                                                                                                      with each chunk comprising s = 6 < 10 tokens. Then the
+tested on input sequences longer than those seen during                                               position indices for keys and queries are scaled within the
+pretraining (Li et al., 2023b; Zhu et al., 2023). Recent stud-                                        chunk size 6. Concretely, we have position indices for keys
+ies (Chen et al., 2023b; Su, 2023; Jin et al., 2024) mainly                                           Pk = [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5] and PqIntra = Pk , where
+attribute this limitation to the presence of unseen relative                                                  |     {z     } |       {z      }
+                                                                                                                  chunk 0         chunk 1
+positions in pretraining phase and propose to redesign the                                            PqIntra means position indices for queries during intra-chunk
+relative position matrix. As illustrated in the example in                                            attention. To formalize, in intra-chunk attention, we adjust
+Figure 1, the model is trained on sequences of 6 tokens,                                              the position indices for queries and keys as follows:
+while inference is carried out on a sequence of 12 tokens.
+This discrepancy can lead to a high PPL because relative                                                        PqIntra = Pk = [0, 1, . . . , l − 1]   mod s.       (2)
+positions beyond 6 were never trained. Previous approaches,
+such as PI and NTK, aim to mitigate this issue by reducing                                            For the absolute indices i and j within the same chunk i.e.,
+the magnitude of M [i][j] to ensure it falls within the scope                                         ⌊i/s⌋ = ⌊j/s⌋, satisfying 0 ≤ j ≤ i < l, the element
+of the observed context length during training. For instance,                                         M [i][j] is defined as the difference between the positional
+applying PI in this example would adjust the position in-                                             encodings of the query and the key:
+dices by scaling: Pq [i] ⇒ Pq [i]/2 and Pk [j] ⇒ Pk [j]/2.
+Consequently, the relative position matrix is also scaled:                                                              M [i][j] = PqIntra [i] − Pk [j].            (3)
+M [i][j] = M [i][j]/2. Here, a scaling factor 2 = 12     6 is                                         When ⌊i/s⌋ = ⌊j/s⌋, we calculate M [i][j] follows Eq. 3.
+employed to scale down the relative positions, leading to
+                                                                                                      The computed M of the previous example where we have a
+inferior resolution of the position information and weak
+                                                                                                      sequence length of 12 and a chunk size of 6, is illustrated
+extrapolation ability.
+                                                                                                      in Figure 2 (a). The intra-chunk attention score for the
+                                                                                                      interaction between the i-th query and the j-th key is then
+3. Method                                                                                             calculated as:
+In this section, we describe our new training-free framework                                                      q⊤             Intra ⊤
+                                                                                                                   i kj = f (q, Pq [i]) f (k, Pk [j]).              (4)
+Dual Chunk Attention in detail. A running example of dual
+chunk attention is shown in figure 2. Our method starts from
+                                                                                                      3.2. Inter-Chunk Attention
+the intra-chunk attention (Figure 2 (a)) which is a chunk-
+based efficient attention pattern (Child et al., 2019; Song                                           To aggregate information from other chunks, we introduce
+et al., 2023). The position embedding of each chunk ranges                                            Inter-Chunk Attention. In Llama-based LLMs, the posi-
+from 0 to chunk size where the chunk size is set to be smaller                                        tion indices for queries are greater than those of the keys
+than pretraining length. The intra-chunk attention pattern                                            to reflect the left-to-right information flow, i.e, we have
+practically means directly truncating the input from left to                                          Pq [i] ≥ Pk [j] whenever i ≥ j. Using Pq = PqIntra and Pk
+the chunk size discarding information from previous chunks.                                           for attention calculation between different chunks clearly
+Such truncation usually brings low perplexity (Xiao et al.,                                           violates this property. For example, considering qs and k1
+2023) but loses long-range information. To address this                                               where s is the chunk size, their relative distance given by
+limitation, we implement inter-chunk attention (Figure 2                                              PqIntra [s] = 0 and Pk [1] = 1 is -1. We maintain the position
+
+                                                                                                  3
+

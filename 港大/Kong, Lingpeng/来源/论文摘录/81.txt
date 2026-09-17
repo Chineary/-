@@ -1,0 +1,177 @@
+          Self-Adaptive In-Context Learning: An Information Compression
+             Perspective for In-Context Example Selection and Ordering
+
+           Zhiyong Wu♦† , Yaoxiang Wang♣†∗, Jiacheng Ye♠† ∗ , Lingpeng Kong♠
+        Shanghai AI Laboratory ♣ Xiamen University ♠ The University of Hong Kong
+           ♦
+
+    {jcye2,lpk}@cs.hku.hk, {wuzhiyong,wangyaoxiang}@pjlab.org.cn,
+
+
+
+                          Abstract
+     Despite the impressive few-shot performance                               80                    Random & Validation
+     of in-context learning (ICL), it remains a com-                           70                    TopK+MDL
+     mon practice to randomly select examples to
+                                                                               60
+     serve as the context. In this paper, we advocate
+                                                                               50
+                                                                    Accuracy
+     self-adaptive in-context learning, a new princi-
+     ple for ICL, in which the self-adaption mech-                             40
+     anism is introduced to help each input find                               30
+     an in-context example organization (i.e., selec-                          20
+     tion and permutation) that can derive the cor-
+                                                                               10
+     rect output, thus maximizing performance. To
+     validate the effectiveness of self-adaptive ICL,                           0
+                                                                                    1   2         3       4         5
+     we propose a general select-then-rank frame-                                           Label of SST5
+     work and a set of novel selection and rank-
+     ing algorithms. Upon extensive evaluation on                 Figure 1: Corpus-level method (red bar) is highly bi-
+     eight different NLP datasets, our self-adaptive              ased towards majority classes, given 8 in-context ex-
+     ICL method achieves a 40% relative improve-                  amples labeled as 2 5 4 4 4 1 2 3.
+     ment over the common practice setting. Fur-
+     ther analysis reveals the great potential of self-
+     adaptive ICL as a promising method to close                  ICL contains two ingredients: some input-output
+     the gap between ICL and finetuning. Our code                 pairs (i.e., in-context examples) and a template that
+     will be released to facilitate future research.              wraps these examples into a natural language in-
+                                                                  struction. Extensive research has been carried out
+1    Introduction                                                 on searching for a better template (Gao et al., 2021;
+The increasing scale of pre-trained language mod-                 Shin et al., 2020; Sorensen et al., 2022; Deng et al.,
+els (PLMs) has brought emergent abilities (Wei                    2022). In contrast, very few efforts have been spent
+et al., 2022) via in-context learning (ICL), where                on searching for the best in-context example or-
+the PLMs learn to do downstream tasks simply by                   ganization. 1 Recent work, however, has pointed
+conditioning on a prompt containing a few exam-                   out that the organization of in-context examples
+ples of their kinds (Brown et al., 2020a). Due to its             can have a significant influence on ICL’s perfor-
+impressive performance, ICL has now emerged as                    mance (Lu et al., 2022; Liu et al., 2022; Rubin et al.,
+a popular and efficient way of using PLMs. How-                   2022).
+ever, ICL is inherently unstable: given different                    This paper fills this gap by proposing a frame-
+prompts, the performance of ICL on downstream                     work for in-context example searching and rank-
+tasks can vary from almost random to comparable                   ing. While one can also trivially extend template
+with state-of-the-art systems (Zhao et al., 2021; Lu              searching methods to conduct in-context example
+et al., 2022; Gao et al., 2021), depending on the                 searching, these methods operate at the corpus-
+quality of the prompts.                                           level. They first construct a small candidate tem-
+   The instability of ICL motivates researchers to                plate set using PLMs (Gao et al., 2021; Shin et al.,
+explore methods that search for high-performing                   2020), data mining algorithms (Jiang et al., 2020),
+prompts. Note that a prompt within the context of                 or by hands (Sorensen et al., 2022). After that, each
+     ∗                                                               1
+         Work done while interning at Shanghai AI Lab.                 In this paper, we abuse the word organization to represent
+     †
+         Equal Contribution.                                      both the selection and ordering of examples.
+
+                                                             1423
+                     Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics
+                                            Volume 1: Long Papers, pages 1423–1436
+                               July 9-14, 2023 ©2023 Association for Computational Linguistics
+candidate will be applied to the whole validation set        might be able to close the gap between ICL
+for inference. According to validation performance,          and finetuning.
+the best template will be adapted for testing. How-
+ever, existing solutions have the following prob-           • We will open-source the proposed framework
+lems: (i) Their performance relies heavily on the             to facilitate future research. This unified
+availability of a large-scale high-quality validation         framework enables researchers to identify im-
+set; (ii) Corpus-level methods can be sub-optimal             portant design choices in previous methods
+(see Figure 1) because finding a universal template           and paves the way for further improvements.
+that suits all testing samples perfectly is unlikely.   2    Related Work
+Such majority bias (Zhao et al., 2021) will signif-
+icantly hurt user experience in practice and make       Despite the surprising zero-shot performance of
+corpus-level methods less robust.                       PLMs, recent works show that ICL can bring the
+   To tackle these issues, we seek to construct a       performance to the next level. Augmenting PLMs
+good-performing in-context example organization         with ICL achieves SOTA results on a wide range of
+for each testing sample individually, without ac-       NLP tasks, ranging from question answering (Joshi
+cess to a validation dataset. This problem, namely      et al., 2017), information retrieval (Tay et al., 2022),
+self-adaptive in-context learning, is essentially an    math word problem (Cobbe et al., 2021), common-
+NP-hard combinatorial optimization problem that         sense reasoning (Geva et al., 2021), and fact check-
+cannot be solved within polynomial time. We thus        ing (Rae et al., 2021) etc. The instability of ICL,
+formulate it as a search problem and propose a gen-     however, has encouraged researchers to explore
+eral two-stage framework to cope with the issue of      methods that search for robust and high-performing
+massive search space.                                   prompts. These methods can be categorized as fol-
+   In the first stage, we apply heuristic rules         lows based on the target of searching/optimization:
+(e.g., nearest neighbors based on semantic simi-        Template search focuses on searching for the
+larity) to filter candidate examples. Given a much      template that can guide PLM’s behavior and steer
+smaller candidate set, we then apply algorithms         its best performance. Great advances have been
+to rank different organizations and look for the        made in template searching using various methods:
+best-performing one. Our ranking algorithms are         PLMs (Gao et al., 2021), heuristic rules (Jiang et al.,
+theoretically supported by the Minimal Description      2020; Shin et al., 2020; Prasad et al., 2022; Xu et al.,
+Length (MDL) principle and can shed light on why        2022), reinforcement learning (Deng et al., 2022),
+certain permutations are better than others.            genetic algorithms (Kumar and Talukdar, 2021),
+   Our contributions are summarized as follows:         or by hands (Sorensen et al., 2022; Zhao et al.,
+   • To the best of our knowledge, we are the first     2021). Nonetheless, all these methods require a
+     to formally define the problem of self-adaptive    high-quality validation set to do prompt selection
+     in-context learning and formulate it as a two-     or optimization. Unlike them, our framework does
+     stage search problem. We propose a general         not require a validation set.
+     framework to address this problem.                    When the validation set is not available, re-
+                                                        searchers propose to search prompts using en-
+   • We achieve state-of-the-art performance using      tropy (Lu et al., 2022) or mutual informa-
+     the proposed framework and outrun the previ-       tion (Sorensen et al., 2022). It’s worth mentioning
+     ous best-performing methods by a large rela-       that these two works and all aforementioned meth-
+     tive improvement. We also find that instance-      ods search at the corpus-level: they pick the best-
+     level ICL methods are generally more robust        performing template with or without a validation
+     than corpus-level counterparts. Such empir-        set and then equally apply this template to all test
+     ical success shows a great promise of self-        examples during inference. However, corpus-level
+     adaptive ICL.                                      methods might be sub-optimal. If we consider the
+                                                        No Free Lunch Theorem, finding one single tem-
+   • We conduct extensive analysis for self-
+                                                        plate that works well for all testing examples is
+     adaptive ICL and make some exciting find-
+                                                        nearly impossible.
+     ings. For instance, in Section 6.3 we reveal
+     that self-adaptive ICL still has much room for     In-context example search, unlike template
+     improvement. With better search methods, we        search, is rarely explored in the literature despite
+                                                    1424
+that they also have a huge impact on ICL perfor-         which picks the best combination and permutation
+mance (Zhao et al., 2021; Lu et al., 2022). Lu           according to information-theoretic-driven criteria.
+et al. (2022) first propose a learning-free corpus-
+level method for in-context example search. How-         4.2   Selection
+ever, they only consider an impractical setting          The goal of selection module is to filter out large
+with only 4 examples and their 24 permutations           parts of “less useful” examples and construct a
+(4 P4 = 4! = 24). Liu et al. (2022) find examples        small candidate set to reduce the search space. We
+that are semantically similar to a test sample can       present various selection methods below.
+serve as a good choice for its in-context examples.
+However, the reason why such a simple heuristic          TopK Liu et al. (2022) and Gao et al. (2021) ob-
+works is unclear. Su et al. (2022) extend this near-     serve that context examples that are closer to the
+est neighbor search and further take the diversity       test sample in the embedding space consistently
+of examples into consideration. Inspired by these        give rise to stronger performance. This observation
+methods, recent studies propose to learn to retrieve     leads to the TopK method which uses the nearest
+in-context examples (Rubin et al., 2022).                neighbors of a given test sample as the correspond-
+                                                         ing in-context examples.
+3   Problem formulation
+                                                         VoteK Although ICL was originally proposed for
+Given a test sample (x, y), the probability of gen-      few-shot settings, they often require a large exam-
+erating the target y using a casual PLM P can be         ple set to achieve good performance. VoteK (Su
+formulated as follows:                                   et al., 2022) proposes to alleviate this problem by
+                                                         selecting diverse yet representative examples. Intu-
+           p(y|x) = P (V(y)|c, T (x)) ,           (1)    itively, VoteK is built upon TopK, but it increases
+                                                         diversity by penalizing examples similar to those
+where T (·) is the template used to wrap up inputs
+                                                         already selected.
+and c = T (x1 ), · · · , T (xk ) is the context string
+concatenating k input-output examples. To deal           DPP Inspired by VoteK, we also experimented
+with classification tasks, a verbalizer V(·) is intro-   with the determinantal point process (DPP) based
+duced to map each label/class y to a word/words          method, which is proposed for set selection prob-
+in P’s vocabulary. Note that in a special scenario       lems where diversity is preferred. We refer readers
+when k = 0, ICL degenerates to zero-shot prompt-         to Kulesza and Taskar (2011) for details of DPP.
+ing (Ye et al., 2022; Brown et al., 2020b).
+   The goal of self-adaptive ICL is then to find an      4.3   Ranking
+optimal organization of c ∈ C that can drive the         With the candidates returned by the selection mod-
+correct y for each input x, and maximize the task        ule, the goal of the ranking module is to deter-
+performance. We formulate this as a combinatorial        mine the best organization among candidates. Our
+optimization problem.                                    ranking algorithm is inspired by the compression
+                                                         viewpoint of Solomonoff’s general theory of infer-
+4   Method                                               ence (Solomonoff, 1964) and Minimum Descrip-
+In this section, we propose a two-stage framework        tion Length (MDL) principle (Grünwald, 2007)
+to tackle the problem of self-adaptive ICL.              from information theory.
+                                                            Both Solomonoff’s theory and the MDL formal-
+4.1 Overview                                             ize Occam’s razor and hold that a good model of
+In such a combinatorial optimization problem, an         data is a model that is good at losslessly compress-
+exhaustive search is not tractable. So we need spe-      ing the data, including the cost of describing the
+cialized algorithms that can quickly rule out large      model itself. These theories have led to advances in
+parts of the search space. We present an overview        VAE (Kingma and Welling, 2013), and information
+of our selection-then-rank framework here: We first      bottleneck methods (Tishby and Zaslavsky, 2015).
+use a selection module to reduce the search space.       Inspired by the compression viewpoint of learning,
+One straightforward choice for pre-ranking would         we recast the problem of self-adaptive in-context
+be to use nearest-neighbor algorithms to select ex-      learning into a similar paradigm. We assume that
+amples that are semantically similar to test samples.    a good organization of in-context examples is the
+The results are then fed into the ranking module,        organization that is good at losslessly compressing
+                                                     1425
+

@@ -1,0 +1,196 @@
+                                                                                 Self-Infilling Code Generation
+
+
+                                                              Lin Zheng 1 * Jianbo Yuan 2 Zhi Zhang 2 Hongxia Yang 2 Lingpeng Kong 1
+
+
+                                                                  Abstract                                     et al., 2024). Building upon this success, an active line of re-
+                                                                                                               search aims to endow these language models with enhanced
+                                               In this work, we introduce self-infilling code gen-             free-form generation capacities (Fried et al., 2023; Bavarian
+
+
+
+
+arXiv:2311.17972v3 [cs.PL] 26 May 2024
+                                               eration, a general framework that incorporates                  et al., 2022; Allal et al., 2023; Nijkamp et al., 2023a; Li
+                                               infilling operations into auto-regressive decoding.             et al., 2023; Roziere et al., 2023), where models learn to
+                                               Our approach capitalizes on the observation that                infill content considering both preceding and subsequent
+                                               recent infilling-capable code language models can               contexts. Such capabilities are instrumental for numerous
+                                               perform self-infilling: whereas conventional infill-            downstream code-related tasks that require a bidirectional
+                                               ing is designed to fill in the middle based on a                context, including but not limited to partial code completion,
+                                               predefined prefix and suffix, self-infilling sequen-            docstring generation, and type prediction (Fried et al., 2023;
+                                               tially generates both such surrounding context                  Li et al., 2023; Roziere et al., 2023).
+                                               and the infilled content. We utilize self-infilling
+                                               to introduce novel interruption and looping mech-               Established practices for fostering infilling capabilities in
+                                               anisms in conventional decoding, evolving it into               language models involve training with an explicit infilling
+                                               a non-monotonic process. Interruptions allow for                objective (Raffel et al., 2020; Bavarian et al., 2022; Tay et al.,
+                                               postponing the generation of specific code until                2023; Anil et al., 2023; Fried et al., 2023; Nijkamp et al.,
+                                               a definitive suffix is established, enhancing con-              2023a), which directs the model to predict the missing span
+                                               trol during decoding. Meanwhile, the looping                    of sequence tokens given the surrounding context. Despite a
+                                               mechanism, which leverages the complementary                    substantial allocation of computational resources dedicated
+                                               nature of self-infilling and left-to-right decoding,            to the specialized infilling training (Bavarian et al., 2022;
+                                               can iteratively update and synchronize each piece               Li et al., 2023; Roziere et al., 2023), most code generation
+                                               of generation cyclically. Extensive experiments                 systems still persist in a strictly left-to-right fashion. It
+                                               across a variety of code generation benchmarks                  remains unclear how the acquired proficiency in infilling
+                                               demonstrate that decoding with self-infilling not               could aid in synthesizing complete code beyond narrowly
+                                               only improves the output quality but also regular-              tailored partial infilling tasks (Bavarian et al., 2022; Fried
+                                               izes the overall generation, which effectively mit-             et al., 2023; Allal et al., 2023).
+                                               igates potential degeneration and scaffolds code                In this work, we investigate the integration of infilling capa-
+                                               to be more consistent with intended functionality.              bilities into the generation process of code language models.
+                                                                                                               We start with a seemingly straightforward yet overlooked ob-
+                                                                                                               servation: recent open-source code language models, specif-
+                                         1. Introduction                                                       ically those trained with fill-in-the-middle objectives (Bavar-
+                                                                                                               ian et al., 2022) (e.g., S TAR C ODER (Li et al., 2023) and
+                                         Contemporary large language models have achieved excel-               C ODE L LAMA (Roziere et al., 2023)), inherently possess
+                                         lent performance in tasks related to code generation and              self-infilling capabilities (§2.1). Unlike regular infilling op-
+                                         understanding (Austin et al., 2021; Chen et al., 2021; Fried          erations that demand a partial surrounding context as input,
+                                         et al., 2023; Nijkamp et al., 2023b; Li et al., 2022; Anil            self-infilling autonomously generates both the surrounding
+                                         et al., 2023; OpenAI, 2023; Touvron et al., 2023a; Li et al.,         context and the infilled content.
+                                         2023; Touvron et al., 2023b; Muennighoff et al., 2023; Ni-
+                                         jkamp et al., 2023a; Roziere et al., 2023; Xie et al., 2023; Xu       We leverage this finding to develop an interruption mech-
+                                                                                                               anism (§2.2) in conventional left-to-right decoding, trans-
+                                           *
+                                            This work was done during an internship at ByteDance. 1 The        forming it into a non-monotonic process. This allows the
+                                         University of Hong Kong 2 ByteDance Inc. Correspondence to:           language model to temporarily halt the decoding process
+                                         Lin Zheng <lzheng2@cs.hku.hk>.
+                                                                                                               when necessary, craft a suffix, and then return to the in-
+                                         Proceedings of the 41 st International Conference on Machine          terruption point to infill the bypassed context (Figure 1c).
+                                         Learning, Vienna, Austria. PMLR 235, 2024. Copyright 2024 by          To handle the variable length of the skipped context and
+                                         the author(s).
+
+                                                                                                           1
+                                                          Self-Infilling Code Generation
+
+      Prefix            Prefix              Prefix              Prefix             models, our extensive experiments (§3) on various code
+                                                                                   benchmarks verify the effectiveness of self-infilling genera-
+                                                                                   tion. We demonstrate that our framework brings significant
+     Middle            Middle              Middle               Middle
+                                                                                   improvements in the quality and regularity of code genera-
+                                                                                   tion compared to conventional left-to-right approaches.
+      Suffix            Suffix              Suffix              Suffix
+
+ (a) Left-to-right   (b) Infilling   (c) Self-infilling   (d) Self-infilling       2. Self-infilling Code Generation
+                                       Interruption         Interruption
+                                                            with Looping
+                                                                                   In this section, we introduce self-infilling, the built-in capa-
+                                                                                   bility of models trained with fill-in-the-middle (§2.1; Bavar-
+Figure 1. Schematic illustrations of various decoding approaches                   ian et al., 2022). We then detail our integration of self-
+for code generation. (a) and (b) represent standard left-to-right                  infilling into the decoding process, including the developed
+decoding and infilling operations, respectively. Whereas infilling                 interruption (§2.2) and looping (§2.3) mechanisms.
+requires the user-provided prefix and suffix, self-infilling inter-
+ruption (c) autonomously generates these segments. (d) further
+expands on self-infilling by incorporating a looping mechanism.                    2.1. FIM Training Entails Self-infilling
+                                                                                   Fill-in-the-middle (FIM) Training. Throughout this
+                                                                                   work, we focus on code language models with causal
+enforce an appropriate suffix, we introduce suffix prompt-                         decoder-only Transformers (Vaswani et al., 2017; Radford
+ing by initiating the suffix with a prespecified yet common                        et al., 2018), which are currently the dominant paradigm
+prompt. The interruption mechanism is particularly useful in                       at large scale. Most of these language models are trained
+high-entropy situations, where conventional decoding meth-                         with conventional left-to-right next token prediction (Rad-
+ods falter due to uncertainty in predicting the next token                         ford et al., 2018; 2019). Despite compelling performance
+and might cause propagation of errors through the context,                         (Austin et al., 2021; Chen et al., 2021; Nijkamp et al.,
+known as the exposure bias (Ranzato et al., 2015; Bengio                           2023b), such training objective only permits left-to-right
+et al., 2015). Instead, self-infilling interruption offers an                      generation for downstream applications and restricts more
+easy-first alternative by deferring the generation of more                         versatile generation tasks like infilling, which necessitates
+difficult tokens and crafting a well-definitive suffix. This                       a non-causal (or bidirectional) context. A recent practice
+suffix works as an anchor to scaffold the code and produce a                       to address this limitation is training with the Fill-In-the-
+more structured context for the subsequent infilling, which                        Middle (FIM) objective (Bavarian et al., 2022), which is
+ensures the final generation is logically consistent with the                      extensively employed in recent code models (Allal et al.,
+intended functionality and enjoys improved regularity.                             2023; Li et al., 2023; Roziere et al., 2023). FIM randomly
+Besides, self-infilling implies a looping mechanism (§2.3) to                      splits input raw code into three pieces (prefix, middle,
+further enhance the decoding process. Leveraging the com-                          suffix) and rearranges them to form a permuted
+plementary nature of left-to-right and self-infilling methods,                     sequence [<PRE>;prefix;<SUF>;suffix;<MID>;
+it iteratively updates code snippets with broader contexts,                        middle;<EOT>], where ; denotes concatenation and
+wherein the output from one mode seamlessly informs the                            particular sentinel tokens are interleaved to mark the bound-
+input to the other (Figure 1d). Specifically, the suffix in                        ary of each piece.1 The model is then optimized to max-
+self-infilling is generated based solely on the prefix with a                      imize the factorized likelihood p(prefix)p(suffix |
+rather limited context. This can be addressed by chaining a                        prefix)p(middle | prefix, suffix) with each mod-
+subsequent left-to-right decoding phase, enabling the suffix                       eled in a standard left-to-right auto-regressive manner.
+to be re-generated within an expanded context that includes
+the infilled middle. Similarly, we can continue by append-
+                                                                                   FIM Entails Self-infilling. Our key observation is that
+ing the next self-infilling to synchronize the middle and the
+                                                                                   FIM (Bavarian et al., 2022) trains the model to predict
+prefix based on the latest suffix information. Such piece-
+                                                                                   the “next” token irrespective of the specific pieces (i.e.,
+wise synchronization allows each snippet to be recurrently
+                                                                                   prefix, middle, or suffix) these tokens belong to.
+updated with more informative contexts.
+                                                                                   Consequently, the model learns not only to predict the
+Intuitively, the developed interruption and looping mecha-                         middle conditioned on both prefix and suffix, but
+nism mirrors human coding practices, which typically do                            also to predict suffix only based on prefix. While the
+not conform strictly to a linear, left-to-right progression.                          1
+Instead, code is usually written via a dynamic process of                               An alternative format, known as the SPM mode (Bavar-
+                                                                                   ian et al., 2022), structures the pieces as [<PRE>;<SUF>;
+continuous refinement, editing, and reconnection of frag-                          suffix;<MID>;prefix;middle;<EOT>]. However, this
+ments. While the replication of human coding strategies                            permutation is not as useful in our setting, because we would like
+may not necessarily be the optimal approach for language                           the suffix to be conditioned on the prefix context.
+
+                                                                               2
+                                                 Self-Infilling Code Generation
+
+former is extensively studied in the literature as infilling          where suffix := [suffixp ; suffixc ] and suffixc
+(Donahue et al., 2020; Bavarian et al., 2022; Du et al., 2022;        is the suffix completion of suffixp . Given prefix and
+Aghajanyan et al., 2022; Tay et al., 2022; 2023; Fried et al.,        a predefined suffixp , we can further expand upon Equa-
+2023), the latter is rarely explored, which characterizes the         tion 2 as follows,
+distribution of suffix given prefix marginalized over
+possible outcomes of middle. This leads to self-infilling,               suffixc ∼ p(suffixc | prefix, suffixp ),
+                                                                                                                                       (5)
+where the model can first generate a suffix based on                      suffix := [suffixp ; suffixc ].
+prefix and then return to fill in the middle given the
+self-generated context. We leverage this aspect to develop a          The use of suffix prompting helps generate an appropriate
+non-monotonic decoding process, as detailed subsequently.             suffix, which serves as a contextual anchor to scaffold
+                                                                      the overall generation and ensure the output structure is
+2.2. Self-infilling Interruption                                      logically consistent with the intended functionality.
+                                                                      In practice, self-infilling interruption is implemented
+Self-infilling introduces a dynamic decoding process with
+                                                                      through the manipulation of sentinel tokens. For instance,
+the interruption mechanism. Specifically, given an initial
+                                                                      the language model is programmed to produce <SUF> as
+input prompt denoted as prefix, the language model per-
+                                                                      the next token upon interruption activation. Our detailed
+forms next-token prediction similar to regular decoding,
+                                                                      implementation is outlined in Algorithm 2 (Appendix A).
+                 prefix ∼ p(prefix).                       (1)
+                                                                      2.3. Decoding through a Looping Mechanism
+Our approach enhances decoding by incorporating interrup-             In this section, we introduce a looping mechanism to im-
+tions. On invocation, the current decoding is suspended to            prove decoding, which interweaves self-infilling with left-
+generate a suffix, followed by filling in the middle:                 to-right conditional generation to recurrently update snip-
+                                                                      pets. Note that during self-infilling, suffix is generated
+      suffix ∼ p(suffix | prefix),                         (2)        based solely on prefix, a narrower context that excludes
+      middle ∼ p(middle | prefix, suffix).                 (3)        middle. This can be enhanced by chaining a subsequent
+                                                                      left-to-right decoding phase to re-generate suffix as
+In general, interruptions can be triggered by various indi-
+cators, such as low likelihood or the occurrence of specific          suffixp ∼ p(suffixp | prefix, middle),
+tokens. We implement a simple heuristic to signal inter-              suffixc ∼ p(suffixc | prefix, middle, suffixp ),
+ruptions by employing a probability threshold τ . If the
+maximum probability over the next token falls below τ , indi-         allowing suffix := [suffixp ; suffixc ] to integrate
+cating high uncertainty, self-infilling is invoked. Contrasting       information from both prefix and middle. Notably, the
+with left-to-right decoding, self-infilling interruption adopts       suffix prompt suffixp is also updated through looping to
+an easy-first methodology and dynamically defers the gen-             become fully contextual instead of being specified a priori.
+eration of potentially difficult snippets. It is thus useful to
+                                                                      This looping procedure can be continued to synchronize
+mitigate divergent issues due to producing an error-prone
+                                                                      middle with the latest suffix information through the next
+context, known as the exposure bias (Bengio et al., 2015;
+                                                                      self-infilling call. Instead of restarting self-infilling with
+Ranzato et al., 2015).
+                                                                      prefix generation (Equation 1), which would ignore the
+                                                                      information from the last left-to-right decoding and repeat
+Suffix Prompting. Accurately crafting a proper suffix                 the first iteration, hereafter self-infilling begins with Equa-
+from only prefix is often challenging due to the inde-                tion 5 to directly incorporate suffixp .2 To update the gen-
+terminate nature of the skipped segment middle during                 erated tokens of prefix (Equation 1), we prepend them
+infilling pretraining. To guide suffix generation, we propose         into middle and reset prefix to the original fixed input.
+suffix prompting that enforces suffix to start with specific          This design choice corroborates prior research (Bavarian
+tokens. For instance, in Python function generation (Chen             et al., 2022), suggesting that while the infilled middle
+et al., 2021; Austin et al., 2021), a common ending is a              sometimes struggles to join suffix, it could adeptly con-
+return statement containing the keyword return. Such                  tinue prefix. During looping, transferring the output from
+common keywords can be used as the suffix prompt (denoted             self-infilling to left-to-right decoding is straightforward due
+as suffixp ) to shape suffix.                                         to explicit sentinel tokens. However, to continue the looping
+Technically, we represent the whole input sequence as a                   2
+                                                                            It is also feasible to pass the entire generated suffix to ini-
+quadruple in the following form,                                      tiate self-infilling with middle generation (Equation 3); however,
+                                                                      this approach often yields inferior results, as shown in Table 4 and
+      [prefix; middle; suffixp ; suffixc ],                (4)        discussed in §3.4.
+
+                                                                  3
+

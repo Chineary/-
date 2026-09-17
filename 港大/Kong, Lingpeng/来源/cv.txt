@@ -1,0 +1,599 @@
+Lingpeng Kong
+https://ikekonglp.github.io/
+
+E MPLOYMENT
+  Assistant Professor, Department of Computer Science, The University of Hong Kong, 2020 - present
+  Senior Research Scientist, Google DeepMind, 2019 - 2020
+  Research Scientist, Google DeepMind, 2017 - 2019
+  Software Engineer, IBM China Systems and Technology Lab, 2011 - 2012
+  Research Internships: Google DeepMind (2017), Google Research (2016), University of Washington (2015-17),
+  Harvard University (2015), NEC Laboratories China (2011), Tsinghua University (2010).
+
+E DUCATION
+  Ph.D. Computer Science, Carnegie Mellon University, 2017
+        Thesis topic: Neural Representation Learning in Linguistic Structured Prediction [128]
+        Committee: Noah A. Smith∗ , Chris Dyer∗ , Alan W. Black, Michael Collins (∗ co-chair)
+  M.S. Computer Science, Carnegie Mellon University, 2015
+  B.E. Computer Science, Beijing Language and Culture University, 2011
+
+R ESEARCH H IGHLIGHTS AND AWARDS
+  2025     Spotlight, NeurIPS [24]. Highlight, CVPR [38].
+  2024     Outstanding Paper Award, ACL [61]. Oral, NeurIPS [53]. Spotlight, ICLR [73].
+  2023     Oral, ICLR [90]. Spotlight, ICLR [91,92].
+  2022     Spotlight, ICLR [110]. Spotlight, NeurIPS [100,101].
+  2021     Tencent AI Lab Rhino-Bird Award. Spotlight, ICLR [113].
+  2020     Spotlight, ICLR [114].
+  2017     Outstanding Paper Award, EACL [118].
+
+S ERVICE
+  Senior Area Chair: EMNLP (2024 - 2025), NAACL (2024 - 2025), IJCNLP/AACL (2023, 2025).
+  Journal Reviewer: Nature, Cell Reports Methods.
+  Action Editor: Transactions on Machine Learning Research (TMLR) (2024 -), ACL Rolling Review (2023 -).
+  Area Chair: NeurIPS (2022 - 2025), ICML (2023 - 2025), ICLR (2022 - 2025), COLM (2024 - 2025), EMNLP
+  (2022 - 2023), COLING (2022), NLPCC (2021), NAACL (2020).
+  Program Committee Member: ICML (2017 - 2020), ACL (2016 - 2020), NeurIPS (2017), EMNLP (2015 - 2020),
+  ICLR (2017), NAACL (2016), COLING (2016), and other various conferences and workshops.
+ADVISING
+P H .D., completed
+
+    • Qintong Li (2021-2025); [48,54,63,67,82,85,96,106] Now: research scientist at Qwen Team
+    • Jiahui Gao (2019-2023); [75,91,95,96,110]
+    • Sheng Wang1 (2024-2025); [24,28,41,48,62,64,85]
+
+P H .D., post-thesis proposal
+
+    • Chang Ma (2022-); [42,53,54,56,65,78]
+    • Xueliang Zhao (2022-); [25,63,66,67,71,86]
+    • Jiacheng Ye2 (2022-); [43,44,45,47,52,62,76,81,87,91,95,96]
+    • Yiheng Xu3 (2022-); [73]
+    • Lin Zheng (2021-); University Postgraduate Fellowship; M.Braun Postgraduate Prize in Computer Science;
+      [22,52,54,59,69,80,88,90,103,104,111]
+
+P H .D., pre-thesis proposal
+
+    • Jingwei Dong4 (2025-); [27]
+    • Zhihui Xie5 (2024-); HKU Presidential PhD Scholarship (HKU-PS); [36,39]
+    • Xijia Tao (2024-); [21,49]
+    • Jing Xiong6 (2024-); [19,29,37,9]
+    • Shansan Gong (2023-); HKU Presidential PhD Scholarship (HKU-PS); [20,43,46,47,52,61,67,70,77,93]
+    • Chenxin An (2023-); Hong Kong PhD Fellowship (HKPF); [26,40,46,47,61,70,100]
+    • Lei Li7 (2023-); [32,38,39,40,46,49,55,60,68,74,79]
+    • Zhenyu Wu8 (2023-); [44]
+
+P OST- DOCTORAL
+
+    • Xiachong Feng9 (2024-); [8,18,33,35,60]
+
+G RADUATE STUDENT VISITORS AND INDEPENDENT STUDY PROJECTS
+
+    2024: Seo Woon Baik, Zirui Wu [22,31], Jiafeng Wang
+    2023: Liheng Chen [52,62,64], Zhiheng Lyu [50], Qingxiu Dong [65,74,79], Xuanyu Chen, Xiaoxu Li, Shuai
+    Zhong
+    2022: Rui Shao, Dantong Li, Jiayi Xin, Chenxin An, Mukai Li [77,93], Haiteng Zhao [78]
+    2021: Xijia Tao, Xiangwei Kong, Shuailong Zhu, Jiahui Gao, Ya-Cheng Hsu, Jakob Prange (Georgetown Univer-
+    sity) [105], Chengzu Li [97], Yuval Kansal, King Min Hao, Ke Ma, Jiacheng Ye
+    2020: Zhiyong Wu [107,111,112], Hao Peng (University of Washington) [108,113], Huijie Pan [104], Yiming
+    Wang, Chiu Yu Ying
+1 Co-advisor: Chuan Wu (HKU) 2 Co-advisor: Tao Yu (HKU) 3 Co-advisor: Tao Yu (HKU) 4 Co-advisor: Chuan Wu (HKU) 5 Co-ad-
+visor: Qi Liu (HKU) 6 Co-advisor: Ngai Wong (HKU) 7 Co-advisor: Qi Liu (HKU) 8 Shanghai Jiao Tong University (SJTU) 9 Co-host:
+Chuan Wu (HKU)
+
+
+Lingpeng Kong                                        January 27, 2026                                                       2
+T EACHING E XPERIENCE
+   Instructor, Introduction to Artificial Intelligence (COMP3270), The University of Hong Kong, Fall 2025
+   Instructor, Advanced Topics in Language Models (COMP8505), The University of Hong Kong, Spring 2025
+   Instructor, Introduction to Machine Learning (COMP3314), The University of Hong Kong, Spring 2022 - 2023,
+   Fall 2023
+   Instructor, Natural Language Processing (COMP3361), The University of Hong Kong, Fall 2021 - 2022
+   Instructor, Natural Language Processing (for graduate students) (COMP7607), The University of Hong Kong, Fall
+   2022 - 2025
+   Teaching Assistant, Natural Language Processing, Carnegie Mellon University, Spring 2015
+   Teaching Assistant, Machine Learning, Carnegie Mellon University, Spring 2013
+
+P UBLICATIONS
+
+P REPRINTS & T ECHNICAL REPORTS
+
+  1. Dani Yogatama, Cyprien de Masson d’Autume, Jerome Connor, Tomas Kocisky, Mike Chrzanowski, Lingpeng
+     Kong, Angeliki Lazaridou, Wang Ling, Lei Yu, Chris Dyer, Phil Blunsom, Learning and Evaluating General
+     Linguistic Intelligence, arXiv:1901.11373, February 2019.
+  2. Jiangtao Feng, Lingpeng Kong, Po-Sen Huang, Chong Wang, Da Huang, Jiayuan Mao, Kan Qiao, Dengyong
+     Zhou, Neural Phrase-to-Phrase Machine Translation, arXiv:1811.02172, November 2018.
+
+  3. Lei Yu, Cyprien de Masson d’Autume, Chris Dyer, Phil Blunsom, Lingpeng Kong, Wang Ling, Sentence En-
+     coding with Tree-constrained Relation Networks, arXiv:1811.10475, November 2018.
+  4. Chris Alberti, Daniel Andor, Ivan Bogatyy, Michael Collins, Dan Gillick, Lingpeng Kong, Terry Koo, Ji Ma,
+     Mark Omernick, Slav Petrov, Chayut Thanapirom, Zora Tung, David Weiss, SyntaxNet Models for the CoNLL
+     2017 Shared Task, arXiv:1703.04929, March 2017. [Link]
+
+  5. Lingpeng Kong, Chris Alberti, Daniel Andor, Ivan Bogatyy, David Weiss, DRAGNN: A Transition-based
+     Framework for Dynamically Connected Neural Networks, arXiv:1703.04474, March 2017. [GitHub][Google
+     AI Blog]
+  6. Graham Neubig, Chris Dyer, Yoav Goldberg, Austin Matthews, Waleed Ammar, Antonios Anastasopoulos,
+     Miguel Ballesteros, David Chiang, Daniel Clothiaux, Trevor Cohn, Kevin Duh, Manaal Faruqui, Cynthia Gan,
+     Dan Garrette, Yangfeng Ji, Lingpeng Kong, Adhiguna Kuncoro, Gaurav Kumar, Chaitanya Malaviya, Paul
+     Michel, Yusuke Oda, Matthew Richardson, Naomi Saphra, Swabha Swayamdipta, Pengcheng Yin, DyNet: The
+     Dynamic Neural Network Toolkit, arXiv:1701.03980, January 2017. [GitHub]
+  7. Lingpeng Kong, and Noah A. Smith, An Empirical Comparison of Parsing Methods for Stanford Dependencies,
+     arXiv:1404.4314, April 2014. [code]
+
+P EER - REFEREED PUBLICATIONS
+Journal papers
+  8. Xiachong Feng, Longxu Dou, Minzhi Li, Qinghao Wang, Yu Guo, Haochuan Wang, Chang Ma, and Lingpeng
+     Kong, A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios, In Transactions
+     on Machine Learning Research (TMLR), 2025
+
+
+
+
+Lingpeng Kong                                  January 27, 2026                                               3
+  9. Jing Xiong, Gongye Liu, Lun Huang, Chengyue Wu, Taiqiang Wu, Yao Mu, Yuan Yao, Hui Shen, Zhongwei
+     Wan, Jinfa Huang, Chaofan Tao, Shen Yan, Huaxiu Yao, Lingpeng Kong, Hongxia Yang, Mi Zhang, Guillermo
+     Sapiro, Jiebo Luo, Ping Luo, Ngai Wong, Autoregressive Models in Vision: A Survey, In Transactions on
+     Machine Learning Research (TMLR), 2025
+ 10. Zhen Qin, Weixuan Sun, Kaiyue Lu, Dongxu Li, Xiaodong Han, Yuchao Dai, Lingpeng Kong, and Yiran Zhong,
+     Linearized Relative Positional Encoding, In Transactions on Machine Learning Research (TMLR), 2023
+ 11. Weixuan Sun, Zhen Qin, Hui Deng, Jianyuan Wang, Yi Zhang, Kaihao Zhang, Nick Barnes, Stan Birchfield,
+     Lingpeng Kong, and Yiran Zhong, Vicinity Vision Transformer, In IEEE Transactions on Pattern Analysis and
+     Machine Intelligence (TPAMI), 2023
+
+ 12. Dani Yogatama, Cyprien de Masson d’Autume, Lingpeng Kong, Adaptive Semiparametric Language Models,
+     Transactions of the Association for Computational Linguistics (TACL), April 2021.
+ 13. Adhiguna Kuncoro*, Lingpeng Kong*, Daniel Fried*, Dani Yogatama, Laura Rimell, Chris Dyer, Phil Blun-
+     som, Syntactic Structure Distillation Pretraining For Bidirectional Encoders, Transactions of the Association for
+     Computational Linguistics (TACL), September 2020.
+
+ 14. Lei Yu, Laurent Sartran, Wojciech Stokowiec, Wang Ling, Lingpeng Kong, Phil Blunsom, Chris Dyer, Better
+     Document-level Machine Translation with Bayes’ Rule, Transactions of the Association for Computational
+     Linguistics (TACL), April 2020.
+ 15. Hao Tang, Liang Lu, Lingpeng Kong, Kevin Gimpel, Karen Livescu, Chris Dyer, Noah A. Smith, Steve Re-
+     nals, End-to-End Neural Segmental Models for Speech Recognition, IEEE Journal of Selected Topics in Signal
+     Processing, August 2017.
+
+Peer-refereed conference publications
+ 16. Qiushi Sun, Zhoumianze Liu, Chang Ma, Zichen Ding, Fangzhi Xu, Zhangyue Yin, Haiteng Zhao, Zhenyu Wu,
+     Kanzhi Cheng, Zhaoyang Liu, Jianing Wang, Qintong Li, Xiangru Tang, Tianbao Xie, Xiachong Feng, and
+     Lingpeng Kong, ScienceBoard: Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows,
+     In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.  ICLR 2026
+ 17. Wendong Xu, Jing Xiong, Chenyang Zhao, Qiujiang Chen, Haoran Wang, Hui Shen, Zhongwei Wan, Jianbo
+     Dai, Taiqiang Wu, He Xiao, Chaofan Tao, Zhuoqing Mao, Ying Sheng, Zhijiang Guo, Hongxia Yang, Lingpeng
+     Kong, and Ngai Wong, SwingArena: Competitive Programming Arena for Long-context GitHub Issue Solving,
+     In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026. ICLR 2026
+ 18. Xiachong Feng, Liang Zhao, Weihong Zhong, Yichong Huang, Yuxuan Gu, Lingpeng Kong, Xiaocheng Feng,
+     and Bing Qin, PERSONA: Dynamic and Compositional Inference-Time Personality Control via Activation
+     Vector Algebra, In International Conference on Learning Representations, May 2026.     ICLR 2026
+ 19. Jing Xiong, Qiujiang Chen, Fanghua Ye, Zhongwei Wan, Chuanyang Zheng, Chenyang Zhao, Hui Shen,
+     Alexander Hanbo Li, Chaofan Tao, Haochen Tan, Haoli Bai, Lifeng Shang, Lingpeng Kong, and Ngai Wong,
+     ATTS: Asynchronous Test-Time Scaling via Conformal Prediction, In International Conference on Learning
+     Representations, Rio de Janeiro, Brazil, May 2026.                                         ICLR 2026
+ 20. Shansan Gong, Ruixiang Zhang, Huangjie Zheng, Jiatao Gu, Navdeep Jaitly, Lingpeng Kong, and Yizhe Zhang,
+     DiffuCoder: Understanding and Improving Masked Diffusion Models for Code Generation, In International
+     Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.                    ICLR 2026
+ 21. Xijia Tao, Yihua Teng, Xinxing Su, Xinyu Fu, Jihao Wu, Chaofan Tao, Ziru Liu, Haoli Bai, Rui Liu, and
+     Lingpeng Kong, MMSearch-Plus: Benchmarking Provenance-Aware Search for Multimodal Browsing Agents,
+     In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026. ICLR 2026
+
+
+Lingpeng Kong                                    January 27, 2026                                                   4
+ 22. Zirui Wu, Lin Zheng, Zhihui Xie, Jiacheng Ye, Jiahui Gao, Shansan Gong, Yansong Feng, Zhenguo Li, Wei Bi,
+     Guorui Zhou, Lingpeng Kong, DreamOn: Diffusion Language Models For Code Infilling Beyond Fixed-size
+     Canvas, In International Conference on Learning Representations, Rio de Janeiro, May 2026.   ICLR 2026
+ 23. Shicheng Li, Lei Li, Kun Ouyang, Shuhuai Ren, Yuanxin Liu, Yuanxing Zhang, Fuzheng Zhang, Lingpeng
+     Kong, Qi Liu, Xu Sun , TEMPLE:Temporal Preference Learning of Video LLMs via Difficulty Scheduling and
+     Pre-SFT Alignment, In Proceedings of AAAI Conference on Artificial Intelligence, January 2026. AAAI 2026
+ 24. Sheng Wang, Pengan Chen, Jingqi Zhou, Qintong Li, Jingwei Dong, Jiahui Gao, Boyang Xue, Jiyue Jiang,
+     Lingpeng Kong, and Chuan Wu, TreeSynth: Synthesizing Diverse Data from Scratch via Tree-Guided Subspace
+     Partitioning, In Advances in Neural Information Processing Systems, San Diego, CA, December 2025. [Spot-
+     light]                                                                                   NeurIPS 2025
+
+ 25. Xueliang Zhao, Wei Wu, Jian Guan, Qintong Li, and Lingpeng Kong, DynaAct: Large Language Model Rea-
+     soning with Dynamic Action Spaces, In Advances in Neural Information Processing Systems, San Diego, CA,
+     December 2025.                                                                            NeurIPS 2025
+ 26. Chenxin An, Zhihui Xie, Xiaonan Li, Ming Zhong, Shansan Gong, Lei Li, Jun Zhang, Jingjing Xu, Lingpeng
+     Kong, Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition, In Proceedings of the
+     Conference on Empirical Methods in Natural Language Processing, November 2025.            EMNLP 2025
+ 27. Jingqi Zhou, Sheng Wang, Jingwei Dong, Kai Liu, Lei Li, Jiahui Gao, Jiyue Jiang, Lingpeng Kong, and Chuan
+     Wu, ProReason: Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom, In Proceedings of
+     the Conference on Empirical Methods in Natural Language Processing, November 2025.          EMNLP 2025
+
+ 28. Juntao Zhao, Wenhao Lu, Sheng Wang, Lingpeng Kong, and Chuan Wu, QSpec: Speculative Decoding with
+     Complementary Quantization Schemes, In Proceedings of the Conference on Empirical Methods in Natural
+     Language Processing, Suzhou, China, November 2025.                                    EMNLP 2025
+ 29. Jing Xiong, Jianghan Shen, Fanghua Ye, Chaofan Tao, Zhongwei Wan, Jianqiao Lu, Xun Wu, Chuanyang
+     Zheng, Zhijiang Guo, Min Yang, Lingpeng Kong, Ngai Wong, UNComp: Can Information Compression Un-
+     cover Sparsity? A Compressor Design from an Uncertainty-Aware Perspective, In Proceedings of the Confer-
+     ence on Empirical Methods in Natural Language Processing, Suzhou, China, November 2025. EMNLP 2025
+ 30. Jiyue Jiang, Alfred Kar Yin Truong, Yanyu Chen, Qinghang Bao, Sheng Wang, Pengan Chen, Jiuming Wang,
+     Lingpeng Kong, Yu Li, and Chuan Wu, Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-
+     Tasking in Large Language Models, In Findings of the Conference on Empirical Methods in Natural Language
+     Processing, Suzhou, China, November 2025.                                        EMNLP 2025 Findings
+ 31. Zirui Wu, Xiao Liu, Jiayi Li, Lingpeng Kong, Yansong Feng, Haste Makes Waste: Evaluating Planning Abilities
+     of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions, In Findings of the
+     Conference on Empirical Methods in Natural Language Processing, November 2025. EMNLP 2025 Findings
+ 32. Linli Yao, Yicheng Li, Yuancheng Wei, Lei Li, Shuhuai Ren, Yuanxin Liu, Kun Ouyang, Lean Wang, Shicheng
+     Li, Sida Li, Lingpeng Kong, Qi Liu, Yuanxing Zhang, Xu Sun, TimeChat-Online: 80% Visual Tokens are
+     Naturally Redundant in Streaming Videos, In Proceedings of the ACM International Conference on Multimedia,
+     Dublin, Ireland, October 2025.                                                             ACMMM 2025
+ 33. Xiachong Feng, Longxu Dou, and Lingpeng Kong, Reasoning Does Not Necessarily Improve Role-Playing
+     Ability, In Proceedings of the Annual Meeting of the Association for Computational Linguistics, Vienna, Aus-
+     tria, August 2025.                                                                     ACL 2025 Findings
+ 34. Xueliang Zhao, Wei Wu, Jian Guan, Lingpeng Kong, PromptCoT: Synthesizing Olympiad-level Problems for
+     Mathematical Reasoning in Large Language Models, In Proceedings of the Annual Meeting of the Association
+     for Computational Linguistics, Vienna, Austria, August 2025.                        ACL 2025 Findings
+
+
+Lingpeng Kong                                  January 27, 2026                                                5
+ 35. Lei Huang, Xiaocheng Feng, Weitao Ma, Yuchun Fan, Xiachong Feng, Yuxuan Gu, Yangfan Ye, Liang Zhao,
+     Weihong Zhong, Baoxin Wang, Dayong Wu, Guoping Hu, Lingpeng Kong, Tong Xiao, Ting Liu, Bing Qin,
+     Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention
+     Learning, In Proceedings of the Annual Meeting of the Association for Computational Linguistics, Vienna,
+     Austria, August 2025.                                                                         ACL 2025
+
+ 36. Zhihui Xie, Jie chen, Liyu Chen, Weichao Mao, Jingjing Xu, and Lingpeng Kong, Teaching Language Models
+     to Critique via Reinforcement Learning, In Proceedings of the International Conference on Machine Learning,
+     Vancouver, Canada, July 2025.                                                                  ICML 2025
+ 37. Jing Xiong, Jianghan Shen, Chuanyang Zheng, Zhongwei Wan, Chenyang Zhao, Chiwun Yang, Fanghua Ye,
+     Hongxia Yang, Lingpeng Kong, and Ngai Wong, ParallelComp: Parallel Long-Context Compressor for Length
+     Extrapolation, In Proceedings of the International Conference on Machine Learning, Vancouver, Canada, July
+     2025.                                                                                         ICML 2025
+ 38. Lei Li, Yuancheng Wei, Zhihui Xie, Xuqing Yang, Yifan Song, Peiyi Wang, Chenxin An, Tianyu Liu, Sujian Li,
+     Bill Yuchen Lin, Lingpeng Kong, Qi Liu, VL-RewardBench: A Challenging Benchmark for Vision-Language
+     Generative Reward Models, In Proceedings of the Conference on Computer Vision and Pattern Recognition,
+     Nashville, TN, June 2025. [Highlight]                                                        CVPR 2025
+ 39. Zhihui Xie, Jiahui Gao, Lei Li, Zhenguo Li, Qi Liu, Lingpeng Kong, Jailbreaking as a Reward Misspecification
+     Problem, In International Conference on Learning Representations, Singapore, April 2025.        ICLR 2025
+ 40. Lei Li, Yuanxin Liu, Linli Yao, Peiyuan Zhang, Chenxin An, Lean Wang, Xu Sun, Lingpeng Kong, and Qi Liu,
+     Temporal Reasoning Transfer from Text to Video , In International Conference on Learning Representations,
+     Singapore, April 2025.                                                                       ICLR 2025
+ 41. Sheng Wang, Liheng Chen, Pengan Chen, Jingwei Dong, Boyang Xue, Jiyue Jiang, Lingpeng Kong, Chuan
+     Wu, MoS: Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards, In International
+     Conference on Learning Representations, Singapore, April 2025.                              ICLR 2025
+
+ 42. Chang Ma, Haiteng Zhao, Junlei Zhang, Junxian He, and Lingpeng Kong, Language Model Non-Myopic Gen-
+     eration for Reasoning and Planning , In International Conference on Learning Representations, Singapore, April
+     2025.                                                                                             ICLR 2025
+ 43. Jiacheng Ye, Jiahui Gao, Shansan Gong, Lin Zheng, Xin Jiang, Zhenguo Li, Lingpeng Kong, Beyond Autore-
+     gression: Discrete Diffusion for Complex Reasoning and Planning, In International Conference on Learning
+     Representations, Singapore, April 2025.                                                      ICLR 2025
+ 44. Jiacheng Ye, Zhenyu Wu, Jiahui Gao, Zhiyong Wu, Xin Jiang, Zhenguo Li, Lingpeng Kong, Implicit Search
+     via Discrete Diffusion: A Study on Chess, In International Conference on Learning Representations, Singapore,
+     April 2025.                                                                                      ICLR 2025
+ 45. Jiahui Gao, Renjie Pi, Jipeng Zhang, Jiacheng Ye, Wanjun Zhong, Yufei Wang, Lanqing Hong, Jianhua Han,
+     Hang Xu, Zhenguo Li, and Lingpeng Kong, G-LLaVA: Solving Geometric Problem with Multi-Modal Large
+     Language Model, In International Conference on Learning Representations, Singapore, April 2025.ICLR 2025
+ 46. Chenxin An, Jun Zhang, Ming Zhong, Lei Li, Shansan Gong, Yao Luo, Jingjing Xu, Lingpeng Kong, Why Does
+     the Effective Context Length of LLMs Fall Short?, In International Conference on Learning Representations,
+     Singapore, April 2025.                                                                        ICLR 2025
+
+ 47. Shansan Gong, Shivam Agarwal, Yizhe Zhang, Jiacheng Ye, Lin Zheng, Mukai Li, Chenxin An, Peilin
+     Zhao, Wei Bi, Jiawei Han, Hao Peng, and Lingpeng Kong, Scaling Diffusion Language Models via Adapta-
+     tion from Autoregressive Models, In International Conference on Learning Representations, Singapore, April
+     2025.                                                                                         ICLR 2025
+
+
+Lingpeng Kong                                   January 27, 2026                                                 6
+ 48. Qintong Li, Jiahui Gao, Sheng Wang, Renjie Pi, Xueliang Zhao, Chuan Wu, Xin Jiang, Zhenguo Li, Lingpeng
+     Kong, Forewarned is Forearmed: Harnessing LLMs for Data Synthesis via Failure-induced Exploration, In
+     International Conference on Learning Representations, Singapore, April 2025.                ICLR 2025
+ 49. Xijia Tao, Shuai Zhong, Lei Li, Qi Liu, Lingpeng Kong, ImgTrojan: Jailbreaking Vision-Language Models
+     with ONE Image, In Proceedings of the Conference of the North American Chapter of the Association for
+     Computational Linguistics, Albuquerque, New Mexico, April 2025.                          NAACL 2025
+ 50. Zhiheng Lyu, Kevin Yang, Lingpeng Kong, Daniel Klein, FactTrack: Time-Aware World State Tracking in Story
+     Outlines, In Proceedings of the Conference of the North American Chapter of the Association for Computational
+     Linguistics, Albuquerque, New Mexico, April 2025.                                               NAACL 2025
+
+ 51. Jiyue Jiang, Pengan Chen, Liheng Chen, Sheng Wang, Qinghang Bao, Lingpeng Kong, Yu Li, Chuan Wu,
+     How Well Do LLMs Handle Cantonese? Benchmarking Cantonese Capabilities of Large Language Models, In
+     Findings of the Conference of the North American Chapter of the Association for Computational Linguistics,
+     Albuquerque, New Mexico, April 2025.                                              NAACL 2025 Findings
+ 52. Jiacheng Ye*, Shansan Gong*, Liheng Chen*, Lin Zheng, Jiahui Gao, Han Shi, Chuan Wu, Xin Jiang, Zhenguo
+     Li, Wei Bi, and Lingpeng Kong, Diffusion of Thought: Chain-of-Thought Reasoning in Diffusion Language
+     Models, In Advances in Neural Information Processing Systems, Vancouver, December 2024. NeurIPS 2024
+ 53. Chang Ma, Junlei Zhang, Zhihao Zhu, Cheng Yang, Yujiu Yang, Yaohui Jin, Zhenzhong Lan, Lingpeng Kong,
+     and Junxian He, AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents, In Advances in
+     Neural Information Processing Systems, Vancouver, December 2024. [Oral]                 NeurIPS 2024
+
+ 54. Chang Ma, Haiteng Zhao, Lin Zheng, Jiayi Xin, Qintong Li, Lijun Wu, Zhihong Deng, Yang Young Lu, Qi Liu,
+     Sheng Wang, and Lingpeng Kong, Retrieved Sequence Augmentation for Protein Representation Learning, In
+     Proceedings of the Conference on Empirical Methods in Natural Language Processing, Miami, Florida, Novem-
+     ber 2024.                                                                                   EMNLP 2024
+ 55. Lei Li, Zhihui Xie, Mukai Li, Shunian Chen, Peiyi Wang, Liang Chen, Yazheng Yang, Benyou Wang, Ling-
+     peng Kong, and Qi Liu, VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models
+     Alignment, In Proceedings of the Conference on Empirical Methods in Natural Language Processing, Miami,
+     Florida, November 2024.                                                                  EMNLP 2024
+ 56. Haiteng Zhao, Chang Ma, Guoyin Wang, Jing Su, Lingpeng Kong, Jingjing Xu, Zhi-Hong Deng, Hongxia
+     Yang, Empowering Large Language Model Agents through Action Learning, In Proceedings of the Conference
+     on Language Modeling, Philadelphia, Pennsylvania, October 2024.                           COLM 2024
+ 57. Qiushi Sun, Zhangyue Yin, Xiang Li, Zhiyong Wu, Xipeng Qiu, Lingpeng Kong , Corex: Pushing the Bound-
+     aries of Complex Reasoning through Multi-Model Collaboration, In Proceedings of the Conference on Language
+     Modeling, Philadelphia, Pennsylvania, October 2024.                                           COLM 2024
+ 58. Jiahui Gao, Renjie Pi, Tianyang Han, Han Wu, Lanqing Hong, Lingpeng Kong, Xin Jiang, Zhenguo Li, CoCA:
+     Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration, In Pro-
+     ceedings of the Conference on Language Modeling, Philadelphia, Pennsylvania, October 2024. COLM 2024
+ 59. Lin Zheng, Jianbo Yuan, Lei Yu, Lingpeng Kong, A Reparameterized Discrete Diffusion Model for Text Gen-
+     eration, In Proceedings of the Conference on Language Modeling, Philadelphia, Pennsylvania, October 2024.
+     [GitHub]                                                                                     COLM 2024
+
+ 60. Lei Li, Yuqi Wang, Runxin Xu, Peiyi Wang, Xiachong Feng, Lingpeng Kong, and Qi Liu, Multimodal ArXiv:
+     A Dataset for Improving Scientific Comprehension of Large Vision-Language Models, In Proceedings of the
+     Annual Meeting of the Association for Computational Linguistics, Thailand, August 2024.     ACL 2024
+
+
+
+Lingpeng Kong                                   January 27, 2026                                                7
+ 61. Chenxin An, Shansan Gong, Ming Zhong, Xingjian Zhao, Mukai Li, Jun Zhang, Lingpeng Kong, and Xipeng
+     Qiu, L-Eval: Instituting Standardized Evaluation for Long Context Language Models, In Proceedings of the
+     Annual Meeting of the Association for Computational Linguistics, Thailand, August 2024. [Outstanding Paper
+     Award]                                                                                          ACL 2024
+ 62. Sheng Wang, Boyang Xue, Jiacheng Ye, Jiyue Jiang, Liheng Chen, Lingpeng Kong, and Chuan Wu, PRoLoRA:
+     Partial Rotation Empowers More Parameter-Efficient LoRA, In Proceedings of the Annual Meeting of the Asso-
+     ciation for Computational Linguistics, Thailand, August 2024.                                  ACL 2024
+ 63. Qintong Li, Leyang Cui, Xueliang Zhao, Lingpeng Kong, and Wei Bi, GSM-Plus: A Comprehensive Benchmark
+     for Evaluating the Robustness of LLMs as Mathematical Problem Solvers, In Proceedings of the Annual Meeting
+     of the Association for Computational Linguistics, Thailand, August 2024.                         ACL 2024
+
+ 64. Sheng Wang, Liheng Chen, Jiyue Jiang, Boyang Xue, Lingpeng Kong, and Chuan Wu, LoRA Meets Dropout
+     under a Unified Framework, In Findings of the Annual Meeting of the Association for Computational Linguis-
+     tics, Thailand, August 2024.                                                          ACL 2024 Findings
+ 65. Yudong Wang, Chang Ma, Qingxiu Dong, Lingpeng Kong, and Jingjing Xu, A Challenging Benchmark for
+     Low-Resource Learning, In Findings of the Annual Meeting of the Association for Computational Linguistics,
+     Thailand, August 2024.                                                              ACL 2024 Findings
+ 66. Xueliang Zhao, Xinting Huang, Wei Bi, and Lingpeng Kong, SEGO: Sequential Subgoal Optimization for
+     Mathematical Problem-Solving, In Proceedings of the Annual Meeting of the Association for Computational
+     Linguistics, Thailand, August 2024.                                                          ACL 2024
+
+ 67. Xueliang Zhao, Xinting Huang, Tingchen Fu, Qintong Li, Shansan Gong, Lemao Liu, Wei Bi, and Lingpeng
+     Kong, BBA: Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models , In Findings
+     of the Annual Meeting of the Association for Computational Linguistics, August 2024. ACL 2024 Findings
+ 68. Peiyi Wang, Lei Li, Liang Chen, Zefan Cai, Dawei Zhu, Binghuai Lin, Yunbo Cao, Lingpeng Kong, Qi Liu,
+     Tianyu Liu, and Zhifang Sui, Large Language Models are not Fair Evaluators, In Proceedings of the Annual
+     Meeting of the Association for Computational Linguistics, Thailand, August 2024.               ACL 2024
+ 69. Lin Zheng, Jianbo Yuan, Zhi Zhang, Hongxia Yang, and Lingpeng Kong, Self-Infilling Code Generation, In
+     Proceedings of the International Conference on Machine Learning, Vienna, Austria, July 2024. ICML 2024
+ 70. Chenxin An, Fei Huang, Jun Zhang, Shansan Gong, Xipeng Qiu, Chang Zhou, and Lingpeng Kong, Training-
+     Free Long-Context Scaling of Large Language Models, In Proceedings of the International Conference on Ma-
+     chine Learning, Vienna, Austria, July 2024.                                                   ICML 2024
+ 71. Xueliang Zhao, Wenda Li, and Lingpeng Kong, Decomposing the Enigma: Subgoal-based Demonstration
+     Learning for Formal Theorem Proving, In Proceedings of the International Conference on Machine Learning,
+     Vienna, Austria, July 2024.                                                                 ICML 2024
+
+ 72. Wenhao Zhu, Hongyi Liu, Qingxiu Dong, Jingjing Xu, Lingpeng Kong, Jiajun Chen, Lei Li, and Shujian Huang,
+     Multilingual Machine Translation with Large Language Models: Empirical Results and Analysis. In Findings
+     of the Conference of the North American Chapter of the Association for Computational Linguistics, Mexico
+     City, Mexico, June 2024.                                                         NAACL 2024 Findings
+ 73. Yiheng Xu*, Hongjin Su*, Chen Xing*, Boyu Mi, Qian Liu, Weijia Shi, Binyuan Hui, Fan Zhou, Yitao Liu,
+     Tianbao Xie, Zhoujun Cheng, Siheng Zhao, Lingpeng Kong, Bailin Wang, Caiming Xiong, and Tao Yu, Lemur:
+     Harmonizing Natural Language and Code for Language Agents, In International Conference on Learning Repre-
+     sentations,Vienna Austria, May 2024. [Spotlight]                                             ICLR 2024
+
+
+
+
+Lingpeng Kong                                  January 27, 2026                                               8
+ 74. Lei Li, Jingjing Xu, Qingxiu Dong, Ce Zheng, Qi Liu, Lingpeng Kong, Xu Sun, Can Language Models Un-
+     derstand Physical Concepts?, In Proceedings of the Conference on Empirical Methods in Natural Language
+     Processing, Singapore, December 2023.                                                    EMNLP 2023
+ 75. Renjie Pi, Jiahui Gao, Shizhe Diao, Rui Pan, Hanze Dong, Jipeng Zhang, Lewei Yao, Jianhua Han, Hang Xu,
+     Lingpeng Kong, Tong Zhang, DetGPT: Detect What You Need via Reasoning, In Proceedings of the Conference
+     on Empirical Methods in Natural Language Processing, Singapore, December 2023.            EMNLP 2023
+ 76. Jiacheng Ye, Chengzu Li, Lingpeng Kong, Tao Yu, Generating Data for Symbolic Language with Large Lan-
+     guage Models, In Proceedings of the Conference on Empirical Methods in Natural Language Processing, Singa-
+     pore, December 2023.                                                                       EMNLP 2023
+
+ 77. Shansan Gong, Mukai Li, Jiangtao Feng, Zhiyong Wu, Lingpeng Kong, Bridging Discrete and Continuous Text
+     Spaces for Accelerated Seq2Seq Diffusion Models, In Findings of the Conference on Empirical Methods in
+     Natural Language Processing, Singapore, December 2023.                          EMNLP 2023 Findings
+ 78. Haiteng Zhao, Shengchao Liu, Chang Ma, Hannan Xu, Jie Fu, Zhi-Hong Deng, Lingpeng Kong, Qi Liu, GIM-
+     LET: A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning, In Advances in Neural
+     Information Processing Systems, New Orleans, Louisiana, December 2023.                    NeurIPS 2023
+ 79. Qingxiu Dong, Jingjing Xu, Lingpeng Kong, Zhifang Sui, Lei Li, Statistical Knowledge Assessment for Gen-
+     erative Language Models, In Advances in Neural Information Processing Systems, New Orleans, Louisiana,
+     December 2023.                                                                            NeurIPS 2023
+ 80. Shuyang Jiang, Jun Zhang, Jiangtao Feng, Lin Zheng, and Lingpeng Kong, Attentive Multi-Layer Perceptron
+     for Non-autoregressive Generation, In Proceedings of the European Conference on Machine Learning and Prin-
+     ciples and Practice of Knowledge Discovery in Databases, Turin, Italy, September 2023. ECML/PKDD 2023
+ 81. Zhiyong Wu*, Yaoxiang Wang*, Jiacheng Ye*, and Lingpeng Kong, Self-Adaptive In-Context Learning: An
+     Information Compression Perspective for In-Context Example Selection and Ordering, In Proceedings of the
+     Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July 2023. ACL 2023
+
+ 82. Qintong Li, Zhiyong Wu, Lingpeng Kong, and Wei Bi, Explanation Regeneration via Information Bottleneck,
+     In Findings of the Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July
+     2023.                                                                                ACL 2023 Findings
+ 83. Fei Yuan, Yinquan Lu, Wenhao Zhu, Lingpeng Kong, Lei Li, and Jingjing Xu, Lego-MT: Learning Detachable
+     Models for Massively Multilingual Machine Translation, In Findings of the Annual Meeting of the Association
+     for Computational Linguistics, Toronto, Canada, July 2023.                             ACL 2023 Findings
+ 84. Wenhao Zhu, Jingjing Xu, Shujian Huang, Lingpeng Kong, and Jiajun Chen, INK: Injecting kNN Knowledge
+     in Nearest Neighbor Machine Translation, In Proceedings of the Annual Meeting of the Association for Com-
+     putational Linguistics, Toronto, Canada, July 2023.                                            ACL 2023
+
+ 85. Jiyue Jiang, Sheng Wang, Qintong Li, Lingpeng Kong, and Chuan Wu, A Cognitive Stimulation Therapy Di-
+     alogue System with Multi-Source Knowledge Fusion for Elders with Cognitive Impairment, In Proceedings of
+     the Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July 2023. ACL 2023
+ 86. Xueliang Zhao, Tingchen Fu, Lemao Liu, Lingpeng Kong, Shuming Shi, and Rui Yan, SORTIE: Dependency-
+     Aware Symbolic Reasoning for Logical Data-to-text Generation, In Findings of the Annual Meeting of the
+     Association for Computational Linguistics, Toronto, Canada, July 2023.             ACL 2023 Findings
+ 87. Jiacheng Ye, Zhiyong Wu, Jiangtao Feng, Tao Yu, and Lingpeng Kong, Compositional Exemplars for In-context
+     Learning, In Proceedings of the International Conference on Machine Learning, Honolulu, Hawaii, July 2023.
+     [GitHub]                                                                                     ICML 2023
+
+
+Lingpeng Kong                                  January 27, 2026                                               9
+ 88. Jun Zhang*, Shuyang Jiang*, Jiangtao Feng, Lin Zheng, and Lingpeng Kong, CAB: Comprehensive Attention
+     Benchmarking on Long Sequence Modeling, In Proceedings of the International Conference on Machine Learn-
+     ing, Honolulu, Hawaii, July 2023.                                                            ICML 2023
+ 89. Xuyang Shen, Dong Li, Jinxing Zhou, Zhen Qin, Bowen He, Xiaodong Han, Aixuan Li, Yuchao Dai, Ling-
+     peng Kong, Meng Wang, and Yiran Zhong, Fine-grained Audible Video Description, In Proceedings of the
+     Conference on Computer Vision and Pattern Recognition, Vancouver, Canada, June 2023.    CVPR 2023
+ 90. Lin Zheng, Jianbo Yuan, Chong Wang, and Lingpeng Kong, Efficient Attention via Control Variates, In Inter-
+     national Conference on Learning Representations, Kigali, Rwanda, May 2023. [Oral]           ICLR 2023
+ 91. Jiahui Gao, Renjie Pi, Lin Yong, Hang Xu, Jiacheng Ye, Zhiyong Wu, Weizhong Zhang, Xiaodan Liang, Zhen-
+     guo Li, and Lingpeng Kong, Self-Guided Noise-Free Data Generation for Efficient Zero-Shot Learning, In
+     International Conference on Learning Representations, Kigali, Rwanda, May 2023. [Spotlight] ICLR 2023
+ 92. Zhen Qin, Xiaodong Han, Weixuan Sun, Bowen He, Dong Li, Dongxu Li, Yuchao Dai, Lingpeng Kong, and
+     Yiran Zhong, Toeplitz Neural Network for Sequence Modeling, In International Conference on Learning Rep-
+     resentations, Kigali, Rwanda, May 2023. [Spotlight]                                          ICLR 2023
+
+ 93. Shansan Gong, Mukai Li, Jiangtao Feng, Zhiyong Wu, and Lingpeng Kong, DiffuSeq: Sequence to Sequence
+     Text Generation with Diffusion Models, In International Conference on Learning Representations, Kigali,
+     Rwanda, May 2023.                                                                          ICLR 2023
+ 94. Sijie Chen, Zhiyong Wu, Jiangjie Chen, Zhixing Li, Yang Liu, and Lingpeng Kong, Unsupervised Explanation
+     Generation via Correct Instantiations, In Proceedings of AAAI Conference on Artificial Intelligence, Washing-
+     ton, DC, February 2023.                                                                           AAAI 2023
+ 95. Jiacheng Ye, Jiahui Gao, Zhiyong Wu, Jiangtao Feng, Tao Yu, and Lingpeng Kong, ProGen: Progressive Zero-
+     shot Dataset Generation via In-context Feedback, In Findings of the Conference on Empirical Methods in Natu-
+     ral Language Processing, Abu Dhabi, December 2022.                                  EMNLP 2022 Findings
+
+ 96. Jiacheng Ye*, Jiahui Gao*, Qintong Li, Hang Xu, Jiangtao Feng, Zhiyong Wu, Tao Yu, and Lingpeng Kong,
+     ZeroGen: Efficient Zero-shot Learning via Dataset Generation, In Proceedings of the Conference on Empirical
+     Methods in Natural Language Processing, Abu Dhabi, December 2022.                            EMNLP 2022
+ 97. Tianbao Xie*, Chen Henry Wu*, Peng Shi, Ruiqi Zhong, Torsten Scholak, Michihiro Yasunaga, Chien-Sheng
+     Wu, Ming Zhong, Pengcheng Yin, Sida Wang, Victor Zhong, Bailin Wang, Chengzu Li, Connor Boyle, Ansong
+     Ni, Ziyu Yao, Dragomir Radev, Caiming Xiong, Lingpeng Kong, Rui Zhang, Noah A. Smith, Luke Zettlemoyer,
+     and Tao Yu, UnifiedSKG: Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text
+     Language Models, In Proceedings of the Conference on Empirical Methods in Natural Language Processing,
+     Abu Dhabi, December 2022.                                                                EMNLP 2022
+ 98. Zhen Qin, Xiaodong Han, Weixuan Sun, Dongxu Li, Lingpeng Kong, Nick Barnes, and Yiran Zhong, The
+     Devil in Linear Transformer, In Proceedings of the Conference on Empirical Methods in Natural Language
+     Processing, Abu Dhabi, December 2022.                                                    EMNLP 2022
+ 99. Changlong Yu, Tianyi Xiao, Lingpeng Kong, Yangqiu Song, and Wilfred Ng, An Empirical Revisiting of Lin-
+     guistic Knowledge Fusion in Language Understanding Tasks, In Proceedings of the Conference on Empirical
+     Methods in Natural Language Processing, Abu Dhabi, December 2022.                        EMNLP 2022
+
+100. Chenxin An, Jiangtao Feng, Kai Lv, Lingpeng Kong, Xipeng Qiu, and Xuanjing Huang, CoNT: Contrastive
+     Neural Text Generation, In Advances in Neural Information Processing Systems, New Orleans, Louisiana,
+     November 2022. [Spotlight]                                                             NeurIPS 2022
+
+
+
+
+Lingpeng Kong                                   January 27, 2026                                               10
+101. Yixuan Su, Tian Lan, Yan Wang, Dani Yogatama, Lingpeng Kong, and Nigel Collier, A Contrastive Framework
+     for Neural Text Generation, In Advances in Neural Information Processing Systems, New Orleans, Louisiana,
+     November 2022. [Spotlight]                                                                NeurIPS 2022
+102. Jinxing Zhou, Jianyuan Wang, Jiayi Zhang, Weixuan Sun, Jing Zhang, Stan Birchfield, Dan Guo, Lingpeng
+     Kong, Meng Wang, and Yiran Zhong, Audio-Visual Segmentation, In Proceedings of the European Conference
+     on Computer Vision, October 2022.                                                          ECCV 2022
+103. Lin Zheng, Chong Wang, and Lingpeng Kong, Linear Complexity Randomized Self-attention Mechanism, In
+     Proceedings of the International Conference on Machine Learning, July 2022.            ICML 2022
+104. Lin Zheng, Huijie Pan, and Lingpeng Kong, Ripple Attention for Visual Perception with Sub-quadratic Com-
+     plexity, In Proceedings of the International Conference on Machine Learning, July 2022.      ICML 2022
+105. Jakob Prange, Nathan Schneider, and Lingpeng Kong, Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic
+     Language Modeling, In Proceedings of the Conference of the North American Chapter of the Association for
+     Computational Linguistics, July 2022.                                                      NAACL 2022
+106. Qintong Li, Piji Li, Wei Bi, Zhaochun Ren, Yuxuan Lai, and Lingpeng Kong, Event Transition Planning for
+     Open-ended Text Generation, In findings of the Annual Meeting of the Association for Computational Linguis-
+     tics, May 2022.                                                                        ACL 2022 Findings
+107. Zhiyong Wu, Wei Bi, Xiang Li, Lingpeng Kong, and Ben Kao, Lexical Knowledge Internalization for Neural
+     Dialog Generation, In Proceedings of the Annual Meeting of the Association for Computational Linguistics,
+     May 2022.                                                                                     ACL 2022
+
+108. Hao Peng, Jungo Kasai, Nikolaos Pappas, Dani Yogatama, Zhaofeng Wu, Lingpeng Kong, Roy Schwartz, and
+     Noah A. Smith, ABC: Attention with Bounded-memory Control, In Proceedings of the Annual Meeting of the
+     Association for Computational Linguistics, May 2022.                                       ACL 2022
+109. Zhen Qin, Weixuan Sun, Hui Deng, Dongxu Li, Yunshen Wei, Baohong Lv, Junjie Yan, Lingpeng Kong, and Yi-
+     ran Zhong, cosFormer: Rethinking Softmax In Attention, In International Conference on Learning Representa-
+     tions, April 2022.                                                                             ICLR 2022
+110. Han Shi*, Jiahui Gao*, Hang Xu, Xiaodan Liang, Zhenguo Li, Lingpeng Kong, Stephen M. S. Lee, and James
+     Kwok, Revisiting Over-smoothing in BERT from the Perspective of Graph, In International Conference on
+     Learning Representations, April 2022. [Spotlight]                                          ICLR 2022
+
+111. Lin Zheng, Zhiyong Wu and Lingpeng Kong, Cascaded Head-colliding Attention. In Proceedings of the Annual
+     Meeting of the Association for Computational Linguistics, August 2021.                        ACL 2021
+112. Zhiyong Wu, Lingpeng Kong, Wei Bi, Xiang Li and Ben Kao, Good for Misconceived Reasons: An Empirical
+     Revisiting on the Need for Visual Context in Multimodal Machine Translation. In Proceedings of the Annual
+     Meeting of the Association for Computational Linguistics, August 2021.                          ACL 2021
+
+113. Hao Peng, Nikolaos Pappas, Dani Yogatama, Roy Schwartz, Noah Smith, and Lingpeng Kong, Random Feature
+     Attention. In International Conference on Learning Representations, May 2021. [Spotlight]  ICLR 2021
+114. Lingpeng Kong, Cyprien de Masson d’Autume, Wang Ling, Lei Yu, Zihang Dai, and Dani Yogatama, A Mutual
+     Information Maximization Perspective of Language Representation Learning. In International Conference on
+     Learning Representations, Ethiopia, April 2020. [Spotlight]                                  ICLR 2020
+
+115. Cyprien de Masson d’Autume, Sebastian Ruder, Lingpeng Kong, and Dani Yogatama, Episodic Memory in
+     Lifelong Language Learning. In Advances in Neural Information Processing Systems, Vancouver, Canada,
+     December 2019.                                                                        NeurIPS 2019
+
+
+
+Lingpeng Kong                                  January 27, 2026                                              11
+116. Lingpeng Kong, Gabor Melis, Wang Ling, Lei Yu, and Dani Yogatama, Variational Smoothing in Recurrent
+     Neural Network Language Models. In International Conference on Learning Representations, New Orleans,
+     Louisiana, May 2019.                                                                      ICLR 2019
+117. Liang Lu, Lingpeng Kong, Chris Dyer, and Noah A. Smith, Multi-task Learning with CTC and Segmental CRF
+     for Speech Recognition. In Proceedings of the Annual Conference of the International Speech Communication
+     Association , Stockholm, Sweden, August 2017.                                        INTERSPEECH 2017
+118. Adhiguna Kuncoro, Miguel Ballesteros, Lingpeng Kong, Chris Dyer, Graham Neubig, and Noah A. Smith, What
+     Do Recurrent Neural Network Grammars Learn About Syntax?. In Proceedings of the Conference of the Euro-
+     pean Chapter of the Association for Computational Linguistics, Valencia, Spain, January 2017. [Outstanding Pa-
+     per Award]                                                                                        EACL 2017
+
+119. Liang Lu*, Lingpeng Kong*, Chris Dyer, and Noah A. Smith, and Steve Renals, Segmental Recurrent Neural
+     Networks for End-to-end Speech Recognition. In Proceedings of the Annual Conference of the International
+     Speech Communication Association, San Francisco, California, September 2016.    INTERSPEECH 2016
+120. Adhiguna Kuncoro, Miguel Ballesteros, Lingpeng Kong, Chris Dyer, and Noah A. Smith, Distilling an En-
+     semble of Greedy Dependency Parsers into One MST Parser. In Proceedings of the Conference on Empirical
+     Methods in Natural Language Processing, Austin, TX, November 2016                       EMNLP 2016
+121. Lingpeng Kong, Chris Dyer, and Noah A. Smith, Segmental Recurrent Neural Networks. In Proceedings of
+     International Conference on Learning Representations, San Juan, Puerto Rico, May 2016. [GitHub]ICLR 2016
+122. Dani Yogatama, Lingpeng Kong, and Noah A. Smith, Bayesian Optimization of Text Representations. In Pro-
+     ceedings of the Conference on Empirical Methods in Natural Language Processing, Lisboa, Portugal, September
+     2015.                                                                                        EMNLP 2015
+123. Lingpeng Kong, Alexander M. Rush, and Noah A. Smith, Transforming Dependencies into Phrase Structures. In
+     Proceedings of the Conference of the North American Chapter of the Association for Computational Linguistics,
+     Denver, CO, May 2015. [GitHub]                                                                NAACL 2015
+
+124. Lingpeng Kong, Nathan Schneider, Swabha Swayamdipta, Archna Bhatia, Chris Dyer and Noah A. Smith, A
+     Dependency Parser for Tweets. In Proceedings of the Conference on Empirical Methods in Natural Language
+     Processing, Doha, October 2014. [GitHub]                                                  EMNLP 2014
+125. William Yang Wang, Lingpeng Kong, Kathryn Mazaitis, and William W. Cohen, Dependency Parsing for Weibo:
+     An Efficient Probabilistic Logic Programming Approach. In Proceedings of the Conference on Empirical Meth-
+     ods in Natural Language Processing, Doha, Qatar, October 2014.                              EMNLP 2014
+126. Lingpeng Kong, and Likun Qiu, Formalization and Rules for Recognition of Satirical Irony. In Proceedings of
+     the International Conference on Asian Language Processing, Penang, Malaysia, November 2011. IALP 2011
+127. Likun Qiu, Lei Wu, Changjian Hu, Kai Zhao, and Lingpeng Kong, Improving Chinese Dependency Parsing with
+     Self-Disambiguating Patterns. In Proceedings of the International Conference on Asian Language Processing,
+     Penang, Malaysia, November 2011.                                                               IALP 2011
+
+Thesis
+128. Lingpeng Kong, Neural Representation Learning in Linguistic Structured Prediction, CMU-LTI-17-008, Carnegie
+     Mellon University, Pittsburgh, PA, October 2017.
+
+
+
+
+Lingpeng Kong                                   January 27, 2026                                                12
+Peer-refereed workshop publications
+129. Yangfeng Ji, Trevor Cohn, Lingpeng Kong, Chris Dyer, Jacob Eisenstein, Document Context Language Models.
+     In International Conference on Learning Representations Workshop Track, San Juan, Puerto Rico, May 2016.
+130. Ting-Hao (Kenneth) Huang, Yun-Nung Chen, and Lingpeng Kong, ACBiMA: Advanced Chinese Bi-Character
+     Word Morphological Analyzer. In Proceedings of The 8th SIGHAN Workshop on Chinese Language Process-
+     ing, Beijing, China, July 2015. [GitHub]
+
+I NVITED TALKS
+   2025   Colloquium, University of Cambridge.
+          Keynote, MBZUAI Workshop.
+          Keynote, AI, Science, and Society @ AI Action Summit, École polytechnique.
+   2023   Invited Talk, Asian Engineering Deans’ Summit.
+          Invited Talk, Tencent.
+   2022   Invited Talk, Tam Wing Fan Innovation Wing.
+          Westlake Engineering Lecture Series, Westlake University.
+          Colloquium, Nanjing University.
+   2021   Invited Talk, Tencent AI Lab.
+          Invited Talk, ByteDance.
+          Colloquium, Shenzhen Institutes of Advanced Technology (SIAT), Chinese Academy of Sciences.
+          Invited Talk, Zoom.
+          Invited Talk, HKU-TCL Joint Research Centre for Artificial Intelligence.
+          Keynote, Genetic and Evolutionary Computation Conference (GECCO-2021).
+   2020   Colloquium, University of Cambridge.
+   2019   Colloquium, Peking University.
+          Invited Talk, Fudan University.
+          Colloquium, University of Cambridge.
+   2017   Colloquium, National Taiwan University.
+   2016   Colloquium, Academia Sinica.
+
+
+
+
+Lingpeng Kong                                 January 27, 2026                                            13
+

@@ -1,0 +1,184 @@
+                                               Claw-Eval: Towards Trustworthy Evaluation of
+                                                           Autonomous Agents
+
+
+                                            Bowen Ye1∗        Rang Li1∗ Qibin Yang1 Yuanxin Liu1 Linli Yao1 Hanglong Lv1
+                                                                        Zhihui Xie2 Chenxin An2 Lei Li2,†
+                                                             Lingpeng Kong2 Qi Liu2 Zhifang Sui1 Tong Yang1
+                                                             1
+                                                               State Key Laboratory of Multimedia Information Processing,
+
+
+
+
+arXiv:2604.06132v3 [cs.AI] 7 May 2026
+                                                                     School of Computer Science, Peking University
+                                                                             2
+                                                                               The University of Hong Kong
+                                                        bwye@stu.pku.edu.cn, lirang410@gmail.com, nlp.lilei@gmail.com
+                                                                                * Equal contribution † Project lead
+                                                                   Leaderboard, data and code: https://claw-eval.github.io
+
+
+
+
+                                                                                        Abstract
+                                                    Large language models are increasingly deployed as autonomous agents for multi-
+                                                    step workflows in real-world software environments. However, existing agent
+                                                    benchmarks are limited by trajectory-opaque grading, underspecified safety and ro-
+                                                    bustness evaluation, and narrow coverage of modalities and interaction paradigms.
+                                                    We introduce Claw-Eval, an end-to-end evaluation suite addressing these gaps
+                                                    with 300 human-verified tasks spanning 9 categories across three groups: general
+                                                    service orchestration, multimodal perception and interaction, and multi-turn profes-
+                                                    sional dialogue. To enable trajectory-aware grading, each run is recorded through
+                                                    three independent evidence channels: execution traces, audit logs, and environ-
+                                                    ment snapshots, yielding 2,159 fine-grained rubric items. The scoring protocol
+                                                    evaluates Completion, Safety, and Robustness, with Average Score, Pass@k, and
+                                                    Pass^k across three trials to distinguish genuine capability from lucky outcomes.
+                                                    Experiments on 14 frontier models show that: (1) Trajectory-opaque evaluation is
+                                                    systematically unreliable, missing 44% of safety violations and 13% of robustness
+                                                    failures detected by our framework. (2) Capability does not imply consistency, with
+                                                    Pass@3 remaining stable under error injection while Pass^3 dropping by up to 24
+                                                    percentage points. (3) Agent capability is strongly multi-dimensional, with model
+                                                    rankings varying across task groups and metrics, indicating that our heterogeneous
+                                                    evaluation coverage is essential. Claw-Eval highlights directions for developing
+                                                    agents that are not only capable but reliably deployable.
+
+
+                                        1    Introduction
+                                        Large language models [25, 3, 7] have rapidly evolved from conversational assistants [28, 55]
+                                        into autonomous agents [49, 32] capable of executing complex, multi-step workflows [33, 29] in
+                                        real-world software environments [10, 39]. Modern agent harnesses, such as Claude Code [2] and
+                                        OpenClaw [26], equip LLMs with the ability to call tools, navigate file systems, query databases,
+                                        and orchestrate actions across multiple applications, transforming the central evaluation question
+                                        from whether a model possesses knowledge to whether it can reliably accomplish a goal through
+                                        proactive situated action. This shift demands evaluation methodologies that go beyond static question-
+                                        answering benchmarks and instead assess agents in live, interactive environments where success
+                                        depends not only on what an agent produces, but also on how it gets there.
+                                        Recent benchmarks have made important strides toward this goal, evaluating agents across sandboxed
+                                        tool-use environments [13, 20], GUI-driven desktop workflows [39, 40], and real-world coding-agent
+
+                                        Preprint.
+pipelines [11, 8]. Yet three critical gaps remain that limit the diagnostic power of current evaluation
+practices. (G1) Trajectory-opaque grading. Many benchmarks verify only the model’s output,
+without systematically auditing the execution that produced it. This makes faithful execution hard to
+distinguish from fabricated or shortcut-based behavior, and leaves output-only evaluation vulnerable
+to reward hacking [35, 18]. (G2) Underspecified safety and robustness. In deployment, agents
+must not only satisfy task objectives but also adhere to safety constraints and recover from transient
+failures. Although prior work has introduced dedicated safety benchmarks and trace-based risk
+evaluations, safety is still rarely embedded into ordinary end-to-end workflow tasks, and robustness
+under controlled perturbations such as timeouts or rate limits is seldom evaluated [51, 54, 34]. (G3)
+Narrow task coverage. Real-world agents must handle heterogeneous scenarios spanning service
+orchestration, multimodal perception, and extended dialogue within the same deployment, yet most
+benchmarks focus on a single modality or interaction paradigm, such as text-based tool calls [13],
+command-line execution [20], or GUI navigation [39].
+In this paper, we introduce Claw-Eval, an end-to-end evaluation suite that addresses all three gaps
+within a unified framework, organized around three corresponding design principles. (1) Full-
+trajectory auditing. Every agent action is recorded through three independent evidence channels,
+namely execution traces, service-side audit logs, and post-execution environment snapshots, enabling
+grading that verifies what the agent actually did. (2) Integrated multi-dimensional scoring. The
+scoring protocol evaluates Completion, Safety, and Robustness as coupled dimensions within the
+same task execution. Completion is decomposed into fine-grained rubric items grounded in auditable
+evidence. Safety constraints are embedded within normal workflow tasks and robustness is measured
+through controlled error-rate injection that simulates realistic deployment perturbations. (3) Unified
+heterogeneous task coverage. Claw-Eval uses a single declarative task schema to support a broad
+range of heterogeneous agent settings under a shared execution and grading protocol. Across these
+components, tasks and fine-grained rubrics are curated and verified by human annotators to ensure
+coverage of diverse modalities, interaction paradigms, and deployment-relevant scenarios. Because
+agentic execution is inherently stochastic, the evaluation protocol further runs each task over multiple
+trials and reports complementary metrics for average performance, capability ceiling, and reliability
+floor, providing a more deployment-relevant view of agent performance.
+Our experiments across 14 frontier and open-weight models yield the following contributions and
+findings: (1) Benchmark and evaluation protocol. We introduce Claw-Eval, an end-to-end evalua-
+tion suite of 300 human-verified tasks spanning 9 categories. The framework combines full-trajectory
+auditing, unified cross-modal coverage, integrated scoring over Completion, Safety, and Robustness,
+and multi-trial evaluation to distinguish average performance, best-case capability, and reliability,
+with 2,159 independently verifiable rubric items. We fully release the benchmark and evaluation
+framework, making all components open-source and reproducible. (2) Evaluation validity. Eval-
+uation design materially affects benchmark conclusions. A vanilla LLM judge misses 44% of the
+safety violations and 13% of the robustness failures detected by our hybrid grading pipeline, showing
+that trajectory-opaque evaluation is systematically unreliable. Robustness under perturbation cannot
+be adequately characterized by single-facet metrics: Pass@3 remains relatively stable under error
+injection, whereas Pass^3 drops by up to 24 percentage points. (3) Capability findings. Agent
+capability is strongly multi-dimensional. Model rankings shift substantially across heterogeneous
+task settings, with no single model dominating all domains. In multi-turn dialogue, success depends
+far more on what the agent asks, i.e., whether its questions are targeted and logically sequenced
+(r=0.87), than on how long the conversation runs (r=0.07).
+Taken together, these results show that trustworthy agent evaluation requires trajectory-level evidence,
+multi-dimensional scoring, and broad task coverage working in concert to capture the full complexity
+of autonomous behavior. The capability gaps surfaced by Claw-Eval point to concrete and actionable
+directions for building agents that are not only technically capable but also reliably deployable.
+
+
+2   Related Work
+
+Agent benchmarks. Evaluating LLM-based agents has produced benchmarks spanning diverse
+domains and interaction modalities (Table 1). For tool use and code, SWE-bench [10] tests real
+GitHub issue resolution, ToolBench [47] and API-Bank [14] evaluate API orchestration, Terminal-
+Bench [20] targets shell execution, and Toolathlon [13] scales to 32 applications with 604 tools. For
+web and GUI interaction, WebArena [56] and VisualWebArena [12] benchmark web navigation,
+
+
+                                                   2
+Table 1: Comparison of agent evaluation benchmarks across six dimensions: Multimodal (visual input
+and artifact generation), Multi-turn (simulated user interaction), Auditable (trajectory-level grading),
+Safety (embedded constraint checking), Perturbation (controlled error injection), and Sandboxed
+(isolated execution environment). ✓ = full support; ❖ = partial; ✗ = absent.
+                                Multi-      Multi-                               Pertur-      Sand-
+          Benchmark                                      Auditable   Safety
+                                modal        turn                                bation       boxed
+        AgentBench [17]           ✗           ✓             ❖          ✗            ✗           ✓
+           GAIA [21]              ❖           ✗             ✗          ✗            ✗           ✓
+          τ -bench [50]           ✗           ✓             ✓          ✓            ✗           ✗
+        SWE-bench [10]            ✗           ✗             ❖          ✗            ✗           ✓
+         WebArena [56]            ❖           ✗             ❖          ✗            ✗           ✓
+      VisualWebArena [12]         ✓           ✗             ❖          ✗            ✗           ✓
+          OSWorld [39]            ✓           ✗             ✓          ✗            ✗           ✓
+         ToolBench [47]           ✗           ✗             ❖          ✗            ✗           ✗
+      Terminal-Bench [20]         ✗           ✗             ✓          ✗            ✗           ✓
+        PinchBench [11]           ✗           ✗             ✗          ✗            ✗           ✓
+       Claw-Eval (Ours)           ✓           ✓             ✓          ✓           ✓            ✓
+
+
+
+while OSWorld [39] extends evaluation to full desktop environments. For multi-turn interaction,
+τ -bench [50] measures policy compliance in customer-service dialogues with simulated users, and
+MINT [37] evaluates multi-turn tool use. Multi-domain suites such as AgentBench [17], GAIA [21],
+and TheAgentCompany [46] broaden coverage across heterogeneous environments. PinchBench [11]
+and WildClawBench [8] benchmark LLM agents on real-world tasks but couple evaluation to the full
+scaffold stack, precluding attribution of performance to the model itself. No existing benchmark si-
+multaneously supports full-spectrum multimodal evaluation, multi-turn dialogue, auditable trajectory
+grading, embedded safety assessment, and controlled perturbation testing. Claw-Eval is designed to
+unify all these capabilities within a single framework, as shown in Table 1.
+Evaluation methodology. Output-only grading cannot detect cases where agents fabricate intermedi-
+ate steps yet produce plausible artifacts [15, 44, 45]. The LLM-as-a-judge paradigm [42, 41, 43] scales
+to open-ended tasks but lacks auditability. Recent work addresses individual gaps: TheAgentCompany
+adds sub-task checkpoints, τ -bench separates correctness from consistency via Pass^k, and safety
+benchmarks such as ToolEmu [31], R-Judge [51], Agent-SafetyBench [54], and MobileRisk-Live [34]
+assess risk awareness over traces. However, no existing framework embeds safety constraints within
+normal workflow tasks, and none supports controlled error injection for robustness testing. Claw-Eval
+addresses both by combining deterministic checks with LLM judgment, grounding rubric items in
+auditable trajectory evidence, and providing error injection as a first-class evaluation parameter.
+
+3     Claw-Eval
+In this section, we present Claw-Eval, whose architecture is shown in Figure 1. Its core premise is
+that trustworthy agent evaluation must ground scores in evidence of what the agent actually did, not
+what it claimed to have done. §3.1 describes the three-phase execution lifecycle, §3.2 introduces the
+300 tasks across 9 categories under a unified schema, and §3.3 explains how the resulting evidence is
+converted into multi-dimensional scores for cross-model comparison.
+
+3.1   Auditable Execution Pipeline
+
+To close the trajectory-opacity gap (G1), Claw-Eval makes the full run, rather than the final answer
+alone, the object of evaluation. At the pipeline level, each run is organized into three temporally
+separated phases: Setup, Execution, and Judge. This phase separation establishes a strict boundary
+between task solving and evaluation: the agent receives only task-solving resources during execution,
+while evaluation resources are isolated until judging time.
+To operationalize this pipeline, we design an auditable agent scaffold inspired by commonly used
+agent frameworks, such as Claude Code [2] and OpenClaw [26]. The scaffold enforces the pipeline
+boundary through fresh per-run sandboxes, controlled tool interfaces, and evidence collectors that
+operate outside the agent’s view. It produces three independent evidence channels: structured
+
+
+                                                     3
+

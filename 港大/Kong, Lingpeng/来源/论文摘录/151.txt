@@ -1,0 +1,200 @@
+                                         B IO M AZE : B ENCHMARKING AND E NHANCING L ARGE
+                                         L ANGUAGE M ODELS FOR B IOLOGICAL PATHWAY
+                                         R EASONING
+                                          Haiteng Zhao1 Chang Ma2 Fangzhi Xu3 Lingpeng Kong2 Zhi-Hong Deng1
+                                          1
+                                            Peking University 2 The University of Hong Kong 3
+                                                                                              Xi’an Jiaotong University
+                                          {zhaohaiteng, zhdeng}@pku.edu.cn
+                                          {cma, lpk}@cs.hku.hk fangzhixu98@gmail.com
+
+
+
+
+arXiv:2502.16660v5 [cs.LG] 22 Jul 2025
+                                                                                      A BSTRACT
+
+                                                  The applications of large language models (LLMs) in various biological do-
+                                                  mains have been explored recently, but their reasoning ability in complex bio-
+                                                  logical systems, such as pathways, remains underexplored, which is crucial for
+                                                  predicting biological phenomena, formulating hypotheses, and designing exper-
+                                                  iments. This work explores the potential of LLMs in pathway reasoning. We
+                                                  introduce BioMaze, a dataset with 5.1K complex pathway problems derived
+                                                  from real research, covering various biological contexts including natural dy-
+                                                  namic changes, disturbances, additional intervention conditions, and multi-scale
+                                                  research targets. Our evaluation of methods such as CoT and graph-augmented
+                                                  reasoning, shows that LLMs struggle with pathway reasoning, especially in per-
+                                                  turbed systems. To address this, we propose PATH S EEKER, an LLM agent that
+                                                  enhances reasoning through interactive subgraph-based navigation, enabling a
+                                                  more effective approach to handling the complexities of biological systems in
+                                                  a scientifically aligned manner. The dataset and code are available at https:
+                                                  //github.com/zhao-ht/BioMaze.
+
+
+                                         1    I NTRODUCTION
+
+                                         Large Language Models (LLMs) have recently demonstrated remarkable performance across scien-
+                                         tific domains, including mathematics (Yu et al., 2023), chemistry (Liu et al., 2023b; Zhu et al., 2022),
+                                         biology (Hayes et al., 2024; Madani et al., 2020; Ma et al., 2023), and materials science (Zheng
+                                         et al., 2023; Park et al., 2024). In biology, LLMs have shown promise in addressing complex tasks
+                                         such as protein design (Valentini et al., 2023; Hosseini et al., 2024), drug discovery (M. Bran et al.,
+                                         2024; Liu et al., 2023c), clinical trial analysis (Singhal et al., 2023; Jin et al., 2023), and experiment
+                                         design (AI4Science & Quantum, 2023; Roohani et al., 2024).
+                                         Biological systems are composed of complex networks called pathways, involving genes, enzymes,
+                                         substrates, and signaling molecules. Intervention in a single component—such as mutations or in-
+                                         fections—can trigger multi-step cascades affecting other components within the organism. Despite
+                                         the complex mechanisms in biological systems, deductive reasoning about the events within biolog-
+                                         ical pathways can be carried out based on an understanding of the structure and function of these
+                                         pathways. For example, based on pathway reasoning, it can be predicted that blocking muscarinic
+                                         M3 receptors in taste cells will weaken taste responses in sensory fibers (see Figure 1).
+                                         Pathway reasoning is essential for biologists to explain phenomena, form hypotheses, design exper-
+                                         iments, and interpret results, and is a fundamental task in biology with broad applications across
+                                         multiple disciplines, including systems biology, pharmacology, toxicology, cell biology, pathology,
+                                         immunology, and biomedical engineering. The reasoning case in Figure 1 aid in toxicity analysis,
+                                         experimental design, and taste disorders treatments.
+                                         Although LLMs have been explored in various biological applications, little research has focused
+                                         on how LLMs can understand and reason through the intricate, multi-step processes inherent to
+                                         complex biological systems. Considering the fundamental role of biological pathway reasoning, the
+
+
+                                                                                             1
+          Question: When muscarinic receptors M3 are blocked in taste cells, what                                    Benchmark Paradigm 1: Internal Knowledge Pathway Reasoning
+                 is the effect on taste-evoked responses in Receptor cells?
+                                                                                                                          Chain of Thought
+                                                                                                                      1. When muscarinic receptors, specifically the M3 subtype, are blocked in Type II taste
+                            Extracellular space                                                  Taste
+      Taste Transduction                                                                         Sensory Fiber           cells.
+                                                                                                                      2. The effect on taste-evoked responses is generally a reduction in the calcium
+           Pathway                                                                                                       mobilization and subsequent signaling pathways that mediate taste perception.
+                                                  Acetylcholine                                                       3. Since ACh acts on these receptors to facilitate calcium influx and other signaling
+                                                                                         ATP
+                                                                                                                         events, blocking them would impair the normal excitatory responses to taste stimuli.
+
+
+                                                                                                                     Benchmark Paradigm 2: External Knowledge Pathway Reasoning
+                                                                                                                     PathSeeker       Call APIs to navigate pathway graph
+                                                                                       CALMH1
+                                                                                       Channel                            Pathways 5, 7, and 11 show that acetylcholine activation of CHRM3 increases calcium
+                            M3 Receptor                β/γ                                                                mobilization in Type II taste cells, enhancing CALMH1's role in ATP release and
+                                                   α
+                                                                                                                          activating taste sensory fibers.
+                                                                                Ca2+
+                                                  Activated
+                                                                                                                          Answer: Blocking muscarinic receptors inhibits M3 receptor activation, leading to
+                                                                  Ca2+
+
+      Taste Receptor Cell                         G-protein              Ca2+
+
+
+                                                                                                 Neurotransmitters
+                                                                                                                          reduced calcium mobilization in Type II taste cells. This decrease in calcium levels
+                                                                                                                          results in lower ATP release, ultimately diminishing taste-evoked responses.
+
+
+
+
+Figure 1: Illustration of BioMaze task and reasoning method with or without additional biological
+pathway graph data guidance. The task of BioMaze focuses on reasoning about the effects and
+mechanisms of natural components or synthetic interventions on various downstream targets under
+different conditions through complex intermediate pathway processes.
+
+potential applications of LLMs in many areas of biology would be questionable if LLMs cannot
+effectively perform this task.
+In this study, we evaluate the reasoning abilities of LLMs in biological tasks through the lens of
+biological pathways. We explore their capabilities in key pathway reasoning paradigms, including
+functional understanding, dynamic changes, regulation, and intervention. To support these studies,
+we introduce a pathway benchmark, BioMaze, which contains 5.1K high-quality, complex biolog-
+ical pathway problems derived from real research literature, such as PubMed (Lu, 2011). These
+problems are carefully curated and reviewed by human experts, covering the context of biological
+pathway research, including natural dynamic changes, disturbances and interventions, additional
+intervention conditions, as well as multi-scale research targets, such as single factors, interaction
+processes, and macro-level functions.
+Based on BioMaze, we compare various methods using LLMs for pathway reasoning, including
+chain-of-thought (CoT) and graph-augmented reasoning approaches (Li et al., 2023a; Sun et al.,
+2023; He et al., 2024). The results demonstrate that LLMs struggle with pathway reasoning, par-
+ticularly in causal inference scenarios where interventions and perturbations are introduced into
+the system. This challenge persists across all LLMs, from LLaMA 8B to GPT-4. The pathway
+knowledge of LLMs comes from the biological pathway corpus during pre-training, which lacks
+a structured organization, making it difficult to plan reasoning paths based on pathway structures.
+This leads to errors such as faulty steps and omissions, and difficulty in simulating the events in the
+pathway during interventions. Additionally, current graph-augmented reasoning methods lack the
+ability to efficiently leverage pathway graphs during reasoning.
+To address these challenges, we propose a novel approach called PATH S EEKER, an LLM agent
+designed to emulate the way scientists reason using biological pathways. During inference, it in-
+teractively explores biological pathways by efficiently navigating global-local subgraphs based on
+demand. This interactive process establishes a mutually reinforcing relationship between inference
+and pathway browsing, helping LLMs utilize pathway data for reasoning. It addresses challenges
+such as interventions and perturbations, long reasoning chains, and errors.
+
+2   R ELATED W ORK
+Biological Scientific Question Answering Previous studies have explored the potential of language
+models in the biological scientific domain (Lu et al., 2022; Vilares & Gómez-Rodrı́guez, 2019; Jin
+et al., 2021; Pal et al., 2022), such as biological scientific reading comprehension (Welbl et al.,
+2018; Jin et al., 2019) and question-answering (Krithara et al., 2023). A few studies have examined
+language models’ ability to complete biological pathways (Li et al., 2023b; Park et al., 2023; Azam
+et al., 2024). Different from previous tasks, this work introduces biological pathway reasoning in
+realistic research scenarios. See Appendix A.12 for a more detailed comparison.
+Graph-augmented Language Model Several studies have explored augmenting LLMs with graph
+data. In particular, some works enhance LLMs by encoding graph data as text (Ye et al., 2023;
+
+
+                                                                                                                        2
+Wang et al., 2024; Fatemi et al., 2023), or tuning LLMs specifically for graph-based tasks (Liu et al.,
+2023a; Tang et al., 2024; He et al., 2024; Zhao et al., 2023; He & Hooi, 2024). Augmented LLMs
+have been applied to knowledge-based QA (Sun et al., 2023; He et al., 2024; Li et al., 2023a; Jin
+et al., 2024; Cheng et al., 2024; Edge et al., 2024) and graph tasks like property prediction (Wang
+et al., 2024; He et al., 2023). Some studies leverage graph structures for complex reasoning tasks
+(Jiang et al., 2023; Besta et al., 2024). Most large graph databases use retrieval mechanisms (He
+et al., 2024; Li et al., 2023a), while others employ LLMs as interactive agents for navigation (Sun
+et al., 2023; Jin et al., 2024; Li et al., 2024). This work introduces a more efficient agent-based
+approach using subgraph navigation and reasoning to improve pathway database exploration.
+
+
+3     B ENCHMARK : B IO M AZE
+
+3.1   DATASET C REATION
+
+BioMaze is created by generating question-answer pairs from biological pathway research papers,
+which are then checked and filtered through a combination of automated methods and expert human
+review. The dataset creation process involves prompting large language models, with GPT-4 and
+LLaMA3.1-405B (Dubey et al., 2024) being selected for data generation in this study.
+To gather relevant biological pathway questions in realistic scientific research contexts, particularly
+those involving interventions, the data for BioMaze is sourced from over 6,000 biological pathway
+research papers. These studies include carefully designed experimental interventions supported by
+pathway mechanisms to observe biological system responses. After extracting detailed experimental
+observations and their contexts, we convert each one into either a True/False or open-ended question,
+depending on its content. Each question is paired with corresponding labeled answers.
+We then apply multiple data filters and human expert reviews to ensure the accuracy and quality
+of the questions. The accuracy of each question is validated by comparing it with the content of
+the original paper. Question quality is ensured through several filters that remove questions that
+are poorly defined, ask for specific measurement values, query more than one fact, are trivial (with
+answers revealed in the question’s context), or are unrelated to biological pathways.
+Finally, all questions are reviewed by human experts based on quality dimensions and their judgment
+to ensure overall question quality. The passing rate for expert review is approximately 40%. After
+applying all filters, BioMaze contains 5.1k high-quality questions. More details are provided in
+Appendix A.2.
+The questions of BioMaze cover a wide range of biological domains, as illustrated in Figure 2 (left).
+
+3.2   R EASONING T YPE C ATEGORIES
+
+To study various research scenarios in biological pathways, such as natural dynamic changes, dis-
+turbances and interventions, and additional intervention conditions, as well as a multi-scale under-
+standing of single factors, action processes, and macroscopic functions, we classify BioMaze tasks
+from three dimensions, namely inquiry type, extra condition, and investigation target, as shown in
+Table 1. More full question cases are in Appendix A.1. The distribution of the three dimensions’
+questions is shown in Figure 2 (right). We introduce each category of the dimensions below:
+Dimension 1: Inquiry Type is the independent variable studied, which can be either Normal
+Source, involving the prediction of the effects of natural components in their normal state within a
+biological pathway, or Perturbed Source, which deals with predicting the effects of external inter-
+ventions or treatments—such as mutations, infections, or experimentally introduced elements—on
+downstream targets within pathways. Normal Source tasks focus on understanding the fundamental
+mechanisms and natural dynamics of pathways, while Perturbed Source tasks examine the phe-
+nomenon under perturbation.
+Dimension 2: Extra Condition refers to additional settings besides the independent variable. This
+could be the Natural Condition, where no additional treatments are applied, and the pathway op-
+erates under the organism’s natural conditions, or the Intervened Condition, which assesses the
+impact of the inquiry source when the pathway has already been influenced by other factors, such as
+
+
+                                                  3
+

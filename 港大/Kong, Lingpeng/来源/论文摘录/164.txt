@@ -1,0 +1,234 @@
+                                                                       Proxy Compression for Language Modeling
+
+
+                                                                Lin Zheng * 1 Xinyu Li * 1 Qian Liu 2 Xiachong Feng 1 Lingpeng Kong 1
+
+
+                                                                    Abstract                                     et al., 2024), maps the raw input into a shorter sequence
+                                                                                                                 of discrete tokens that the model actually processes. This
+                                              Modern language models are trained almost ex-                      compression is computationally essential, as it reduces the
+                                              clusively on token sequences produced by a fixed                   sequence length and thus enables efficient training.
+
+
+
+
+arXiv:2602.04289v2 [cs.CL] 14 May 2026
+                                              tokenizer, an external lossless compressor often
+                                              over UTF-8 byte sequences, thereby coupling                        However, this design couples the entire modeling stack to
+                                              the model to that compressor. This work intro-                     a fixed external compressor. Every input and output must
+                                              duces proxy compression, an alternative training                   pass through it, and at the level of raw data,1 the model is
+                                              scheme that preserves the efficiency benefits of                   no longer strictly end-to-end, as it learns only to manipulate
+                                              compressed inputs while providing an end-to-end,                   the compressor’s outputs. In the case of hand-crafted tok-
+                                              raw-byte interface at inference time. During train-                enizers, this coupling introduces well-documented artifacts
+                                              ing, a single language model is jointly trained on                 (Phan et al., 2024), including prompt boundary problems
+                                              raw byte sequences and compressed views gen-                       (Microsoft, 2023; Lundberg & Ribeiro, 2023; Athiwaratkun
+                                              erated by external compressors; through the pro-                   et al., 2024; Hayase et al., 2025), retokenization drift (Team,
+                                              cess, the model learns to internally align com-                    2025), under-trained or glitch tokens (Rumbelow & Watkins,
+                                              pressed sequences and raw bytes. This align-                       2023; Land & Bartolo, 2024; Wang et al., 2024a; Yang,
+                                              ment enables strong transfer between the two                       2024; Yang et al., 2024), data mixture leakage (Hayase
+                                              formats, even when training predominantly on                       et al., 2024), biases against low-resource languages (Petrov
+                                              compressed inputs that are discarded at inference.                 et al., 2023; Ahia et al., 2023; Limisiewicz et al., 2024), and
+                                              Extensive experiments on code language mod-                        increased sensitivity to adversarial inputs (Sun et al., 2020;
+                                              eling demonstrate that proxy compression sub-                      Pagnoni et al., 2024).
+                                              stantially improves training efficiency and signifi-               In this work, we ask whether it is possible to keep the ef-
+                                              cantly outperforms pure byte-level baselines given                 ficiency benefits of training on compressed data without
+                                              fixed compute budgets. As model scale increases,                   hard-wiring the compressor into the model’s interface. We
+                                              these gains become more pronounced, and proxy-                     address this with proxy compression (Figure 1): treating
+                                              trained models eventually match or surpass tok-                    external compressors as a training-time proxy rather than a
+                                              enizer approaches, all while operating solely on                   permanent part of the pipeline. Given a training corpus, we
+                                              raw bytes and retaining the inherent robustness                    apply an external compressor to produce compressed views
+                                              of byte-level modeling. Our code is available at                   of each sequence and mix these compressed sequences with
+                                              https://github.com/LZhengisme/pr                                   raw UTF-8 counterparts during training. A single language
+                                              oxy-compression.                                                   model is trained to perform next-symbol prediction over
+                                                                                                                 both representations jointly. At inference time, we can
+                                                                                                                 discard the compressor entirely and run the model on raw
+                                         1. Introduction                                                         bytes alone; the compressor has served only to provide
+                                                                                                                 shorter proxy sequences during training for efficiency. Our
+                                         Modern language models are almost always trained on com-
+                                                                                                                 central finding enabling proxy compression is strong cross-
+                                         pressed views of data rather than on the raw format (Bengio
+                                                                                                                 representation transfer: although the majority of training
+                                         et al., 2003). In practice, the compressor, most commonly a
+                                                                                                                 data is specified in compressed form for efficiency (e.g.,
+                                         tokenizer (Sennrich et al., 2016; Kudo & Richardson, 2018)
+                                                                                                                 90%), the model performs surprisingly well on raw-byte
+                                         or arithmetic coding with another language model (Lester
+                                                                                                                 inference. Moreover, transfer strength of proxy compression
+                                           *
+                                             Equal contribution 1 University of Hong Kong 2 TikTok. Corre-       grows with model scale: small models demonstrate weak or
+                                         spondence to: Lin Zheng <lzheng2@cs.hku.hk>.                               1
+                                                                                                                      We use raw to refer to the UTF-8 byte encoding of text, con-
+                                                               rd
+                                         Proceedings of the 43 International Conference on Machine               trasting it with compressed sequences often derived from that byte
+                                         Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026            stream, such as tokenized text.
+                                         by the author(s).
+
+                                                                                                             1
+                                            Proxy Compression for Language Modeling
+
+
+     Training Data Preparation                                                                    Modeling
+                                                 Mixed-representation inputs                        Next-symbol prediction
+                                                    <comp> 733, 8223, 1187, 8338, 7144, …
+
+                                                   </comp>        <comp> 733, 1231, 4494,
+
+      733, 8223, 1187, 8338, 7144, 62780,           7390, 11507, … </comp>          <raw> 10,
+      7054, 285, 1087, 271, 2436, 1783,
+      5072, 285, 1006, 763, 702, …                 100, 101, 102, 32, 113, 117, 105, … </raw>             Language Model
+
+                                                    <comp> 733, … </comp>           <comp>
+            Proxy Compressor
+       (Tokenization / Neural / Gzip)              741, 1786, 763, 988, 347, 848, … </comp>
+
+
+
+                                                  10, 100, 101, 102, 32, 113, 117, 105, 99,          10, 97, 115, 121, 110, 99, 32,
+             Training corpus                      107, 115, 111, 114, 116, 40, 97, 114, 114,         100, 101, 102, …
+                                      UTF-8       58, 32, 108, 105, 115, 116, 91, …
+
+                                                                                                  Byte-level Inference
+
+Figure 1. Overview of proxy compression for language modeling. During training, we prepare mixed-representation inputs by combining
+compressed sequences with raw UTF-8 bytes, which are packed together to train a single language model with next-symbol prediction
+over both representations. Different representations are associated with special sentinels, such as ⟨comp⟩, ⟨/comp⟩ for compressed data
+and ⟨raw⟩ and ⟨/raw⟩ for raw data. At inference time, the proxy compressor is discarded entirely, and the model operates solely on raw
+bytes. By training primarily on compressed data (e.g., 90% of training data in this work), this approach captures the training efficiency
+benefits of compressed data without hard-wiring the compressor into the model’s interface.
+
+
+negative transfer, while larger models with proxy compres-              modeling (§3) demonstrate that proxy compression yields
+sion can match or surpass ordinary language models with                 strong transfer from compressed training to raw-byte in-
+hard-wired compressors (Figure 2).                                      ference. On downstream benchmarks (§3.2), models that
+                                                                        see only about 10% of their training samples in raw UTF-
+Conceptually, proxy compression makes the learning ob-
+                                                                        8 nonetheless outperform pure raw-byte baselines under a
+jective more demanding in a useful way. The model must
+                                                                        fixed compute budget, as they can consume substantially
+predict in two different code spaces and implicitly align
+                                                                        more compressed data while benefiting from strong trans-
+them, learning an internal mapping between proxy codes
+                                                                        fer; at scale, they match or surpass strong tokenizer-based
+and bytes. This encourages the model to treat compressed
+                                                                        baselines. In-context transfer probes (§3.3) show that proxy-
+sequences as informative hints rather than a complete sub-
+                                                                        trained models can near-perfectly recover raw inputs from
+stitute for the raw byte stream. From a coding perspective,
+                                                                        their compressed forms in context. We then investigate what
+a language model defines a compressor via its predictive
+                                                                        makes a good proxy compressor in §3.4, where gzip prox-
+distribution (Deletang et al., 2024); proxy compression can
+                                                                        ies fail to transfer, possibly due to their unstable outputs,
+thus be viewed as partially delegating compression to an ex-
+                                                                        whereas both tokenizer-based and neural proxies support
+ternal proxy while training the model to remain an effective
+                                                                        strong transfer. Robustness evaluations (§3.5) show that
+compressor over raw bytes. This navigates a fundamental
+                                                                        proxy-trained models retain most of the inherent robustness
+trade-off: training on purely compressed data is efficient
+                                                                        of raw byte-level modeling.
+but constrains the model to patterns the compressor exposes,
+while training with pure raw bytes captures all structure               In summary, this work makes the following contributions:
+but at high computational cost. Proxy compression gains
+efficiency from compressed inputs while staying grounded                • We introduce proxy compression, a mixed-representation
+in the underlying byte-level distribution.                                training scheme that enables efficient training over com-
+                                                                          pressed data while keeping a simple, raw-byte inference
+We instantiate proxy compression with several families                    interface, without modifying model architectures.
+of compressors (§2): tokenizer-based compression (§2.2),
+which uses conventional tokenizers as proxy compressors;                • We demonstrate strong cross-representation transfer with
+neural proxy compressors (§2.3), which combine a sep-                     proxy compression: models trained predominantly on
+arately trained byte-level model with arithmetic coding                   proxy-compressed inputs substantially outperform byte-
+(Lester et al., 2024); and generic, structure-agnostic com-               level baselines and rival tokenizer-based approaches at
+pression via gzip (§2.4). Our experiments on code language                scale, with the gap narrowing as the model scale increases.
+
+                                                                    2
+                                                                        Proxy Compression for Language Modeling
+
+                       50.0   Tokenizer-based                                             +4.0                        are confined to the data preprocessing pipeline.
+                              Byte-level
+                              Proxy (Neural)
+                       45.0   Proxy (Tokenizer)                                 1.1 1.3   +2.0
+                                Byte-level                                                                            Byte-level Inference. At inference time, the model oper-
+
+
+
+
+MBPP-Plus Pass@1 (%)
+                                Proxy (Neural)                                            +0.0                        ates exclusively on raw UTF-8 bytes; the proxy compressor
+
+
+                                                                                             to Tokenizer Perf.
+                       40.0     Proxy (Tokenizer)
+                                                                 -1.9                                                 is used only during training and can be discarded after-
+                                                                                          -2.0
+                       35.0    -3.4
+                                                                                                                      wards. This decoupling leverages compression for training
+                                             -4.0                                                                     efficiency while retaining a universal byte-level interface.
+                                                     -4.5 -4.5                            -4.0
+                       30.0
+                                                                         -6.1
+                                                                                          -6.0                        Format Sentinel Tokens. To make different representa-
+                       25.0           -7.4
+                                                                                          -8.0
+                                                                                                                      tions explicitly distinguishable, we wrap each sequence
+                       20.0                                                                                           with special sentinel tokens that indicate its
+                                                                                                                                                                    format. Raw
+                                 0.5B                   4B                 14B                                        and compressed    sequences  are encoded  as  ⟨raw⟩ ◦ xraw ◦
+                                                    Model Size                                                                                             
+                                                                                                                      ⟨/raw⟩ and ⟨comp⟩◦xcomp ◦⟨/comp⟩ , respectively, where
+Figure 2. Model performance (Pass@1) on MBPP-Plus across                                                              ◦ denotes concatenation. These markers allow the model to
+model scales. Bars show absolute performance (left axis); lines
+show the performance gap (∆) relative to the tokenizer baseline                                                       condition its predictions on the representation type.2
+(right axis). While byte-level models exhibit a persistent or widen-
+ing gap, proxy-based models progressively close the gap as the                                                        In-context Translation Pairing. The sampling scheme
+model scale increases.                                                                                                above treats raw and compressed samples independently.
+                                                                                                                      To further encourage cross-representation alignment, we
+                                                                                                                      introduce in-context translation pairing, which optionally
+• We systematically study several proxy compressors, in-                                                              presents both views of the same sample concatenated within
+  cluding generic gzip, tokenizer-based compression, and                                                              a single context (the ordering between xraw and xcomp is
+  arithmetic-coded neural proxies, showing that more struc-                                                           randomized with equal probability),
+  tured compressors (tokenizer-based and neural) are highly                                                                                                               
+  effective proxies for training language models, while gzip-                                                             ⟨raw⟩ ◦ xraw ◦ ⟨/raw⟩ ◦ ⟨comp⟩ ◦ xcomp ◦ ⟨/comp⟩ .
+  based compression fails to transfer effectively.
+                                                                                                                      These paired sequences encourage the model to predict one
+                                                                                                                      representation conditioned on the other, effectively learning
+2. Proxy Compression                                                                                                  an in-context “translation” between formats. By default,
+                                                                                                                      pairing is enabled only during an initial warm-up phase
+We introduce proxy compression, a training scheme that
+                                                                                                                      (§2.5); further analysis is provided in Appendix D.8.
+retains the efficiency of compressed inputs while exposing
+an end-to-end byte-level interface at inference. §2.1 de-                                                             Note that mixed-representation training usually yields a
+scribes the core framework, §§ 2.2 to 2.4 present concrete                                                            lower effective compression rate than the proxy compressor
+instantiations of the proxy compressor, and §2.5 provides                                                             f alone; see Appendix A for more detailed discussion. We
+implementation details.                                                                                               next describe concrete instantiations of f that produce dis-
+                                                                                                                      crete symbol sequences amenable to offline preprocessing.
+2.1. Overview
+                                                                                                                      2.2. Tokenizer-based Compressors
+Let xraw denote a raw input sample in UTF-8 bytes, and let
+xcomp := f (xraw ) be a representation compressed by a proxy                                                          A natural instantiation of the proxy compressor f is stan-
+compressor f . We assume xcomp is a sequence of discrete                                                              dard tokenization. Given a trained tokenizer (Sennrich
+symbols from a finite vocabulary, so that both formats can                                                            et al., 2016; Kudo & Richardson, 2018; Liu et al., 2025),
+be handled seamlessly by a standard language model.                                                                   it segments xraw into token indices from a fixed-size vo-
+                                                                                                                      cabulary to obtain xcomp . This satisfies our design criteria:
+                                                                                                                      the output is a discrete sequence, and tokenization can be
+Mixed-Representation Training. Our training pipeline
+                                                                                                                      performed entirely offline. Conceptually, the use of tok-
+operates at the sample level. For each input xraw , we draw a
+                                                                                                                      enization for proxy compression differs from conventional
+Bernoulli variable such that with probability r, the sample
+                                                                                                                      tokenizer-based language model training. Whereas a stan-
+is presented in compressed form xcomp , otherwise it remains
+                                                                                                                      dard tokenizer-based model operates exclusively in token
+as xraw . The resulting sequences are packed into fixed-
+                                                                                                                      space and almost never sees raw bytes, our approach in-
+length contexts, which may contain both formats within the
+                                                                                                                      stead treats tokens as a training-time proxy for efficiency
+same context, and a single standard autoregressive model
+                                                                                                                      while still retaining a raw-byte interface at inference. We
+is trained with the usual next-symbol prediction objective
+on both compressed and raw sequences. Crucially, this                                                                     2
+                                                                                                                            Sentinel tokens also improve performance at smaller model
+scheme requires no architectural changes; all modifications                                                           scales with diminishing gains at larger scales; see Appendix D.10.
+
+                                                                                                                  3
+

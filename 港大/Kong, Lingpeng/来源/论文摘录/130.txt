@@ -1,0 +1,191 @@
+      ACBiMA: Advanced Chinese Bi-Character Word Morphological Analyzer
+
+                      Ting-Hao (Kenneth) Huang, Yun-Nung Chen, and Lingpeng Kong
+                         Language Technologies Institute, Carnegie Mellon University
+                                5000 Forbes Ave, Pittsburgh, PA 15213, USA
+                           {tinghaoh, yvchen, lingpenk}@cs.cmu.edu
+
+
+
+                             Abstract                                     reflects that the core task of Chinese morphologi-
+                                                                          cal analysis should be aimed at bi-character words.
+           While morphological information has                            Previous work tended to focus on longer unknown
+           been demonstrated to be useful for various                     words (Tseng and Chen, 2002; Tseng et al., 2005;
+           Chinese NLP tasks, there is still a lack of                    Lu et al., 2008; Qiu et al., 2008) or the function-
+           complete theories, category schemes, and                       ality of morphemic characters (Galmar and Chen,
+           toolkits for Chinese morphology. This pa-                      2010), and none of them effectively covered Chi-
+           per focuses on the morphological struc-                        nese bi-character words. To the best of our knowl-
+           tures of Chinese bi-character words, where                     edge, Huang et al. (2010) is the only work focused
+           a corpus were collected based on a well-                       on Chinese bi-character words, where they ana-
+           defined morphological type scheme cov-                         lyzed Chinese morphological types and developed
+           ering both Chinese derived words and                           a suite of classifiers to predict the types. However,
+           compound words. With the corpus, a                             their work covers only a subset of Chinese content
+           morphological analyzer is developed to                         words and has limited scalability. Therefore, this
+           classify Chinese bi-character words into                       paper addresses the issues, which expands their
+           the defined categories, which outperforms                      work by developing a more detailed scheme and
+           strong baselines and achieves about 66%                        collecting more words to produce a generalized
+           macro F-measure for compound words,                            analyzer.
+           and effectively covers derived words.                             Our contributions are three-fold:
+
+      1    Introduction                                                       • Linguistic – we propose a morphological
+                                                                                type scheme for full coverage of Chinese bi-
+      Considering that Chinese is an analytic language                          character content words, and developed a cor-
+      without inflectional morphemes, Chinese mor-                              pus containing about 11K words.
+      phology mainly focuses on analyzing morpholog-
+      ical word formation. In this paper, we conceive                         • Technical – we develop an effective mor-
+      the Chinese word forming process from a syntac-                           phological classifier for Chinese bi-character
+      tic point of view (Packard, 2000). The analysis                           words, achieving 66% macro F-measure for
+      and prediction of the intra-word syntactic struc-                         compound words, and and effectively covers
+      tures, i.e., the “morphological structures”, have                         derived words.
+      been shown to be effective in various Chinese NLP
+                                                                              • Practical – we release the collected data and
+      tasks, e.g., sentiment analysis (Ku et al., 2009;
+                                                                                the analyzer with the trained model to pro-
+      Huang, 2009), POS tagging (Qiu et al., 2008),
+                                                                                vide additional Chinese morphological fea-
+      word segmentation (Gao et al., 2005), and pars-
+                                                                                tures for other NLP tasks. 2
+      ing (Li, 2011; Li and Zhou, 2012; Zhang et al.,
+      2013). Thus, this paper focuses on analyzing the                    2       Morphological Type Scheme
+      morphological structures of Chinese bi-character
+      content words.                                                      Our morphological type category scheme is devel-
+         Huang et al. (2010) observed that 52% multi-                     oped based on the literature (X.-H. Cheng, 1992;
+      character Chinese tokens are bi-character1 , which                  Lu et al., 2008; Huang et al., 2010) and the naming
+          1
+                                                                          conventions of Stanford typed dependency (Chang
+            The uni-character tokens do not contain any morpholog-
+                                                                              2
+      ical structures.                                                            http://acbima.org/
+
+
+                                                                     26
+                Proceedings of the Eighth SIGHAN Workshop on Chinese Language Processing (SIGHAN-8), pages 26–31,
+Beijing, China, July 30-31, 2015. c 2015 Association for Computational Linguistics and Asian Federation of Natural Language Processing
+                   Table 1: The category description and examples for derived words
+  Class    Morphological Characteristics                                Example
+  dup      Two duplicate characters.                                    天天/tian-tian/day-day/everyday
+   pfx     The first character is a prefix character, e.g. 阿/a.         阿姨/a-yi/a-aunt/aunt
+   sfx     The second character is a suffix character, e.g. 仔/zi.       牛仔/new-zi/cow-zi/cowboy
+  neg      The first character is a negation character, e.g. 不/bu.      不能/bu-neng/no-capable/unable
+           The first character is an existential construction,
+   ec                                                                   有人/you-ren/exists-human/people
+           e.g. 有/you/have;exists.
+
+
+                 Table 2: The category description and examples for compound words
+                      Syntactic Role
+  Class                                               Example
+                 Char 1             Char 2
+ a-head                        adjective head         最大/zui-da/most-big/biggest
+ n-head         modifier        nominal head          平台/ping-tai/flat-platform/(flat)platform
+ v-head                          verbal head          主辦/zhu-ban/major-handle/host
+  nsubj     nominal subject predicate (verb)          身經/shen-jing/body-experience/experience
+   vobj                             object            開幕/kai-mu/open-screen/opening of event
+            predicate (verb)
+   vprt                            particle           投入/tou-ru/throw-in to/throw in
+  conj      play coordinate roles in a word           男女/nan-nu/male-female/men and women (people)
+    els     else                                      transliterations, abbreviations, idiomatic words, etc.
+
+
+et al., 2009; catherine De Marneffe and Manning,           pound words scheme.
+2008) shown in Figure 1.
+                                                           3 Morphological Type Classification
+            Single-Morpheme Word     els
+                          Derived
+                                                           Due to the difference between derived words and
+                                     dup, pfx, sfx,
+Chinese                    Word      neg, ec
+                                                           compound words, we respectively adopt rule-
+Bi-Char                                                    based and machine learning approaches to predict
+Content     Synthetic
+                                     a-head, conj,         their morphological types. Note that all of our ap-
+             Word
+ Word
+                        Compound     n-head, nsubj,        proaches and features assume that Chinese mor-
+                          Word       v-head, vobj,         phological structures are independent from word-
+                                     vprt, els             level contexts (Tseng and Chen, 2002; Li, 2011).
+
+Figure 1: The morphological category scheme of             3.1   Derived Word: Rule-Based Approach
+Chinese bi-character content words                         By definition, a morphological derived word can
+   The two major categories of Chinese bi-                 be recognized based on its formation. Therefore,
+character content words are derived words and              we apply the pattern matching rules described in
+compound words. Derived words are words                    Table 1 to build a rule-based classifier.
+formed in certain formations (e.g. duplication),              To evaluate the coverage of these developed
+while compound words are composed of con-                  rules, we run the classifier on Chinese Treebank
+stituent characters following certain syntactic re-        7.0 (CTB) (Levy and Manning, 2003), where
+lations. Table 1 and 2 present detailed category           2.9% of bi-character content words are anno-
+schemes. Note that for derived words, the char-            tated as derived words (842 unique word types).
+acters “有/you/have” and “是/shi/be” are of a spe-           Our rules are able to capture derived words with
+cial type of existential constructions (Tao, 2007),        a precision of 0.97. The false positives are
+so we isolate them from common prefixes to dis-            caused by the ambiguity of Chinese characters
+tinguish their unique characteristics. The “els”           “子/zi” and “兒/er”.3 The ambiguity results
+type (compound words) consists of exceptional                 3
+                                                                These two characters are common Chinese suffixes
+words that cannot be categorized into our com-             which mean “son/kid”.
+
+
+                                                      27
+Table 3: Features for the Compound Word C1C2 ( Dict: Revised Mandarin Chinese Dictionary (Min-
+istry of Education (MoE), 1994); CTB: Chinese Treebank 5.1 (Xue et al., 2005))
+                                   Category             Feature            Description
+                                                         Tone              All possible tones (0-4) of Ci
+                                     uni-char       Pronunciation          All possible pronunciations, consonants, and vowels of Ci
+
+
+
+
+Character Feature (for both Ci )
+                                      word            TF in CTB            The POS distribution of Ci in CTB
+                                                Majority POS in CTB        The most frequent POS of Ci in CTB
+                                                    Character POS          Two POS tags when parsing the 2-token sentence C1 C2
+                                     uni-char   Dist. of Senses in Dict    POS distribution of the senses of Ci in dictionary
+                                    morpheme    Majority POS in Dict       POS of Ci with the most senses in dictionary
+                                                         Root              The radical (also referred to as “character root”) of Ci
+                                                                           The occurrence distribution of the n-char words with Ci
+                                                CTB Prefix/Suffix Dist.
+                                     alphabet                              as the prefix/suffix corresponding to each POS in CTB.
+                                     symbol                                The occurrence distribution of the n-char dictionary
+                                                Dict Prefix/Suffix Dist.
+                                                                           entry words with Ci as the prefix/suffix
+                                                   Example Word            Same as above, but calculate
+                                                  Prefix/Suffix Dist.      the distribution in dictionary example words.
+               Word Feature                      Typed dependency          Typed dependency relation between C1 and C2
+                (for C1 C2 )                     Stanford Word POS         Single POS tag of a single token (word)
+
+
+in mis-classifications such as “父子/fu-zi/father-
+                                                                                      Table 4: Morphological category distribution
+son/father and son” into the “sfx” type instead of
+the “conj” type. Table 1 defines the patterns we                                                       Initial Set      Whole Set
+                                                                                        Category
+consider as derived words, and the words that do                                                    3,052 words      11,366 words
+not belong to the defined classes will be consid-                                         nsubj             1.2%            1.6%
+ered as compound words.                                                                  v-head             7.7%            8.7%
+                                                                                         a-head             1.1%            1.8%
+3.2                                Compound Word: Machine Learning                       n-head            36.7%           34.0%
+                                   Approach                                                vprt             9.4%            9.3%
+To automatically predict morphological types for                                          vobj             14.3%           14.6%
+compound words, we perform machine learning                                               conj             25.5%           26.9%
+techniques to capture generalizations from vari-                                           els              4.1%            3.3%
+ous features. For each bi-character word C1 C2 ,
+we extract character-level features for C1 and C2
+individually, as well as a single word-level feature
+for C1 C2 . Table 3 describes our feature set. For                                  Majority, Stanford Dependency Map, and Tabular
+character-level features, a Chinese character may                                   Models. The Tabular Models first assign the POS
+take on 3 different roles: word, morpheme, or al-                                   tags to each known character C based on differ-
+phabet symbol, where the extracted features are                                     ent heuristics (i.e., the most frequent POS of C
+organized according to these roles. In addition, we                                 in CTB, the POS of C with most senses in Dict,
+propose word-level features, e.g. POS of C1 C2 ,                                    and the POS of C annotated by Stanford Parser),
+to capture the word information dismissed by the                                    and then assigns the most frequent morphological
+previous work (Huang et al., 2010) with consider-                                   type obtained from training data to each POS com-
+ation that such clue helps classification.                                          bination, e.g., “(VV, NN) = vobj”. The Stanford
+   We experiment with various ML classification                                     Dependency Map takes the dependency relation
+models: Naı̈ve Bayes (John and Langley, 1995),                                      between C1 and C2 as predicted by the Stanford
+Random Forest (Breiman, 2001), and Support                                          Parser (Chang et al., 2009) , and maps it to a cor-
+Vector Machine (Platt, 1999; Keerthi et al., 2001;                                  responding morphological type, which is learned
+Hastie and Tibshirani, 1998) for the classification                                 from training data. The Majority baseline always
+task. The three types of baselines are compared:                                    outputs the majority type, i.e., the “n-head” type.
+
+
+                                                                               28
+

@@ -1,0 +1,210 @@
+                                        Published as a conference paper at ICLR 2016
+
+
+
+
+                                        S EGMENTAL R ECURRENT N EURAL N ETWORKS
+                                         Lingpeng Kong, Chris Dyer
+                                         School of Computer Science
+                                         Carnegie Mellon University
+                                         Pittsburgh, PA 15213, USA
+                                         {lingpenk, cdyer}@cs.cmu.edu
+
+                                         Noah A. Smith
+                                         Computer Science & Engineering
+                                         University of Washington
+
+
+
+
+arXiv:1511.06018v2 [cs.CL] 1 Mar 2016
+                                         Seattle, WA 98195, USA
+                                         nasmith@cs.washington.edu
+
+
+
+                                                                                   A BSTRACT
+
+                                                 We introduce segmental recurrent neural networks (SRNNs) which define,
+                                                 given an input sequence, a joint probability distribution over segmentations of
+                                                 the input and labelings of the segments. Representations of the input segments
+                                                 (i.e., contiguous subsequences of the input) are computed by encoding their con-
+                                                 stituent tokens using bidirectional recurrent neural nets, and these “segment em-
+                                                 beddings” are used to define compatibility scores with output labels. These lo-
+                                                 cal compatibility scores are integrated using a global semi-Markov conditional
+                                                 random field. Both fully supervised training—in which segment boundaries and
+                                                 labels are observed—as well as partially supervised training—in which segment
+                                                 boundaries are latent—are straightforward. Experiments on handwriting recog-
+                                                 nition and joint Chinese word segmentation/POS tagging show that, compared to
+                                                 models that do not explicitly represent segments such as BIO tagging schemes and
+                                                 connectionist temporal classification (CTC), SRNNs obtain substantially higher
+                                                 accuracies.
+
+
+
+                                        1   I NTRODUCTION
+
+                                        For sequential data like speech, handwriting, and DNA, segmentation and segment-labeling are
+                                        abstractions that capture many common data analysis challenges. We consider the joint task of
+                                        breaking an input sequence into contiguous, arbitrary-length segments while labeling each segment.
+                                        Our new approach to this problem is the segmental recursive neural network (SRNN). SRNNs com-
+                                        bine two powerful machine learning tools: representation learning and structured prediction. First,
+                                        bidirectional recurrent neural networks (RNNs) embed every feasible segment of the input in a con-
+                                        tinuous space, and these embeddings are then used to calculate the compatibility of each candidate
+                                        segment with a label. Unlike past RNN-based approaches (e.g., connectionist temporal classification
+                                        or CTC; Graves et al., 2006) each candidate segment is represented explicitly, allowing application
+                                        in settings where an alignment between segments and labels is desired as part of the output (e.g.,
+                                        protein secondary structure prediction or information extraction from text).
+                                        At the same time, SRNNs are a variant of semi-Markov conditional random fields (Sarawagi & Co-
+                                        hen, 2004), in that they define a conditional probability distribution over the output space (segmen-
+                                        tation and labeling) given the input sequence (§2). This allows explicit modeling of statistical de-
+                                        pendencies, such as those between adjacent labels, and also of segment lengths (unlike widely used
+                                        symbolic approaches based on “BIO” tagging; Ramshaw & Marcus, 1995). Because the probability
+                                        score decomposes into chain-structured clique potentials, polynomial-time dynamic programming
+                                        algorithms exist for prediction and parameter estimation (§3).
+
+
+                                                                                         1
+Published as a conference paper at ICLR 2016
+
+
+
+
+Parameters can be learned with either a fully supervised objective—where both segment boundaries
+and segment labels are provided at training time—and partially supervised training objectives—
+where segment boundaries are latent (§4).
+We compare SRNNs to strong models that do not explicitly represent segments on handwriting
+recognition and joint word segmentation and part-of-speech tagging for Chinese text, showing sig-
+nificant accuracy improvements in both, demonstrating the value of models that explicitly model
+segmentation even when segmentation is not necessary for downstream tasks (§5).
+
+2    M ODEL
+Given a sequence of input observations x = hx1 , x2 , . . . , x|x| i with length |x|, a segmental recur-
+rent neural network (SRNN) defines a joint distribution p(y, z | x) over a sequence of labeled
+segments each of which is characterized by a duration (zi ∈ Z+ ) and label (yi ∈ Y ). The segment
+                                P|z|
+durations constrained such that i=1 zi = |x|. The length of the output sequence |y| = |z| is
+a randomP variable, and |y| ≤ |x| with probability 1. We write the starting time of segment i as
+si = 1 + j<i zj .
+To motivate our model form, we state several desiderata. First, we are interested in the following
+prediction problem,
+                                           X
+          y ∗ = arg max p(y | x) = arg max     p(y, z | x) ≈ arg max max p(y, z | x).          (1)
+                        y                       y                               y     z
+                                                      z
+
+Note the use of joint maximization over y and z as a computationally tractable substitute for
+marginalizing out z; this is commonly done in natural language processing.
+Second, for problems where the explicit durations observations are unavailable at training time and
+are inferred as a latent variable, we must be able to use a marginal likelihood training criterion,
+                                                           X
+                              L = − log p(y | x) = − log      p(y, z | x).                          (2)
+                                                                  z
+
+In Eqs. 1 and 2, the conditional probability of the labeled segment sequence is (assuming kth order
+dependencies on y):
+                                                          |y|
+                                               1 Y
+                                p(y, z | x) =          exp f (yi−k:i , zi , x)                                 (3)
+                                              Z(x) i=1
+
+where Z(x) is an appropriate normalization function. To ensure the expressiveness of f and the
+computational efficiency of the maximization and marginalization problems in Eqs. 1 and 2, we use
+the following definition of f ,
+    f (yi−k:i , zi , xsi :si +zi −1 ) = w> φ(V[gy (yi−k ); . . . ; gy (yi ); gz (zi );
+                                                  −−→                       ←−−                                (4)
+                                                  RNN(csi :si +zi −1 ); RNN(csi :si +zi −1 )] + a) + b
+       −−→
+where RNN(csi :si +zi −1 ) is a recurrent neural network that computes the forward segment em-
+                                                                                   ←−−
+bedding by “encoding” the zi -length subsequence of x starting at index si ,1 and RNN computes
+the reverse segment embedding (i.e., traversing the sequence in reverse order), and gy and gz are
+functions which map the label candidate y and segmentation duration z into a vector representation.
+The notation [a; b; c] denotes vector concatenation. Finally, the concatenated segment duration,
+label candidates and segment embedding are passed through a affine transformation layer param-
+eterized by V and a and a nonlinear activation function φ (e.g., tanh), and a dot product with a
+vector w and addition by scalar b computes the log potential for the clique. Our proposed model
+is equivalent to a semi-Markov conditional random field with local features computed using neural
+networks. Figure 1 shows the model graphically.
+    1
+      Rather than directly reading the xi ’s, each token is represented as the concatenation, ci , of a forward and
+backward over the sequence of raw inputs. This permits tokens to be sensitive to the contexts they occur in, and
+this is standardly used with neural net sequence labeling models (Graves et al., 2006).
+
+
+                                                          2
+Published as a conference paper at ICLR 2016
+
+
+
+
+We chose bidirectional LSTMs (Graves & Schmidhuber, 2005) as the implementation of the RNNs
+in Eq. 4. LSTMs (Hochreiter & Schmidhuber, 1997) are a popular variant of RNNs which have
+been seen successful in many representation learning problems (Graves & Jaitly, 2014; Karpathy &
+Fei-Fei, 2015). Bidirectional LSTMs enable effective computation for embedings in both directions
+and are known to be good at preserving long distance dependencies, and hence are well-suited for
+our task.
+
+
+                                                  (
+
+                        Segmentation/Labeling Model
+                                                                       y1                y2       y3
+
+                                                      z1                        z2                z3
+
+
+                                                      h 1,3                     h 4,5             h 6,6
+
+                                                                       !                 !        !
+                                                                       h 1,3             h 4,5    h 6,6
+
+
+                                                  (   c1      c2       c3       c4       c5       c6
+
+
+
+
+                        Encoder BiRNN
+
+
+
+                                                      x111    x21212   xx
+                                                                        x3213   xx4214   xx
+                                                                                          x5215   xx6216
+
+
+Figure 1: Graphical model showing a six-frame input and three output segments with durations
+z = h3, 2, 1i (this particular setting of z is shown only to simplify the layout of this figure; the model
+assigns probabilities to all valid settings of z). Circles represent random variables. Shaded nodes are
+observed in training; open nodes are latent random variables; diamonds are deterministic functions
+of their parents; dashed lines indicate optional statistical dependencies that can be included at the
+cost of increased inference complexity. The graphical notation we use here draws on conventions
+used to illustrate neural networks and graphical models.
+
+
+
+3     I NFERENCE WITH DYNAMIC P ROGRAMMING
+
+We are interested in three inference problems: (i) finding the most probable segmentation/labeling
+for a model given a sequence x; (ii) evaluating the partition function Z(x); and (iii) computing
+the posterior marginal Z(x, y), which sums over all segmentations compatible with a reference se-
+quence y. These can all be solved using dynamic programming. For simplicity, we will assume
+zeroth order Markov dependencies between the yi s. Extensions to the kth order Markov dependen-
+cies should be straightforward. Since each of these algorithms relies on the forward and reverse
+segment embeddings, we first discuss how these can be computed before going on to the inference
+algorithms.
+
+
+3.1   C OMPUTING S EGMENT E MBEDDINGS
+         →
+         −                  −−−→
+Let the h i,j designate the RNN encoding of the input span (i, j), traversing from left to right, and
+    ←
+    −                                                    ←−−−
+let h i,j designate the reverse direction encoding using RNN. There are thus O(|x|2 ) vectors that
+must be computed, each of length O(|x|). Naively this can be computed in time O(|x|3 ), but the
+
+
+                                                                        3
+

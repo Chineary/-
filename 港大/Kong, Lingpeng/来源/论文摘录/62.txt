@@ -1,0 +1,181 @@
+    PRO L O RA: Partial Rotation Empowers More Parameter-Efficient LoRA
+
+            Sheng Wang♡ , Boyang Xue♠ , Jiacheng Ye♡ , Jiyue Jiang♠ , Liheng Chen♡ ,
+                                 Lingpeng Kong♡ , Chuan Wu♡
+             ♡
+               The University of Hong Kong, ♠ The Chinese University of Hong Kong
+       u3009618@connect.hku.hk, byxue@se.cuhk.edu.hk, carsonye@connect.hku.hk,
+        jiangjy@link.cuhk.edu.hk, clh648@connect.hku.hk, {lpk, cwu}@cs.hku.hk
+
+
+
+                          Abstract                                  Model                               LoRA
+                                                                                 Rank
+        With the rapid scaling of large language mod-             LLaMA2                      Parameters          Bytes
+        els (LLMs), serving numerous low-rank adap-                                2            5.00M             19MB
+        tations (LoRAs) concurrently has become in-
+                                                                      7B           16           39.98M            153MB
+        creasingly impractical, leading to unafford-
+        able costs and necessitating more parameter-                               64          159.91M            610MB
+        efficient finetuning methods. In this work, we                             2            6.26M             24MB
+        introduce Partially Rotation-enhanced Low-                   13B           16           50.07M            191MB
+        Rank Adaptation (PRoLoRA), an intra-layer
+                                                                                   64          200.28M            764MB
+        sharing mechanism comprising four essential
+        components: broadcast reduction, rotation en-                              2           11.27M             43MB
+        hancement, partially-sharing refinement, and                 70B           16           90.18M            344MB
+        rectified initialization strategy. As a superset                           64          360.71M           1,376MB
+        of LoRA, PRoLoRA retains its advantages,
+        and effectively circumvent the drawbacks of
+                                                                  Table 1: Theoretical memory usage of LoRA weights
+        peer parameter-sharing methods with superior
+                                                                  with different ranks for LLaMA2-7/13/70B models.
+        model capacity, practical feasibility, and broad
+        applicability. Empirical experiments demon-
+        strate the remarkably higher parameter effi-
+        ciency of PRoLoRA in both specific param-                 by tuning a minority of parameters and freezing
+        eter budget and performance target scenarios,
+                                                                  the remaining ones (Houlsby et al., 2019; Liu et al.,
+        and its scalability to larger LLMs. Notably,
+        with one time less trainable parameters, PRo-             2022). However, with the rapid boost in the num-
+        LoRA still outperforms LoRA on multiple in-               ber of model’s parameters, the demand for further
+        struction tuning datasets. Subsequently, an ab-           enhanced parameter efficiency becomes progres-
+        lation study is conducted to validate the neces-          sively more imperative, especially when multiple
+        sity of individual components and highlight the           LoRA are deployed simultaneously. As shown in
+        superiority of PRoLoRA over three potential               the Table 1, the configuration in Dettmers et al.
+        variants. Hopefully, the conspicuously higher
+                                                                  (2023) (i.e., applying LoRA with the rank of 64
+        parameter efficiency can establish PRoLoRA
+        as a resource-friendly alternative to LoRA.
+                                                                  to all linear layers) results in a significant number
+                                                                  of trainable parameters. For a single LLaMA2-7B
+   1    Introduction                                              model, LoRA will have about 160 million parame-
+                                                                  ters to be tuned, occupying 610MB of disk storage
+   Finetuning large language models (LLMs), such                  and GPU memory in inference. These numbers
+   as LLaMA 2 (Touvron et al., 2023), GPT-                        quickly escalate to about 360 million and 1.4GB
+   3.5 Turbo (OpenAI, 2023), and Gemini (Team                     for a LLaMA2-70B model. For multi-LoRA sce-
+   et al., 2023), for specific domains and functions              narios, such as personalization (Chen et al., 2023)
+   (e.g., model alignment (Wang et al., 2023b) and                and multitasking (Huang et al., 2023), this issue
+   instruction tuning (Zhang et al., 2023b) ), have be-           will dramatically exacerbate. Specifically, resource
+   come increasingly popular. To alleviate the high               consumption will increase linearly with personal-
+   costs associated with full finetuning, parameter-              ized customization, which will further experience
+   efficient finetuning (PEFT), especially LoRA (Hu               a quadratic growth when coupled with multitask-
+   et al., 2021), has emerged as a lightweight solution           ing. Hence, the high costs in multi-LoRA scenarios
+                                                             2829
+Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2829–2841
+                              August 11-16, 2024 ©2024 Association for Computational Linguistics
+do spark a demand for further improved parameter          parameter efficiency of PRoLoRA than baselines
+efficiency.                                               via two alternative perspectives (i.e., a specific
+   Focusing on the above target, parameter sharing        trainable parameter budget and performance tar-
+can serve as an effective approach. Although small        get). With half of tunable parameters, PRoLoRA
+ranks could provide competitive performance in            achieves 4/6 wins and better average performance
+specific tasks (Hu et al., 2021), models generally        over LoRA. When scaling up to LLaMA2-13B,
+perform better with higher ranks as listed in Table 2.    PRoLoRA consistently outperforms LoRA with
+Besides, given a specific trainable parameter bud-        the same trainable parameter count. Additionally,
+get, better performance means higher parameter            comprehensive ablation studies demonstrate the
+efficiency. Hence, enhancing parameter efficiency         necessity of each component and the superiority
+can be transformed into appropriately increasing          of PRoLoRA over three potential intra-layer shar-
+the rank of LoRA with the same parameter count.           ing variants. Overall, PRoLoRA achieves signif-
+Although VeRA (Kopiczko et al., 2023) can be re-          icantly higher parameter efficiency, and thereby
+garded as an attempt in this direction, its aggressive    remarkably alleviates the storage and GPU mem-
+freezing operations result in limited model capacity      ory burden in multi-LoRA scenarios, establishing
+and excessively high rank, leading to significant         PRoLoRA as a resource-friendly alternative for
+inference latency in multi-LoRA scenarios where           LoRA.
+LoRA modules are not merged into the pretrained              In summary, our main contributions are as fol-
+weights. Subsequently, Tied LoRA (Renduchintala           lows:
+et al., 2023) alleviates these problems by allowing
+                                                          • We introduce a more parameter-efficient method
+the inter-layer shared matrices to be trainable. How-
+                                                            named PRoLoRA, featuring an intra-layer shar-
+ever, its tying mechanism restricts its applicability
+                                                            ing mechanism consisting of broadcast reduction,
+to weights of different shapes, which are widely
+                                                            rotation enhancement, partially-sharing refine-
+present among self-attention and MLP modules.
+                                                            ment and rectified initialization strategy.
+   To circumvent all the above drawbacks, we in-
+troduce a new approach called Partially Rotation-         • We compare PRoLoRA with LoRA and exist-
+enhanced Low-Rank Adaptation (PRoLoRA). It                  ing peer methods on multiple instruction tuning
+features a parameter-sharing mechanism within the           datasets, and demonstrate its remarkably higher
+low-rank decomposition matrices, and consists of            parameter efficiency, hopefully establishing PRo-
+four essential components: broadcast reduction, ro-         LoRA as a resource-friendly alternative to LoRA.
+tation enhancement, partially-sharing refinement,
+and rectified initialization strategy. Specifically, we   • We perform an ablation study to demonstrate the
+reparameterize the low-rank matrices with multiple          necessity of individual components and the supe-
+chunks along the hidden dimension, and broadcast            riority of PRoLoRA over other potential variants.
+the first chunks to the others so that trainable pa-
+                                                          2   Related work
+rameters can be saved, or equivalently, the rank can
+be increased multiple times. Then a nearly cost-          LoRA Series. Inspired by the low intrinsic di-
+free rotation operation along the rank dimension          mensions in over-parameterized models (Agha-
+is performed to differentiate the identical chunks        janyan et al., 2020), Hu et al. (2021) proposes
+for higher expressiveness. Besides, a minimal sub-        LoRA to reparameterize the weight update with
+set of ranks is reserved without sharing for further      two trainable low-rank matrices, while freezing the
+refined capacity. To ensure the same bounds for           pretrained weights. With this lightweight decom-
+initialization as unshared parameters, we also rec-       position, LoRA reduces storage and task-switching
+tify the vanilla Kaiming uniform distribution (He         overhead by sharing the pretrained models across
+et al., 2015) for shared ones. As a superset of           multiple tasks. Theoretically, the linear design of
+LoRA, PRoLoRA not only pertains the advantages            LoRA enables seamless merging of trainable ma-
+of LoRA, such as lightweight task switching and           trices with frozen weights, thereby avoiding extra
+optional merging to eliminate extra latency, but          inference latency, albeit this operation is typically
+also brings about better capacity, practical feasibil-    not performed in multiple LoRA serving scenarios.
+ity, and broader applicability than other parameter-         Subsequently, numerous efforts have been made
+sharing methods. Empirical experiments on multi-          to further enhance the effectiveness and efficiency
+ple instruction tuning datasets validate the higher       of LoRA. Based on singular value decomposition,
+                                                      2830
+AdaLoRA (Zhang et al., 2023a) achieves the auto-          on multi-LoRA scenarios and seeks to enhance the
+matic rank allocation by adaptively pruning less im-      parameter efficiency of LoRA models instead of
+portant parameters during finetuning, but the vary-       transformer models.
+ing ranks among layers pose challenges on deploy-
+ing multiple LoRAs. Inspired by random projec-            3       Method
+tions (Aghajanyan et al., 2020), VeRA (Kopiczko
+et al., 2023) shares two frozen random matrices           In this section, we introduce Partially Rotation-
+across all layers, and updates disentangled com-          enhanced Low-Rank Adaptation (PRoLoRA), a
+bination vectors for each layer. Although this ap-        more parameter-efficient method featuring an intra-
+proach reduces the number of parameters, it results       layer sharing mechanism. Briefly, we present four
+in performance degradation and several times the          essential components of PRoLoRA in Section 3.1
+additional computation associated with a very high        namely broadcast reduction, rotation enhancement,
+rank. In contrast, Tied LoRA (Renduchintala et al.,       partially-sharing refinement, and rectified initial-
+2023) enhances parameter efficiency by sharing            ization strategy, followed by its advantage analysis
+trainable LoRA matrices across all layers, with           compared to existing peer methods in Section 3.2.
+the down projection matrix further tied among the
+query, key, and value modules. Additionally, it           3.1      Mathematical Formulation
+incorporates scaling vectors to differentiate each
+module. However, in addition to the high rank sim-        Based on the low-rank decomposition, LoRA (Hu
+ilar to VeRA, this approach also necessitates the         et al., 2021) updates the frozen pretrained weights
+shared matrices to have identical shapes, which fur-      W0 ∈ Ro×h with two trainable matrices A ∈
+ther restricts its expansion to other linear layers. In   Rr×h and B ∈ Ro×r , where r denotes the rank
+contrast, our approach features an intra-layer shar-      and satisfies r ≪ min(h, o). This approximation
+ing mechanism to enhance parameter efficiency,            process can be formulated as follows:
+thereby circumventing the above drawbacks while
+exhibiting potential for integration with them.                     W = W0 + ∆W = W0 + BA, 1                         (1)
+
+Parameter Sharing. Parameter sharing has been             where W and ∆W refer to the updated weights
+adopted by prior studies to reduce model footprint.       and weight differences with the dimensions of o×h,
+Universal Transformer (Dehghani et al., 2018) pro-        respectively. Therefore, a higher parameter effi-
+poses to share all layers within a transformer model.     ciency can be converted into how to obtain simi-
+Systematically, Takase and Kiyono (2023) refines          lar expressiveness of ∆W with fewer parameters,
+this mechanism with three parameter-sharing strate-       which inspires the introduction of PRoLoRA.
+gies across transformer layers, improving the com-
+putational and parameter efficiency. Similarly, Reid      Broadcast Reduction. An intuitive approach to
+et al. (2021) compares several parameter reduc-           optimizing the utilization efficiency of parameters
+tion methods and introduces the Subformer model           is to reuse them multiple times. As depicted in
+with shared middle layers and embedding factor-           Figure 1(a) and 1(b), in the first step of PRoLoRA,
+ization, significantly saving the parameters with-        we propose to partition the original A and B matri-
+out performance degradation. Subsequently, Dict-          ces into chunks along the hidden dimensions h and
+Former (Lou et al., 2021) reparameterizes the orig-       o correspondingly, and broadcast the first chunks’
+inal weights with a shared dictionary, unshared           parameters to the remaining ones, so that the ex-
+coefficients and indices, resulting in a more com-        panded matrices maintain the same shapes as the
+pact transformer model and faster computations.           original ones. Importantly, given the potential vari-
+Targeting on-device deployment, EdgeFormer (Ge            ations in the dimensions of A and B, we allocate
+et al., 2022) shares the attention and FFN modules,       separate chunks to each matrix so that PRoLoRA
+and incorporates PEFT-based layer adaptation to           will not be restricted by different weight shapes
+minimize the number of parameters. More recently,         which is suffered by Tied LoRA. Formally, this
+Pires et al. (2023) removes the FFN on the decoder        chunk-wise sharing process, referred to as CLoRA
+layers and shares a single larger FFN across the
+encoder, achieving substantial gains in both accu-            1
+                                                               Here we omit the preset scaling factor αr for clarity, but
+racy and latency. Differently, our study focuses          will restore it in Section 4.
+
+                                                      2831
+

@@ -1,0 +1,6 @@
+{
+  "url": "https://leili.site/",
+  "date": "2026-09-17",
+  "status": "失败: Command failed: curl -L --max-time 40 --retry 1 -sS -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/来源/合作者/Lei_Li-0.html https://leili.site/\ncurl: (6) Could not resolve host: leili.site\ncurl: (6) Could not resolve host: leili.site\n",
+  "file": "合作者/Lei_Li-0.html"
+}

@@ -1,0 +1,200 @@
+                                         Workshop track - ICLR 2016
+
+
+
+
+                                         D OCUMENT C ONTEXT L ANGUAGE M ODELS
+                                           Yangfeng Ji1 , Trevor Cohn2 , Lingpeng Kong3 , Chris Dyer3 & Jacob Eisenstein1
+                                          1
+                                            School of Interactive Computing, Georgia Institute of Technology
+                                          2
+                                            Department of Computing and Information Systems, University of Melbourne
+                                          3
+                                            School of Computer Science, Carnegie Mellon University
+
+
+
+                                                                                     A BSTRACT
+
+
+
+
+arXiv:1511.03962v4 [cs.CL] 21 Feb 2016
+                                                  Text documents are structured on multiple levels of detail: individual words are re-
+                                                  lated by syntax, and larger units of text are related by discourse structure. Existing
+                                                  language models generally fail to account for discourse structure, but it is crucial
+                                                  if we are to have language models that reward coherence and generate coherent
+                                                  texts. We present and empirically evaluate a set of multi-level recurrent neural net-
+                                                  work language models, called Document-Context Language Models (DCLMs),
+                                                  which incorporate contextual information both within and beyond the sentence.
+                                                  In comparison with sentence-level recurrent neural network language models, the
+                                                  DCLMs obtain slightly better predictive likelihoods, and considerably better as-
+                                                  sessments of document coherence.
+
+
+                                         1    I NTRODUCTION
+                                         Statistical language models are essential components of natural language processing systems, such
+                                         as machine translation (Koehn, 2009), automatic speech recognition (Jurafsky & Martin, 2000),
+                                         text generation (Sordoni et al., 2015) and information retrieval (Manning et al., 2008). Language
+                                         models estimate the probability of a word for a given context. In conventional language models,
+                                         context is represented by n-grams, so these models condition on a fixed number of preceding words.
+                                         Recurrent Neural Network Language Models (RNNLMs; Mikolov et al., 2010) use a dense vector
+                                         representation to summarize context across all preceding words within the same sentence. But
+                                         context operates on multiple levels of detail: on the syntactic level, a word’s immediate neighbors
+                                         are most predictive; but on the level of discourse and topic, all words in the document lend contextual
+                                         information.
+                                         Recent research has developed a variety of ways to incorporate document-level contextual informa-
+                                         tion. For example, both Mikolov & Zweig (2012) and Le & Mikolov (2014) use topic information
+                                         extracted from the entire document to help predict words in each sentence; Lin et al. (2015) propose
+                                         to construct contextual information by predicting the bag-of-words representation of the previous
+                                         sentence with a separate model; Wang & Cho (2015) build a bag-of-words context from the pre-
+                                         vious sentence and integrate it into the Long Short-Term Memory (LSTM) generating the current
+                                         sentence. These models are all hybrid architectures in that they are recurrent at the sentence level,
+                                         but use a different architecture to summarize the context outside the sentence.
+                                         In this paper, we explore multi-level recurrent architectures for combining local and global infor-
+                                         mation in language modeling. The simplest such model would be to train a single RNN, ignoring
+                                         sentence boundaries: as shown in Figure 1, the last hidden state from the previous sentence t − 1 is
+                                         used to initialize the first hidden state in sentence t. In such an architecture, the length of the RNN
+                                         is equal to the number of tokens in the document; in typical genres such as news texts, this means
+                                         training RNNs from sequences of several hundred tokens, which introduces two problems:
+                                         Information decay In a sentence with thirty tokens (not unusual in news text), the contextual in-
+                                                formation from the previous sentence must be propagated through the recurrent dynamics
+                                                thirty times before it can reach the last token of the current sentence. Meaningful document-
+                                                level information is unlikely to survive such a long pipeline.
+                                         Learning It is notoriously difficult to train recurrent architectures that involve many time
+                                                steps (Bengio et al., 1994). In the case of an RNN trained on an entire document, back-
+                                                propagation would have to run over hundreds of steps, posing severe numerical challenges.
+
+
+                                                                                            1
+Workshop track - ICLR 2016
+
+
+
+                     y t −1,1   y t −1,2   y t −1, M −1   y t −1, M       y t ,1   y t ,2   y t , N−1    yt , N
+
+
+
+
+                     x t −1,1   x t −1,2   x t −1, M −1   x t −1, M       xt , 1   xt , 2   x t , N −1   xt , N
+
+
+Figure 1: A fragment of document-level recurrent neural network language model (D R NNLM). It is
+also an extension of sentence-level RNNLM to the document level by ignoring sentence boundaries.
+
+In this paper, we use multi-level recurrent structures to solve both of these problems, thereby suc-
+cessfully efficiently leveraging document-level context in language modeling. We present several
+variant Document-Context Language Models (DCLMs), and evaluate them on predictive likelihood
+and their ability to capture document coherence.
+
+2     M ODELING FRAMEWORK
+The core modeling idea of this work is to integrate contextual information from the RNN language
+model of the previous sentence into the language model of the current sentence. We present three
+alternative models, each with various practical or theoretical merits, and then evaluate them in sec-
+tion 4.
+
+2.1   R ECURRENT N EURAL N ETWORK L ANGUAGE M ODELS
+
+We start from a recurrent neural network language model (R NNLM) to explain some necessary terms.
+Given a sentence {xn }Nn=1 , a recurrent neural network language model is defined as
+                                    hn =g (hn−1 , xn )                                        (1)
+                                     yn =softmax (Wo hn + b) ,                                (2)
+where xn ∈ RK is the distributed representation of the n-th word, hn ∈ RH is the corresponding
+hidden state computed from the word representation and the previous hidden state hn−1 , and b
+is the bias term. K and H are the input and hidden dimension respectively. As in the original
+RNNLM (Mikolov et al., 2010), yn is a prediction of the (n + 1)-th word in the sequence.
+The transition function g (·) could be any nonlinear function used in neural networks, such as the
+elementwise sigmoid function, or more complex recurrent functions such as the LSTM (Hochreiter
+& Schmidhuber, 1997) or GRU (Chung et al., 2014). In this work, we use LSTM, as it consistently
+gives the best performance in our experiments. By stacking two LSTM together, we are able obtain
+a even more powerful transition function, called multi-layer LSTM (Sutskever et al., 2014). In a
+multi-layer LSTM, the hidden state from a lower-layer LSTM cell is used as the input to the upper-
+layer, and the hidden state from the final-layer is used for prediction. In our following models, we
+fix the number of layers as two.
+In the rest of this section, we will consider different ways to employ the contextual information for
+document-level language modeling. All models obtain the contextual representation from the hidden
+states of the previous sentence, but they use this information in different ways.
+
+2.2   M ODEL I: C ONTEXT- TO -C ONTEXT DCLM
+
+The underlying assumption of this work is that contextual information from previous sentences
+needs to be able to “short-circuit” the standard RNN, so as to more directly impact the generation
+of words across longer spans of text. We first consider the relevant contextual information to be the
+final hidden representation from the previous sentence t − 1, so that,
+                                           ct−1 = ht−1,M                                          (3)
+where M is the length of sentence t − 1. We then create additional paths for this information to
+impact each hidden representation in the current sentence t. Writing xt,n for the word representation
+of the n-th word in the t-th sentence, we have,
+                                  ht,n =gθ (ht,n−1 , s (xt,n , ct−1 ))                            (4)
+
+
+                                                                      2
+Workshop track - ICLR 2016
+
+
+
+                                                  y t ,1   y t ,2     y t , N−1    yt , N
+
+
+
+ y t −1,1   y t −1,2   y t −1, M −1   y t −1, M                                                 y t −1,1   y t −1,2   y t −1, M −1   y t −1, M   y t ,1   y t ,2   y t , N−1    yt , N
+
+
+
+                                                  xt , 1   xt , 2     x t , N −1   xt , N
+
+
+ x t −1,1   x t −1,2   x t −1, M −1   x t −1, M                                                 x t −1,1   x t −1,2   x t −1, M −1   x t −1, M   xt , 1   xt , 2   x t , N −1   xt , N
+
+                                      (a) CC DCLM                                                                                    (b) CO DCLM
+
+                                         Figure 2: Context-to-context and context-to-output DCLMs
+
+
+where gθ (·) is the activation function parameterized by θ and s (·) is a function that combines the
+context vector with the input xt,n for the hidden state. In future work we may consider a variety of
+forms for this function, but here we simply concatenate the representations,
+                                                              s (xt,n , ct−1 ) = [xt,n , ct−1 ].                                                                                 (5)
+The emission probability for yt,n is then computed from ht,n as in the standard RNNLM (Equa-
+tion 2). The underlying assumption of this model is that contextual information should impact the
+generation of each word in the current sentence. The model therefore introduces computational
+“short-circuits” for cross-sentence information, as illustrated in Figure 2(a). Because information
+flows from one hidden vector to another, we call this the context-to-context Document Context
+Language Model, abbreviated CC DCLM.
+With this specific architecture, the number of parameters is H(16H + 3K + 6) + V (H + K + 1),
+where H is the size of the hidden representation, K is the size of the word representation, and V is
+the vocabulary size. The constant factors come with the weight matrices within a two-layer LSTM
+unit. This is in the same complexity class as the standard RNNLM. Special handling is necessary
+for the first sentence of the document. Inspired by the idea of sentence-level language modeling, we
+introduce a dummy contextual representation c0 as a S TART symbol for a document. This is another
+parameter to be learned jointly with the other parameters in this model.
+The training procedure of CC DCLM is similar to a conventional RNNLM: we move from left to
+right through the document and compute a softmax loss on each output yt,n . We then backpropagate
+this loss through the entire sequences.
+
+2.2.1          M ODEL II: C ONTEXT- TO -O UTPUT DCLM
+Rather than incorporating the document context into the recurrent definition of the hidden state, we
+can push it directly to the output, as illustrated in Figure 2(b). Let ht,n be the hidden state from a
+conventional RNNLM of sentence t,
+                                                                    ht,n = gθ (ht,n−1 , xt,n ) .                                                                                 (6)
+Then, the context vector ct−1 is directly used in the output layer as
+                                                  yt,n ∼ softmax (Wh ht,n + Wc ct−1 + b)                                                                                         (7)
+where ct−1 is defined in Equation 3. Because the document context impacts the output directly, we
+call this model the context-to-output DCLM (CO DCLM). The modification on the model archi-
+tecture from CC DCLM to CO DCLM leads to a notable change on the number of parameters. The
+total number of parameters of CO DCLM is H(13H + 3K + 6) + V (2H + K + 1). The difference
+of the parameter numbers between these CO DCLM and CC DCLM is V H − 3H 2 . Recall that V is
+the vocabulary size and H is the size of latent representation, in most cases we have V ≥ 104 and
+H ≈ 102 . Therefore V  H in all reasonable cases, and CO DCLM includes more parameters than
+CC DCLM in general.
+
+While the CO DCLM has more parameters that must be learned, it has a potentially important com-
+putational advantage. By shifting ct−1 from hidden layer to output layer, the relationship of any two
+hidden vectors ht and ht0 from different sentences is decoupled, so that each can be computed in
+isolation. In a guided language generation scenario such as machine translation or speech recogni-
+tion — the most common use case of neural language models — this means that decoding decisions
+are only pairwise dependent across sentences. This is in contrast with the CC DCLM, where the
+
+
+                                                                                            3
+

@@ -1,0 +1,207 @@
+                                        Published as a conference paper at COLM 2024
+
+
+
+
+                                        A Reparameterized Discrete Diffusion Model for Text Gener-
+                                        ation
+
+                                            Lin Zheng1 Jianbo Yuan2 Lei Yu3 Lingpeng Kong1
+                                            1 The University of Hong Kong 2 ByteDance Inc. 3 Google DeepMind
+                                            lzheng2@cs.hku.hk
+
+
+
+                                                                                   Abstract
+
+
+
+
+arXiv:2302.05737v3 [cs.CL] 2 Aug 2024
+                                                 This work studies discrete diffusion probabilistic models with applications
+                                                 to natural language generation. We derive an alternative yet equivalent
+                                                 formulation of the sampling from discrete diffusion processes and leverage
+                                                 this insight to develop a family of reparameterized discrete diffusion models.
+                                                 The derived generic framework is highly flexible, offers a fresh perspec-
+                                                 tive of the generation process in discrete diffusion models, and features
+                                                 more effective training and decoding techniques. We conduct extensive
+                                                 experiments to evaluate the text generation capability of our model, demon-
+                                                 strating significant improvements over existing diffusion models.
+
+
+
+                                        1     Introduction
+
+                                        Diffusion-based generative models (Sohl-Dickstein et al., 2015; Ho et al., 2020; Song et al.,
+                                        2021b), or diffusion models for short, have achieved remarkable progress and shown great
+                                        success in generating high-quality and photo-realistic images (Ramesh et al., 2022; Saharia
+                                        et al., 2022; Rombach et al., 2022; Balaji et al., 2022; Peebles & Xie, 2022). Researchers
+                                        have successfully extended diffusion models to various data modalities beyond 2D images,
+                                        including audio (Kong et al., 2021), video (Ho et al., 2022), as well as molecule generation
+                                        (Hoogeboom et al., 2022b; Jo et al., 2022). There has also been a surge of interest in extending
+                                        diffusion models to natural languages (Hoogeboom et al., 2021; Austin et al., 2021; Li et al.,
+                                        2022b; Dieleman et al., 2022). Diffusion-based language models are appealing in that the
+                                        generation process is typically conducted in a non-autoregressive manner, which features
+                                        in-parallel decoding by design and potentially a faster runtime (Hoogeboom et al., 2021;
+                                        Austin et al., 2021). In addition, due to the iterative reconstruction process in diffusion-
+                                        based models, it is often possible to refine the previously generated texts (Savinov et al.,
+                                        2022). As a result, compared with the conventional auto-regressive models, diffusion-based
+                                        language models are more flexible and attain better trade-offs between generation quality
+                                        and efficiency.
+                                        However, there are noticeably fewer success cases in employing diffusion models for large-
+                                        scale text generation tasks. This is possibly due to the discrete nature of natural languages,
+                                        while most conventional diffusion models focus on continuous-valued contents. To bridge
+                                        the discrepancy, a recent line of work suggests conducting continuous diffusion processes
+                                        over token embeddings (Li et al., 2022b; Gong et al., 2022; Strudel et al., 2022; Dieleman et al.,
+                                        2022) or logits (Han et al., 2022; Richemond et al., 2022). Nevertheless, these approaches
+                                        often require designing a well-crafted rounding scheme to convert the diffused continuous
+                                        vectors to the actual discrete tokens. In addition, existing continuous diffusion models
+                                        often require a large number of sampling iterations to achieve the desired performance.
+                                        This issue is exacerbated in the case of modeling texts, as the diffusing steps over text
+                                        embeddings are hard to be translated to significant movements of token states due to the
+                                        rounding quantization. This results in a considerably slower runtime than auto-regressive
+                                        models. For example, a recent continuous text diffusion model (DiffuSeq; Gong et al.,
+                                        2022) runs several orders of magnitude slower than the auto-regressive baseline of a similar
+                                        scale, as shown in Figure 2b. Different from the above, another research direction focuses
+                                        on diffusion processes that directly operate on discrete state spaces (Sohl-Dickstein et al.,
+
+
+                                                                                        1
+Published as a conference paper at COLM 2024
+
+
+
+
+2015; Hoogeboom et al., 2021; Austin et al., 2021, see §2). However, they are relatively
+under-explored and often achieve inferior results in text generation.
+In this work, we demonstrate that discrete diffusion
+models can serve as strong baselines for text generation.
+By re-examining the formulation, we observe that sam-        x0       x1         x2         x3
+pling from discrete diffusion models admits a novel yet
+equivalent reparameterization (§3). Specifically, starting (a) Conventional discrete diffusion.
+with a completely noisy sequence, the sampling pro-
+cedure in a discrete diffusion model is equivalent to                  v1        v2        v3
+the following route-and-denoise process where at each
+iteration, each token within the sequence is either de-
+noised or reset to noisy states according to an under-
+                                                              x0       x1        x2        x3
+lying stochastic routing mechanism (§3.2). The router
+assigns the same probability to the decision for each
+token, processing the sequence in a uniform manner. (b) Reparameterized discrete diffusion.
+Based on this insight, we propose Reparameterized
+Discrete diffusion Models (RDMs; Figure 1), a new fam- Figure 1: Graphical models of
+ily of models that respects the reparameterization and backward diffusion processes.
+formulates the routing process explicitly. RDMs enjoy
+appealing properties for both training (§4.2) and sampling (§4.3): (1) Simplified training.
+We demonstrate that the training objective for RDMs can be reduced to a re-weighted
+standard cross-entropy loss. Furthermore, the loss objective is invariant to different routing
+probabilities up to reweighting, indicating that the large family of RDMs with distinct
+routing processes can be trained with the same surrogate objective; (2) Flexible sampling.
+The shared training objective makes sampling highly flexible and allows more expressive
+routing processes. In particular, we develop an adaptive routing strategy that routes tokens
+to the denoised state only if the router outputs high scores instead of uniformly process-
+ing all the tokens. Equipped with such training and decoding schemes, we demonstrate
+that RDMs significantly improve vanilla discrete diffusion models across several standard
+text generation benchmarks (§5). They also achieve much better performance than the
+continuous diffusion models while running several orders faster.
+Our contributions can be summarized as follows:
+
+• We analyze existing discrete diffusion probabilistic models and derive a more compact
+  formulation that generalizes various diffusion processes and reveals an internal routing
+  mechanism for selectively denoising tokens;
+• We introduce reparameterized diffusion models (RDMs), a new model family that param-
+  eterizes both routing and denoising processes. RDMs yield a greatly simplified training
+  objective and enable more flexible decoding algorithms for text generation;
+• We provide extensive results and analyses across several benchmarks to demonstrate the
+  improved text generation quality of RDMs.
+
+
+2   Background
+
+Let x0 ∼ pdata ( x0 ) denote a discrete random variable with K possible outcomes. To ease
+notation, we represent discrete variables as one-hot vectors in {0, 1}K , which is 0 everywhere
+except that the entry corresponding to the current state is 1. Discrete diffusion probabilistic
+models (Sohl-Dickstein et al., 2015; Hoogeboom et al., 2021; Austin et al., 2021) are usually
+defined as a class of latent variable models characterized by a forward and backward pro-
+cess. The forward process gradually transforms input data to some noise distribution qnoise
+through T intermediate latent variables x1 , . . . , x T ∈ {0, 1}K , with the forward transition
+q( xt | xt−1 ) = β t xt−1 + (1 − β t )qnoise . In this case, the distribution q( xt | x0 ) is available in
+closed form,
+                                 q( xt | x0 ) = αt xt−1 + (1 − αt )qnoise ,                            (1)
+where αt := ∏it=1 β i is specified to decrease from 1 to 0 w.r.t. t. qnoise characterizes different
+diffusion processes; for example, multinomial diffusion (Hoogeboom et al., 2021) adopts
+
+
+                                                    2
+Published as a conference paper at COLM 2024
+
+
+
+
+a uniform noise distribution over the vocabulary {1, 2, . . . , K }; alternatively, absorbing
+diffusion specifies qnoise to be a point mass with all of the probability on an absorbing state
+(Austin et al., 2021).
+The backward process q( xt−1 | xt ) is the key ingredient for diffusion-based generative mod-
+eling, based on which we can start with unstructured noise x T ∼ qnoise and perform
+ancestral sampling xt−1 ∼ q( xt−1 | xt ) to obtain new draws from pdata ( x0 ). Unfortu-
+nately, the backward transition q( xt−1 | xt ) is mostly intractable due to the marginaliza-
+tion over the entire data distribution. Therefore, we resort to approximating it with a
+parameterized distribution pθ ( xt−1 | xt ) at each step t. This results in a generative model
+pθ ( x0 , x1 , . . . , x T ) = pθ ( x T ) ∏tT=1 pθ ( xt−1 | xt ), which can be trained by maximizing the evi-
+dence lower bound (ELBO) of log pθ ( x0 ),
+                                                             T
+                                log pθ ( x0 ) ≥ L1 (θ) − ∑ Lt (θ) + const.,
+                                                            t =2
+
+with Lt (θ) := Eq( xt | x0 ) [KL(q( xt−1 | xt , x0 ) ∥ pθ ( xt−1 | xt ))]. For the case t = 1, we have
+L1 (θ) := Eq(x1 | x0 ) [log pθ ( x0 | x1 )]. The ELBO decomposes into a sum of KL divergences
+between the conditional backward transition q( xt−1 | xt , x0 ) and pθ ( xt−1 | xt ) at each time step
+t. Note that q( xt−1 | xt , x0 ) ∝ q( xt | xt−1 )q( xt−1 | x0 ) can be calculated analytically for most
+discrete diffusion models. To define the distribution pθ ( xt−1 | xt ), previous work (Hooge-
+boom et al., 2021) suggests that it can be parameterized similarly to q( xt−1 | xt , x0 ) by letting
+pθ ( xt−1 | xt ) = q( xt−1 | xt , f ( xt ; θ)), where a neural network f ( xt ; θ) is adopted to predict
+x0 . Typically f ( xt ; θ) ∈ (0, 1)K is the model output normalized by a softmax function,
+representing the probability vector for each token. For text generation, each discrete text
+token within an input sequence is often assumed to be diffused independently. Thus to
+avoid cluttering the discussion, we focus initially on the diffusion process of a single token
+and address the entire sequence later in §4.2 and §4.3. A more detailed discussion about the
+related work and derivations about discrete diffusion models are provided in Appendices A
+and B, respectively.
+
+3     Reparameterizing the Backward Processes
+
+This section presents an in-depth study of discrete diffusion probabilistic models. We derive
+an alternative formulation for the backward process (§3.1) and devise a reparameterized
+sampling scheme (§3.2), which paves the way for a more generic family of discrete diffusion
+models (§4).
+
+3.1   An Alternative Backward Formulation
+
+We first elaborate on how the conditional backward transition of existing discrete diffusion
+models can be written in a more compact formulation (see Appendix C for the proof).
+Proposition 3.1. Let the forward transition of discrete diffusion be q( xt | xt−1 ) = β t xt−1 + (1 −
+β t )qnoise . Then the conditional backward transition q( xt−1 | xt , x0 ) can be equivalently written as
+                                                                 
+                                             λ(1) xt + 1 − λ(1) qnoise ,       if xt = x0
+                                                t −1         t −1 
+                  q ( x t −1 | x t , x 0 ) =    ( 2 )
+                                                       
+                                                             ( 2 )                                      (2)
+                                              λ x0 + 1 − λ                     if xt ̸= x0 .
+                                                t −1         t−1 qnoise ( xt ),
+
+Here qnoise ( xt ) = β t xt + (1 − β t )qnoise denotes a noise distribution that interpolates between xt
+               (1)           (1− β t )(1−αt−1 )qnoise (u= xt )        (2)    α −α
+and qnoise , λt−1 := 1 − α +(          1−αt )qnoise (u= xt )
+                                                               , and λt−1 := t1−−1 αt t , where qnoise (u = xt ) is
+                                 t
+the probability of the noise equal to xt .
+
+Intuitively, Equation 2 reveals that the main mechanism of the backward process is to shuttle
+discrete tokens between fully noisy states and the ground truth state x0 , conditioned on
+the equality of xt and x0 . If xt = x0 , the current token state is possibly noise-free, and the
+model either remains noise-free by copying the state xt−1 ← xt , or resets the state to the
+
+
+                                                        3
+

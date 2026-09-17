@@ -1,0 +1,185 @@
+                                                            Dream 7B: Diffusion Large Language Models
+                                                  Jiacheng Ye1∗ Zhihui Xie1∗ Lin Zheng1∗ Jiahui Gao2∗ Zirui Wu1
+                                                              Xin Jiang2 Zhenguo Li2 Lingpeng Kong1
+                                                          1
+                                                            The University of Hong Kong 2 Huawei Noah’s Ark Lab
+                                                                     DreamLM/Dream           Dream-7B
+                                                                                                      April 2, 2025
+
+
+
+
+arXiv:2508.15487v1 [cs.CL] 21 Aug 2025
+                                                                                                            Abstract
+                                                      We introduce Dream 7B, the most powerful open diffusion large language model to date. Unlike
+                                                  autoregressive (AR) models that generate tokens sequentially, Dream 7B employs discrete diffusion
+                                                  modeling to refine sequences in parallel through iterative denoising. Our model consistently
+                                                  outperforms existing diffusion language models on general, mathematical, and coding tasks. Dream
+                                                  7B demonstrates superior planning abilities and inference flexibility, including arbitrary-order
+                                                  generation, infilling capabilities, and tunable quality-speed trade-offs. These results are achieved
+                                                  through simple yet effective training techniques, including AR-based LLM initialization and
+                                                  context-adaptive token-level noise rescheduling. We release both Dream-Base and Dream-Instruct
+                                                  to facilitate further research in diffusion-based language modeling.
+
+
+                                                                      Dream 7B (Diffusion)      LLaDA 8B (Diffusion)    Qwen2.5 7B (AR)      LLaMA 3 8B (AR)
+                                          100
+
+
+
+                                             75
+
+
+
+                                             50
+
+
+
+                                             25
+
+
+
+                                              0
+                                                     MMLU     ARC-C         RACE        GSM8K        MATH        GPQA   Humaneval     MBPP     Countdown       Sudoku   Trip planning
+
+
+
+
+                                         Figure 1: Performance comparison of diffusion and autoregressive language models on various tasks.
+
+
+
+                                         1        Introduction
+                                         The rapid advancement of large language models (LLMs) has fundamentally transformed artificial
+                                         intelligence, driving breakthroughs across diverse applications and industries. The current landscape
+                                         is dominated by autoregressive (AR) models that generate text through sequential left-to-right token
+                                         prediction, with virtually all leading systems including GPT-4 (OpenAI et al., 2024) and DeepSeek
+                                         R1 (Guo et al., 2025). While these models have demonstrated remarkable capabilities, a fundamental
+                                         question emerges: What architectural paradigms might define the next generation of LLMs? This
+                                         question becomes increasingly important as AR models exhibit inherent limitations in complex reasoning,
+                                         long-term planning, and maintaining coherence across extended contexts (Bubeck et al., 2023; Dziri
+                                         et al., 2023; Bachmann and Nagarajan, 2024; Ye et al., 2025a). These limitations are particularly crucial
+                                             ∗ Equal Contribution
+
+
+
+
+                                                                                                                 1
+for emerging applications such as embodied AI, autonomous agents, and long-horizon decision-making
+systems, where the ability to reason holistically about entire sequences rather than incrementally
+becomes paramount.
+    Discrete diffusion models (DMs) have gained attention as a promising alternative for sequence
+generation since their introduction to the text domain (Austin et al., 2021a; Hoogeboom et al., 2021;
+Campbell et al., 2022). Rather than building text token by token from left to right, diffusion models
+begin with completely corrupted sequences and gradually denoise them through multiple refinement
+steps, enabling bidirectional context integration and more flexible generation patterns. This architectural
+shift unlocks several theoretical advantages that directly address autoregressive limitations. The parallel
+nature of diffusion enables richer contextual modeling by incorporating information from all positions
+simultaneously, potentially leading to more coherent and globally consistent outputs (Li et al., 2022).
+Furthermore, the iterative refinement process naturally supports controllable generation (Gulrajani
+and Hashimoto, 2023b; Li et al., 2022) and provides flexible quality-speed trade-offs through adjustable
+inference steps, offering new dimensions for optimization for test-time scaling (Snell et al., 2024;
+Muennighoff et al., 2025; Geiping et al., 2025) that complement existing techniques like long-thought
+chain-of-thought reasoning (Jaech et al., 2024; Guo et al., 2025).
+    Recent developments have begun to demonstrate the practical viability of scaled diffusion language
+models. Works such as DiffuLLaMA (Gong et al., 2025), LLaDA (Nie et al., 2025b) have success-
+fully scaled discrete diffusion to billion-parameter regimes. While Mercury Coder (Inception Labs,
+2025), as a commercial implementation, has demonstrated remarkable inference efficiency in code
+generation. This rapid progress, combined with the inherent architectural advantages of diffusion
+language modeling, positions these models as a promising direction for overcoming the fundamental
+limitations of autoregressive approaches. However, significant gaps remain in achieving performance
+parity with state-of-the-art autoregressive models like Qwen2.5 (Qwen et al., 2025) across various
+general tasks (Clark et al., 2018; Hendrycks et al., 2020).
+    In this work, we present Dream 7B, a 7-billion parameter diffusion language model that bridges
+this performance gap while demonstrating unique capabilities inherent to the diffusion paradigm.
+We introduce a comprehensive training framework that leverages AR-based LLM initialization and
+context-adaptive noise scheduling to scale diffusion language models. Through extensive evaluation,
+we establish that diffusion models can match AR-based LLM performance on general language tasks
+while providing distinct advantages in planning-intensive scenarios and offering unprecedented inference
+flexibility through arbitrary-order generation and dynamic quality-speed optimization. We release both
+Dream-Base and Dream-Instruct to facilitate further research in this promising direction.
+
+      Takeaways
+
+       • We release Dream 7B, which consistently outperforms existing diffusion language models
+         by substantial margins across diverse benchmarks.
+       • Dream 7B achieves competitive performance with Qwen 2.5 on standard benchmarks
+         (general language understanding, mathematical reasoning, and code generation) while
+         exhibiting superior planning abilities and novel inference flexibility features that naturally
+         emerge from the diffusion modeling paradigm.
+
+
+
+2     Related Work
+2.1    Diffusion Models for Text
+Diffusion models were originally developed for continuous domains like image generation (Song et al.,
+2021; Ho et al., 2020). Building on their remarkable success, a number of works have extended diffusion
+techniques to text generation tasks by modeling text in a continuous embedding space, building
+continuous diffusion language models (Li et al., 2022; Gong et al., 2023b,a; Dieleman et al., 2022).
+Among these approaches, Lin et al. (2023) demonstrated the feasibility of applying diffusion models
+within a pre-training and fine-tuning framework on a small-scale transformer.
+    To fit the discrete nature of text, Austin et al. (2021a); Hoogeboom et al. (2021); Campbell et al.
+(2022) introduced discrete diffusion, which operates on the discrete vocabulary space, establishing the
+
+
+                                                    2
+foundation for discrete diffusion methods. In this formulation, diffusion forward steps progressively
+with either [MASK] tokens (leading to an absorbing state) or random tokens (resulting in a uniform
+state), and the reverse process reconstructs the original text from these noised sequences. Building
+on this foundation, several studies have improved the training objectives for discrete diffusion (Zheng
+et al., 2024b; Lou et al., 2024; Shi et al., 2024; Ou et al., 2025; Zhao et al., 2024; Sahoo et al., 2024).
+Besides, He et al. (2023); Ye et al. (2025c) have shown benefits by initializing discrete diffusion models
+with pre-trained masked language models (MLMs, e.g., BERT; Devlin et al. 2019). Recent studies have
+highlighted diffusion language models’ advantages for complex reasoning and planning tasks (Ye et al.,
+2024, 2025a,b). Moreover, combining diffusion and autoregressive methods through block generation has
+emerged as a promising approach, demonstrating a flexible trade-off between parallelism and sequential
+coherence (Ye et al., 2024; Arriola et al., 2025).
+
+2.2    Diffusion Large Language Models
+Gulrajani and Hashimoto (2023a) analyzed the scaling laws for continuous diffusion language mod-
+els, highlighting that continuous diffusion models require substantially longer training compared to
+autoregressive (AR) counterparts for optimal computational efficiency. In the discrete domain, Lou
+et al. (2024) showed that masked diffusion models (MDMs) could achieve perplexities comparable
+to or exceeding GPT-2-level AR models. Encouraged by these results, recent efforts have scaled
+diffusion language models to billions of parameters. Nie et al. (2025a) demonstrated the applicability
+of 1.1B-scale MDMs in language tasks such as question answering. Instead of training from scratch,
+Gong et al. (2025) proposed adapting existing AR language models (GPT-2 and LLaMA, from 127M
+to 7B parameters) into diffusion-based counterparts termed DiffuGPT and DiffuLLaMA. Concurrently,
+Nie et al. (2025b) presented LLaDA, an 8B-parameter diffusion language model trained from scratch,
+which achieved performance competitive with LLaMA3-8B (Grattafiori et al., 2024). Furthermore,
+Mercury Coder (Inception Labs, 2025) has recently shown commercial applicability and efficiency in
+code generation tasks. Overall, our work builds upon the masked diffusion paradigm and introduces
+new training techniques to push the performance further, highlighting the potential of diffusion-based
+models as an alternative to autoregressive LLMs.
+
+
+3     Preliminary
+3.1    Auto-regressive Modeling
+Consider a sequence x := (x1 , . . . , xN ) of length N sampled from a data distribution q(x). A fundamental
+approach in sequence modeling decomposes the joint probability of tokens into a product of conditional
+probabilities (Jelinek, 1980; Bengio et al., 2000):
+                                                    N
+                                                    Y
+                                pθ (x) = pθ (x1 )         pθ (xn | x1:n−1 ),                             (1)
+                                                    n=2
+                                                    |          {z         }
+                                              progressive left-context prediction
+
+
+where θ represents the model parameters and x1:n−1 := x1 , . . . , xn−1 denotes the preceding tokens.
+
+3.2    Discrete Diffusion Modeling
+Discrete diffusion models (Sohl-Dickstein et al., 2015; Hoogeboom et al., 2021; Austin et al., 2021a)
+are a class of latent variable models characterized by a forward noising process and a learned reverse
+denoising process. Let xt denote theQT noised sequence at timestep t and the [MASK] noise is employed.
+The forward process q(x1:T |x0 ) = t=1 q(xt |xt−1 ) progressively corrupts the original data x0 := x into
+a sequence of increasingly noisy tokens (replaced with [MASK] tokens) x1:T := x1 , . . . , xT . The forward
+process continues until the sequence is fully denoised at t = T . For t ∈ (0, T ), the sequence xt is
+partially noised using a noise schedule αt (where for each token the probability of remaining unmasked
+is αt ). The backward process learns to gradually denoise the masked sequence back to the original data
+distribution by iteratively predicting masked tokens as t moves from T to 0. This denoising process can
+
+
+
+                                                        3
+

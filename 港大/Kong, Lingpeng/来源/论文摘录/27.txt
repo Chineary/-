@@ -1,0 +1,180 @@
+                    P RO R EASON: Multi-Modal Proactive Reasoning
+                         with Decoupled Eyesight and Wisdom
+                   Jingqi Zhou♡ , Sheng Wang♡† , Jingwei Dong♡ , Kai Liu♡ ,
+              Lei Li♡ , Jiahui Gao♡ , Jiyue Jiang♠ , Lingpeng Kong♡ , Chuan Wu♡†
+            ♡
+              The University of Hong Kong, ♠ The Chinese University of Hong Kong,
+               {u3011211, u3009618, u3013005, u3638070}@connect.hku.hk,
+                       nlp.lilei@gmail.com, sumiler@connect.hku.hk,
+                     jiangjy@link.cuhk.edu.hk, {lpk, cwu}@cs.hku.hk
+
+                      Abstract                              2024; Team et al., 2023; Jiang et al., 2023) have
+    Large vision-language models (LVLMs) have               experienced explosive growth in their capabilities,
+    witnessed significant progress on visual under-         driving significant advancements across various
+    standing tasks. However, they often prioritize          fields (Shao et al., 2023; Guo et al., 2024; Shao
+    language knowledge over image information on            et al., 2024). This progress has also sparked
+    visual reasoning tasks, incurring performance           interest in developing large vision-language
+    degradation. To tackle this issue, we first iden-       models (LVLMs) (Xiaomi and Team, 2025;
+    tify the drawbacks of existing solutions (i.e.,
+                                                            Bai et al., 2025; Chen et al., 2024b; Bai et al.,
+    limited multi-modal reasoning capacities, and
+    insufficient and irrelevant visual descriptions).       2023), which, like LLaVA (Li et al., 2024b), have
+    We then decompose visual reasoning process              achieved remarkable performance in multi-modal
+    into two stages: proactive visual perception            understanding tasks. However, state-of-the-art
+    (i.e., eyesight) and textual reasoning (i.e., wis-      (SOTA) LVLMs still struggle to handle visual un-
+    dom), and introduce a novel visual reasoning            derstanding with textual reasoning simultaneously
+    framework named P RO R EASON. This frame-               due to inherent modality differences. For example,
+    work features decoupled vision-reasoning ca-
+                                                            Ghosh et al. (2024) demonstrate that LVLMs often
+    pabilities and multi-run proactive perception.
+    Briefly, given a multi-modal question, P RO R E -       rely more on their prior language knowledge,
+    ASON iterates proactive information collection          neglecting visual information in multi-modal
+    and reasoning until the answer can be con-              reasoning tasks, such as visual chart understanding
+    cluded with necessary and sufficient visual de-         and math reasoning, resulting in performance
+    scriptions. Notably, the disassociation of ca-          degradation. Figure 2.b illustrates a typical case
+    pabilities allows seamless integration of ex-           of this issue, where the reasoning process remains
+    isting large language models (LLMs) to com-             irrelevant to the image.
+    pensate for the reasoning deficits of LVLMs.
+                                                               To address the challenges, several visual reason-
+    Our extensive experiments demonstrate that
+    P RO R EASON outperforms existing multi-step            ing frameworks have been proposed. Specifically,
+    reasoning frameworks on various benchmarks              (Ghosh et al., 2024) and (Mitra et al., 2024) con-
+    for both open-source and closed-source mod-             vert visual information in images into textual de-
+    els, with the average performance gain reach-           scriptions to aid LVLMs in reasoning. However,
+    ing 13.2%. Besides, the integration of LLMs             their visual extraction process is not targeted at
+    allows P RO R EASON to produce high-quality vi-         a given question (i.e., question-agnostic), termed
+    sual reasoning data, which empowers P RO R E -
+                                                            as "passive", and omits reasoning mechanisms to
+    ASON -distilled models (i.e., ProReason-VL
+    and ProReason-Q3) to achieve superior per-              infer extra information for better descriptions(i.e.,
+    formance in downstream tasks. Our insights              reasoning-free). These limitations result in irrele-
+    into existing solutions and the decoupled per-          vant or inadequate information, ultimately degrad-
+    spective for feasible integration of LLMs il-           ing performance. Furthermore, these frameworks
+    luminate future research on visual reasoning            are powered by a single LVLM, leading to a reason-
+    techniques, especially LLM-assisted ones. The           ing process that conflates visual understanding with
+    code is available at https://github.com/                textual reasoning abilities, failing to mitigate the
+    lian-tian-mo-zun/Pro_Reason.
+                                                            challenge faced by LVLMs in effectively managing
+1   Introduction                                            both capabilities.
+In recent years, large language models                         To resolve these problems, we propose P RO R E -
+(LLMs) (Yang et al., 2024; Dubey et al.,                    ASON , a multi-modal reasoning framework featur-
+
+                                                         31662
+     Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 31662–31691
+                          November 4-9, 2025 ©2025 Association for Computational Linguistics
+ing decoupled vision-reasoning capabilities. As            • We propose a novel multi-modal reasoning
+illustrated in Figure 1, we decouple multi-modal             framework named P RO R EASON, featuring de-
+reasoning capacity into two sub-tasks: proactive             coupled vision-reasoning and iterative proac-
+visual perception (i.e., eyesight) and textual rea-          tive perception capabilities, effectively miti-
+soning (i.e., wisdom). The former extracts visual            gating the drawbacks of previous methods.
+information in a question-oriented and reasoning-
+                                                           • Extensive experiments consistently highlight
+involved manner, while the latter integrates all in-
+                                                             the significant superiority of P RO R EASON
+formation to draw final conclusions. Specifically,
+                                                             and necessity of each component across mul-
+during the visual perception stage, a Dispatcher
+                                                             tiple visual reasoning tasks and model se-
+first selectively engages a Vision Expert to capture
+                                                             ries, illuminating the great potential of LLM-
+additional visual information, or an Insight Expert
+                                                             assisted LVLM reasoning.
+to derive intermediate inferences. A Referee then
+determines whether sufficient information is gath-         • P RO R EASON-distilled models also exhibits
+ered to proceed to the reasoning stage, where a              remarkable enhancements over vanilla coun-
+Summarizer produces the final answer. Unlike pas-            terparts, showcasing the feasibility of LLM-
+sive methods, all sub-agents operate based on the            assisted LVLM improvement in the future.
+given question and known information, effectively
+avoiding irrelevant information redundancy or in-      2       Preliminary Observations
+sufficiency. Notably, decoupled vision-reasoning
+eliminates the need for LVLMs to handle vision-        Ghosh et al. (2024) demonstrate that the limited
+irrelevant roles (i.e., Dispatcher, Insight Expert,    multimodal reasoning abilities of LVLMs lead to
+Referee, and Summarizer), enabling seamless in-        an overreliance on linguistic priors, thus neglect-
+tegration of existing LLMs with proven strong          ing visual inputs and ultimately degrading their
+reasoning abilities (Chang et al., 2024), thereby      performance. Their Visual Description Grounded
+alleviate the limitations of LVLMs. In addition,       Decoding (VDGD) mitigates visual oversight by
+the high-quality reasoning data generated by LLM-      converting images into comprehensive textual de-
+assisted P RO R EASON can be effectively distilled     scriptions to inform reasoning processes. How-
+into downstream models for inherent performance        ever, such passive visual reasoning techniques
+improvement.                                           suffer insufficient and irrelevant visual infor-
+   Empirically, we evaluate P RO R EASON across        mation. To support this claim, we generate fine-
+multiple challenging visual reasoning benchmarks       grained image captions using GPT-4o-mini1 with
+with both open-source and closed-source models.        the prompt shown in Figure 9. We then incorpo-
+Extensive experiments demonstrate that P RO R E -      rate these captions into the prompts for LVLMs
+ASON exhibits significant advantages in two key        to facilitate the reasoning process. We analyze
+aspects: (1) As a visual reasoning framework,          the performance of this approach on the challeng-
+P RO R EASON achieves consistent and substantial       ing multi-modal MMMU dataset, which requires
+performance improvements across multiple bench-        college-level knowledge and fine-grained reason-
+marks, with the average performance gain reaching      ing, using recent open-source LVLMs listed in Sec-
+13.2%, validating the effectiveness of its decoupled   tion 4.1 As shown in Table 4, while these image
+vision-reasoning architecture and proactive visual     descriptions improve the performance of LVLMs,
+feature extraction mechanism; (2) P RO R EASON         the gains are marginal, consistently amounting to
+effectively integrates existing LLMs to generate       less than 1%. This underscores the limited utility
+high-quality visual reasoning process, empowering      of captions generated by passive methods.
+P RO R EASON-distilled models (i.e., ProReason-VL         For further demonstration, inspired by Liu et al.
+and ProReason-Q3) with superior visual reasoning       (2023c), we use the prompt instructions in Fig-
+capabilities. The above results, coupled with the      ure 8 to instruct GPT-4 to analyze the generated
+ablation study in Section 4.5, demonstrate the sub-    captions along three dimensions: Detail Level,
+stantial advantages of decoupled vision-reasoning,     Question Relevance, and Reasoning Effective Info
+while highlighting the potential of LLM-assisted       Inclusion, measuring the richness of detail, rele-
+LVLM reasoning and distillation strategies.            vance to the given question, and the inclusion of
+   The main contributions of this work are three-          1
+                                                           https://openai.com/index/
+fold:                                                  gpt-4o-mini-advancing-cost-efficient-intelligence
+
+                                                  31663
+information that is essential for reasoning, respec-   ponent. The Referee then evaluates whether the
+tively. Meanwhile, since the reasoning process         information stored in Memory is sufficient to an-
+of GPT-4o-mini on MMMU contains key infor-             swer the original question.
+mation necessary for solving the problems, we             Formally, given an image I and its correspond-
+use it as a reference answer to aid evaluation. As     ing textual question Q, the Dispatcher decides to
+shown in Table 5, the captions for correct responses   consult the Vision Expert or Insight Expert, based
+of Llama3-LLaVA-NeXT-8B receive higher scores          on the analysis of Q and the known information in
+across all three criteria, highlighting the impor-     the Memory (if not empty). The Dispatcher then
+tance of better captions for multi-modal reason-       generates a query q for the chosen expert. If the
+ing. Additionally, all captions score significantly    Vision Expert is selected, it takes the image I and
+lower in the Question Relevance and Reasoning          query q as input, and generates an answer Avision ,
+Effective Info Inclusion dimensions than the De-       which is then stored in the Memory. When the
+tail Level dimension, indicating that while the        Insight Expert is selected, it provides a response
+captions are detailed, they often lack relevance       consisting of the inference process and the final
+to the questions. Figure 2 shows a case where          answer Ainsight based on the query q and known
+Llama3-LLaVA-NeXT-8B utilizes fine-grained cap-        information in the Memory, before only Ainsight is
+tions to solve a question from the MMMU bench-         stored in Memory. The Referee then evaluates the
+mark. As illustrated, although the caption exhaus-     available information in the Memory concerning
+tively describes the image content, it incorrectly     the question Q. If the Memory contains adequate
+describes the wires in the image as octagons, and      information to answer the question Q, the Referee
+misses information about the locations of these        outputs the identifier “SOLVABLE”; otherwise, it
+wires. This information is irrelevant to the tar-      outputs “UNSOLVABLE”. If the Referee’s output
+get question, thus offering minimal assistance to      is SOLVABLE, the workflow precedes to the Tex-
+LVLMs. In summary, our analysis highlights the         tual Reasoning phase. Conversely, if the output
+drawbacks of passive visual reasoning enhance-         is UNSOLVABLE, the above process will be re-
+ment techniques in terms of information insuf-         executed to gather more necessary information.
+ficiency and redundancy, due to their question-           In the Proactive Visual Perception phase, the
+agnostic property.                                     Dispatcher collaborates with the Vision Expert and
+                                                       Insight Expert to achieve question-oriented and
+3   Method                                             reasoning-involved visual information extraction,
+                                                       while the Referee ensures informational complete-
+As depicted in Figure 1 and exemplified in Figure 3,   ness and prevents omissions. These four sub-agents
+P RO R EASON presents an innovative decoupling         work closely together, thereby overcoming the lim-
+of the visual reasoning process into two distinct      itations of passive methods. Notably, the Memory
+phases framed through the lens of LVLM capabil-        component allows P RO R EASON to keep compact
+ities: Proactive Visual Perception (i.e., eyesight)    information, and avoids lengthy reasoning traces
+and Textual Reasoning (i.e., wisdom). The entire       like CoT (Wei et al., 2022) and ReAct (Yao et al.,
+workflow consists of five functionally distinct yet    2022), thereby suffering less from redundant infor-
+inter-cooperative sub-agents, along with a Mem-        mation (for a detailed analysis, refer to Section 4.4
+ory component, facilitating multi-modal reasoning      and Table 3).
+performance.
+                                                       3.2   Textual Reasoning Step
+3.1 Proactive Visual Perception
+                                                       The Textual Reasoning step focuses on integrating
+Proactive Visual Perception is the core of question-   the available information in the Memory, and pro-
+oriented visual information extraction, driven by      viding the final answer to the question Q. This step
+four sub-agents: Dispatcher, Vision Expert, Insight    is mainly powered by a sub-agent called Summa-
+Expert and Referee. The Dispatcher breaks down         rizer. Once the Referee confirms that the Memory
+the original question, selectively directing the Vi-   contains sufficient information to address question
+sion Expert to capture specific visual information,    Q and outputs the SOLVABLE identifier, the Sum-
+or instructing the Insight Expert to analyze known     marizer will be invoked to perform a detailed rea-
+information to derive more. The responses from         soning and generate a final answer based on the
+both experts are stored in a textual Memory com-       question Q and Memory. This final answer is then
+                                                  31664
+

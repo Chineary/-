@@ -1,0 +1,198 @@
+                                              Dream-VL & Dream-VLA: Open Vision-Language and
+                                             Vision-Language-Action Models with Diffusion Language
+                                                               Model Backbone
+                                              Jiacheng Ye1,∗            Shansan Gong1,∗              Jiahui Gao2,†,♢              Junming Fan2
+                                            Shuang Wu2             Wei Bi‡ Haoli Bai2 Lifeng Shang2 Lingpeng Kong1,†
+                                                             1
+                                                                 The University of Hong Kong 2 Huawei Technologies
+                                                       Dream-VL                 Dream-VLA                   DreamLM/Dream-VLX
+
+
+
+
+arXiv:2512.22615v2 [cs.CV] 4 Jan 2026
+                                                                                     December 23, 2025
+
+                                                                                            Abstract
+                                                  While autoregressive Large Vision-Language Models (VLMs) have achieved remarkable success,
+                                              their sequential generation often limits their efficacy in complex visual planning and dynamic
+                                              robotic control. In this work, we investigate the potential of constructing Vision-Language Models
+                                              upon diffusion-based large language models (dLLMs) to overcome these limitations. We introduce
+                                              Dream-VL, an open diffusion-based VLM (dVLM) that achieves state-of-the-art performance
+                                              among previous dVLMs. Dream-VL is comparable to top-tier AR-based VLMs trained on open
+                                              data on various benchmarks but exhibits superior potential when applied to visual planning tasks.
+                                              Building upon Dream-VL, we introduce Dream-VLA, a dLLM-based Vision-Language-Action
+                                              model (dVLA) developed through continuous pre-training on open robotic datasets. We demonstrate
+                                              that the natively bidirectional nature of this diffusion backbone serves as a superior foundation for
+                                              VLA tasks, inherently suited for action chunking and parallel generation, leading to significantly
+                                              faster convergence in downstream fine-tuning. Dream-VLA achieves top-tier performance of 97.2%
+                                              average success rate on LIBERO, 71.4% overall average on SimplerEnv–Bridge, and 60.5% overall
+                                              average on SimplerEnv–Fractal, surpassing leading models such as π0 and GR00T-N1. We also
+                                              validate that dVLMs surpass AR baselines on downstream tasks across different training objectives.
+                                              We release both Dream-VL and Dream-VLA to facilitate further research in the community.
+
+
+
+                                        1     Introduction
+                                        Vision-language models are reshaping AI across diverse domains – from medical diagnosis and scientific
+                                        discovery to autonomous systems and robotic manipulation (Tu et al., 2024; Zhang et al., 2024a,c;
+                                        Zhou et al., 2024b; Driess et al., 2023; Brohan et al., 2023). As these applications grow in complexity, a
+                                        fundamental capability emerges as critical: visual planning – the ability to perceive visual context, reason
+                                        about goals, and formulate coherent action sequences. Whether analyzing multi-step experimental
+                                        procedures in scientific papers, guiding a surgical robot through delicate operations, orchestrating a
+                                        delivery drone’s route, or enabling a home robot to organize a kitchen, success hinges on the capacity
+                                        for sophisticated long-horizon planning.
+                                            Large vision-language models (VLMs) have demonstrated remarkable progress in grounding language
+                                        with visual representations, powering applications from multimodal dialogue to scene understanding.
+                                        Building on these foundations, vision-language-action (VLA) models extend these capabilities to action
+                                        generation, enabling agents to interact with physical and virtual environments. However, current
+                                        VL and VLA models overwhelmingly rely on autoregressive large language models (LLMs) as their
+                                        backbone. This architectural choice presents a fundamental bottleneck: the autoregressive paradigm,
+                                        trained on next-token prediction, struggles with tasks requiring long-horizon planning and global
+                                        reasoning (Bachmann and Nagarajan, 2024; Ye et al., 2025a; Weng et al., 2025). Besides, its sequential
+                                            ∗ Equal contribution † Corresponding author ♢ Project Lead ‡ Independent Researcher
+
+
+
+
+                                                                                                 1
+                                  Text planning    Multimodal           High-level action
+                                                                                                     Low-level action planning
+  Applied    Text reasoning                        reasoning            planning {
+                                                                                       `action`:
+                                                                                                                                 [0.1,
+                                                                                                                                 -0.2,
+                                                                                                                                            Deploy
+ Scenarios   Each box has 6
+             pencils. She buys
+                                                                  ...                     `move`
+                                                                                       `params`: {
+                                                                                                                                 0,
+                                                                                                                                 10º, ...
+             4 boxes, so
+             4*6=24 pencils.
+                                                                                           ...             Chunks = 4            25º,
+                                                                                                                                 -7º,
+                                                                                       }
+                                                                                   }                      (Tokens = 28)          0]
+                                         ...
+
+             Cups are on the table, …                       Cups are on the table, …                                 Get cups and …
+Generation
+                                               …                                                …                                     …
+
+ Backbone         Dream (dLLM)                           Dream-VL (dVLM)                                        Dream-VLA (dVLA)
+
+                                               …                                                …                                     …
+ Diffusion   Cups are [m] the table, …             Vision  Cups are [m] the table, …                        Vision Get cups and …
+                                                                                                            Encoder                                  Empty Action
+                                                   Encoder
+   Input                                                                                                                          Δx | Δy | Δz | Δ⍺ | Δβ | Δγ | G
+
+                                                                                                                                          Robotic Action
+
+
+Figure 1: Overview of the Dream family, with bi-directional masked diffusion modeling. Built on the
+diffusion language model Dream-7B, we introduce Dream-VL, a state-of-the-art diffusion VLM that
+demonstrates strong multimodal understanding, reasoning, and effective long-horizon planning. Building
+further on Dream-VL, we perform VLA pretraining to obtain the first pretrained diffusion-based VLA
+model (dVLA), which serves as a strong backbone for downstream VLA tasks.
+
+
+generation nature suffers from error accumulation during inference, further hindering global reasoning
+capabilities (Zhang et al., 2023a; Rohatgi et al., 2025).
+    Diffusion large language models (dLLMs) offer a compelling alternative to address these chal-
+lenges (Inception Labs, 2025; Nie et al., 2025; Ye et al., 2025c; DeepMind, 2025). Unlike autoregressive
+models that generate tokens sequentially, diffusion models learn to iteratively refine noisy sequences
+into coherent outputs. This iterative refinement process naturally encourages global coherence, making
+dLLMs particularly well-suited for planning tasks where long-range dependencies and goal-oriented
+reasoning are critical (Ye et al., 2025c; Zhang et al., 2025a). Moreover, the parallel decoding capability
+of diffusion language models offers computational advantages during inference (Inception Labs, 2025;
+DeepMind, 2025; Wang et al., 2025b; Wu et al., 2025b). Given these promising characteristics in
+language modeling, a natural question arises: can these advantages translate to vision-language tasks,
+where planning and coherent reasoning are equally critical?
+    To explore this potential, we build Dream-VL, a diffusion LLM-based vision-language model
+(dVLM) for general visual understanding, and Dream-VLA, a diffusion LLM-based vision-language-
+action model (dVLA) for robotic manipulation. We conduct comprehensive experiments across visual
+understanding, visual planning, and embodied action benchmarks. Our results show that:
+    • Dream-VL achieves comparable performance to top-tier autoregressive VLMs trained on open data,
+      and significantly surpasses existing dVLMs such as LLaDA-V (You et al., 2025) and Dimple (Yu
+      et al., 2025). Notably, Dream-VL shows superior performance over strong AR baselines on visual
+      planning tasks (e.g., LIBERO (Liu et al., 2023a), ViPlan (Merler et al., 2025)) that require
+      long-horizon planning.
+    • Built upon Dream-VL, Dream-VLA establishes top-tier performance on both the evaluated
+      SimplerEnv (Li et al., 2024e) and LIBERO (Liu et al., 2023a) benchmark, surpassing top VLA
+      models such as π0 (Black et al., 2024a) and GR00T-N1 (Bjorck et al., 2025). Notably, Dream-VLA
+      consistently outperforms the strong AR-based baseline OpenVLA-OFT (Kim et al., 2025) across
+      diverse finetuning objectives, demonstrating that a natively bidirectional dVLM can serve as a
+      superior backbone for VLA tasks.
+We attribute these strong results to three inherent advantages of diffusion-based VLMs over autore-
+gressive models: (1) Bidirectional attention enables richer information fusion between visual and text
+features; (2) The text planning capability in dLLMs enhances visual planning in VLMs by generating
+global plans aligned with predefined goals; (3) Diffusion VLMs naturally support action chunking and
+parallel generation without architectural modification, which are crucial for low-level action prediction
+in VLA models and enable faster convergence during downstream fine-tuning.
+
+
+
+
+                                                                        2
+2    Related Work
+Diffusion Language Model Diffusion models are now considered a promising alternative to tradi-
+tional autoregressive generation methods, as they support flexible generation orders and work through
+iterative refinement. The idea of using discrete diffusion for language modeling was first explored by
+Austin et al. (2021); Hoogeboom et al. (2021), which provided an initial framework for text modeling.
+Since then, various studies have been proposed to improve text diffusion models (Campbell et al., 2022;
+Li et al., 2022; Chen et al., 2023; Gong et al., 2023; Zheng et al., 2023; Sahoo et al., 2024; Shi et al.,
+2024; Ou et al., 2025; Xu et al., 2025b; Liu et al., 2025b; Zhang et al., 2025b; Zheng et al., 2025a;
+Pynadath et al., 2025; Havasi et al., 2025; Yang et al., 2025a; Wu et al., 2025c; Kang et al., 2025;
+Campbell et al., 2025). Larger models have been trained from scratch, such as SEDD (Lou et al., 2024),
+Plaid (Gulrajani and Hashimoto, 2023), MDGA (Ni et al., 2025) and LLaDA (Nie et al., 2025; Zhu
+et al., 2025a,b). Meanwhile, methods that adapt pretrained autoregressive models for diffusion, such as
+DiffuLLaMA (Gong et al., 2025a) and Dream (Ye et al., 2025c), have led to significant reductions in
+the training costs of dLLMs. DLLMs have exhibited promising capabilities in planning (Zhang et al.,
+2023b; Ye et al., 2024, 2025a,b) and code generation (Khanna et al., 2025; Gong et al., 2025b; Xie et al.,
+2025). Recently, DeepMind (2025); Arriola et al. (2025); Ma et al. (2025a); Wang et al. (2025b); Cheng
+et al. (2025); Wu et al. (2025b,a); Gat et al. (2025); Liu et al. (2025a) have further advanced dLLMs by
+improving generation quality and inference efficiency.
+
+Vision-Language Model (VLM) Autoregressive vision-language models have achieved remarkable
+success across various multimodal tasks. Pioneering works (Alayrac et al., 2022; Li et al., 2023b; Liu
+et al., 2023b; Dai et al., 2023; Liu et al., 2024a,b; Chen et al., 2024b,c; Dai et al., 2024; Wang et al.,
+2024c; OpenAI, 2024; Bai et al., 2025b; Guo et al., 2025) have demonstrated strong capabilities in
+visual understanding, reasoning, and instruction following by aligning pretrained vision encoders with
+large language models. Extending dLLMs to vision-language tasks remains an emerging research area.
+LaViDA (Li et al., 2025c) explores a discrete diffusion transformer with multi-view image encoding
+and masked-denoising objectives. LLaDA-V (You et al., 2025) applies masked diffusion with visual
+instruction tuning, which supports parallel decoding and controllable infilling. MMaDA (Yang et al.,
+2025b) proposes a unified diffusion transformer that aims to align reasoning between text and vision
+through chain-of-thought supervision and reinforcement learning. Dimple (Yu et al., 2025) addresses the
+training instability of discrete diffusion by employing a hybrid autoregressive-then-diffusion paradigm.
+Lavida-O (Li et al., 2025b) introduces a unified masked diffusion model for multimodal understanding
+and generation, incorporates planning and iterative self-reflection in image generation and editing tasks.
+LLaDA-MedV (Dong et al., 2025) utilizes masked diffusion in medical applications, integrating imaging
+and textual data for diagnosis.
+
+Vision-Language-Action Model (VLA) Building a generalist robotic policy has long been a
+central goal in embodied AI. Driven by the rapid advances in autoregressive Vision-Language, researchers
+have increasingly focused on Vision-Language-Action (VLA) models to leverage strong multimodal
+generalization for robotic control (Driess et al., 2023; Brohan et al., 2023; Black et al., 2024b; Kim et al.,
+2024; Li et al., 2024c; Wen et al., 2025a; Team et al., 2025; Bjorck et al., 2025). Pioneering work such
+as RT-2 (Brohan et al., 2023) established the VLA paradigm by jointly fine-tuning VLMs on web-scale
+data and low-level robot demonstrations. OpenVLA (Kim et al., 2024) is further introduced as the first
+open-source VLA model. To address the computational demands of these models, subsequent work has
+introduced token compression (Pertsch et al., 2025) and action chunking (Zhao et al., 2023; Kim et al.,
+2025), enabling higher-frequency control and faster adaptation. Build upon diffusion models (Chi et al.,
+2023; Pearce et al.; Reuss et al., 2023) for action prediction, a VLM with an additional action expert
+architecture has also been actively explored to predict coherent continuous actions (Li et al., 2024c;
+Black et al., 2024a; Wen et al., 2025a; Bjorck et al., 2025; Shukor et al., 2025; Zhang et al., 2025c).
+While standard VLAs rely on autoregressive modeling, discrete diffusion VLA has also been recently
+studied for robotic control (Liang et al., 2025; Wen et al., 2025b) and autonomous driving (Cui et al.,
+2025; Li et al., 2025a; Ma et al., 2025b; Xu et al., 2025a). DiscreteDiffusionVLA (Liang et al., 2025)
+and LLaDA-VLA (Wen et al., 2025b) have introduced discrete masked diffusion as an alternative by
+directly finetuning specific robotic tasks on an autoregressive dLLM backbone (Liang et al., 2025) or
+dVLM backbone (Wen et al., 2025b) without robotic pretraining.
+
+
+                                                      3
+

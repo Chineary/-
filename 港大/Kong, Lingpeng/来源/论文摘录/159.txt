@@ -1,0 +1,159 @@
+                                            Reasoning Path Divergence: A New Metric and Curation
+                                                  Strategy to Unlock LLM Diverse Thinking
+
+                                              Feng Ju1,2 , Zeyu Qin1 , Rui Min1 , Zhitao He1 , Lingpeng Kong3 , Yi R. (May) Fung1
+                                                             1 The Hong Kong University of Science and Technology
+                                                                  2 University of Science and Technology of China
+                                                                           3 The University of Hong Kong
+
+
+
+
+arXiv:2510.26122v2 [cs.CL] 4 Jan 2026
+                                           While Test-Time Scaling (TTS) has proven effective in improving the reasoning ability
+                                           of large language models (LLMs), low diversity in model outputs often becomes a
+                                           bottleneck; this is partly caused by the common one problem, one solution (1P1S) training
+                                           practice, which provides a single canonical answer and can push models toward a nar-
+                                           row set of reasoning paths. This homogenization not only limits sampling effectiveness
+                                           but also restricts the exploration space for subsequent Reinforcement Learning (RL)
+                                           stages. To address this, we propose a one problem, multiple solutions (1PNS) training
+                                           paradigm that exposes the model to a variety of valid reasoning trajectories and thus
+                                           increases inference diversity. A core challenge for 1PNS is reliably measuring semantic
+                                           differences between multi-step chains of thought, so we introduce Reasoning Path Diver-
+                                           gence (RPD), a step-level metric that aligns and scores Long Chain-of-Thought solutions
+                                           to capture differences in intermediate reasoning. Using RPD, we curate maximally
+                                           diverse solution sets per problem and fine-tune Qwen3-4B-Base. Experiments show that
+                                           RPD-selected training yields more varied outputs and higher pass@k, with an average
+                                           +2.80% gain in pass@16 over a strong 1P1S baseline and a +4.99% gain on AIME24,
+                                           demonstrating that 1PNS further amplifies the effectiveness of TTS.
+
+                                           Keywords: Large Language Models, Reasoning Diversity, Data Curation
+                                           Code: https://github.com/fengjujf/Reasoning-Path-Divergence
+                                           Correspondence: Yi R. (May) Fung
+
+
+
+                                        1. Introduction
+                                        Large Language Models (LLMs) (Achiam et al., 2023; Chowdhery et al., 2023; Touvron et al.,
+                                        2023) have made significant progress on tasks requiring complex reasoning that were previously
+                                        challenging for automated systems, including competition-level mathematics and theoretical
+                                        physics (Huang et al., 2025a; Wang et al., 2025a). Chain-of-Thought (CoT) prompting (Nye
+                                        et al., 2021; Wei et al., 2022) plays an important role in that progress by eliciting step-by-step
+                                        reasoning from language models. Built on CoT, Test-Time Scaling (TTS) methods, which have
+                                        been widely adopted in recent research, further achieve substantial improvements on complex
+                                        reasoning tasks, by generating multiple reasoning trajectories at inference time and selecting
+
+                                                                                        1
+among them through techniques such as Best-of-N sampling (Brown et al., 2024; Song et al.,
+2024) and self-consistency (Wang et al., 2022, 2025b). However, the effectiveness of TTS methods
+critically depends on the diversity of generated reasoning paths (Chen et al., 2025; Chow et al.,
+2025; Dang et al., 2025; Yao et al., 2025). If the model’s reasoning paths show minimal variation,
+the gains from additional sampling remain limited.
+    This diversity bottleneck is partly a consequence of common training practices for reasoning:
+datasets typically pair each problem with a single solution, which, by habitually exposing the
+model to one pathway, effectively teaches it to converge on a single “correct” way of reasoning
+rather than to explore the space of valid alternatives. Consequently, models tend to adopt that
+canonical trajectory and seldom produce alternative reasoning paths. Such "mode collapse" in
+the SFT phase is particularly detrimental when the model serves as the initial policy for RL.
+If the starting policy is overfit to a single, homogenous solution path, the agent’s exploration
+during RL is severely handicapped, often confining it to narrow, suboptimal local optima (Chu
+et al., 2025; Li et al., 2025b). Thus, establishing a diverse solution space in SFT is not merely an
+isolated improvement but a prerequisite for robust RL. Several works have sought to counteract
+this by modifying objectives or introducing diversity-aware losses (Chen et al., 2025; Li et al.,
+2025b; Yao et al., 2025), yet it is still unclear how the diversity in the training examples maps
+onto the diversity of output at test time. That uncertainty motivates our core question:
+
+Can a one problem, multiple solutions training paradigm effectively mitigate output homogenization and
+                                      improve TTS performance?
+
+    In this work, we explore a pragmatic approach to address this diversity bottleneck: training
+models on datasets where each problem is paired with multiple distinct solutions. To build
+such datasets, we first need to solve a key challenge: how to reliably measure semantic di-
+versity between complex reasoning paths. Common approaches, such as computing cosine
+similarity on embeddings (Reimers and Gurevych, 2019) of the entire solution text, fail for
+Long Chain-of-Thought solutions because they conflate high-level strategic differences with
+low-level computational details and narrative style. To tackle this issue, we introduce Reasoning
+Path Divergence (RPD), a new diversity metric that uses large language models to summarize
+solutions into their core logical steps and then applies an asymmetric matching process to mea-
+sure semantic overlap. This approach allows RPD to tell true strategic novelty from superficial
+variations, forming a basis for systematically curating diverse data.
+    Using this metric, we chose the OpenThought3 dataset (Guha et al., 2025) for our experiments.
+It contains 53,125 math problems, each with 16 long chain-of-thought answers. These features
+make the dataset a well-suited testbed for our experiments on diversity-driven data selection.
+   Our main contributions in this work are:
+
+  • A Novel Metric and Diversity Driven Curation Strategy. We first propose and validate
+    Reasoning Path Divergence (RPD), a novel metric for quantifying the semantic diversity
+    between Long-CoT solutions. Building on this metric, we propose a novel data curation
+    pipeline. This pipeline constructs a high-quality one problem, multiple solutions training set
+    by selecting the most semantically distinct solutions for each problem.
+  • Demonstrated Gains in Diversity and Performance. Models fine-tuned on our multi-
+    solution (1PNS) dataset achieve an average improvement of 2.80% in 𝑝𝑎𝑠𝑠@16 performance
+    across challenging math benchmarks, highlighted by a peak gain of 4.99% on the AIME24
+    benchmark, while simultaneously exhibiting higher output diversity as measured by our
+
+
+                                                  2
+      Problem: Find the constant term of the polynomial
+
+              Solution A: Full Expansion                                                           Solution B: Constant Term Shortcut
+
+               Brute-force       Expand All Terms                                                       Efficient       Isolate Constants
+
+
+
+                                                           LLM (Reasoning Step Extraction)
+
+                                                                       Match     0.21
+   Expand polynomial products via distributive property.                                     Isolate constant terms from each polynomial.
+                                                                      Mismatch 0.35
+   Sum expanded polynomials and combine like terms.
+                                                           E                            E    Multiply constants to find each product's term.
+                                                                                 0.37
+                                                                                              Sum all resulting constant terms together.
+         Extract the constant term from the sum.                                 0.32          State the final aggregated constant term.
+
+                                                                                                          Semantic Distance:
+                                                                       Average                                  0.259
+     E     Embedding Model
+                                                                                                         Percentile Rank 86.9%
+
+
+Figure 1 | The workflow of our Reasoning Path Divergence (RPD) metric. Given two solutions
+(A and B), an LLM first decomposes them into step-level summaries. An asymmetric matching
+is then performed: each step in the shorter summary (A) is matched to its semantically closest
+counterpart in the longer summary (B) based on embedding cosine distance. The final RPD
+score is the average of these minimum distances. Detailed examples with analysis is provided
+in Appendix C.
+
+
+     RPD metric. These gains confirm that our method alleviates the diversity bottleneck in
+     Test-Time Scaling, boosting its overall performance.
+
+
+2. Related Work
+Test-Time Scaling. A significant branch of Test-Time Scaling (TTS) focuses on improving
+performance by generating and aggregating multiple candidate solutions, which can be broadly
+divided into selection and fusion strategies. Selection-based methods choose the single best
+answer from a candidate pool. For example, some select the candidate with the highest verifier
+score, as in Best-of-N (Brown et al., 2024; Song et al., 2024), while others pick the most frequent
+answer via Majority Voting (Wang et al., 2022). To improve efficiency, certain studies filter
+candidates before final selection or voting (Chen et al., 2024; Munkhbat et al., 2025; Wu et al.,
+2025). Fusion-based methods, by contrast, merge multiple answers. This can be done by
+prompting an LLM to summarize the candidates (Jiang et al., 2023; Li et al., 2025a,c) or self-
+correct (He et al., 2025). A key challenge for these methods is low output diversity. Standard
+training often causes models to overfit to a single, canonical reasoning path, which limits the
+effectiveness of TTS.
+
+
+LLM Generation Diversity. A large body of work confirms that standard supervised fine-
+tuning is detrimental to generation diversity (Chen et al., 2025; Li et al., 2025b; O’Mahony et al.,
+2024), prompting explorations into various training-phase optimizations to mitigate this issue,
+especially as recent studies establish a strong positive correlation between a model’s solution
+diversity and its reasoning potential (Yao et al., 2025). These algorithm-centric approaches
+are varied, ranging from modifying the training objective with techniques like confidence
+regularization (Chen et al., 2025) or direct Best-of-N optimization (Chow et al., 2025), to altering
+the training process via sparse updates (Li et al., 2025b), checkpoint ensembling (Dang et al.,
+
+                                                                          3
+

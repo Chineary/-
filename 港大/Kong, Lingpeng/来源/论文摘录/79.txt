@@ -1,0 +1,197 @@
+                                                                Statistical Knowledge Assessment
+                                                                   for Large Language Models
+
+
+                                                       Qingxiu Dong1 , Jingjing Xu2 , Lingpeng Kong3 , Zhifang Sui1 and Lei Li4
+                                                           1
+                                                             National Key Laboratory for Multimedia Information Processing,
+                                                                    School of Computer Science, Peking University
+
+
+
+
+arXiv:2305.10519v2 [cs.CL] 28 Oct 2023
+                                                    2
+                                                      Shanghai AI Lab 3 The University of Hong Kong 4 Carnegie Mellon University
+                                             dqx@stu.pku.edu.cn, {jingjingxu, szf}@pku.edu.cn, lpk@cs.hku.hk, leili@cs.cmu.edu
+
+
+
+                                                                                          Abstract
+                                                      Given varying prompts regarding a factoid question, can a large language model
+                                                      (LLM) reliably generate factually correct answers? Existing LLMs may generate
+                                                      distinct responses for different prompts. In this paper, we study the problem of
+                                                      quantifying knowledge contained in an LLM regarding a given set of facts. We
+                                                      propose KaRR, a statistical approach to assess factual knowledge for LLMs. The
+                                                      main idea is to estimate the ratio of LLM generating text corresponding to the
+                                                      answer entity given diverse prompts of the subject and the querying relation, versus
+                                                      it generating by random chances. Our assessment suite contains a comprehensive
+                                                      set of 994,123 entities and 600 relations, with 1,395,905 text aliases. We use our
+                                                      method to evaluate 20 LLMs of various sizes, including LLaMA, Alpaca, OPT, etc.
+                                                      Experiments show that our results have a strong correlation (0.43 Kendall’s τ ) with
+                                                      the results of human assessment on LLMs. Our results reveal that the knowledge in
+                                                      LLMs with the same backbone architecture adheres to the scaling law, while tuning
+                                                      on instruction-following data sometimes compromises the model’s capability to
+                                                      generate factually correct text reliably.
+
+
+                                         1       Introduction
+                                         Large language models (LLMs) have achieved impressive performance on many tasks including text
+                                         generation, question answering, and dialog generation [Brown et al., 2020, Thoppilan et al., 2022,
+                                         Bubeck et al., 2023]. Previous studies have shown that pretrained language models store factual
+                                         knowledge in parameters [Roberts et al., 2020, Dai et al., 2022a,b, Singhal et al., 2023], demonstrating
+                                         considerable potential as assistants for responding to user questions based on their stored knowledge.
+                                         Despite the remarkable success of LLMs, critical concerns arise — LLMs often generate unreliable
+                                         answers given varying prompts [Ji et al., 2023, Maharana et al., 2023, Chang and Bergen, 2023, Chen
+                                         et al., 2023]. As shown in Fig. 1, reliability refers to the ability to consistently generate knowledge-
+                                         correct text, posing a higher standard than accuracy. For example, although Alpaca-7B [Taori et al.,
+                                         2023] generates accurately (playwright) given a prompt of “William Shakespeare’s job”, it generates
+                                         incorrect text (boatman) given a prompt of “the job of Swan of Avon is”1 . ChatGPT [OpenAI, 2022]
+                                         correctly generates playwright and teacher. However, it answers “No” for the prompt “Is William
+                                         Shakespeare a teacher?” In this paper, we assess the knowledge contained in an LLM and investigate
+                                         whether an LLM is able to consistently generate factually correct answers given varying prompts.
+                                         Knowledge assessment is a critical problem for LLMs. The assessment results directly affect the
+                                         people’s trust in the LLM generated content. Once we identify inconsistency of LLM generation,
+                                         we could potentially correct such knowledge in LLMs [De Cao et al., 2021, Zhao et al., 2021, Dong
+                                         et al., 2022].
+                                             1
+                                                 Swan of Avon is a nickname of Shakespeare.
+
+
+                                         37th Conference on Neural Information Processing Systems (NeurIPS 2023).
+William Shakespeare’s job is      Large     a playwright, …   William Shakespeare’s job is      Large     a playwright, …
+                                 Language                                                      Language
+List the jobs of Swan of Avon:    Model     a boatman, and…   List the jobs of Swan of Avon:    Model     a playwright, and…
+
+                       Accurate but Unreliable                                                 Reliable
+
+Figure 1: Accuracy pertains to generating the correct knowledge in response to a specific prompt,
+evaluated as a binary value (correct or incorrect). However, accuracy alone does not ensure reliability,
+as responses may vary with different prompt expressions. Reliability requires consistently generating
+correct knowledge for semantically similar prompts and is measured as a continuous value. Reliability
+sets a higher standard than accuracy by maintaining consistent accuracy across related prompts.
+
+Important steps have been taken in the automatic knowledge evaluation for pre-trained language
+models [Petroni et al., 2019, Poerner et al., 2020, Jiang et al., 2020]. However, two issues still remain:
+1) Prior methods focus on assessing the accuracy but not the reliability. Consequently, their probing
+results are prone to inflation or bias since models exhibit spurious correlations towards specific
+prompts [Poerner et al., 2020]. 2) Most prior methods target masked language models (MLMs)
+and don’t provide a universal solution for assessing the knowledge in generative LLMs. MLMs are
+evaluated by probing whether they predict the masked object in response to a given prompt in cloze
+form, while the freely generated results of generative LLMs might be irrelevant to factual knowledge.
+Therefore, there is a need for a method that assesses both the accuracy and consistency, i.e. reliability,
+of knowledge in LLMs.
+In this paper, we introduce KaRR, a statistical approach to assess whether a large language
+model contains reliable factual knowledge. We use triplets to represent the probing facts (e.g.
+<William_Shakespeare, occupation, Playwright>). Our main idea is to estimate the ratio of
+the likelihood of LLM generating correct surface text for ground-truth object entities (Playwright)
+given varying prompts with subject entity (William_Shakespeare) and relation (occupation and
+the likelihood of generating entity text by pure chances. We distinguish the entities versus their
+surface text since each entity and relation may contain several text aliases. We introduce three latent
+variables to represent subject, object, and relation, and a Bayesian network to represent the causal
+dependency among them and generated text. Our proposed KaRR quantifies the ratio of generating
+text with and without a specified relation/subject. This metric effectively captures the combined
+impact of both the subject and the relation in determining the model generation probability for the
+plausible text of the object (e.g., “playwright”, “dramatist”).
+We develop a large-scale assessment suite with 994,123 entities, 600 relations, and their text aliases.
+Our suite is orders of magnitude larger than prior studies which only cover very few relations. We
+evaluate a comprehensive set of 20 LLMs using our method, including LLaMA [Touvron et al.,
+2023a], OPT [Zhang et al., 2022], and others. Moreover, we also invite human experts to assess
+knowledge in these LLMs. Results reveal a strong correlation (0.43 Kendall’s τ ) between KaRR and
+human evaluation. Our experimental results show that knowledge of LLMs with the same backbone
+architecture conforms to the scaling law.
+In summary, our contributions are: (1) We propose KaRR, a statistical method to assess the reliable
+knowledge contained in LLMs. We present a probabilistic graphical model to tackle varying text
+aliases regarding a fact. (2) We develop a large-scale assessment suite with 994,123 entities and 600
+relations, which will be released to the community for further study. (3) We conduct a comprehensive
+evaluation of 20 LLMs. The experiments show that KaRR exhibits a strong correlation (0.43 Kendall’s
+τ ) with human assessment, and achieves a low variance to varying prompts, with a standard deviation
+of 0.82. Furthermore, our evaluation results are seldom affected by spurious correlations. Our code
+and data are available at https://github.com/dqxiu/KAssess.
+
+
+2    Related Work
+
+Knowledge Probing Recent studies have demonstrated that language models possess factual
+knowledge, which can be utilized for complex reasoning, question answering, and performing
+various tasks[Roberts et al., 2020, Choudhary and Reddy, 2023]. To evaluate the knowledge in
+language models, previous works implement knowledge probing methods on MLMs. Petroni et al.
+[2019] introduces LAMA, studying whether MLMs correctly predict masked object entities in a
+cloze-style prompt. However, Elazar et al. [2021] shows that probing outcomes are inconsistent
+with various prompts, resulting in contradictory or unreliable results. Shin et al. [2020] show that
+
+
+                                                              2
+                   Relation given                                     Subject given
+                  ( , occupation)                               ( , William_Shakespeare)
+Subject ( )          worked as a        Object ( )                     Shakespeare         Relation ( )   Object ( )
+                 ’s occupation was a                                  Swan of Avon
+
+               Relation not given ( )
+                                                      LLM                                                               LLM
+                                                                   Subject not given ( )
+ Shakespeare                            playwright.                                         worked as a   playwright.
+                     married a                                         Shakespeare
+Swan of Avon                             dramatist.                                        ’s job was a    dramatist.
+    …               worked as a             …                                                   …             …
+                                                                     Thomas Edison
+                    defended a                                           Lincoln
+                        …                                                  …
+
+                                             (a)                                                          (b)
+
+Figure 2: Illustration of KaRR using the fact <William_Shakespeare,occupation,playwright>
+as an example. S and R are latent variables representing the subject and relation, respectively; s, r
+and o refer to specific values of a subject, relation and object, respectively. (a) illustrates KaRRr ,
+which measures the impact of specifying r or not on LLM generating o given s. (b) illustrates KaRRs ,
+measuring the impact of specifying s or not on LLM generating o given r.
+well-engineered automatic prompts result in much higher results than handcrafted LAMA prompts.
+Therefore, ParaRel [Elazar et al., 2021] and LPAQA [Jiang et al., 2020] are proposed for MLMs.
+ParaRel measures the knowledge consistency of MLMs through the use of several paraphrased
+prompts. Subsequently, Hase et al. [2023] adopt their metric for paraphrase consistency as a measure
+of belief, and Raj et al. [2022] extend the metric to measure the general semantic consistency of
+OPT [Zhang et al., 2022]. LPAQA focuses on prompts selection and ensembling to improve the
+prediction accuracy, by automatically discovering better prompts to query. However, it has not been
+comprehensively assessed to what extent LLMs contain knowledge about a fact.
+Spurious Correlations in Probing Recent literature reveals that empirical probing results for
+masked entities may be affected by spurious correlations within the text [Poerner et al., 2020, Dong
+et al., 2022]. Spurious correlations occur when a model takes shortcuts to generate answers based on
+superficial information in surface forms, even without possessing relevant knowledge. For instance, a
+model with limited knowledge can correctly answer “French” when queried about the native language
+of actor “Jean Marais”, simply because “Jean Marais” is a typically French name. This phenomenon
+inflates probing results. On the one hand, Zhao et al. [2021] find that probing results are influenced
+by contextual biases, and Dong et al. [2022] also note frequency biases in rank-based probing. On
+the other hand, the subject’s class has been shown to introduce biases in predictions [Poerner et al.,
+2020]. To address these issues, Poerner et al. [2020] eliminate vulnerable relation classes, however,
+this approach restricts coverage and does not provide a comprehensive solution. In our statistical
+knowledge assessment, we account for both the subject and relation by decomposing their influence
+and using multiple aliases to minimize spurious correlations.
+
+3         Statistical Knowledge Assessment
+In this section, we present a statistical method for assessing knowledge in LLMs. We begin by
+introducing the graphical model for knowledge assessment, which serves as the foundation of our
+approach. Subsequently, we introduce the Knowledge Assessment Risk Ratio (KaRR), which we
+then convert into a computable form based on the graphical model.
+3.1       Graphical Model for Knowledge Assessment
+
+                               Fig. 3 shows the graphical model that describes the knowl-
+                               edge symbols and their corresponding text forms. Here, we
+   S            𝜶 Text (S)
+                               introduce latent variables S, R, and O to represent the sym-
+                               bolic subject, relation, and object, respectively. We use s, r,
+                               and o to refer to specific values of these variables, and the
+  R             𝜷 Text (S,R)
+                               triplet (s, r, o) to denote a simple fact/knowledge, such as
+                               <William_Shakespeare,occupation,playwright>. We intro-
+                𝜸 Text (S,R,O) duce α, β, γ to denote the random variables for the textual forms
+  O
+                               (textual aliases2 ) of (S), (S, R), (S, R, O), respectively. Here,
+Figure 3: Graphical model for α, β, and γ refer to specific values of α, β, and γ, such as α being
+knowledge assessment.          expressed as “Shakespeare”.
+      2
+   “Aliases” are alternative names for entities or relations, defined in Wikidata (https://www.wikidata.org/
+wiki/Help:Aliases).
+
+
+                                                            3
+

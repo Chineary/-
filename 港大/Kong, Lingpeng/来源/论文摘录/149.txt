@@ -1,0 +1,217 @@
+                                         Preprint.
+
+
+
+
+                                         U NDERSTANDING THE ROLE OF LLM S IN M ULTI -
+                                         MODAL E VALUATION B ENCHMARKS
+
+                                             Botian Jiang1∗ Lei Li2∗ Xiaonan Li1 Zhaowei Li1               Xiachong Feng2
+                                             Lingpeng Kong2† Qi Liu2† Xipeng Qiu1†
+                                          1                        2
+                                              Fudan University         The University of Hong Kong
+                                             fdutian@gmail.com
+
+
+
+
+arXiv:2410.12329v1 [cs.CL] 16 Oct 2024
+                                                                                       A BSTRACT
+
+                                                     The rapid advancement of Multimodal Large Language Models (MLLMs) has
+                                                     been accompanied by the development of various benchmarks to evaluate their
+                                                     capabilities. However, the true nature of these evaluations and the extent to which
+                                                     they assess multimodal reasoning versus merely leveraging the underlying Large
+                                                     Language Model (LLM) backbone remain unclear. This paper presents a com-
+                                                     prehensive investigation into the role of LLM backbones in MLLM evaluation,
+                                                     focusing on two critical aspects: the degree to which current benchmarks truly
+                                                     assess multimodal reasoning and the influence of LLM prior knowledge on per-
+                                                     formance. Specifically, we introduce a modified evaluation protocol to disentangle
+                                                     the contributions of the LLM backbone from multimodal integration, and an au-
+                                                     tomatic knowledge identification technique for diagnosing whether LLMs equip
+                                                     the necessary knowledge for corresponding multimodal questions. Our study en-
+                                                     compasses four diverse MLLM benchmarks and eight state-of-the-art MLLMs.
+                                                     Key findings reveal that some benchmarks allow high performance even without
+                                                     visual inputs and up to 50% of error rates can be attributed to insufficient world
+                                                     knowledge in the LLM backbone, indicating a heavy reliance on language capabil-
+                                                     ities. To address knowledge deficiencies, we propose a knowledge augmentation
+                                                     pipeline that achieves significant performance gains, with improvements of up to
+                                                     60% on certain datasets, resulting in a approximately 4x increase in performance.
+                                                     Our work provides crucial insights into the role of the LLM backbone in MLLMs,
+                                                     and highlights the need for more nuanced benchmarking approaches.1
+
+
+                                         1        I NTRODUCTION
+                                         The rapid development of Large Language Models (LLMs) (Touvron et al., 2023; Bai et al., 2023a),
+                                         combined with advancements in visual encoders (Radford et al., 2021; Zhai et al., 2023) and modal-
+                                         ity bridge techniques (Liu et al., 2023a; Dai et al., 2023), has catalyzed the evolution of Multi-
+                                         modal Large Language Models (MLLMs) capable of comprehending diverse multi-modal inputs.
+                                         Concurrently, diverse benchmarks and leaderboards have emerged to evaluate various multimodal
+                                         perception and reasoning capabilities (Lu et al., 2022b; Lerner et al., 2022; Yue et al., 2024a).
+                                         While these benchmarks aim to assess multimodal capabilities, the role of the underlying LLM
+                                         backbone in MLLM performance remains poorly understood. Recent studies (Tong et al., 2024;
+                                         Yue et al., 2024c) have highlighted that some benchmarks demonstrate an excessive dependence
+                                         on the language model component, allowing MLLMs to achieve high scores even without visual
+                                         inputs. This observation raises critical questions about the true nature of multimodal reasoning
+                                         in these models and the extent to which performance is driven by the LLM backbone rather than
+                                         multimodal integration. Furthermore, as different MLLMs utilize LLM backbones with distinct
+                                         knowledge priors learned from various pre-training corpora (Gao et al., 2020; Penedo et al., 2023),
+                                         this knowledge inconsistency leads to incomparable evaluation scores when comparing MLLMs
+                                              ∗
+                                                Equal contribution.
+                                              †
+                                                Corresponding author.
+                                              1
+                                                Code and data are available at https://github.com/Twilight92z/Role-of-LLM.
+
+
+                                                                                             1
+Preprint.
+
+
+
+
+with different underlying LLMs. These issues can result in misinterpretation of evaluation scores
+and may misguide research and deployment of MLLMs by providing an inaccurate assessment of
+their true multimodal capabilities.
+In this paper, we present an in-depth investigation into the role of LLM backbones in MLLM evalua-
+tion, focusing on two key aspects: (i) the extent to which current benchmarks truly assess multimodal
+reasoning versus relying on language capabilities alone, and (ii) the influence of LLM prior knowl-
+edge on final performance. To address the first question, we propose an approach that goes beyond
+simply evaluating models without visual cues (Tong et al., 2024; Chen et al., 2024a). Our method
+incorporates comparisons with shuffled options and transforms multiple-choice quesiont-answering
+(QA) formats into open-ended generation tasks, providing a more comprehensive understanding
+of the role of language capabilities versus true multimodal reasoning in these benchmarks. For
+the second question, we develop an automatic knowledge identification method utilizing external
+knowledge bases such as Wikipedia or powerful LLMs (OpenAI, 2023b) to obtain the necessary
+knowledge behind each question. With these knowledge facts prepared, we examine whether the
+underlying LLM backbone possesses the requisite world knowledge for multimodal questions, en-
+abling a better understanding of the obtained scores.
+We select four benchmarks covering different capabilities of MLLMs: the comprehensive evaluation
+benchmark MMMU (Yue et al., 2024a), ScienceQA for multimodal reasoning evaluation (Lu et al.,
+2022b), and two knowledge-based VQA tasks: Viquae (Lerner et al., 2022) and InfoSeek (Chen
+et al., 2023). Our experimental results with eight MLLMs reveal significant insights into the role
+of LLM backbones: (i) LLMs would exploit the shortcuts in question and options, making pre-
+dictions without relying on the visual inputs. For example, on the commonly adopted MMMU
+dataset, accuracy scores remain the same for more than 80% of samples even without visual inputs.
+Further comparison of datasets and task formats suggests that knowledge-intensive VQA bench-
+marks requiring entity recognition from images are less affected by this issue, and LLMs could
+solely rely on options to achieve prediction without relying on visual inputs. Specifically, we ob-
+serve that the average performance difference between scenarios with and without visual inputs is
+markedly lower for multiple-choice questions in MMMU (15%) compared to open-ended questions
+in InfoSeek (65%). (ii) MLLMs performance shows great dependence on the knowledge of
+LLM backbones. We observe that up to 50% of error rates on multimodal benchmarks could be
+attributed to insufficient world knowledge in the LLM backbone. Besides, MLLMs adopting knowl-
+edgeable LLMs such as LLaVA-Next-Yi-34B and InternVL2-Llama3-76B during evaluation tend
+to perform better, highlighting the significant impact of the LLM backbone on overall performance.
+Motivated by these findings, we develop a simple knowledge augmentation pipeline to retrieve sup-
+plementary background knowledge for answering challenging VQA questions. This approach yields
+an average significant 36% absolute accuracy gain, with Phi-3 achieving an impressive improvement
+of over 60% on the Viquae dataset. Further analysis demonstrates a trade-off between knowledge
+recall and the noise introduced by retrieved knowledge paragraphs.
+Our study provides crucial insights into the role of LLM backbones in MLLM evaluation and high-
+lights the need for more nuanced benchmarking approaches that can distinguish between language
+model capabilities and true multimodal reasoning. These findings have important implications for
+the development and evaluation of future MLLMs, suggesting that both visual integration techniques
+and the choice of LLM backbone are critical factors in achieving robust multimodal performance.
+nd the limitations in practical applications.
+
+
+
+2   M ETHOD
+
+In this section, we perform an approach to better understand the role of LLM in multi-modal evalua-
+tion benchmarks. Figure 1 provides a comprehensive overview of the method. We begin by formally
+introducing the key notations essential for setting up our framework (§2.1). Following this, we delve
+into the specifics of how we measure the significance of vision and knowledge. First we outline the
+methodologies for evaluating the role of vision (§2.2). We then explore the methodologies for gaug-
+ing the impact of factual knowledge §2.3 and develop a knowledge-augmented framework to assist
+the MMLMs (§2.4).
+
+
+                                                 2
+Preprint.
+
+
+
+
+                 VQA Question with Image
+
+
+
+               Question: What is the capital of Mississippi?                                              What is the date this aircraft took the first flight?
+               Options: (A) Detroit (B) Jackson (C) Biloxi (D) Topeka
+
+
+               The state of Mississippi is highlighted in dark green.
+               And the capital of Mississippi is Jackson, so my
+               answer is: (B) Jackson
+                                                                                                   Visual Perception :
+                                                                                                   This aircraft is Airbus A310 designed by Airbus Industrie.
+
+
+             Remove Image from VQA Question
+
+                                                                                                   Knowledge Reasoning:
+               Question: What is the capital of Mississippi?
+               Options: (A) Detroit (B) Jackson (C) Biloxi (D) Topeka                              Airbus A310 took its first flight on 4th March 1981.
+
+
+                                                                                  Final Respone:
+               (B) Jackson
+                                                                                  4th March 1981
+
+
+
+
+Figure 1: Left:We first identify VQA questions answerable without images. Right:We subsequently
+decompose the process of solving visual questions into two distinct yet interrelated steps, decoupling
+visual perception capability from knowledge.
+
+
+2.1   P ROBLEM N OTATIONS
+
+VQA involves providing a model with visual input and a related question, and then requiring the
+model to generate an appropriate answer. Let D be a given multi-modal dataset. For any data entry
+d in D, we define d as a triple (I, Q, A), where I denotes the visual input (a single image in our
+work), Q represents the textual question, and A is the corresponding answer. We posit that MLLMs
+process VQA tasks through two primary stages: visual perception and knowledge reasoning. In the
+visual perception stage, the model extracts key information from the image input. Subsequently,
+we hypothesize that the model internally reformulates the original VQA question into a cognate
+knowledge reasoning query, denoted as K. This query K integrates both the textual input and
+the extracted visual information, forming the basis for the ensuing reasoning process to derive the
+answer.
+Regarding the representation of the multi-modal large language model (MLLM), we employ the
+function form f , where f (I, Q), f (∅, Q), and f (∅, K) denote the model’s responses to visual
+questions with images, without images, and to knowledge reasoning queries respectively. The visual
+perception step is described by P , with ∼ used instead of = to reflect the non-deterministic nature
+of visual conception. For evaluation, we define a combination C as one of these three input types.
+Given a dataset D, we calculate the Score Rate (SR) as:
+                                          1 X
+                                SRC D =          1 [f (Cd ) == A] .                              (1)
+                                         |D|
+                                                                        d∈D
+                   (∅,K)
+For instance, SRV iquae represents the model’s performance on knowledge reasoning questions in the
+Viquae dataset. Empirically, we believe that a higher SR of a model indicates stronger performance,
+and vice versa.
+
+2.2   I S V ISUAL C APABILITY N ECESSARY ?
+
+Previous research has demonstrated that the absence of visual input often does not significantly im-
+pact model performance on certain visual evaluation datasets (Goyal et al., 2017; Tong et al., 2024;
+Huang et al., 2024). To elucidate this phenomenon, we extend prior work by systematically modi-
+fying the VQA task paradigm to assess the role of visual information under varied conditions. Our
+methodology involves presenting identical questions to models in image-present and image-absent
+contexts. Furthermore, we introduce two critical modifications to the multiple-choice format: (1)
+randomization of multiple-choice option order and (2) reformulation of questions into open-ended
+queries. These alterations serve dual purposes: randomization of options mitigates potential biases
+towards specific answer types that may align with training data distributions, while open-ended re-
+formulation allows us to evaluate whether the apparent diminished reliance on visual information is
+an artifact of constrained multiple-choice setups, where some options may be trivially eliminable.
+Our findings indicate that the presence of multiple-choice options significantly reduces both task dif-
+ficulty and the necessity for visual information processing. This insight offers a nuanced perspective
+
+
+                                                                              3
+

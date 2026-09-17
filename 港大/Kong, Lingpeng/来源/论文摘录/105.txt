@@ -1,0 +1,436 @@
+                                                                    Linguistic Frameworks Go Toe-to-Toe
+                                                                   at Neuro-Symbolic Language Modeling
+
+                                                  Jakob Prange Nathan Schneider                             Lingpeng Kong
+                                                        Georgetown University                          The University of Hong Kong
+                                              {jp1724, nathan.schneider}@georgetown.edu                           lpk@cs.hku.hk
+
+
+
+
+                                                              Abstract                            (Strubell et al., 2018; Swayamdipta et al., 2018;
+                                                                                                  Peng et al., 2019; Wu et al., 2021, inter alia).
+                                             We examine the extent to which, in principle,           A question that has received less attention is
+                                             different syntactic and semantic graph repre-
+
+
+
+
+arXiv:2112.07874v2 [cs.CL] 11 May 2022
+                                                                                                  which kind of symbolic linguistic representation
+                                             sentations can complement and improve neu-           (SLR) is most conducive to guiding neural lan-
+                                             ral language modeling. Specifically, by condi-
+                                                                                                  guage models (LMs). Numerous domain-general
+                                             tioning on a subgraph encapsulating the locally
+                                             relevant sentence history, can a model make          candidates exist (Abend and Rappoport, 2017;
+                                             better next-word predictions than a pretrained       Oepen et al., 2019, 2020; Žabokrtský et al., 2020;
+                                             sequential language model alone? With an en-         Müller, 2020): some are focused on syntactic struc-
+                                             semble setup consisting of GPT-2 and ground-         ture, others on semantics (§2; big grey example
+                                             truth graphs from one of 7 different for-            graphs in the left panels of figure 1). Frameworks
+                                             malisms, we find that the graph information          vary along several dimensions, with different label
+                                             indeed improves perplexity and other metrics.
+                                                                                                  inventories and treatments of specific constructions.
+                                             Moreover, this architecture provides a new
+                                             way to compare different frameworks of lin-
+                                                                                                  Formal differences include the type of structure (de-
+                                             guistic representation. In our oracle graph          pendency or constituency, one or multiple parents,
+                                             setup, training and evaluating on English WSJ,       projectivity) and its relation to the input string. In
+                                             semantic constituency structures prove most          general, different design choices may aim to cap-
+                                             useful to language modeling performance—             ture different kinds of generalizations or facilitate
+                                             outpacing syntactic constituency structures as       different kinds of processing, and may make pars-
+                                             well as syntactic and semantic dependency            ing raw text easier or harder. It is often not obvious
+                                             structures.
+                                                                                                  which framework should be chosen for best results
+                                                                                                  on an external task—or indeed, how to even per-
+                                         1   Introduction                                         form a controlled comparison across frameworks.
+                                         Linguistic theories posit that humans can take ad-          In this paper we investigate whether structurally
+                                         vantage of hierarchical structure related to some        guided language modeling can serve as a bench-
+                                         notion of compositionality to produce and com-           mark task for directly comparing linguistic repre-
+                                         prehend utterances with complex meanings. Yet            sentations. Specifically, we evaluate on next-word
+                                         explicit representations of this kind of structure are   prediction—a relatively neutral task in that it does
+                                         harder to come by than raw text, and large-scale         not rely on any artificial test suite, nor does it tar-
+                                         pretrained neural language models (e.g., Devlin          get a specific downstream application where one
+                                         et al., 2019; Radford et al., 2019) have managed         linguistic framework may have an advantage. 1
+                                         to perform strikingly well at contextually encoding         We devise a method for selecting and encoding
+                                         and predicting words from distributional evidence        partial views of linguistic graphs over the preced-
+                                         alone. At the same time, there are good reasons to       ing context relevant to predicting the next token
+                                         doubt that these models can be said to understand        (§3 and §4). 2 We call these views slices (small
+                                         language in any meaningful way (Trott et al., 2020;      per-token graphs and dashed lines in figure 1).
+                                         Bender and Koller, 2020; Merrill et al., 2021). To           1
+                                                                                                        Our findings are limited to a particular language (English)
+                                         address this conundrum, people have started to ex-       and domain (financial news) in which gold graphs from multi-
+                                         plore probing pretrained models (Liu et al., 2019;       ple frameworks are available for the same sentences, but such
+                                                                                                  annotations could be obtained for other samples in the future.
+                                         Tenney et al., 2019a, inter alia) and supplement-            2
+                                                                                                        Our code is available to the research community at https:
+                                         ing training data with linguistic structure guidance     //github.com/jakpra/LinguisticStructureLM.
+ UD: Syntactic dependency tree with functional labels                              PTG: Deep syntactic / quasi-semantic argument structure
+                                                                           3                              0
+                                  1            nsubj:pass                                                                  PRED
+                                                            ss
+                          d                              :pa                                                                       PAT
+                                                                                                                                                 3
+                      amo                            aux                                                               2
+           0                                     2                                             1
+                                                                                                          EXT
+                                                                                                                                                                 GPT-2: Neural language model with multihead attention
+    N          umerous          injuries             were              ????           N            umerous         injuries          were            ????           N       umerous      injuries     were      ????
+     0    =       0               1                   2                    3          1        =      1                2                 3       =       3
+
+                                  0                                    1       2                                       1            2        0       2       0
+
+
+
+
+ PTB-fxn: Syntactic phrase/function-labeled constituency tree EDS: Semantic predication/modification and variable binding
+                                           0
+                                                VP                                                        0                                                                                     logits𝐿𝑀
+                                UBJ
+                  1
+                         NP-S                                 2
+                                                                  VP                       1
+                                                                                                              BV
+                                                                                                                                                         3
+                                                                               3
+                                                                                                     ARG1                           ARG2                                 logits𝑆𝐿𝑅
+                                                                                                                       2
+                                                                                                                                                                                          +                  𝑃𝐿𝑀
+    N          umerous          injuries             were              ????           N            umerous         injuries          were            ????
+     1    =       1       =       1                   2                    3          1        =      1                2       =         2               3
+                                                                                                                                                                                        𝑃𝐸𝑛𝑠𝑒𝑚𝑏𝑙𝑒
+     0            0               0              1        0                2                                       0       1        0        1           2                  𝑃𝑆𝐿𝑅
+                                                                       1       0                                                                     0       1                                                reported
+
+
+
+Figure
+ Figure 1:
+         1:Contrasting
+             ContrastingGPT-2’s
+                          GPT-2’sincremental
+                                     incremental attention mechanism
+                                                   attention mechanism   (top right)
+                                                                            (top      withwith
+                                                                                  right)    incremental    context
+                                                                                                 incremental        slices
+                                                                                                                context    obtained
+                                                                                                                         slices ob-
+from  linguistic
+ tained from     graphs (left
+              linguistic      four
+                         graphs     panels)
+                                 (left four of  four of
+                                            panels)  different formalisms
+                                                        four different       (§5.2). As
+                                                                        formalisms         shared
+                                                                                       (§5.2).      tokenization
+                                                                                                As shared          we use we
+                                                                                                            tokenization    GPT-2’s
+                                                                                                                                use
+byte-pairbyte-pair
+ GPT-2’s   encoding. Slice
+                     encoding.nodes
+                                 Sliceare  color-coded
+                                        nodes are        by localbyrelation
+                                                    color-coded      local type
+                                                                            relation(black:   target,target,
+                                                                                      type (black:     cyan: cyan:
+                                                                                                               parent,parent,
+                                                                                                                        blue: blue:
+                                                                                                                               child,
+green:  coparent,
+ child, green:     yellow:
+               coparent,    sibling,
+                          yellow:     purple:purple:
+                                   sibling,    grandparent,  brown:
+                                                     grandparent,      aunt).aunt).
+                                                                    brown:     Dashed    lines lines
+                                                                                     Dashed     indicate
+                                                                                                      indicate tokentoken
+                                                                                                          the the     anchoring   of
+                                                                                                                            anchor-
+original
+ ing of (big   grey)
+        original (biggraph
+                      grey)nodes
+                             graphand,   correspondingly,
+                                    nodes and,              which which
+                                                 correspondingly,   previousprevious
+                                                                               tokens tokens
+                                                                                        (empty (empty
+                                                                                                  circles) are accessible
+                                                                                                          circles) are      for each
+                                                                                                                        accessible
+next-token
+ for        prediction. In
+     each next-token        the bottom
+                      prediction.  In theright we right
+                                           bottom  visualize
+                                                         we how   different
+                                                             visualize  how models
+                                                                              differentarrive
+                                                                                         modelsat their prediction
+                                                                                                   arrive at their (§3    and (§3
+                                                                                                                   prediction §4.3).
+ and §4.3).
+
+relations within each slice, which in the incremen-                                                                             Scope. A main goal of syntactic representations
+tal
+ Oursetting is   much faster
+       neuro-symbolic           and more
+                           encoder           flexible
+                                      statically        than
+                                                  allocates                                                                     is
+                                                                                                                               guishto SLR
+                                                                                                                                       explain    distributional
+                                                                                                                                             frameworks             patterns in
+                                                                                                                                                             along two   dimensions:word3 or-
+computation-intensive
+ distinct vector dimensionsdeep for
+                                  graph   encoders.
+                                      different       Using
+                                                 structural                                                                     der; theyAtend
+                                                                                                                               Scope.         maintogoal
+                                                                                                                                                      be rooted     trees representations
+                                                                                                                                                            of syntactic   with often pro-
+ relations
+this        withinwe
+      encoding,     each  slice, 7
+                       compare   which
+                                     SLRin the   incremen-
+                                           formalisms     by                                                                    jective
+                                                                                                                               is        anchoring
+                                                                                                                                   to explain         functions. patterns
+                                                                                                                                                 distributional     Semanticinformalisms
+                                                                                                                                                                                   word or-
+ tal setting
+virtue        is much
+        of their         faster and
+                  incremental         more flexible
+                                 language    modeling   than
+                                                          ca-                                                                   are  meaning-oriented,      aiming
+                                                                                                                               der; they tend to be rooted trees     to capture   the higher-
+                                                                                                                                                                          with often    pro-
+ computation-intensive
+pability in  an controlleddeep    graph encoders.
+                             experimental             Using
+                                             setup (§5)   on                                                                   jectivelogic
+                                                                                                                                level        expressed
+                                                                                                                                        anchoring          in a sentence;
+                                                                                                                                                     functions.    Semantic thus, they
+                                                                                                                                                                               formalismsmay
+ this encoding,
+jointly  annotated we compare
+                      ground-truth7 SLR    formalisms
+                                       data (Oepen     et by
+                                                          al.,                                                                  have   more  complex     structures,   including
+                                                                                                                               are meaning-oriented, aiming to capture the higher-  reentrant
+ virtue2020).
+2019,    of theirThe
+                  incremental
+                     results (§6)language    modeling
+                                   suggest that           ca-
+                                                  linguistic                                                                    edgeslogic
+                                                                                                                               level    and expressed
+                                                                                                                                             discontiguousin a anchors.
+                                                                                                                                                                sentence; thus, they may
+ pabilityare
+graphs    in an  controlled
+             indeed          experimental
+                     informative             setup (§5)
+                                    for next-word         on
+                                                     predic-                                                                   have   more complex
+                                                                                                                                Structure.              structures,
+                                                                                                                                                 SLRs can             including
+                                                                                                                                                              further be           reentrant
+                                                                                                                                                                           subdivided     into
+ jointly annotated
+tion,                 ground-truth
+       complementing what              data in
+                                is learned  (Oepen    et al.,
+                                               pretraining.                                                                    edges   and and
+                                                                                                                                dependency  discontiguous      anchors.
+                                                                                                                                                     constituency     structures. The for-
+ 2019,invites
+This    2020). future
+                 The results (§6) quantifying
+                        research   suggest that linguistic
+                                                   different                                                                    mer   are relatively
+                                                                                                                               Structure.             shallow,
+                                                                                                                                                SLRs can          while
+                                                                                                                                                             further  be the  latter contain
+                                                                                                                                                                         subdivided     into
+ graphs  are indeed
+formalisms’     designinformative   for next-word predic-
+                        choices (§7).                                                                                           abstract
+                                                                                                                               dependency nodesandwith no    or multiple
+                                                                                                                                                    constituency           word The
+                                                                                                                                                                     structures.   anchors.
+                                                                                                                                                                                         for-
+ tion, complementing what is learned in pretraining.
+                                                                                                                               mer are relatively shallow, while the latter contain
+2ThisBackground:
+       invites future research
+                         Symbolic  quantifying
+                                       Linguistic different                                                                     3    Overview:
+                                                                                                                               abstract              Language
+                                                                                                                                          nodes with no             Modeling
+                                                                                                                                                            or multiple             with
+                                                                                                                                                                          word anchors.
+ formalisms’    design
+      Representation     choices  (§7).                                                                                               Linguistic Graphs
+                                                                                                                               3      Overview: Language Modeling with
+ 2 Background:
+Following               Symbolic
+              a long tradition        Linguistic
+                                 in formal    linguistics,                                                                         OurLinguistic
+                                                                                                                                       main goal isGraphs
+                                                                                                                                                    to quantify the predictive power
+       Representation
+graph-structured    representations of language quali-                                                                          of different SLRs by combining them with a pre-
+tatively describe grammatical and logical relations                                                                            Our   mainlanguage
+                                                                                                                                trained       goal is tomodel
+                                                                                                                                                          quantifyandthe     predictivehow
+                                                                                                                                                                        measuring        powerthis
+ Following
+among         a long
+          words.      tradition
+                 The SLR         in formal
+                            paradigm          linguistics,
+                                        has recently  seen                                                                     of  different
+                                                                                                                                affects         SLRs by
+                                                                                                                                         next-token         combining them
+                                                                                                                                                         generation                 with aApre-
+                                                                                                                                                                         performance.         lan-
+ graph-structured   representations    of language
+a revival in the form of larger-scale treebanking    quali-
+                                                       and                                                                     trained model
+                                                                                                                                guage    language      model
+                                                                                                                                                    (LM)        and measuring
+                                                                                                                                                            assigns     probabilities howto this
+                                                                                                                                                                                              sen-
+ tatively  describe grammatical    and   logical relations                                                                     affects
+                                                                                                                                tences next-token
+                                                                                                                                         and can begeneration
+                                                                                                                                                          used to both  performance.     A lan-
+                                                                                                                                                                              process existing
+sembanking for training neural parsers.
+ among words. The SLR paradigm has recently seen                                                                               guage    model
+                                                                                                                                sentences      and(LM)     assigns
+                                                                                                                                                    generate          probabilities
+                                                                                                                                                                new ones.       As is to    sen-
+                                                                                                                                                                                       standard
+    Formally, an SLR instance is a directed acyclic
+ a revival in the form of larger-scale treebanking and                                                                         tences   and     can  be  used   to  both     process
+                                                                                                                                practice, we treat sentences as length-𝑛 sequences     existing
+graph (DAG) 𝐺 = ⟨𝑉, 𝐸, 𝛼⟩, with vertices 𝑉, la-
+ sembanking for training neural parsers.                                                                                       sentences
+                                                                                                                                of  word and
+                                                                                                                                           tokens, 𝐰generate
+                                                                                                                                                         = ⟨𝑤new      ones. As is standard
+                                                                                                                                                                0 , 𝑤1 , … , 𝑤𝑛−1 ⟩. An incre-
+beled edges 𝐸, and an anchoring function 𝛼 ∶ 𝑉 →                                                                               practice,   we    treat sentences    as   length-𝑛   sequences
+𝐰 Formally,
+    that maps an   SLR
+                each     instance
+                      vertex  to a is(potentially
+                                       a directed acyclic
+                                                   empty)                                                                       mental LM factorizes the joint              probability   of the
+ graph (DAG) 𝐺 = ⟨𝑉, 𝐸, 𝛼⟩, with vertices 𝑉, la-                                                                               of  word   tokens,    𝐰   =
+                                                                                                                                sentence in terms of the0 1 ⟨𝑤  , 𝑤   , …  ,
+                                                                                                                                                                 probability 𝑤 𝑛−1 ⟩. An incre-
+                                                                                                                                                                                  of each  word
+subset of tokens in the sentence. We broadly distin-                                                                           mental    LM     factorizes   the   joint   probability   of  the
+ beled edges 𝐸, and an anchoring function 𝛼 ∶ 𝑉 →                                                                               𝑤𝑖 conditioned on previous tokens 𝐰<𝑖 ; eq. (1).
+guish SLR frameworks along two dimensions: 3
+ 𝐰 that maps each vertex to a (potentially empty)                                                                                  3Here we describe at a high level how we process
+                                                                                                                                    See Abend and Rappoport (2017); Koller et al. (2019);
+ subset
+    3    of tokens in the sentence. We broadly distin-
+      See Abend and Rappoport (2017); Koller et al. (2019);                                                                    (oracle)
+                                                                                                                               Prange      SLR
+                                                                                                                                       et al.      graphs
+                                                                                                                                              (2019b)       for use
+                                                                                                                                                       for more       in this
+                                                                                                                                                                detailed        language mod-
+                                                                                                                                                                           taxonomies.
+Prange et al. (2019b) for more detailed taxonomies.                                                                             eling scenario, i.e., to obtain context-conditional
+sentence in terms of the probability of each word          et al., 2021, inter alia), recursive auto-encoders
+𝑤𝑖 conditioned on previous tokens 𝐰<𝑖 ; eq. (1).           (Tai et al., 2015; Roth and Lapata, 2016), and graph-
+   Here we describe at a high level how we process         convolutional networks (GCNs; Yang and Deng,
+(oracle) SLR graphs for use in this language mod-          2020; Wu et al., 2021). However, transition se-
+eling scenario, i.e., to obtain context-conditional        quences for non-tree graphs are subject to spurious
+vocabulary distributions from them. In contrast to         ambiguity; and we find that graph-structured neural
+sequential LMs, contexts are now graph-structured,         networks are impractical in the incremental setting
+and which context tokens to select as well as in           (§6.5). Instead, we propose a computationally inex-
+what way they are related to the target token is de-       pensive method for statically and deterministically
+termined by the underlying SLR graph 𝐺; eq. (2).           projecting slices into a high-dimensional space by
+                                                           vector concatenation (§4.2).
+                        𝑛−1
+                        ∏                                     Finally, we compute output distributions
+           𝑃𝐿𝑀 (𝐰) =           𝑃𝐿𝑀 (𝑤𝑖 |𝐰<𝑖 )       (1)
+                         𝑖=0
+                                                           𝑃(𝑊𝑖 |𝐺𝑖 ) from the vector representations (§4.3).
+           𝑃𝑆𝐿𝑅 (𝐰) ∶= 𝑃(𝐰|𝐺)                       (2)    4       Modeling Details
+   This general idea is closely related to syntactic       4.1       Slicing Graphs
+language modeling (Pauls and Klein, 2012; Gub-
+                                                           A slice 𝐺𝑖 is a connected subgraph of 𝐺 that cap-
+bins and Vlachos, 2013, inter alia). We extend this
+                                                           tures 𝑤𝑖 ’s linguistically structured context, masking
+line of work to arbitrarily complex syntactic and
+                                                           𝑤𝑖 itself (or else estimating 𝑃(𝑤𝑖 |𝐺𝑖 ) would be triv-
+semantic DAG structures and, in doing so, take par-
+                                                           ial). 𝐺𝑖 always minimally consists of 𝑤𝑖 ’s direct
+ticular care to restrict conditioning contexts from
+                                                           anchor node 𝑎𝑖 = Select({𝑣 ∶ 𝑤𝑖 ∈ 𝛼(𝑣)}). Start-
+accessing not only future words but also future sub-
+                                                           ing from 𝑎𝑖 , we traverse the graph and add vertices
+graphs, so effectively top-down and left-to-right.
+                                                           and edges that are connected to 𝑎𝑖 via paths of a
+Our procedure is as follows:
+                                                           few specific relative types, REL. Here we settle on
+   First, we select for each token position 𝑖 to be
+                                                           6 types: parents, siblings, grandparents, parents’
+predicted a subgraph 𝐺𝑖 , called the token’s slice.
+                                                           siblings, children, and coparents. The vertices 𝑉𝑖
+Slices are both admissible in the language model-
+                                                           and edges 𝐸𝑖 for slice 𝐺𝑖 = ⟨𝑉𝑖 , 𝐸𝑖 , 𝛼⟩ consist then
+ing setting, i.e., they do not violate the left-to-right
+                                                           of the union of these sets. 4
+conditioning order, and relevant to the token predic-
+                                                              To prevent information leakage from future to-
+tion according to some criteria—here we consider
+                                                           kens, we discard from 𝐺𝑖 all nodes {𝑣 ∶ 𝛼(𝑣) =
+criteria based on structural relationships generally,
+                                                           𝑤𝑗 , 𝑗 > 𝑖} which are only anchored in tokens fol-
+without relying on formalism-specific labels (§4.1).
+                                                           lowing 𝑤𝑖 . E.g., in figure 1, the UD-slice for the
+Consider the small colored subgraphs for each to-
+                                                           token ‘were’ does not contain the parent node 3
+ken in figure 1: the EDS-slice for the target ‘re-
+                                                           because that is anchored only in the following to-
+ported’, for example, starts at node 3, and extends
+                                                           ken ‘reported’ (and thus the sibling 1 cannot be
+to the ARG2-child 2, ARG1-coparent 1, and BV-
+                                                           accessed either). If a node’s anchors contain or
+coparent 0, which are anchored, respectively, in the
+                                                           overlap with 𝑤𝑖 (i.e., the node is a non-terminal
+spans ‘injuries’, ‘Numerous’, and ‘Numerous in-
+                                                           above 𝑤𝑖 ), we retain the node and its edges but
+juries’). Recall from §2 that context words 𝐰<𝑖 are
+                                                           remove its token anchors.
+contained in 𝐺𝑖 , to the extent that they are anchored
+in a node reachable from 𝑤𝑖 . Inspired by Markov           4.2       Vectorizing Graph Slices
+assumptions of independence in generative model-           Because slices can be large, we partition each
+ing and Markov blankets in causal networks, SLR            slice’s nodes by structural relative type, in order to
+graph slicing thus allows us to factorize 𝑃(𝐰|𝐺) as        aggregate them into a fixed-length summary vec-
+                           𝑛−1
+                           ∏                               tor. Specifically, we allocate capacities for each
+             𝑃(𝐰|𝐺) ∶=           𝑃(𝑤𝑖 |𝐺𝑖 ).        (3)    relative type: 𝛾rel = 2 for parents, siblings, aunts,
+                           𝑖=0                             and children, and 1 for grandparents and coparents.
+   Next, we encode each graph slice as a fixed-            Up to 𝛾 − 1, relative nodes 𝑉rel are added ‘with
+sized vector. Prior approaches to encoding linguis-        high resolution’, maintaining their identity and or-
+tic graphs for neural modeling have involved seri-         der; beyond the capacity, relatives are aggregated
+alization, e.g., as parser transition sequences (Qian          4
+                                                                   See appendices A.1 and A.2 for details.
+

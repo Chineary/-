@@ -1,0 +1,201 @@
+                                                     B BA: Bi-Modal Behavioral Alignment for Reasoning with Large
+                                                                       Vision-Language Models
+
+                                                 Xueliang Zhao♠∗ Xinting Huang♢ Tingchen Fu♢ Qintong Li♠ Shansan Gong♠
+                                                                    Lemao Liu♢ Wei Bi♢ Lingpeng Kong♠
+                                                                ♠
+                                                                  The University of Hong Kong ♢ Tencent AI Lab
+                                                                        {xlzhao,lpk}@cs.hku.hk
+
+
+                                                                   Abstract                             contexts, especially within specialized domains
+                                                                                                        such as symbolic reinforcement learning (McGrath
+                                                 Multimodal reasoning stands as a pivotal
+                                                 capability for large vision-language models            et al., 2022; Zahavy et al., 2023; Ruoss et al., 2024)
+                                                 (LVLMs). The integration with Domain-                  and diverse scientific fields (Winter et al., 2022).
+
+
+
+
+arXiv:2402.13577v1 [cs.CL] 21 Feb 2024
+                                                 Specific Languages (DSL), offering precise vi-            Multimodal reasoning is a fundamental
+                                                 sual representations, equips these models with         capability for large vision-language models
+                                                 the opportunity to execute more accurate rea-          (LVLMs) (OpenAI, 2023; Yang et al., 2023b),
+                                                 soning in complex and professional domains.
+                                                                                                        crucial for many of their applications. Despite
+                                                 However, the vanilla Chain-of-Thought (CoT)
+                                                 prompting method faces challenges in effec-            the considerable progress made by LVLMs in
+                                                 tively leveraging the unique strengths of vi-          multimodal tasks (Lu et al., 2023; Hu et al., 2023),
+                                                 sual and DSL representations, primarily due            effectively utilizing them for complex multimodal
+                                                 to their differing reasoning mechanisms. Addi-         reasoning, particularly in conjunction with DSLs,
+                                                 tionally, it often falls short in addressing crit-     remains underexplored. The most direct approach
+                                                 ical steps in multi-step reasoning tasks. To           is to feed the LVLMs with both visual data (e.g.,
+                                                 mitigate these challenges, we introduce the Bi-
+                                                                                                        images) and its corresponding DSL representation
+                                                 Modal Behavioral Alignment (B BA) prompting
+                                                 method, designed to maximize the potential of
+                                                                                                        along with the textual queries. They are then
+                                                 DSL in augmenting complex multi-modal rea-             guided through the Chain-of-Thought (CoT) (Wei
+                                                 soning tasks. This method initiates by guiding         et al., 2023) prompting to process step-by-step
+                                                 LVLMs to create separate reasoning chains for          reasoning. However, a significant issue with this
+                                                 visual and DSL representations. Subsequently,          approach is that the reasoning processes derived
+                                                 it aligns these chains by addressing any incon-        from different modalities are often inconsistent,
+                                                 sistencies, thus achieving a cohesive integration      or even conflicting. This inconsistency limits
+                                                 of behaviors from different modalities. Our ex-
+                                                                                                        the ability of LVLMs to effectively integrate the
+                                                 periments demonstrate that B BA substantially
+                                                 improves the performance of GPT-4V(ision)              strengths of visual and DSL representations (§2.1).
+                                                 on geometry problem solving (28.34% →                  Moreover, these models encounter difficulties
+                                                 34.22%), chess positional advantage prediction         in executing multi-step reasoning (Wu et al.,
+                                                 (42.08% → 46.99%) and molecular property               2023a; Liu and Chen, 2023), which hampers their
+                                                 prediction (77.47% → 83.52%).                          effectiveness in addressing critical steps within
+                                                                                                        complex problems (§2.2).
+                                         1       Introduction                                              To address these challenges, we propose a Bi-
+                                                                                                        Modal Behavioral Alignment (B BA) prompting
+                                         The use of domain-specific language (DSL) (Bow-
+                                                                                                        method that adeptly integrates DSL into com-
+                                         man and Hammerlindl, 2008; Edwards, 1994;
+                                                                                                        plex multimodal reasoning tasks. B BA begins by
+                                         Weininger, 1988) aims to incorporate multimodal
+                                                                                                        prompting LVLMs to generate distinct reasoning
+                                         information by providing a precise and unequivocal
+                                                                                                        chains from both visual and DSL representations,
+                                         alternative form using text.1 Its application has sig-
+                                                                                                        and then aligns these chains by resolving inconsis-
+                                         nificantly improved the multimodal reasoning ca-
+                                                                                                        tencies, thereby harmonizing the behaviors elicited
+                                         pability, yielding notable improvements in intricate
+                                                                                                        from various modalities. B BA offers two primary
+                                                 ∗
+                                             Work done during internship at Tencent AI Lab.             advantages. Firstly, it adopts a “late fusion” strat-
+                                             1
+                                            Figure 2 illustrates an example of a DSL tailored for the
+                                         geometry domain. Further instances of DSLs can be found in     egy (Ghanem et al., 2018; Owens and Efros, 2018),
+                                         Appendix D.                                                    effectively maintaining the inherent strengths of
+                               Spatial
+                             Manipulation
+                                                                                                        70
+      Quantitative
+
+
+
+
+                                                                   Avg. # of Tokens per Critical Step
+       Analysis                                                                                         60
+                                              40
+                                         30                                                             50
+                                    20
+                               10                                                                       40
+                                                   Propositional
+                                                    Reasoning
+                                                                                                        30
+                                                                                                        20
+       Algebraic                                                                                        10
+      Manipulation
+       CoTd
+       CoTv                                                                                             0
+                               Logical                                                                         CoTd    CoTv      CoTm   BBA
+       CoTm                   Deduction                                                                                    Methods
+       BBA
+
+
+Figure 1: Comparative analyses of different methods in problem-solving and critical step detailing. Left: Problem-
+solving rates across diverse problem types, where CoTd and CoTv refer to Chain-of-Thought prompting with DSL
+and image inputs, respectively, and CoTm represents the approach combining both inputs. Right: Average number
+of tokens per critical step across different methods.
+
+both the direct vision input and the DSL representa-               success rates across various problem types and the
+tion. Secondly, B BA turns the inconsistency across                allocation of tokens for critical reasoning steps.
+modalities into a beneficial signal that aids in iden-
+tifying critical steps within reasoning processes.                 2.1                                       Performance on Fine-grained Types
+By revealing where the reasoning chains differ, it
+efficiently allocates more intermediate tokens to                  Our analysis begins with an assessment of the per-
+these critical steps by resolving the inconsistencies              formance of different models on fine-grained prob-
+found.                                                             lem types. To this end, we categorically divide the
+                                                                   geometry problems based on the primary skills re-
+   We evaluate B BA on three multimodal reason-
+                                                                   quired for resolution, resulting in five categories:
+ing tasks: geometry problem-solving, chess posi-
+                                                                   (1) Spatial Manipulation, (2) Propositional Rea-
+tional advantage prediction, and molecular prop-
+                                                                   soning, (3) Logical Deduction, (4) Algebraic Ma-
+erty prediction. In these diverse applications, B BA
+                                                                   nipulation, and (5) Quantitative Analysis. Addi-
+demonstrated notable relative improvements, with
+                                                                   tional details on the categorization annotation can
+respective performance improvements of 14.26%,
+                                                                   be found in Appendix A.1. We proceed to calculate
+10.25%, and 6.30%.
+                                                                   and compare the problem-solving rates for each
+                                                                   category.
+2   Pilot Study
+                                                                      Figure 1 offers a visual comparison of the mod-
+In this study, we compare three variants of CoT                    els’ performances across these categories. It is
+prompting within domains where DSL is available.                   evident that CoTv and CoTd exhibit significantly
+These variations include: (1) CoTv , which utilizes                different levels of effectiveness across these prob-
+only images for grounding responses to queries;                    lem types. Specifically, CoTv shows superior per-
+(2) CoTd , which relies exclusively on DSL repre-                  formance in tasks involving spatial manipulation
+sentations for grounding; and (3) CoTm , which                     and propositional reasoning, while CoTd excels
+integrates both images and DSL representations.                    in logical deduction, algebraic manipulation, and
+We focus on a selection of mathematical geometry                   quantitative analysis. This variation in performance
+problems from the MATH benchmark (Hendrycks                        can be attributed to the different reasoning mech-
+et al., 2021), comprising a total of 187 problems                  anisms enabled by each modality. DSL represen-
+that incorporate image inputs. We then explore the                 tations provide detailed information (e.g., precise
+difficulties associated with performing multi-modal                coordinates) that support logic-oriented operations.
+reasoning using both images and DSL representa-                    On the other hand, images provide intuitive visual
+tions, through an empirical examination of distinct                cues that are more conducive to spatial reasoning
+tasks. Despite the concurrent use of images and         3     Preliminaries
+DSL representations, CoTm does not demonstrate
+                                                        3.1    Problem Formulation
+uniform improvements across all problem types, in-
+dicating the challenge of aligning reasoning mech-      This study focuses on multi-modal reasoning tasks,
+anisms across modalities. In §4, we elaborate on        specifically where the visual modality is repre-
+B BA, which initiates by independently deriving         sented as an image, coupled with a DSL that accu-
+reasoning chains from images and DSL representa-        rately depicts the image. Our objective is to predict
+tions, and then aligning these chains by resolving      an answer to a given question q, associated with an
+any inconsistencies between them. Unlike CoTm ,         image v and a DSL representation d, adhering to
+B BA effectively capitalizes on the strengths of        specific task requirements (e.g., solving mathemat-
+both modalities, achieving comprehensive improve-       ical problems).
+ments across all identified problem categories.            The emergence of LVLMs has streamlined this
+                                                        process. Owing to extensive pre-training on tril-
+                                                        lions of tokens, these models can accurately in-
+                                                        terpret various instructions and execute the corre-
+2.2   Token Allocation for Critical Steps
+                                                        sponding tasks. In this paradigm, the model param-
+                                                        eters are denoted by θ, and the answer â is gener-
+In light of recent theoretical advances (Feng et al.,   ated as â = arg maxa p(a | q, v, d; θ), where the
+2023; Merrill and Sabharwal, 2023) indicating the       inputs are reformulated into well-crafted prompts
+effective allocation of intermediate tokens as piv-     using specific templates, designed to elicit the de-
+otal for unlocking the expressive power of models       sired response from the LVLMs.
+in sequential reasoning tasks, we delve into the
+allocation of intermediate tokens for addressing        3.2    Chain-of-Thought Prompting
+critical steps in problem-solving. A critical step in   Recently, chain-of-thought prompting has gained
+solving mathematical problems is defined as the         recognition as an effective technique for enhanc-
+point at which an essential insight, decision, or       ing the reasoning capabilities of language mod-
+application of a method is crucial for obtaining        els (Wei et al., 2023). This method decomposes
+the correct solution, typically involving a signifi-    the original task into two distinct phases: ratio-
+cant conceptual leap, strategic theorem application,    nale generation and answer prediction. In the ra-
+or key calculation that influences the subsequent       tionale generation phase, a rationale r̂ is derived
+problem-solving process. For each problem, we           as r̂ = arg maxr p(r | q, v, d; θ), leveraging a
+identify all critical steps, categorizing each step     query augmented with an instruction designed to
+in the generated solution as either corresponding       initiate stepwise analytical thinking (Kojima et al.,
+to one of the identified critical steps or not, and     2022)). Subsequently, the answer is often deduced
+then sum the tokens for steps within a generated        directly from the rationale, utilizing heuristic string-
+solution that are associated with the same critical     matching methods for precise identification.
+step. Details on the annotation of critical steps are
+provided in Appendix A.2.                               4     Method
+   Figure 1 demonstrates that merely combining          This work aims to tackle two primary challenges
+images and DSL representations in inputs is in-         in multi-modal reasoning: (1) the integration of
+sufficient for effectively allocating more tokens to    the inherent strengths of both visual and DSL rep-
+critical steps, thus reducing the expressive power of   resentations, and (2) the identification and resolu-
+LLMs and leading to inferior overall performance        tion of critical steps within these tasks. To address
+(as discussed in §5.4). We hypothesize that this        these challenges, we introduce the B BA prompt-
+limitation arises from the current inefficiencies of    ing method, an innovative approach that seeks to
+LLMs in exploring the solution space for complex        unleash the power of DSL in enhancing complex
+problems (Yang et al., 2023b), resulting in their       multi-modal reasoning tasks. Figure 2 offers an
+struggle to accurately identify critical steps. As      overview of our proposed methodology. B BA initi-
+will be discussed in §4.2, B BA is more effective in    ates by employing LVLMs to generate reasoning
+discerning and addressing critical steps by uncover-    chains separately from visual and DSL inputs. Sub-
+ing and reconciling discrepancies among reasoning       sequently, these chains proceed through an align-
+chains derived from different modalities.               ment phase, wherein inconsistencies are identified
+

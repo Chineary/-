@@ -1,0 +1,229 @@
+                 What Do Recurrent Neural Network Grammars Learn About Syntax?
+                             Adhiguna Kuncoro♠ Miguel Ballesteros♦ Lingpeng Kong♠
+                                   Chris Dyer♠♣ Graham Neubig♠ Noah A. Smith♥
+                      ♠
+                        School of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
+                             ♦
+                               IBM T.J. Watson Research Center, Yorktown Heights, NY, USA
+                                                ♣
+                                                  DeepMind, London, UK
+                      ♥
+                        Computer Science & Engineering, University of Washington, Seattle, WA, USA
+                                               {akuncoro,lingpenk,gneubig}@cs.cmu.edu
+                       miguel.ballesteros@ibm.com, cdyer@google.com, nasmith@cs.washington.edu
+
+
+                                    Abstract                                data. In some sense, such models can be thought
+                                                                            of as mini-scientists.
+                  Recurrent neural network grammars                            Neural networks, including RNNGs, are capa-
+                  (RNNG) are a recently proposed prob-                      ble of representing larger classes of hypotheses
+                  ablistic generative modeling family for                   than traditional probabilistic models, giving them
+                  natural language. They show state-of-                     more freedom to explore. Unfortunately, they tend
+                  the-art language modeling and parsing                     to be bad mini-scientists, because their parameters
+                  performance. We investigate what in-                      are difficult for human scientists to interpret.
+                  formation they learn, from a linguistic                      RNNGs are striking because they obtain state-
+                  perspective, through various ablations                    of-the-art parsing and language modeling perfor-
+                  to the model and the data, and by aug-                    mance. Their relative lack of independence as-
+                  menting the model with an attention                       sumptions, while still incorporating a degree of
+                  mechanism (GA-RNNG) to enable closer                      linguistically-motivated prior knowledge, affords
+                  inspection. We find that explicit modeling                the model considerable freedom to derive its own
+                  of composition is crucial for achieving the               insights about syntax. If they are mini-scientists,
+                  best performance. Through the attention                   the discoveries they make should be of particular
+                  mechanism, we find that headedness                        interest as propositions about syntax (at least for
+                  plays a central role in phrasal represen-                 the particular genre and dialect of the data).
+                  tation (with the model’s latent attention
+                                                                               This paper manipulates the inductive bias of
+                  largely agreeing with predictions made
+                                                                            RNNGs to test linguistic hypotheses.1 We be-
+                  by hand-crafted head rules, albeit with
+                                                                            gin with an ablation study to discover the impor-
+                  some important differences). By training
+                                                                            tance of the composition function in §3. Based
+                  grammars without nonterminal labels, we
+                                                                            on the findings, we augment the RNNG composi-
+                  find that phrasal representations depend
+                                                                            tion function with a novel gated attention mech-
+                  minimally on nonterminals, providing
+                                                                            anism (leading to the GA-RNNG) to incorporate
+                  support for the endocentricity hypothesis.
+                                                                            more interpretability into the model in §4. Using
+             1    Introduction                                              the GA-RNNG, we proceed by investigating the
+                                                                            role that individual heads play in phrasal represen-
+             In this paper, we focus on a recently proposed                 tation (§5) and the role that nonterminal category
+             class of probability distributions, recurrent neural           labels play (§6). Our key findings are that lexi-
+             network grammars (RNNGs; Dyer et al., 2016),                   cal heads play an important role in representing
+             designed to model syntactic derivations of sen-                most phrase types (although compositions of mul-
+             tences. We focus on RNNGs as generative proba-                 tiple salient heads are not infrequent, especially
+             bilistic models over trees, as summarized in §2.
+                                                                                1
+                Fitting a probabilistic model to data has often                   RNNGs have less inductive bias relative to traditional
+                                                                            unlexicalized probabilistic context-free grammars, but more
+             been understood as a way to test or confirm some               than models that parse by transducing word sequences to
+             aspect of a theory. We talk about a model’s as-                linearized parse trees represented as strings (Vinyals et al.,
+             sumptions and sometimes explore its parameters                 2015). Inductive bias is necessary for learning (Mitchell,
+                                                                            1980); we believe the important question is not “how little
+             or posteriors over its latent variables in order to            can a model get away with?” but rather the benefit of differ-
+             gain understanding of what it “discovers” from the             ent forms of inductive bias as data vary.
+
+
+                                                                       1249
+Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 1, Long Papers, pages 1249–1258,
+                                 Valencia, Spain, April 3-7, 2017. c 2017 Association for Computational Linguistics
+for conjunctions) and that nonterminal labels pro-
+                                                                                                              RE
+                                                                                                              GEDUC
+                                                                                                              NTN E
+                                                                                                                 (N
+                                                                                                              NT P)
+                                                                                                                 (VP…
+                                                                                                                         p(at )
+                                                                                                                     )
+
+
+
+
+vide little additional information. As a by-product                       z
+                                                                                    St
+                                                                                    }|         {                            ut          z
+                                                                                                                                              Tt
+                                                                                                                                              }|     {
+of our investigation, a variant of the RNNG with-
+out ensembling achieved the best reported super-                     (S             NP             (VP                            cat       hungry   The
+vised phrase-structure parsing (93.6 F1 ; English                                                                   a<t
+                                                                              The hungry cat
+PTB) and, through conversion, dependency pars-
+ing (95.8 UAS, 94.6 LAS; PTB SD). The code and
+pretrained models to replicate our results are pub-               Figure 1: The RNNG consists of a stack, buffer of
+licly available2 .                                                generated words, and list of past actions that lead
+                                                                  to the current configuration. Each component is
+2    Recurrent Neural Network Grammars                            embedded with LSTMs, and the parser state sum-
+An RNNG defines a joint probability distribution                  mary ut is used as top-layer features to predict a
+over string terminals and phrase-structure nonter-                softmax over all feasible actions. This figure is
+minals.3 Formally, the RNNG is defined by a                       due to Dyer et al. (2016).
+triple hN, Σ, Θi, where N denotes the set of non-
+terminal symbols (NP, VP, etc.), Σ the set of all
+terminal symbols (we assume that N ∩ Σ = ∅),                         open nonterminal) are popped, a composition
+and Θ the set of all model parameters. Unlike                        function is executed, yielding a composed rep-
+previous works that rely on hand-crafted rules to                    resentation that is pushed onto the stack.
+compose more fine-grained phrase representations
+(Collins, 1997; Klein and Manning, 2003), the                        At each timestep, the model encodes the stack,
+RNNG implicitly parameterizes the information                     buffer, and past actions, with a separate LSTM
+passed through compositions of phrases (in Θ and                  (Hochreiter and Schmidhuber, 1997) for each
+the neural network architecture), hence weakening                 component as features to define a distribution over
+the strong independence assumptions in classical                  the next action to take (conditioned on the full
+probabilistic context-free grammars.                              algorithmic state). The overall architecture is il-
+   The RNNG is based on an abstract state ma-                     lustrated in Figure 1; examples of full action se-
+chine like those used in transition-based parsing,                quences can be found in Dyer et al. (2016).
+with its algorithmic state consisting of a stack
+                                                                     A key element of the RNNG is the composition
+of partially completed constituents, a buffer of
+                                                                  function, which reduces a completed constituent
+already-generated terminal symbols, and a list of
+                                                                  into a single element on the stack. This function
+past actions. To generate a sentence x and its
+                                                                  computes a vector representation of the new con-
+phrase-structure tree y, the RNNG samples a se-
+                                                                  stituent; it also uses an LSTM (here a bidirectional
+quence of actions to construct y top-down. Given
+                                                                  one). This composition function, which we con-
+y, there is one such sequence (easily identified),
+                                                                  sider in greater depth in §3, is illustrated in Fig. 2.
+which we call the oracle, a = ha1 , . . . , an i used
+during supervised training.
+   The RNNG uses three different actions:
+                                                                                                                                        x
+                                                                                    x
+• NT(X), where X ∈ N , introduces an open non-                                     NP
+  terminal symbol onto the stack, e.g., “(NP”;
+                                                                          u         v          w
+• GEN(x), where x ∈ Σ, generates a terminal
+  symbol and places it on the stack and buffer; and
+                                                                                                         NP   u             v      w           NP
+• REDUCE indicates a constituent is now com-
+  plete. The elements of the stack that comprise
+  the current constituent (going back to the last                 Figure 2: RNNG composition function on each
+                                                                  REDUCE operation; the network on the right mod-
+    2
+      https://github.com/clab/rnng/tree/                          els the structure on the left (Dyer et al., 2016).
+master/interpreting-rnng
+    3
+      Dyer et al. (2016) also defined a conditional version of
+the RNNG that can be used only for parsing; here we focus
+on the generative version since it is more flexible and (rather     Since the RNNG is a generative model, it at-
+surprisingly) even learns better estimates of p(y | x).           tempts to maximize p(x, y), the joint distribution
+
+
+                                                              1250
+of strings and trees, defined as                                   Vinyals et al. (2015) and Choe and Charniak
+                                                                   (2016) must learn implicitly, plays a crucial role in
+                            n
+                            Y                                      the RNNG’s generalization success. Beyond this,
+     p(x, y) = p(a) =             p(at | a1 , . . . , at−1 ).
+                            t=1
+                                                                   Choe and Charniak’s generative variant of Vinyals
+                                                                   et al. (2015) is another instance where generative
+In other words, p(x, y) is defined as a product                    models trained on the PTB outperform discrimina-
+of local probabilities, conditioned on all past ac-                tive models.
+tions. The joint probability estimate p(x, y) can
+be used for both phrase-structure parsing (finding                 3.1     Ablated RNNGs
+arg maxy p(y | x)) and language modeling (find-                    On close inspection, it is clear that the RNNG’s
+ing p(x) by marginalizing over the set of possi-                   three data structures—stack, buffer, and action
+ble parses for x). Both inference problems can be                  history—are redundant. For example, the action
+solved using an importance sampling procedure.4                    history and buffer contents completely determine
+We report all RNNG performance based on the                        the structure of the stack at every timestep. Every
+corrigendum to Dyer et al. (2016).                                 generated word goes onto the stack, too; and some
+                                                                   past words will be composed into larger structures,
+3    Composition is Key                                            but through the composition function, they are all
+                                                                   still “available” to the network that predicts the
+Given the same data, under both the discrimina-
+                                                                   next action. Similarly, the past actions are redun-
+tive and generative settings RNNGs were found to
+                                                                   dant with the stack. Despite this redundancy, only
+parse with significantly higher accuracy than (re-
+                                                                   the stack incorporates the composition function.
+spectively) the models of Vinyals et al. (2015) and
+                                                                   Since each of the ablated models is sufficient to
+Choe and Charniak (2016) that represent y as a
+                                                                   encode all necessary partial tree information, the
+“linearized” sequence of symbols and parentheses
+                                                                   primary difference is that ablations with the stack
+without explicitly capturing the tree structure, or
+                                                                   use explicit composition, to which we can there-
+even constraining the y to be a well-formed tree
+                                                                   fore attribute most of the performance difference.
+(see Table 1). Vinyals et al. (2015) directly predict
+the sequence of nonterminals, “shifts” (which con-                    We conjecture that the stack—the component
+sume a terminal symbol), and parentheses from                      that makes use of the composition function—is
+left to right, conditional on the input terminal se-               critical to the RNNG’s performance, and that the
+quence x, while Choe and Charniak (2016) used a                    buffer and action history are not. In transition-
+sequential LSTM language model on the same lin-                    based parsers built on expert-crafted features, the
+earized trees to create a generative variant of the                most recent words and actions are useful if they
+Vinyals et al. (2015) model. The generative model                  are salient, although neural representation learners
+is used to re-rank parse candidates.                               can automatically learn what information should
+                                                                   be salient.
+    Model                                                 F1          To test this conjecture, we train ablated RN-
+    Vinyals et al. (2015) – PTB only                     88.3      NGs that lack each of the three data structures (ac-
+    Discriminative RNNG                                  91.2      tion history, buffer, stack), as well as one that lacks
+                                                                   both the action history and buffer.5 If our conjec-
+    Choe and Charniak (2016) – PTB only                  92.6
+                                                                   ture is correct, performance should degrade most
+    Generative RNNG                                      93.3
+                                                                   without the stack, and the stack alone should per-
+Table 1: Phrase-structure parsing performance on                   form competitively.
+PTB §23. All results are reported using single-                       Experimental settings. We perform our exper-
+model performance and without any additional                       iments on the English PTB corpus, with §02–21
+data.                                                              for training, §24 for validation, and §23 for test;
+                                                                   no additional data were used for training. We fol-
+  The results in Table 1 suggest that the RNNG’s                       5
+                                                                         Note that the ablated RNNG without a stack is quite sim-
+explicit composition function (Fig. 2), which                      ilar to Vinyals et al. (2015), who encoded a (partial) phrase-
+                                                                   structure tree as a sequence of open and close parentheses,
+    4
+      Importance sampling works by using a proposal distri-        terminals, and nonterminal symbols; our action history is
+bution q(y | x) that is easy to sample from. In Dyer et al.        quite close to this, with each NT(X) capturing a left parenthe-
+(2016) and this paper, the proposal distribution is the discrim-   sis and X nonterminal, and each REDUCE capturing a right
+inative variant of the RNNG; see Dyer et al. (2016).               parenthesis.
+
+
+                                                                1251
+

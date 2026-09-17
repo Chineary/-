@@ -1,0 +1,214 @@
+                     LoRA Meets Dropout under a Unified Framework
+
+                   Sheng Wang♡∗, Liheng Chen♡∗ , Jiyue Jiang♠ , Boyang Xue♠ ,
+                                   Lingpeng Kong♡ , Chuan Wu♡
+               ♡
+                 The University of Hong Kong, ♠ The Chinese University of Hong Kong
+              {u3009618, clh648}@connect.hku.hk, jiangjy@link.cuhk.edu.hk,
+                        byxue@se.cuhk.edu.hk, {lpk, cwu}@cs.hku.hk
+
+
+
+                         Abstract                               parameter-efficient fine-tuning (PEFT) (Houlsby
+                                                                et al., 2019; Hu et al., 2021; Liu et al., 2022)
+    With the remarkable capabilities, large lan-
+    guage models (LLMs) have emerged as essen-                  has been widely adopted as a lightweight method,
+    tial elements in numerous NLP applications,                 which generally freezes the majority of parameters
+    while parameter-efficient finetuning, especially            while only updating or adding negligible trainable
+    LoRA, has gained popularity as a lightweight                parameters. Among these methods, LoRA (Hu
+    approach for model customization. Meanwhile,                et al., 2021) gains the most popularity due to its
+    various dropout methods, initially designed                 high effectiveness, robustness and generality.
+    for full finetuning with all the parameters up-                In parallel with this, dropout (Hinton et al., 2012)
+    dated, alleviates overfitting associated with ex-
+                                                                has been widely adopted to mitigate overfitting,
+    cessive parameter redundancy. Hence, a possi-
+    ble contradiction arises from negligible train-             which is generally caused by excessive parameter
+    able parameters of LoRA and the effectiveness               redundancy. Its variants, including DropKey (Li
+    of previous dropout methods, which has been                 et al., 2023), DropAttention (Zehui et al., 2019) and
+    largely overlooked. To fill this gap, we first              HiddenCut (Chen et al., 2021), have also demon-
+    confirm that parameter-efficient LoRA is also               strated superiority for transformers. With a speci-
+    overfitting-prone. We then revisit transformer-             fied probability, they randomly deactivate attention
+    specific dropout methods, and establish their
+                                                                logits, weights and hidden representations, respec-
+    equivalence and distinctions mathematically
+    and empirically. Building upon this compar-                 tively. However, the effectiveness of these meth-
+    ative analysis, we introduce a unified frame-               ods is only verified in full finetuning scenarios,
+    work for a comprehensive investigation, which               where all the parameters are updated and easily
+    instantiates these methods based on dropping                lead to excessive redundancy. When it comes to
+    position, structural pattern and compensation               LoRA-based PEFT scenarios, a potential contra-
+    measure. Through this framework, we reveal                  diction arises. Specifically, since overfitting pri-
+    the new preferences and performance compar-                 marily stems from excessive parameter redundancy,
+    isons of them when involved with limited train-
+                                                                dropout may prove ineffective in LoRA-based fine-
+    able parameters. This framework also allows us
+    to amalgamate the most favorable aspects into               tuning because of the extremely limited trainable
+    a novel dropout method named HiddenKey. Ex-                 parameters. Besides, all the above methods are pro-
+    tensive experiments verify the remarkable su-               posed independently, lacking a clear guideline to
+    periority and sufficiency of HiddenKey across               unify them systematically, which hinders compre-
+    multiple models and tasks, which highlights it              hensive comparative analysis and the development
+    as the preferred approach for high-performance              of more effective dropout methods.
+    and parameter-efficient finetuning of LLMs.
+                                                                   In this study, we first conduct extensive exper-
+1   Introduction                                                iments and confirm that LoRA also suffers from
+                                                                overfitting easily, which serves as a prerequisite
+Recently, transformers (Vaswani et al., 2017), such             for our following analysis. As shown in Figure 5,
+as GPT-4 (OpenAI, 2023), PaLM 2 (Anil et al.,                   as the rank and trainable parameters increase, the
+2023) and LLaMA 2 (Touvron et al., 2023b), have                 model’s performance initially improves but gradu-
+been rapidly expanded to billions of parameters,                ally deteriorates due to the intensifying overfitting.
+leading to remarkable performance boost. When                   Much more experiments in Sec. 4 provide further
+customizing these models for downstream tasks,                  evidence and affirm that this overfitting susceptibil-
+    ∗
+        Equal Contribution.                                     ity can be improved with dropout methods. Besides,
+                                                           1995
+                    Findings of the Association for Computational Linguistics: ACL 2024, pages 1995–2008
+                            August 11-16, 2024 ©2024 Association for Computational Linguistics
+we compare the above transformer-specific dropout              instantiate existing dropout methods, within
+methods mathematically and empirically. For the                which we discover the new preferences and
+first time, we find that DropKey and DropAtten-                performance comparison of these methods.
+tion share the equivalent forwarding process, while
+                                                           • A new dropout method named HiddenKey is
+the gradient stopping operator introduces gradient
+                                                             devised within our framework, exhibiting su-
+noise into the backpropagation of DropAttention,
+                                                             perior effectiveness and sufficiency in mitigat-
+impairing the training stability and performance.
+                                                             ing LoRA’s susceptibility to overfitting.
+   Based on the comparative analysis, we identify
+three key dimensions for a dropout method and         2        Preliminaries
+derive a unified framework along dropping posi-
+tion, structural pattern and compensation measure.    In this section, we revisit three transformer-specific
+With this framework, empirical experiments firstly    dropout methods shown in Figure 1, laying the
+reveal the new preferences of these methods in        foundation for the subsequent analysis.
+LoRA scenarios. For example, span-wise Hidden-        DropAttention. DropAttention (Zehui et al.,
+Cut is no longer superior to the element-wise one     2019) is the first dropout method specially designed
+due to the limited tunable parameters. Secondly,      for self-attention mechanism. It randomly masks
+this framework enables the comprehensive com-         elements or key columns of attention weights, en-
+parisons among different methods. Empirically,        couraging the utilization of multiple contextualized
+we find that DropKey performs the best followed       features instead of overfitting some specific pat-
+by HiddenCut, while DropAttention exhibits the        terns. Following Eq. 1 and 2, normalized rescaling
+worst performance due to the gradient noise. As an    replaces the traditional one to guarantee the sum
+alternative compensation, Bidirectional Kullback-     of attention weights to be one, and achieves better
+Leibler (KL) divergence loss consistently achieves    performance for multiple NLP classification tasks.
+performance gains, while Jensen-Shannon (JS) con-                  wj = m · wj ,m ∼ Bernoulli(p),                  (1)
+sistency regularization loss becomes ineffective.                              w j
+   Guided by this framework, we also derive a new                  wj′ =        P            ,                     (2)
+                                                                         NoGrad( l−1
+                                                                                   j=0 w j )
+dropout method named HiddenKey, which drops
+attention logits column-wisely and hidden represen-    where p, l, wj , wj , and wj′ denote the dropout rate,
+tations element-wisely, respectively, and augment     sequence length, original, masked, and rescaled
+the vanilla loss with KL loss. It consistently ex-    attention weights. NoGrad() and Bernoulli() rep-
+hibits superiority across multiple models in both     resent the gradient stopping operator and sampling
+natural language understanding (NLU) and gen-         from the Bernoulli distribution, respectively1 .
+eration (NLG) tasks, which also fills the largely     DropKey. As a dropout-before-softmax scheme,
+overlooked gap on the effect of dropout methods       DropKey (Li et al., 2023) takes attention logits gj
+on NLG tasks. Integrating with input and output       instead of weights as the basic units, as formulated
+dropout does not provide further complementar-        in Eq. 3. Since the subsequent softmax() ensures
+ity, demonstrating the sufficiency of our method.     the sum of weights to be one, rescaling is no longer
+Hence, HiddenKey excels as the better method for      necessary.          (
+high-performance and parameter-efficient finetun-                               0,       with probability 1 − p
+                                                          gj′ = m + gj , m =                                    (3)
+ing of LLMs on both NLU and NLG tasks.                                          −∞,      with probability p
+   In summary, our contributions are mainly as fol-
+                                                      HiddenCut. In contrast, HiddenCut (Chen et al.,
+lows:
+                                                      2021) focuses on preventing the co-adaptation of
+   • We present the first comprehensive investi-      hidden representations in the feed-forward mod-
+     gation to explore the potential contradiction    ule. The core idea is to cut single contiguous span,
+     between various dropout methods and LoRA.        which may contain more semantic information and
+                                                      be more difficult to be restored. Besides, JS loss is
+   • We compare three typical transformer-specific    applied to encourage the perturbed representations
+     dropout methods theoretically and empirically,   to be as close to those in inference as possible.
+     and derive the core dimensions for designing          1
+                                                          Here we omit the subscript t for clarity. Although whether
+     a dropout method.                                the NoGrad() operator exists or not significantly impacts the
+                                                      performance of DropAttention, it is overlooked in the original
+   • We further introduce a unified framework to      paper. We present it here and will discuss both cases in detail.
+
+                                                  1996
+                                                                *L
+        DropAttention                                                      Proved by Eq. 13 in Appendix C, Eq. 5 and Eq. 6
+                    SoftMax              Add & LayerNorm
+          DropKey                  HiddenCut                               are strictly equal to each other. Hence, the final at-
+                     Scale                 FeedForward                     tention weights (i.e., wu′ and wm ′ ) of DropKey are
+
+                    MatMul               Add & LayerNorm                   the same as those of DropAttention, and so is the
+                                                                           following computation. Notably, normalized rescal-
+                                                MatMul
+                                                                           ing plays an indispensable role in establishing this
+                              X
+                                                                           equivalence, which diminishes the differences be-
+                                                                           tween these two methods during the forward pass.
+Figure 1: Illustration of transformer architecture and
+typical transformer-specific dropout methods, namely                       Variation in Back-Propagation between Drop-
+DropKey, DropAttention, and HiddenCut.                                     Key and DropAttention. Due to the equiva-
+                                                                           lent forward pass, the corresponding values of
+                                                                            ∂O        ∂O
+                                                                           ∂wu′ and ∂w ′   remain the same for DropKey and
+                                                                                        m
+                                                                           DropAttention, where O denotes the objective func-
+                                                                           tion. Meanwhile, because of the identical compu-
+                                                                           tation before attention logits, the analysis of back-
+         (a) element          (b) column             (c) span
+                                                                           propagation focuses on the four partial derivatives
+                                                                           of wu′ and wm ′ with respect to g and g , respec-
+                                                                                                              u      m
+Figure 2: Three structural sampling strategies, namely                     tively. For DropKey, we have
+element, column, and span. The grey and blue cells                                                Pl−1
+                                                                              ∂wu′                  i=0,̸=m exp(gi ) − exp(gu )
+represent masked and remaining entries, respectively. In                           = exp(gu ) ·        P                        .     (7)
+                                                                              ∂gu                     ( l−1
+                                                                                                          i=0,̸=m exp(gi ))
+                                                                                                                            2
+HiddenCut, rows and columns denote sequence length
+(L) and hidden dimension (D), while representing keys
+(K) and queries (Q) in DropKey and DropAttention.                          For DropAttention with NoGrad(), we have
+
+                                                                                 ∂wu′            exp(gu ) · exp(gm )
+                                                                                      = − Pl−1               Pl−1                 ,   (8)
+3       Method                                                                   ∂gm        i=0 exp(g   i) ·     i=0,̸=m exp(gi )
+                                                                                                      P
+                                                                                 ∂wu′      exp(gu ) · l−1  i=0,̸=u exp(gi )
+Firstly, we conduct a comparative analysis of the                                     = Pl−1               Pl−1               .       (9)
+                                                                                 ∂gu          exp(g   )  ·   i=0,̸=m exp(gi )
+above methods. Based on their similarity and differ-                                      i=0       i
+
+ences, we then propose a unified framework along
+                                                                            As for other partial derivatives, their gradient flow
+dropping position, structural pattern and compen-
+                                                                           is disrupted by dropping operations. When the cor-
+sation measure. Finally, this framework guides us
+                                                                           responding elements of attention logits and weights
+to derive a new dropout method named HiddenKey,
+                                                                           are masked in DropKey and DropAttention, the
+which exhibits superior performance empirically.
+                                                                           derivative of wu′ with respect to gu has proportional
+3.1     Mathematical and Empirical Comparison                              relation, as shown in Eq. 10 and proven by Eq. 14.
+Equivalent Forwarding between DropKey and                                  Provably, k is always less than 1 and continuously
+DropAttention. Despite the different details be-                           decreases with the increase of gm . In other words,
+tween DropKey and DropAttention, we show their                             compared to DropAttention with NoGrad(), Drop-
+mathematical equivalence in forwarding. Let gu                             Key can adaptively lower the gradients when a
+and gm denote the unmasked and masked attention                            large attention logit gm is discarded. This can pro-
+logits, while wu and wm represent the correspond-                          vide DropKey with dropping-dependent compen-
+ing attention weights2 . For DropKey, we have                              sation capability, thereby stabilizing the training
+               ′                                                           process. For DropAttention with NoGrad(), the
+              gm := −∞,           gu′ := gu ,     ′
+                                                 wm = 0,             (4)
+                                                                           partial derivative of wu′ with respect to gm is non-
+                      exp(g ′ )
+              wu′ = Pl−1 u ′ ,                                       (5)   zero and that with respect to gu depends on the
+                     i=0 exp(gi )
+                                                                           value of gm , even if wm is masked and gm is not
+while for DropAttention, we have                                           used for computation. This implies that a larger
+         ′
+        wm := 0,
+                               exp(gu )
+                       wu′ = Pl−1
+                                                1
+                                            · Pl−1 .                 (6)   dropout rate can introduce more gradient noise,
+                              i=0 exp(g i )    i=0 w i                     which is further validated by the inferior perfor-
+    2
+    Only one masked element is considered here, but masking                mance in Sec. 4. In contrast, DropAttention with-
+multiple elements shares the same analysis.                                out NoGrad() shares the same back-propagation
+                                                                       1997
+

@@ -1,0 +1,228 @@
+                                                                          Scaling Reasoning without Attention
+
+
+                                                                                        Xueliang Zhao♠⋆∗ Wei Wu⋆† Lingpeng Kong♠†
+                                                                                          ♠
+                                                                                            The University of Hong Kong ⋆ Ant Group
+                                                                                                   {xlzhao,lpk}@cs.hku.hk
+                                                                                                  wuwei19850318@gmail.com
+
+
+
+
+arXiv:2505.22425v1 [cs.LG] 28 May 2025
+                                                                                                                                           Abstract
+
+                                                     Large language models (LLMs) have made significant advances in complex rea-
+                                                     soning tasks, yet they remain bottlenecked by two core challenges: architectural
+                                                     inefficiency due to reliance on Transformers, and a lack of structured fine-tuning
+                                                     for high-difficulty domains. We introduce P ROMPT C OT-M AMBA, an attention-
+                                                     free language model that addresses both issues through architectural and data-
+                                                     centric innovations. Built on the state space dual (SSD) layers of Mamba-2, our
+                                                     model eliminates the need for self-attention and key-value caching, enabling fixed-
+                                                     memory, constant-time inference. To train it for complex reasoning, we propose
+                                                     a two-phase curriculum fine-tuning strategy based on the P ROMPT C OT synthe-
+                                                     sis paradigm, which generates pedagogically structured problems via abstract
+                                                     concept selection and rationale-guided generation. On benchmark evaluations,
+                                                     P ROMPT C OT-M AMBA-7B outperforms strong Transformer and hybrid models
+                                                     of comparable scale, and even surpasses the much larger Gemma3-27B by 2.6%
+                                                     on AIME 24, 0.6% on AIME 25, and 3.0% on Livecodebench. These results
+                                                     highlight the potential of state space models as efficient and scalable alternatives to
+                                                     attention-based architectures for high-capacity reasoning.
+                                                                                                                     github.com/inclusionAI/PromptCoT
+                                                                                                            huggingface.co/xl-zhao/PromptCoT-Mamba-7B
+
+
+                                                                                                         PromptCoT-Mamba-7B                Gemma3-12B               S1.1-7B                          Nemotron-H-8B
+                                                                                                         Gemma3-27B                        Sky-T1-7B                Bespoke-Stratos-7B               M1-3B
+                                                                    100
+
+                                                                                                                                                           84  .6 89.0                               86
+                                                                                                                                                         83  .                                         .0
+                                                                                                                                                            858 .
+                                                                                                                                                    82 0 .0                                         .7    .1
+                                                                                                                                                   81 .                                             81   81
+                                                                                                                                              77 2                                                                      .3
+                                                                    80                                                                          .6  81  .7
+                                                                                                                                                                                                                      79      78
+                                                                                                                                                                                                                             .0
+                                                                                                                                                                                                                                  .0
+                                                                                                                                                                                                                    .2       75    .2            .4
+                                                                                                                                                                                                                                                 74
+                                                                                                                                                                                                                   73             73
+                                                                                                                                                                                                                                             .3
+                                                                                                                                                                                                                                            68
+                                                                                                                                                                                                               64.0
+
+
+
+
+                                                     Accuracy (%)
+                                                                    60                                                                                                                                                                  56  .7
+                                                                                                                                                                           50  .7 54 .2
+                                                                                                                                                                          49 .
+                                                                                                                                                                         49 9
+                                                                                                                                                                           .2
+                                                                                                                                                                                      .1  .0   .6
+                                                                                                                                                                                       45      43
+                                                                                                                                                                                    43                        .5
+                                                                                                                                                                                                            41
+                                                                    40    .2
+                                                                                                                                                                                                                                       .2
+                                                                                                                                                                                                                                       37
+                                                                          35   .6
+                                                                           32                                        .9
+                                                                                                                     29
+                                                                                                                      26  .9
+                                                                                            .0    24
+                                                                                                 24 6.
+                                                                                     22 .          .0           .0         .2
+                                                                                19 9
+                                                                                   .
+                                                                                            23                  22        22
+                                                                                19 2                     19
+                                                                    20         18 2.                        .
+                                                                                                         19 2                  .3
+                                                                                 .3                  17 2
+                                                                                                        .   .                  18
+                                                                                                    16 5
+                                                                                                      .3
+                                                                                                                                13  .3
+
+                                                                                                                                     8.6
+
+
+                                                                     0
+                                                                                AIME 24              AIME 25         Livecodebench                 MATH-500              OlympiadBench                   HumanEval            HumanEval+
+
+                                         Figure 1: Comparison of benchmark performance across models of varying architectures. P ROMPT C OT-
+                                         M AMBA-7B, a pure attention-free Mamba model (orange), outperforms all Transformer (blue) and hybrid
+                                         Mamba-Transformer (hatched) baselines of similar or larger scale on AIME 24, AIME 25, and Livecodebench,
+                                         while remaining competitive across other math and code reasoning benchmarks. Bars represent pass@1 accuracy.
+
+                                            ∗
+                                                This work was done during an internship at Ant Group.
+                                            †
+                                                Corresponding authors.
+
+
+                                         Preprint.
+1   Introduction
+
+Recent progress in large language models (LLMs) has enabled impressive capabilities in multi-step
+reasoning [Brown et al., 2020, Achiam et al., 2023], mathematical problem solving [Lewkowycz
+et al., 2022, Lightman et al., 2023], and code generation[Chen et al., 2021]. Despite these advances,
+a well-known limitation persists in the Transformer architecture that powers most state-of-the-art
+LLMs: their attention mechanism is memory-intensive and scales poorly with long input contexts.
+Transformer decoders require maintaining a growing key-value (KV) cache during autoregressive
+inference, resulting in linear memory growth and degraded throughput in long-context applications.
+This limitation has become increasingly problematic with the rise of long chain-of-thought reasoning
+paradigms popularized by models like OpenAI’s O1 [Jaech et al., 2024] and DeepSeek’s R1 [Guo
+et al., 2025], where extended reasoning paths are critical for complex problem solving. In this work,
+we propose P ROMPT C OT-M AMBA, an attention-free language model that delivers constant-time
+inference and fixed memory per token without maintaining a KV cache, yet outperforms strong
+Transformer and hybrid models of comparable scale—even surpassing the much larger Gemma3-27B
+[Team et al., 2025] by 2.6% on AIME 24, 0.6% on AIME 25, and 3.0% on Livecodebench. To achieve
+this, P ROMPT C OT-M AMBA builds upon Mamba-2’s selective state space architecture [Dao and Gu,
+2024], replacing traditional self-attention with state space dual (SSD) layers. This architectural choice
+delivers constant-time inference and fixed memory consumption while maintaining strong reasoning
+capabilities. We further enhance the model’s problem-solving abilities through a carefully designed
+two-phase curriculum fine-tuning framework based on the P ROMPT C OT synthesis paradigm [Zhao
+et al., 2025]. This methodology systematically develops advanced reasoning skills by generating
+pedagogically structured problems through a principled process: first sampling abstract concepts and
+constructing expert-style rationales, then generating target problems conditioned on these structured
+rationales.
+This integration of architectural efficiency with structured supervision enables P ROMPT C OT-M AMBA
+to solve complex reasoning tasks effectively, while offering favorable inference characteristics com-
+pared to Transformer-based alternatives. Extensive experiments across math and code benchmarks
+show that our model outperforms strong open-source baselines of similar size, and even surpasses
+significantly larger Transformer models on high-difficulty domains such as AIME and Livecodebench.
+Contributions. This paper makes the following key contributions:
+
+       • We introduce P ROMPT C OT-M AMBA, a fully attention-free language model that outperforms
+         strong Transformer and hybrid baselines of comparable size—for instance, surpassing S1.1-
+         7B by 16.0% on AIME 24, 7.1% on AIME 25, and 16.6% on LiveCodeBench—establishing
+         a new performance bar for pure Mamba-based architectures.
+       • We propose a scalable two-phase curriculum fine-tuning pipeline based on the P ROMPT C OT
+         synthesis paradigm, which enables the model to acquire expert-level reasoning capabilities
+         through pedagogically structured supervision.
+       • We demonstrate that the math-specialized variant P ROMPT C OT-M AMBA -M ATH achieves
+         state-of-the-art results on all math benchmarks, including +3.4% on MATH-500, +7.7% on
+         AIME 24, and +6.2% on AIME 25 over the general P ROMPT C OT-M AMBA, illustrating the
+         effectiveness of domain-focused adaptation.
+       • We show that P ROMPT C OT-M AMBA delivers up to 3.66× higher throughput on 24GB
+         memory and 1.69× on 72GB memory compared to strong Transformer baselines, confirming
+         its suitability for efficient long-context inference in resource-constrained settings.
+
+2   Method
+
+We introduce P ROMPT C OT-M AMBA, an attention-free language model that combines efficient
+state space modeling with curriculum fine-tuning based on the P ROMPT C OT synthesis paradigm.
+The architecture is built on Mamba-2 [Dao and Gu, 2024], employing SSD layers as the core
+computational primitive in place of self-attention. We first describe the SSD layer formulation for
+both autoregressive inference and parallel training (§2.1), and then describe a two-phase curriculum
+strategy that scaffolds learning from foundational to advanced reasoning, using PromptCoT-guided
+synthesis to introduce high-complexity examples (§2.2).
+
+
+                                                   2
+2.1   State Space Dual Layers in Mamba-2
+
+We adopt the SSD layer introduced by Dao and Gu [2024], which reformulates selective state-space
+models as recurrent architectures through a structured matrix representation. This section details both
+inference and training for a single SSD layer, which forms the core computational unit in our model.
+Let N denote the hidden state dimension, P the intermediate projection dimension, and d the input
+embedding dimension. The full architecture comprises multiple SSD layers composed sequentially,
+each maintaining its own hidden state trajectory.
+
+Inference. During autoregressive inference, the SSD layer maintains and updates a hidden state
+recurrently to compute the next token distribution, conditioned on the current token embedding. Let
+wt ∈ V denote the input token at position t, and let et ∈ Rd denote its corresponding embedding,
+where d is the embedding dimension. A shared projection generates all time-dependent parameters:
+                                    [at , bt , ct , ut ] = Linear(et ),
+where at ∈ [0, 1] is a scalar decay factor, bt , ct ∈ RN are the input and output kernel vectors, and
+ut ∈ RP is a projected feature vector.
+The core recurrence consists of a low-rank state update followed by a linear readout:
+                                        Zt = ut ⊗ bt
+                                        Ht = at · Ht−1 + Zt                                        (1)
+                                         yt = c⊤  ⊤
+                                               t Ht
+
+Here, Zt ∈ RP ×N represents a low-rank input-dependent update to the hidden state, and Ht ∈ RP ×N
+accumulates contributions over time via exponential decay. The output vector yt ∈ RP is produced
+by linearly projecting the hidden state with the output kernel ct .
+The output yt is mapped to vocabulary logits using a learned projection head, and the next token is
+sampled as wt+1 ∼ Categorical(softmax(ℓt )), where ℓt = VocabProj(yt ).
+The per-step complexity of this procedure is O(N P ), owing to the outer product in the state update
+and the projection in the output computation. Unlike Transformer decoders, which require O(T N )
+operations per layer and maintain a growing key-value cache, SSD layers operate with fixed memory
+and constant computation per token.
+
+Training. During training, the SSD recurrence admits a parallel formulation using a series of
+structured contraction operations. Let E ∈ RT ×d denote the sequence of input embeddings, where T
+is the sequence length. A shared linear projection produces the time-dependent parameters:
+                                     [a, B, C, U] = Linear(E),
+where a ∈ R are decay scalars, B, C ∈ RT ×N are input and output kernels, and U ∈ RT ×P are
+             T
+
+projected features.
+We express the SSD training computation using a sequence of structured contractions over time. Let
+S be a symbolic contraction axis with S = T . To simplify notation, we denote rank-3 tensors such
+as Z and H using bold uppercase letters, with dimensionality made explicit through context. The
+forward computation consists of the following steps:
+                           Z = contract(S P, S N → S P N)(U, B)
+                           H = contract(T S, S P N → T P N)(M, Z)                                  (2)
+                           Y = contract(T N, T P N → T P)(C, H)
+
+Here, Z ∈ RT ×P ×N represents the low-rank update tensor, H ∈ RT ×P ×N is the accumulated
+hidden state, and Y ∈ RT ×P contains the output representations at each time step.
+The structured transition matrix M ∈ RT ×T encodes the recurrence dynamics, with entries defined
+by                                      (Q
+                                           j
+                                           k=i+1 ak  if i ≤ j,
+                                 mj,i =
+                                         0           otherwise,
+
+
+                                                    3
+

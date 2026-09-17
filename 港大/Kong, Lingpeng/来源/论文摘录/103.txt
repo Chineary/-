@@ -1,0 +1,263 @@
+                                                          Linear Complexity Randomized Self-attention Mechanism
+
+
+                                                                               Lin Zheng 1 * Chong Wang 2 Lingpeng Kong 1 3
+
+
+                                                                   Abstract                                  However, the computational complexity of attention mech-
+                                                                                                             anism is quadratic in the number of tokens, making it pro-
+                                               Recently, random feature attentions (RFAs) are                hibitive to process long sequences. In the past two years,
+                                               proposed to approximate the softmax attention in              there has been a community effort towards developing ef-
+
+
+
+
+arXiv:2204.04667v2 [cs.LG] 15 Jun 2022
+                                               linear time and space complexity by linearizing               ficient attention architectures with improved computation
+                                               the exponential kernel. In this paper, we first pro-          complexity and memory usage (Tay et al., 2020b). Among
+                                               pose a novel perspective to understand the bias               them, one prominent is to view the attention mechanism
+                                               in such approximation by recasting RFAs as self-              through kernelization (Katharopoulos et al., 2020; Choro-
+                                               normalized importance samplers. This perspec-                 manski et al., 2021; Peng et al., 2021b, inter alia). In this
+                                               tive further sheds light on an unbiased estimator             work, we focus on random feature attentions (RFAs) (Peng
+                                               for the whole softmax attention, called random-               et al., 2021b; Choromanski et al., 2021), which approximate
+                                               ized attention (RA). RA constructs positive ran-              softmax attention by linearizing the exponential kernel into
+                                               dom features via query-specific distributions and             a dot product of random feature maps. Despite achieving lin-
+                                               enjoys greatly improved approximation fidelity,               ear time and space complexity, this approximation is biased
+                                               albeit exhibiting quadratic complexity. By com-               to the softmax attention as a whole.1
+                                               bining the expressiveness in RA and the efficiency
+                                                                                                             In this work, we revisit RFA and show that it can be reinter-
+                                               in RFA, we develop a novel linear complexity self-
+                                                                                                             preted as a self-normalized importance sampler to softmax
+                                               attention mechanism called linear randomized at-
+                                                                                                             attention. This insight reveals that the source of the approxi-
+                                               tention (LARA). Extensive experiments across
+                                                                                                             mation bias in RFAs comes from the self-normalization in
+                                               various domains demonstrate that RA and LARA
+                                                                                                             estimation (Owen, 2013). We further show softmax atten-
+                                               significantly improve the performance of RFAs
+                                                                                                             tion can be written as an expectation of linearized attention
+                                               by a substantial margin.
+                                                                                                             over an input-dependent mixture distribution. These find-
+                                                                                                             ings suggest that we can in principle construct an unbiased
+                                                                                                             estimator for the softmax attention as a whole, as opposed to
+                                         1. Introduction                                                     merely exponential kernels in previous work. We call such
+                                                                                                             unbiased estimation randomized attention or RA. To the best
+                                         Transformers (Vaswani et al., 2017) are powerful neural net-        of our knowledge, this is the first unbiased approximation
+                                         works for sequence modeling. They have been successfully            of the whole softmax attention via kernel linearization.
+                                         applied in various domains, such as natural language pro-
+                                         cessing (Vaswani et al., 2017; Dehghani et al., 2019; Devlin        RA constructs positive random features via distributions
+                                         et al., 2019; Raffel et al., 2020), computer vision (Carion         exclusive to each query. Since RFAs only employ an input-
+                                         et al., 2020; Dosovitskiy et al., 2021; Liu et al., 2021), bioin-   agnostic standard Gaussian as the importance sampling
+                                         formatics (Rives et al., 2021; Jumper et al., 2021) and rein-       proposal, RA enables a finer-grained treatment for query-
+                                         forcement learning (Chen et al., 2021c). The core building          specific information and greatly improves the approxima-
+                                         block of transformer models is the self-attention mecha-            tion fidelity; however, it is as expensive as softmax attention
+                                         nism, which captures complex interactions among sequence            computationally with quadratic complexity, because the key-
+                                         elements (Vaswani et al., 2017).                                    value statistics are different for each query, unlike the ones
+                                           *
+                                                                                                             in RFAs.
+                                               The majority of this work was done while the first author
+                                                                                                                 1
+                                         was interning at Bytedance. 1 Department of Computer Science,             There are several variants of random feature maps that yield
+                                         The University of Hong Kong 2 ByteDance Inc. 3 Shanghai Ar-         an unbiased estimate of the exponential kernel (Peng et al., 2021b;
+                                         tificial Intelligence Laboratory. Correspondence to: Lin Zheng      Choromanski et al., 2021). Nevertheless, RFAs still run a biased
+                                         <linzheng@connect.hku.hk>.                                          approximation to the whole softmax attention, since the softmax
+                                                                                                             attention involves a ratio of these exponential kernels. Although
+                                         Proceedings of the 39 th International Conference on Machine        the estimator is still consistent, the bias in question is elusive and
+                                         Learning, Baltimore, Maryland, USA, PMLR 162, 2022. Copy-           might impair the approximation fidelity of random features.
+                                         right 2022 by the author(s).
+                                    Linear Complexity Randomized Self-attention Mechanism
+
+Based on the analysis, one question naturally arises: “Can         where ξ(·, ·) : RD × RD → Rl , l ≥ 1, is the randomized
+we combine the expressiveness in RA and the efficiency in          mapping transforming the input vector to a l-dimensional
+RFA to get the best of both worlds?” To achieve that, we           vector via a randomly drawn ω ∼ N (ω; 0, I). A clas-
+generalize the importance sampling formulation of RFA              sical choice of randomized mapping is to let ξ(x, ω) =
+                                                                                                         >
+by adopting multiple proposals, each of which depends on           exp 12 kxk2 sin ω > x , cos ω > x
+                                                                                          
+                                                                                                             (Rahimi & Recht,
+different subsets of queries. We further apply multiple im-        2008; Peng et al., 2021b). In Performer (Choromanski
+portance sampling (Veach & Guibas, 1995) and put together          et al., 2021), a scalar-valued positive   randomized map-
+these proposals to approximate softmax attention adaptively        ping ξ(x, ω) = exp ω > x − 12 kxk2 is used to improve the
+                                                                                                        
+for different queries, retaining the query-specific property       training stability. We base our model on the latter choice;
+of RA. Meanwhile, since these proposals are shared among           other variants are discussed further in Appendix C. We use
+all queries, we inherit the efficient computation reuse in         the term RFA and Performer interchangeably to refer to
+RFA and achieve linear complexity. We refer to this effi-          attention models with positive randomized mappings.
+cient attention mechanism as LineAr Randomized Attention
+(LARA). Extensive experiments and analyses demonstrate             To estimate the expectation in Equation 1, we can draw
+                                                                                                       3
+that RA, as well as its linear variant LARA, significantly         multiple Monte Carlo samples     PS and compute        the average
+reduce the approximation error of RFAs. They improve               such that exp(x y) ≈ S s=1 ξ(x, ωs )> ξ(y, ωs ). By
+                                                                                     >           1
+
+RFAs by a substantial margin across various tasks, includ-         substituting such approximation into the softmax attention,
+ing image classification, video action recognition, machine        we obtain random feature attention (RFA; Choromanski
+translation, and so on, while retaining computational effi-        et al., 2021; Peng et al., 2021b):
+ciency.                                                                     PM             >
+                                                                                                    >
+                                                                              m=1 exp qn km vm
+                                                                              PM              >
+2. Background                                                                   m0 =1 exp (qn km0 )
+                                                                               PM PS                       >                >
+                                                                                          s=1 ξ(qn , ωs ) ξ(km , ωs )vm
+2.1. Softmax Attention                                                       ≈ Pm=1M     PS                   >
+                                                                                            s=1 ξ(qn , ωs ) ξ(km , ωs )
+                                                                                                                     0
+                                                                                   m0 =1
+Let Q ∈ RN ×D , K ∈ RM ×D and V ∈ RM ×D denote the                             PS                        M
+                                                                                      ξ(qn , ωs )> m=1 ξ(km , ωs )v>
+                                                                                                      P
+                                                                                                                             m
+sets of N query vectors, M key and value vectors respec-                     = Ps=1S                   PM                          (2)
+                                                                                       ξ(q    , ω  ) >          ξ(k   0 , ω  )
+tively. For each query qn , the softmax attention computes                         s=1     n     s        m0 =1     m      s
+the following quantity,2                                                    := RFA (qn , K, V) .
+
+                               M                                   Thanks to the linearized formulation, one can first
+                                        exp q>
+                                                    
+                                             n km
+                               X
+SoftmaxAttn (qn , K, V) :=          PM                     v>
+                                                            m.     pre-compute    the corresponding    key-value statistics
+                                                 >
+                                      m0 =1 exp(qn km )
+                                                     0             PM                 >
+                                                                                            PM
+                                                                      m=1 ξ(km , ωs )vm and    m=1 ξ(km , ωs ) once, and then
+                              m=1
+                                                                   reuse them for each query. Consequently, it achieves linear
+Intuitively, the softmax attention first computes the nor-
+                                                                   complexity in both time and memory with respect to the
+malized similarity between the query and each key, which
+                                                                   sequence length.
+is then used to weight value vectors. In the case of self-
+attention in Transformers (Vaswani et al., 2017), we have
+                                                                   2.3. Self-normalized Importance Sampling
+N = M ; as a result, such mechanism suffers from quadratic
+time and memory complexity due to the explicit computa-            Importance sampling (IS) is a general approach to approxi-
+tion of the similarity scores between all pairs of queries and     mating expectation Ep(ω) [f (ω)] when it is difficult to draw
+keys.                                                              samples directly from p(ω). By sampling from a tractable
+                                                                   proposal distribution q(ω) instead, IS forms the following
+2.2. Random Feature Attention                                      estimate to correct the sampling bias,
+To reduce the computational complexity of softmax atten-                                                      S
+                                                                                                p(ω)         1 X p(ωs )
+tion, recent work (Choromanski et al., 2021; Peng et al.,          Ep(ω) [f (ω)] = Eq(ω)             f (ω) ≈              f (ωs ),
+2021b) proposes to linearize exponential kernels via ran-                                       q(ω)         S s=1 q(ωs )
+dom feature methods (Rahimi & Recht, 2008). According
+to Bochner’s theorem (Bochner,  2020), they re-write the           where p(ω)/q(ω) is often referred to as importance weights.
+exponential kernel exp x> y as the following expectation,
+                                                                  Given that q(ω) is positive whenever p(ω) 6= 0, IS yields
+                                                                      3
+                                                                                        √ can also be written as φ(x,
+                                                                        This sample average                             w)> φ(y, w)
+      exp(x y) = Eω∼N (ω;0,I) ξ(x, ω)> ξ(y, ω) ,
+             >
+                                             
+                                                                                                                     >
+                                                            (1)    with φ(x, w) := 1/ S[ξ(x, ω1 ), . . . , ξ(x, ωS )] ∈ RlS . Here
+                                                  √                φ(·, ·) are conventionally referred to as random features (Rahimi
+    2
+      We omit the commonly used scaling factor 1/ d for simplic-   & Recht, 2008). We spell out individual samples as it simplifies
+ity as it can be merged into the computation of queries or keys.   the analysis later.
+                                   Linear Complexity Randomized Self-attention Mechanism
+
+an unbiased estimation. However, if the target density takes      with parametric component weights and means,
+the form p(ω) = p̃(ω)/Z and its normalizing constant is
+                                                                                        M
+difficult to compute, IS would be intractable since it requires                         X
+evaluating p(ω) explicitly. Self-normalized importance sam-                   p(ω) =         πm N (ω; qn + km , I),            (5)
+                                                                                       m=1
+pling (SNIS), a variant of IS estimators, mitigates this issue
+by taking the following form (Owen, 2013),                                            exp(q>
+                                                                                           n km )
+                                                                  where πm = PM           exp(q>
+                                                                                                         is the component weight.
+                              h           i                                         m0 =1      n km0 )
+
+                     Eq(ω) p(ω) q(ω) f (ω)                        Besides, f (ω) is an attention-like aggregation function over
+    Ep(ω) [f (ω)] =              h      i                         value vectors, which computes the linearized similarity be-
+                        Eq(ω) p(ω) q(ω)                           tween queries and keys via randomized mappings,
+         1
+           PS 1 p̃(ωs )                 PS p̃(ωs )
+              s=1 Z q(ωs ) f (ωs )        s=1 q(ωs ) f (ωs )
+                                                                                                  PM
+     ≈
+        S
+                                    =                                                ξ(qn , ω)>                   >
+                                                                                                    m=1 ξ(km , ω)vm
+          1
+              PS   1   p̃(ω )
+                        s
+                                           PS p̃(ω ) . (3)
+                                                 s
+                                                                           f (ω) =                  PM                  .      (6)
+                                                                                                  >
+          S    s=1 Z q(ωs )              s=1 q(ωs )                                   ξ(qn , ω)      m0 =1 ξ(km0 , ω)
+
+The name self-normalized comes from the fact that the im-         From this perspective, for each query qn , RFA uses
+portance weights p(ω)/q(ω) are normalized. Albeit at the          N (ω; 0, I) as the proposal to perform self-normalized im-
+cost of introducing a bias, this method cancels out the nor-      portance sampling for the following expectation,4
+malizing constant Z at both nominator and denominator.
+SNIS often works well in practice.
+                                                                                            "           PM                 #
+                                                                                              ξ(qn , ω)> m=1 ξ(km , ω)v> m
+                                                                  Epn (ω) [fn (ω)] = Epn (ω)             PM                  .
+                                                                                               ξ(qn , ω)> m0 =1 ξ(km0 , ω)
+3. Randomized Attention
+                                                                  This re-formulation offers alternative viewpoints to under-
+In this section, we present an alternative view of RFA, re-
+                                                                  stand the approximation quality of RFA. It is straightforward
+vealing new insights of how RFA approximates the softmax
+                                                                  to see that RFA is a biased (but consistent) estimator due to
+attention. In particular, we show that RFA can be recast as a
+                                                                  the self-normalization (Owen, 2013). In addition, RFA may
+self-normalized importance sampler and its target expecta-
+                                                                  exhibit large bias and variance since it only uses a standard
+tion is exactly softmax attention (§3.1). This reformulation
+                                                                  Gaussian proposal, which is far away from the underly-
+allows us to construct an unbiased estimator for softmax
+                                                                  ing input-dependent mixture pn (ω). These may explain
+attention. We refer this unbiased estimation as randomized
+                                                                  its inferior performance and slow convergence observed in
+attention (§3.2).
+                                                                  previous studies (Patrick et al., 2021; Tay et al., 2021b).
+3.1. RFA as Self-normalized Importance Sampling
+                                                                  3.2. Randomized Attention
+Note that the formulation of RFA (Equation 2) and SNIS
+                                                                  The analysis above further implies that the softmax attention
+(§2.3) both take the form as a ratio of sample averages
+                                                                  itself can be formulated as an expectation.
+drawing from a tractable distribution. This resemblance
+motivates us to treat RFA as an SNIS estimator and reverse-       Proposition 3.2. Let pn (ω) and fn (ω) be defined by Equa-
+engineer the target expectation Ep(ω) [f (ω)] that RFA ap-        tion 5 and Equation 6 respectively. Then for softmax atten-
+proximates. For this to hold, the nominator and denominator       tion we have
+in Equation 2 should define a regular importance sampling
+estimator and a valid importance weight up to some constant               SoftmaxAttn(qn , K, V) = Epn (ω) [fn (ω)] .          (7)
+Z respectively. Formally, denoting q(ω) := N (ω; 0, I), for
+any ωs ∼ q(ω) we have                                             The detailed proof is in Appendix B. As a result, RFA can be
+ ( p(ω )                             PM                           viewed as using importance sampling to estimate softmax
+                                   >
+       s             1
+    q(ωs ) f (ωs ) = Z ξ(qn , ωs )        ξ(km , ωs )v>m,         attention. Alternatively, one can directly sample from pn (ω)
+      p(ωs )         1             >
+                                     Pm=1
+                                      M                   (4)     to construct an unbiased estimate of the softmax attention,
+      q(ωs )       = Z ξ(q n , ωs )   m=1 ξ(km , ωs ).
+                                                                          SoftmaxAttn(qn , K, V)
+Solving this relation gives concise formulations for both
+                                                                                S              PM
+f (ω) and p(ω) (see Appendix A for the proof):                               1 X ξ(qn , ωs )> m=1 ξ(km , ωs )v>  m
+                                                                          ≈
+Proposition 3.1. Let q(ω) = N (ω; 0, I) be the proposal,                    S s=1 ξ(qn , ωs )> M
+                                                                                               P
+                                                                                                 m0 =1 ξ(km , ωs )
+                                                                                                           0
+
+ξ(x, ω) = exp ω > x − 12 kxk2 be the positive randomized
+                                                                           := RA (qn , K, V)
+mapping in Choromanski et al. (2021) and Ep(ω) [f (ω)] be
+the unknown target expectation. Given the relation specified          4
+                                                                        Here we add the subscript to emphasize that both fn (ω) and
+in Equation 4, the distribution p(ω) is a Gaussian mixture        pn (ω) is specific to a particular query qn .
+

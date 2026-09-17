@@ -1,0 +1,200 @@
+                                                               Compositional Exemplars for In-context Learning
+
+
+                                                              Jiacheng Ye 1 2 Zhiyong Wu 2 Jiangtao Feng 2 Tao Yu 1 Lingpeng Kong 1
+
+
+                                                                 Abstract                                   language models (LMs; Brown et al. 2020). Given a limited
+                                              Large pretrained language models (LMs) have                   number of demonstration examples, in-context learning
+                                              shown impressive In-Context Learning (ICL)                    imitates the human ability to leverage prior knowledge to
+                                                                                                            achieve the best generalization performance.
+
+
+
+
+arXiv:2302.05698v3 [cs.CL] 20 Jun 2023
+                                              ability, where the model learns to do an unseen
+                                              task via a prompt consisting of input-output                  However, such ability comes along with the robustness
+                                              examples as the demonstration, without any                    issue: ICL is particularly sensitive to the selection of in-
+                                              parameter updates. The performance of ICL is                  context examples, and different arrangements can result in
+                                              highly dominated by the quality of the selected               a performance deviation from close to random to near state-
+                                              in-context examples. However, previous selection              of-the-art (Rubin et al., 2022; Liu et al., 2022; Wu et al.,
+                                              methods are mostly based on simple heuristics,                2022). There have been a number of research attempts
+                                              leading to sub-optimal performance. In this                   over the past two years to select better in-context examples.
+                                              work, we formulate in-context example selection               In particular, one prominent approach is to compare the
+                                              as a subset selection problem. We propose                     input with each individual example based on learning-free
+                                              CEIL (Compositional Exemplars for In-context                  heuristics (Liu et al., 2022) or learning-based metrics (Rubin
+                                              Learning), which is instantiated by Determinantal             et al., 2022). Despite the improved performance, these
+                                              Point Processes (DPPs) to model the interaction               methods do not take into account the inter-relationship
+                                              between the given input and in-context examples,              between in-context examples. For instance, the ignorance of
+                                              and optimized through a carefully-designed con-               redundancy of in-context examples can result in almost
+                                              trastive learning objective to obtain preference              identical examples, providing no additional supervision.
+                                              from LMs. We validate CEIL on 12 classification               Searching for a compact set of in-context examples becomes
+                                              and generation datasets from 7 distinct NLP tasks,            even more urgent as there is a hard limit for the prompt
+                                              including sentiment analysis, paraphrase detec-               length due to the backbone transformer architecture of LMs.
+                                              tion, natural language inference, commonsense
+                                              reasoning, open-domain question answering, code               In this paper, we propose a general approach, named
+                                              generation, and semantic parsing. Extensive                   CEIL (Compositional Exemplars for In-context Learning).
+                                              experiments demonstrate not only the state-of-the-            Instead of selecting each in-context example independently,
+                                              art performance but also the transferability and              CEIL models the joint probability of the entire in-context
+                                              compositionality of CEIL, shedding new light                  example set, and thus captures the inter-relationship be-
+                                              on in-context learning. Our code is released at               tween in-context examples. To model the joint probability
+                                              https://github.com/HKUNLP/icl-ceil.                           of a set given a specific input, we propose a novel model
+                                                                                                            based on the conditional determinantal point process (DPP;
+                                                                                                            Kulesza et al. 2012) that learns to select the most diverse yet
+                                         1. Introduction                                                    helpful in-context example set (§3.1). To take into account
+                                                                                                            the quality of a selected subset, a scoring function from a
+                                         An important goal of artificial intelligence is to develop         language model is incorporated into the conditional DPP
+                                         models that can generalize to unseen tasks. NLP community          to form a contrastive loss (§3.2). That way, our algorithm
+                                         made a major step towards this goal by discovering the             maintains the polynomial time maximum a posteriori (MAP)
+                                         in-context learning (ICL) capability of large pre-trained          inference of DPP (Chen et al., 2018) so that the optimal
+                                             1                                                              in-context example subset can be found effectively in the
+                                               Department of Computer Science, The University of
+                                         Hong Kong 2 Shark-NLP, Shanghai Artificial Intelligence Lab-       inference stage (§3.3).
+                                         oratory. Correspondence to: Jiacheng Ye, Zhiyong Wu <car-          We validate our method by conducting extensive experi-
+                                         sonye@connect.hku.hk, whucs2013wzy@gmail.com>.
+                                                                                                            ments on 12 classification and generation datasets from
+                                         Proceedings of the 40 th International Conference on Machine       7 distinct tasks, including sentiment analysis, paraphrase
+                                         Learning, Honolulu, Hawaii, USA. PMLR 202, 2023. Copyright         detection, natural language inference, commonsense rea-
+                                         2023 by the author(s).
+
+                                                                                                        1
+                                             Compositional Exemplars for In-context Learning
+
+soning, open-domain question answering, code generation,                       a probability measure for 2N item sets, where each set
+and semantic parsing. The experiments demonstrate that: 1)                     consists of items sampled without replacement from a
+CEIL substantially surpasses both conventional learning-                       discrete item set Z = {1, 2, . . . , N }. Given the feature
+free and learning-based selection approaches, achieving                        vector a for each item, DPP calculates an N × N positive
+state-of-the-art in-context learning performance (§4.4); 2)                    semi-definite (PSD) kernel matrix L, where Lij = k(ai , aj )
+CEIL shows transferability across LMs and datasets, en-                        and k(·, ·) is a kernel function. Then the probability over a
+abling a learning-free efficient application (§4.6); 3) CEIL                   subset of items indexed by S ⊆ Z can be defined as
+inherently learns to compose different examples, shedding
+new lights on in-context learning for compositional tasks                                                       det(LS )
+                                                                                                    P(S) =                ,                     (1)
+(§4.5); 4) CEIL is especially effective when the number of                                                     det(L + I)
+in-context examples is in a small scale (§4.7).
+                                                                               where LS ≡ [Lij ]i,j∈S denotes the restriction of L to
+                                                                               the entries indexed by elements of S, det(·) denotes the
+2. Preliminary
+                                                                               determinant of a matrix, and I is an identity matrix. Note
+2.1. In-context Learning                                                       according to the the kernel trick (Schölkopf et al., 2002),
+                                                                               k(ai , aj ) can be written as ϕ(ai )T ϕ(aj ), where ϕ(·) is a
+In-context learning (ICL) refers to one of the core emergent                   reproducing kernel feature map. Therefore, determinants
+abilities (Wei et al., 2022) that infers new tasks from                        can be geometrically interpreted as the volume of the
+context (Brown et al., 2020). We use the terms ’in-                            parallelepiped formed by the vectors {ϕ(ai ) | i ∈ S}. As
+weights learning’ and ’in-context learning’ from prior work                    the magnitude of an item’s feature vector increases, so do
+on sequence models (Brown et al., 2020) to distinguish                         the probabilities of sets containing that item. Meanwhile, as
+between gradient-based learning with parameter updates                         the similarity between two items increases, the probabilities
+and gradient-free learning from context, respectively.                         of sets containing both of them decrease.
+Formally, each training instance is first linearized into                      Under the distribution P, although the number of possible
+an input text x = (x1 . . . x|x| ) and an output text y =                      realizations of S is exponential in N , many types of
+(y1 . . . y|y| ), where for all tokens x1 . . . x|x| , y1 . . . y|y| ∈ V       inference tasks including marginalization, conditioning,
+and V is the vocabulary set of the LM. Given a new test                        sampling and MAP inference can be performed in poly-
+input text xtest , in-context learning defines the generation                  nomial time (Kulesza et al., 2012; Gillenwater et al., 2012;
+of output y as                                                                 Han et al., 2017; Chen et al., 2018, inter alia).
+        ytest ∼ PLM (ytest | x1 , y1 , . . . , xK , yK , xtest ),
+                                                                               3. Model
+                             |           {z          }
+                                        context
+
+where ∼ refers to decoding strategies (e.g., greedy decoding                   In this section, we introduce an efficient framework, CEIL,
+and nuclear sampling (Holtzman et al., 2019)), and each                        to learn the Composition of Exemplars for In-context
+in-context example ei = (xi , yi ) is sampled from a training                  Learning, as shown in Figure 1. Instead of independently
+set D = {(xi , yi )}N  i=1 . The generation procedure is                       retrieving each in-context example, CEIL models the full
+especially attractive as it eliminates the need for updating                   in-context example sets by learning the joint probability
+the parameters of the language model when encountering a                       P(S | xtest ), and thus captures the inter-relationship
+new task, which is often expensive and impractical.                            between in-context examples. The joint probability is
+Notably, the performance of ICL on downstream tasks can                        modeled with a learnable conditional DPP (§3.1) and trained
+vary from almost random to comparable with state-of-the-art                    with contrastive learning (§3.2). In the inference stage, the
+systems, depending on the quality of the retrieved in-context                  best in-context example subset is selected via efficient MAP
+examples (Rubin et al., 2022; Liu et al., 2022; Wu et al.,                     inference (§3.3).
+2022). Rather than randomly selecting in-context examples
+for each test input, previous work model the process with                      3.1. Modeling
+a retriever P(ei | xtest ), which is either off-the-shelf (Liu                 For in-context learning, both relevance (i.e., choosing in-
+et al., 2022; Wu et al., 2022) or fine-tuned (Rubin et al.,                    context examples similar to the test input) and diversity
+2022).                                                                         (i.e., the similarity between examples) are essential, while
+                                                                               the vanilla DPPs ignore the relevance term. To infuse both
+2.2. Determinantal Point Processes                                             relevance and diversity into the selection procedure, we
+Determinantal point processes (DPPs) are elegant proba-                        define a new kernel
+bilistic models with the ability to express negative inter-
+actions. (Kulesza et al., 2012). Formally, a DPP P is                                 k̃ (ai , aj | x) = g (ai , x) k (ai , aj ) g (aj , x) ,   (2)
+
+                                                                           2
+                                           Compositional Exemplars for In-context Learning
+
+                                                      Inference         Training
+                                                                                                                  …
+         Test Input                                                                                                    …
+                                                      DPP                                                             …
+          the movie fails to live up to                                            Creating                       …
+            the sum of its parts. It is             Retriever                    Training Data
+                                                                                                      Exemplars       Input
+                                              MAP
+                                            Inference       …
+                                                                            DPP
+                                               …                          Retriever                               LM
+                               a film that loses sight of its own
+            LM
+                                        story . It is bad
+                           a film that suffers because of its
+                                many excesses . It is bad             DPP                                                LM
+                                                                                             Alignment                  Scores
+                                                                     Scores   …                                   …
+             bad                  Optimal Exemplars                                             Loss
+
+
+
+Figure 1. CEIL at training and inference. Instead of independently retrieving each exemplar (or in-context example), CEIL models the
+entire set of exemplars by learning their joint probability with a conditional DPP (§3.1), which is further trained to align with the LM
+score through a contrastive loss (§3.2). For a given test input during inference, the optimal exemplar set is obtained by the learned DPP
+retriever through MAP inference (§3.3). The black-box LM is frozen during the whole procedure.
+
+
+which is conditioned on the test input x. The new DPP                   be an effective ranking metric for subset retrieval. On the
+corresponds to a conditional kernel matrix considering both             high-dimensional embedding space, linear kernel (i.e., dot
+diversity and relevance: L̃ = Diag(r) · L · Diag(r), where              product) is then applied as similarity function g and k. The
+ri = g (ai , x) is the relevance score for item i. Based on             learning of the embedder networks essentially becomes a
+Eq. (1) and Eq. (2), we can derive the unnormalized log-                metric learning problem (Kulis et al., 2013), which we will
+probability for subset S as                                             introduce in the subsequent section.
+                 X
+                             log r2i + log det (LS ) ,
+                                    
+      log det L̃S =                                                     3.2. Training
+                          i∈S
+                                                                        Since there is no ground-truth subset of in-context examples
+which clearly shows how the DPP model incorporates the                  for each training instance, we cannot apply the conventional
+relevance (i.e., ri ) and diversity (i.e., det(LS )) of the in-         likelihood-maximization method to learn the parameters. In
+context examples.                                                       this section, we introduce a contrastive learning framework,
+                                                                        with the main idea of rectifying the embedding of each in-
+Intuitively, different tasks may prefer a different trade-off
+                                                                        context example and training instance such that a ‘better’
+between diversity and relevance, e.g., a more complex input
+                                                                        subset has a higher probability to be retrieved than a ‘worse’
+may require a more complicated composition of in-context
+                                                                        subset for the training instance.
+examples. At the same time, the original DPP model does
+not offer such a mechanism. To balance the magnitude
+of diversity and relevance for different tasks, we further              Training Data. Our goal in construction training data is to
+incorporate a trade-off parameter λ as follows:                         obtain a dataset Dtrain = {(ei , {Sij , sij })M    N
+                                                                                                                      j=1 }i=1 consists
+                            1X                                          of N instances. Each instance contains one input instance
+         log det (L′S ) =      ri + log det (LS ) .                     ei from the training set D, M in-context example subsets
+                            λ
+                                i∈S                                     where each example in subset Sij is also retrieved from D1 ,
+                                                                        and score sij to indicate the quality of each subset.
+This exactly corresponds to a DPPwith kernel L′ =
+            r                  r
+              
+Diag exp 2λ · L · Diag exp 2λ      .                                    Modeling on the full space of S is exponential in N and thus
+                                                                        prohibitive. To this end, we employ a two-stage framework
+In practice, the retriever model consists of two embedders to
+                                                                        which is commonly used in retrieval (Liu et al., 2009).
+encode input text and in-context examples to their represen-
+                                                                        We first precompute a set of relevant examples of size
+tations x and a. We set both of the two embedders as highly
+expressive learnable neural networks (e.g., BERT (Devlin                    1
+                                                                              We omit the retrieved example that is exactly same as input
+et al., 2019)) such that the resulting DPP score (Eq. (1)) can          instance ei to prevent copying answer.
+
+                                                                    3
+

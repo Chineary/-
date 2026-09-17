@@ -1,0 +1,193 @@
+                                        N EURAL P HRASE - TO -P HRASE M ACHINE T RANSLATION
+                                         Jiangtao Feng∗                                        Lingpeng Kong, Po-Sen Huang
+                                         Fudan University                                               DeepMind
+                                         fengjt16@fudan.edu.cn                                 {lingpenk, posenhuang}@google.com
+
+                                         Chong Wang, Da Huang                                           Jiayuan Mao∗
+                                                Google                                                  Tsinghua University
+                                         {chongw, dahua}@google.com                                     mjy14@mails.tsinghua.edu.cn
+
+
+
+
+arXiv:1811.02172v1 [cs.CL] 6 Nov 2018
+                                         Kan Qiao, Dengyong Zhou
+                                                 Google
+                                         {qiaokan, dennyzhou}@google.com
+
+
+
+                                                                                        A BSTRACT
+                                                     In this paper, we propose Neural Phrase-to-Phrase Machine Translation (NP2 MT).
+                                                     Our model uses a phrase attention mechanism to discover relevant input (source)
+                                                     segments that are used by a decoder to generate output (target) phrases. We
+                                                     also design an efficient dynamic programming algorithm to decode segments that
+                                                     allows the model to be trained faster than the existing neural phrase-based machine
+                                                     translation method by Huang et al. (2018). Furthermore, our method can naturally
+                                                     integrate with external phrase dictionaries during decoding. Empirical experiments
+                                                     show that our method achieves comparable performance with the state-of-the art
+                                                     methods on benchmark datasets. However, when the training and testing data are
+                                                     from different distributions or domains, our method performs better.
+
+
+                                        1       I NTRODUCTION
+                                        Statistical phrase-based models used to be the state-of-the-art machine translation systems (Koehn
+                                        et al., 2007) before the deep learning revolution. In contrast to word-based systems (Koehn et al.,
+                                        2003; Lopez, 2008; Koehn, 2009), phrase-based approaches explicitly model phrase structures in
+                                        both source and target sentences and their corresponding alignments. These linguistic structures can
+                                        be understood as a form of inductive bias to the model, a key factor to its superior performance over
+                                        word-based counterpart.
+                                        In recent years, we have witnessed the surge of neural sequence to sequence (seq2seq) models (Bah-
+                                        danau et al., 2014; Sutskever et al., 2014). These models usually consist of three main components:
+                                        an encoder that encodes the source sentence into a fixed-length vectoR, a decoder that generates
+                                        the translation word by word, and an attention module that selectively retrieves the source side
+                                        information as per the decoder’s needs. Innovations in both architectures (Vaswani et al., 2017;
+                                        Gehring et al., 2017) and training techniques (Vaswani et al., 2017; Ba et al., 2016) keep advancing
+                                        the-state-the-art results on standard benchmarks for machine translation.
+                                        Despite the remarkable success of neural sequence to sequence models, the biases induced from phrase
+                                        structures, which have been shown to be useful in machine translation (Koehn, 2009), are largely
+                                        ignored. Until recently, Huang et al. (2018) developed Neural Phrase-based Machine Translation
+                                        (NPMT) to incorporate target-side phrasal information into a neural translation model. Their model
+                                        builds upon the Sleep-WAke Networks (SWAN), a segmentation-based sequence modeling technique
+                                        described in Wang et al. (2017a).
+                                        In this paper, we propose Neural Phrase-to-Phrase Machine Translation (NP2 MT). Our contributions
+                                        are twofold. First, we develop an explicit phrase-level attention mechanism to capture the source
+                                        side phrasal information and their alignments with the target side phrase outputs. This approach also
+                                            ∗
+                                                This work was done when Jiangtao and Jiayuan interned in Google.
+
+
+                                                                                               1
+                                                                            y1    y2        $         y3    y4   $
+
+
+
+                               ...             ...                                                                         segment decoder
+ phrase-level encoder
+
+                                                                            <p>   y1        y2        <p>   y3   y4
+
+
+sentence-level encoder                                                                                                      target encoder
+
+
+
+                          x1      x2      x3         x4         x5          <s>        y1        y2         y3        y4
+
+
+Figure 1: The architecture of NP2 MT model. The example shows how the target phrase y3:4 is
+translated conditioning directly on the source phrase x2:3 , using the phrase-level attention. Note
+that for brevity, in the phrase-level encoder, we only show one possible segmentation of the source
+sentence. We use “· · · ” to indicate all the possible segments xi:j in Eq. 2.
+
+
+avoids the more costly dynamic programming procedure due to the monotonic requirement for input-
+output alignments in NPMT. NP2 MT can achieve comparable performance with the state-of-the art
+methods on benchmark datasets. Second, we can naturally incorporate an external phrase-to-phrase
+dictionary during the decoding procedure. NMT systems trained on a fixed amount of parallel data
+are known to have limitations with out-of-vocabulary words (Luong et al., 2014). In other words,
+those out-of-vocabulary words are from different data distributions other than the training data. The
+standard remedy for this is to apply a post-processing step that patches in unknown words based
+on the word-level alignment information from attention mechanism (Luong et al., 2014; Hashimoto
+et al., 2016). In our model, given the phrase-level attentions, we develop a dictionary look-up
+decoding method with an external phrase-to-phrase dictionary. We demonstrate that our NP2 MT
+model consistently outperforms Transformer (Vaswani et al., 2017) in a simulated open vocabulary
+setting and a cross domain translation setting.
+
+2     N EURAL PHRASE - TO - PHRASE MACHINE TRANSLATION
+
+In this section, we first describe the proposed NP2 MT model with the phrase-level attention mecha-
+nism. We show how it avoids the more costly dynamic programming used in NPMT (Huang et al.,
+2018). Next, given the phrase-level attention mechanism, we develop a decoding algorithm that can
+naturally use an external phrase-to-phrase dictionary.
+
+2.1     NP2 MT
+
+Figure 1 shows an overview of NP2 MT. There are three main components in our model: a source
+encoder f src , a target encoder f tgt , and a segment decoder g. The source encoder f src consists
+                                                    src    src
+of a sentence-level and phrase-level encoders (fsent    , fphrase ), namely f src = fphrase
+                                                                                     src       src
+                                                                                            ◦ fsent . We use
+bidirectional LSTM (Hochreiter & Schmidhuber, 1997) for source encoders, LSTM for target encoder
+and the Transformer (Vaswani et al., 2017) for the segment decoder.1
+Consider a source sentence x1:T = {x1 , x2 , . . . , xT } and a target sentence y1:T 0 = {y1 , y2 , . . . , yT 0 }.
+                                                                                   src
+First, the source sentence x1:T is passed through sentence-level encoder fsent          to obtain the word
+vector representation,
+                                                                  src
+                                                          s1:T = fsent (x1:T ).                                                        (1)
+                                     phrase
+Second, we use phrase-level encoder fsrc    to independently encode all possible segments xi:j in the
+source sentence as,
+                                   src
+                         h[i,j] = fphrase (si:j ), ∀(i, j) ∈ {(i, j) : 1 ≤ i ≤ j ≤ i + L − 1 ≤ T }.                                    (2)
+    1
+      In our proposed model, we first tried LSTM to use as the targer decoder, but we later found Transformer did
+better to capture meaningful output segments.
+
+
+                                                                     2
+where L is the maximum segment length we will consider in our model. This architecture of
+computing phrase embedding is inspired by the Segmental RNNs (Kong et al., 2015), which has been
+shown to be effective in both text and speech tasks (Lu et al., 2017).
+Denote h as the entire set of phrase-level encoding vectors. Now the rest of the model is more
+conveniently described as a generative process. Let π(·) be a concatenation operator, $ be the end of
+segment symbol and eos as the end of sentence symbol.
+      1. For segment index n = 1, ..., ∞
+          (a) Update the attention state given all previous segments,
+                                                aj = attn(h, π(z1:n−1 )),                        (3)
+                         Pn−1
+              where j = m=1 |zm | is the total length of all previous segments. Note that different
+              collections of previous segments can lead to the same attention state as long as their
+              concatenation is the same.
+          (b) Given the current state aj , sample words from segment decoder g until we reach the
+              end of segment symbol $ or end of sentence eos. This gives us a segment zn .
+          (c) If we see eos in zn , stop.
+      2. Concatenate {z1 , . . . , zN } to obtain the output sentence π(z1:N ) = y1:T 0 .
+Since there are more than one way to obtain the same y1:T 0 using the generative process above, we
+need to consider all cases. Let z be a valid segmentation of y1:T 0 , then we have
+                                                                        |z|
+                                                             X          Y
+                                  p(y1:T 0 |x1:T ) =                           p(zn |aj ),                          (4)
+                                                        z:π(z)=y1:T 0 n=1
+
+where |z| is the number of segment in z, attention aj (z1:n−1 , h) is defined in Eq. 3 and the segment
+probability p(zn |aj ) is defined via the decoder g.
+
+2.2   T RAINING
+
+Given a pair of source and target sentence (x1:T , y1:T 0 ), the objective function of machine translation
+model is defined as follows,
+                                     L(θ) = − log p(y1:T 0 |x1:T ).                                    (5)
+Similar to NPMT in Huang et al. (2018), direct computing Eq. (5) is intractable. We also need to
+develop a dynamic programming algorithms to efficiently compute the loss function. We denote
+conditional probability p(y1:j |x1:T ) as α(j); then we have p(y1:T 0 |x1:T ) = α(T 0 ). It can be shown
+that we have the following recursion,
+                                  X
+                         α(j) =        α(j 0 )p(yj 0 +1:j |aj 0 ),
+                                       j 0 <j
+                                                                               Y
+                p(yj 0 +1:j |aj 0 ) = p($|yj 0 +1:j , aj 0 )p(yj 0 |aj 0 )              p(yk |yj 0 :k−1 , aj 0 ),
+                                                                             j 0 <k≤j
+The initial condition is α(0) = 1. The computational complexity of this algorithm is to O(T 0 L),
+where L denotes the maximum segment length. Comparing with the original NPMT model (Huang
+et al., 2018) with O(T T 0 L) training complexity, the proposed approach is much faster.
+
+2.3   D ECODING
+
+For the proposed NP2 MT, besides the standard beam search algorithm, we propose a method to
+decode with an external phrase-to-phrase dictionary. We leave the beam search algorithm in Appendix.
+
+Dictionary integration in decoding. The proposed NP2 MT builds a phrase-to-phrase framework,
+which could be easily extended to leverage an external phrase-to-phrase dictionary. Here, we describe
+the dictionary-enhanced decoding algorithm in the greedy search case.2
+    2
+      Integration dictionary to beam search is nontrivial. For the current model, the usage of the dictionary is
+determined by rules instead of probability scores. But beam search requires a quantitative comparison among
+the candidates consisting of the phrases generated by both of the rule-based system and the neural model. It is
+unclear how to quantify the former into beam search scores. We leave it for future work.
+
+
+                                                             3
+

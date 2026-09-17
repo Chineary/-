@@ -1,0 +1,196 @@
+                                             DYNA ACT: Large Language Model Reasoning with
+                                                        Dynamic Action Spaces
+
+
+                                                  Xueliang Zhao♠⋆∗ Wei Wu⋆† Jian Guan⋆ Qintong Li♠ Lingpeng Kong♠†
+                                                                 ♠
+                                                                   The University of Hong Kong ⋆ Ant Group
+                                                                       {xlzhao,qtli,lpk}@cs.hku.hk
+                                                                  {wuwei19850318,jianguanthu}@gmail.com
+
+
+
+
+arXiv:2511.08043v1 [cs.LG] 11 Nov 2025
+                                                                                          Abstract
+
+                                                    In modern sequential decision-making systems, the construction of an optimal can-
+                                                    didate action space is critical to efficient inference. However, existing approaches
+                                                    either rely on manually defined action spaces that lack scalability or utilize un-
+                                                    structured spaces that render exhaustive search computationally prohibitive. In
+                                                    this paper, we propose a novel framework named DYNA ACT for automatically
+                                                    constructing a compact action space to enhance sequential reasoning in complex
+                                                    problem-solving scenarios. Our method first estimates a proxy for the complete
+                                                    action space by extracting general sketches observed in a corpus covering diverse
+                                                    complex reasoning problems using large language models. We then formulate a
+                                                    submodular function that jointly evaluates candidate actions based on their utility
+                                                    to the current state and their diversity, and employ a greedy algorithm to select
+                                                    an optimal candidate set. Extensive experiments on six diverse standard bench-
+                                                    marks demonstrate that our approach significantly improves overall performance,
+                                                    while maintaining efficient inference without introducing substantial latency. The
+                                                    implementation is available at https://github.com/zhaoxlpku/DynaAct.
+
+
+                                         1       Introduction
+                                         Recent advances in complex reasoning with Large Language Models (LLMs) [Achiam et al., 2023,
+                                         Jaech et al., 2024] have established a prevalent self-improvement paradigm: given a mass of problems
+                                         paired with final answers, model developers first search for correct reasoning paths from a base
+                                         model using test time scaling strategies [Snell et al., 2024], then improve it to internalize these
+                                         patterns [Guo et al., 2025] through supervised fine-tuning [Guan et al., 2025] or reinforcement
+                                         learning [Guo et al., 2025]. While LLMs have exhibited remarkable reasoning capabilities, current
+                                         approaches to long-term reasoning in these models often suffer from fundamental limitations. On the
+                                         one hand, some approaches explicitly define an action space and state space and structure reasoning
+                                         hierarchically, where action selection and state prediction are carried out iteratively [Hao et al., 2023,
+                                         Qi et al., 2024] along the reasoning path. However, because action spaces are often heuristically
+                                         designed, the resulting actions tend to either be too specific to generalize across domains or too
+                                         broad to effectively guide reasoning. On the other hand, in the absence of an explicit definition for
+                                         action spaces, other approaches impose a specific format on generation and perform reasoning in an
+                                         autoregressive manner [Lightman et al., 2023, Guo et al., 2025]. These approaches inherently search
+                                         the entire natural language space for reasoning, thereby necessitating powerful base models.
+                                         We investigate LLM reasoning within the framework of Markov Decision Process (MDP) [Hao et al.,
+                                         2023], where a reasoning trace consists of a series of actions and states. Instead of focusing on
+                                             ∗
+                                                 This work was done during an internship at Ant Group.
+                                             †
+                                                 Corresponding authors.
+
+
+                                         39th Conference on Neural Information Processing Systems (NeurIPS 2025).
+    Question: Is the Earth the center of the universe?           Futil                    Subset 𝓐𝒕 :                                  State 𝐬𝐭 :
+                                                                                                                                       Step 1: : Review past assumptions.
+                                                                                                                            Bad        …
+                                                                                          ② Think about earlier assumptions.
+    State 𝐬𝐭 :                                                                            ③ Consider past assumptions on                Q(st, a)
+    Step 1: Review past assumptions.                                                      centrality.
+    Early models placed Earth at the center, like Ptolemy’s.               subsets                                                                           Action 𝒂𝐭 :
+                                                               Submodular Function:                                         Good                             Assess modern
+                                                                                          ① Assess modern understanding.                                     assumptions.
+    Action Space 𝓐:                                            F = α Futil + β Fdiv       ④ Challenge established perspectives.                    actions
+                                                                                                                                         ①④⑤
+    ① Assess modern assumptions.                                                          ⑤ Rethink core principles.
+    ② Think about earlier assumptions.                           Fdiv                                                                  State 𝐬𝐭+𝟏 :
+                                                                                                                            Good but
+    ③ Consider past assumptions on centrality.                                            ① Assess modern assumptions. Redundant       Step 1: …
+    ④ Challenge established perspectives.                                                 ② Think about earlier assumptions.           Step 2: Assess modern assumptions.
+    ⑤ Rethink core principles.                                                            ④ Challenge established perspectives.        The heliocentric model, supported by
+    …                                                                      subsets        ⑤ Rethink core principles.                   Copernicus and others, is accurate.
+
+
+
+                                                                         Submodular score for each subset of 𝓐
+
+
+
+Figure 1: Overview of the proposed method. Given the proxy action space A, the method searches
+for the subset At that maximizes the submodular function, which consists of a utility term and a
+diversity term. The subset At is then used for the subsequent reasoning steps.
+
+policy learning or reward modeling, we pay special attention to action space construction, as a well-
+defined action space is fundamental to MDP-based reasoning. Specifically, we identify two essential
+properties that a qualified action space should possess: (1) Scalability: it should be automatically
+learned from demonstration data, rather than being manually engineered, to strike a balance between
+generalization and utility; and (2) Compactness: it should maintain a dynamically constructed,
+information-dense structure so that for each step desired action can be picked up from a small yet
+complete candidate set. The core technical challenge lies in developing a principled approach that
+simultaneously optimizes both objectives: distilling generalizable action patterns from demonstrations
+while eliminating redundant candidates that would otherwise impede efficient exploration.
+To achieve both scalability and compactness, we frame the problem of action space construction as a
+subset selection task and propose DYNA ACT, in which the action space for each reasoning step is
+dynamically determined by a submodular function that is learned through a data-driven approach. The
+key idea is to approximate a small subset from the entire action space that achieves the optimal balance
+between utility and diversity, leveraging the diminishing returns property of submodular functions
+to ensure linear computational complexity. Our method begins by extracting general reasoning
+patterns from a diverse corpus of complex problems to construct the complete action space. We then
+define a submodular function to evaluate candidate actions by jointly considering their utility to the
+current state and their diversity contribution. By maximizing this function via a greedy algorithm, we
+obtain an optimal subset of actions. Consequently, reasoning follows a standard Markov process: at
+each step, candidate actions are selected via the submodular optimization, an action is then chosen
+according to a Q-function estimated via Monte Carlo tree search, and a reasoning step is finally
+generated conditioned on the current reasoning context and the chosen action. Notably, throughout
+this process, only a lightweight embedding model used in the submodular function requires training,
+while the base LLM remains frozen.
+We conduct extensive experiments on six benchmarks spanning general, reasoning, and math tasks.
+Evaluation results indicate that DYNA ACT achieves significant improvements over baselines across
+all tasks, including MMLU, MMLU-Pro, GPQA, ARC-C, GSM8K, and MATH-500. Notably,
+DYNA ACT excels at solving complex problems, achieving a 6.8% absolute gain over the recently
+proposed strong model rStar on MATH-500. Furthermore, an extended study demonstrates that while
+dynamic action space construction enhances efficacy, it does not introduce significant additional
+latency during inference compared to the baselines.
+Our contributions are three-fold: (1) We propose dynamic action space construction as a novel
+research question, orthogonal to the extensive studies on LLM reasoning in the community; (2)
+We introduce a submodular function for action space construction, which significantly improves
+problem-solving accuracy while maintaining reasonable inference efficiency; and (3) We empirically
+verify the efficacy of our method across a wide range of tasks.
+
+
+2        Preliminaries
+
+Before delving into DYNA ACT, we provide some background information. We begin by formulating
+MDP-based reasoning, then describe the search strategy applied. The section finally gives a brief
+introduction to submodular functions, which form the theoretical basis for action space construction.
+
+
+                                                                                      2
+2.1   Reasoning Framework
+
+We formulate LLM reasoning as an MDP, defined by a tuple (S, A, T , R, γ). Here, S represents
+the state space where each state st ∈ S encodes the cumulative reasoning context up to step t,
+with the initial state s0 derived from the input prompt. A denotes the action space with at ∈ A an
+action indicating the progression of the reasoning context. The transition function T : S × A → S
+determines how actions transform the reasoning state, while R : S × A → R assigns rewards based
+on the quality of reasoning steps. The discount factor γ ∈ [0, 1] balances immediate and future
+rewards.
+At each time step t, the LLM selects an action at from a candidate set At ⊆ A, which may be gener-
+ated automatically [Hao et al., 2023] or specified manually [Qi et al., 2024]. In our implementation,
+the action selection is governed by a learnable value function Q(st , a) that estimates the expected
+cumulative reward:
+
+                                at = arg max Q(st , a),
+                                         a∈At
+                                       "∞                                  #
+                                        X
+                                              k
+                         Q(st , a) = E      γ R(st+k , at+k ) | st , at = a .
+                                         k=0
+
+Our primary focus is on developing a principled approach to construct the candidate action set At at
+each step, as this significantly impacts the efficiency and efficacy of the reasoning process in complex
+problem-solving scenarios.
+
+2.2   Monte Carlo Tree Search
+
+We employ Monte Carlo Tree Search (MCTS) for estimating Q(st , a) [Silver et al., 2016]. In a
+nutshell, the estimation is achieved by simulating multiple continuations of the reasoning process
+from the current state after applying the candidate action. During these simulations, the outcomes of
+the extended reasoning traces are evaluated, and the value of an action is approximated as the average
+result observed across the simulations. In this way, MCTS effectively balances the exploration of less
+frequently visited candidate actions with the exploitation of those that have demonstrated promising
+progress, which is critical to ensure that the estimated value function reliably reflects the potential
+benefit of each action in guiding the overall reasoning process. We defer additional technical details
+of MCTS, including how selection, expansion, simulation, and backpropagation are performed, to
+Appendix C.
+
+2.3   Submodular Functions
+
+The problem of action space construction can naturally be formalized as a subset selection task,
+where the goal is to identify a small, high-value subset from a much larger set of potential candidates.
+A typical approach to subset selection involves assessing the utility of each element, ensuring that
+every new element added contributes additional value to the overall set. To achieve this, submodular
+functions are often employed due to their diminishing returns property, which prioritizes the selection
+of elements that offer unique and informative value [Fujishige, 2005, Kothawade et al., 2022, Chen
+et al., 2024]. As a result, subset selection with submodular functions ensures that the marginal benefit
+of adding an element to a smaller subset is greater than adding it to a larger one, thus enhancing the
+compactness of the subset.
+Formally, given two candidate sets X ⊆ X ′ and an action a ∈ X \ X ′ , a submodular function F (·; ·)
+satisfies the following condition:
+
+                   F (X ∪ {a}; st ) − F (X; st ) ≥ F (X ′ ∪ {a}; st ) − F (X ′ ; st ).               (1)
+
+Heading toward a scalable approach for constructing compact action spaces, we take advantage
+of submodular functions. The problem then boils down to (1) how to define a proper submodular
+function; (2) how to learn the submodular function from data; and (3) how to perform action space
+construction with the submodular function, as will be presented in the following Section.
+
+
+                                                   3
+

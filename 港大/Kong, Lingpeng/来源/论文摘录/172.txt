@@ -1,0 +1,252 @@
+                                               The Granularity Axis: A Micro-to-Macro Latent
+                                                Direction for Social Roles in Language Models
+
+
+                                            Chonghan Qin1 , Xiachong Feng1∗, Ziyun Song2 , Xiaocheng Feng2 , Jing Xiong1 , Lingpeng Kong1
+                                                            1
+                                                              The University of Hong Kong, 2 Harbin Institute of Technology
+                                                                       qinch@connect.hku.hk, fxc@hku.hk
+
+
+
+
+arXiv:2605.06196v1 [cs.AI] 7 May 2026
+                                                                                                  Abstract
+                                                    Large language models (LLMs) are routinely prompted to take on social roles rang-
+                                                    ing from individuals to institutions, yet it remains unclear whether their internal
+                                                    representations encode the granularity of such roles, from micro-level perspec-
+                                                    tives centered on individual experience to macro-level perspectives associated
+                                                    with organizational, institutional, or national reasoning. We find that they do: a
+                                                    contrast-based Granularity Axis, defined as the difference between mean macro-
+                                                    and micro-role hidden states, aligns with the principal axis (PC1) of the role
+                                                    representation space at cosine 0.972 and accounts for 52.6% of its variance in
+                                                    Qwen3-8B. Granularity is therefore not one factor among many but the dominant
+                                                    geometric axis along which prompted social roles are organized. To establish this
+                                                    result, we construct an ordered set of 75 social roles spanning five granularity levels
+                                                    and collect 91,200 role-conditioned responses across shared question sets and
+                                                    prompt variants, from which we extract role-level hidden states and project them
+                                                    onto the axis. Role projections increase monotonically across all five levels, and the
+                                                    structure remains stable across layers, prompt variants, and score-filtered subsets,
+                                                    and transfers to Llama-3.1-8B-Instruct. The axis is not merely descriptive but
+                                                    causal: intervening along it shifts response granularity in the predicted direction,
+                                                    with Llama moving from 2.00 to 3.17 on a five-point macro scale under positive
+                                                    steering on prompts that admit genuinely local responses. The two models differ
+                                                    in how this control behaves, indicating that controllability along the axis depends
+                                                    on each model’s default operating regime rather than on whether the direction
+                                                    exists. Together, these findings reposition social role granularity from a stylistic
+                                                    surface phenomenon to a representational primitive: a single, ordered, causally
+                                                    manipulable direction that organizes role-conditioned generation across model
+                                                    families and exposes social scale as a controllable axis of LLM behavior.2
+
+
+                                        1      Introduction
+                                        Recent large language models (LLMs) have demonstrated strong instruction following, open-ended
+                                        interaction, and behavioral adaptation under prompting [1–5]. These capabilities have motivated
+                                        growing interest in using LLMs to simulate human behavior and social interaction [6–8], including
+                                        multi-agent environments [9–12] and domains such as politics [13, 14], public health [15], and
+                                        markets [16, 17]. Compared with classical agent-based modeling, LLM-based simulation can elicit
+                                        diverse behavioral patterns directly through language, but recent work also raises concerns about
+                                        representational validity [18, 19], survey-response bias, and overly rationalized models of human
+                                        decision-making [20, 21]. These concerns ultimately rest on what an LLM internally represents when
+                                        prompted to be someone, since stylistic mimicry and a genuinely distinct perspective would carry
+                                        very different weight for any downstream simulation.
+                                            ∗ Corresponding author.
+                                             2 Code and data are available at Granularity-Axis.
+
+
+
+                                        Preprint.
+              Social Role                                     Response                                              Activation and                                                    Granularity Axis                              Steering and
+       1                                             2                                                         3                                                              4                                             5
+              Construction                                    Generation                                            Representation                                                    Discovery                                     Evaluation
+
+        75 Social Roles                          Role Cards             Question Set                       Hidden State Extraction                                                                                           Activation Steering
+                                                     ______                                                                                                                   The Granularity Axis:
+      5 Granularity Levels                           ______
+                                                                         (Total 240)                                                                                                                                                (ℓ ) (ℓ )
+                                                                                                          Role: Anxious Parents                     Model Layers           𝒈 = 𝒎𝒆𝒂𝒏 𝑳𝟒 , 𝑳𝟓 − 𝒎𝒆𝒂𝒏 (𝑳𝟏 , 𝑳𝟐 )                      𝒉𝒕 ← 𝒉𝒕 + 𝜶𝒈
+                                                     ___
+                                                                        1. Describe what you              Question: How                                   …
+                                                                        consider good chemistry                                                                                                                            Prompt: How should we handle the
+                                                                                                          should we […] ?
+        Individual         Worried Parent            ______             between people.                                                                                                                                    mental health crisis?
+                                                     ______                                               Response: I don't                         ℓ (Selected)
+        L1-Micro           Anxious Patient                              2. Can you explain what
+                                                     ___                                                  know how to balance
+                                                                        makes a truly great
+                                                                                                          anything right now. […]                         …                                                                      You can talk to a              Micro
+                                                                        leader?”                                                                                                                                                 teacher, a counselor, or
+                                                     ______             3. Can you help me                                                                                                                                       even a school nurse
+                                                     ______             create an action plan
+          Group             Sports Coach
+                                                     ___                                           Response Vector 𝒓ℓ                  Token Hidden States
+      L2-Community          PTA President                               for achieving my goals?
+                                                                                                                        Mean over Tokens
+                                                                        4. How do we balance                                                                                                                                     social determinants of
+                                                     ______             economic growth with                                                                                                                                     mental health, such as         Neutral
+                                                     ______
+                                                     ___
+                                                                        environmental                     Role-level Representation                                                                                              poverty, inequality, and
+                                                                        protection?                                                                                                                                              social isolation.
+       Organization          Uni. Dean
+        L3-Meso            NGO Organizer             ______
+                                                                        …
+                                                                                                                                                                                                                                various stakeholders,
+                                                     ______
+                                                     ___
+                                                                    s                                                                                   (ℓ)
+                                                                                                                                           Role Vector 𝒗𝒖                                                                       including governments,
+                                                                                                                                                                          3D Role-level hidden-state representations            healthcare systems,             Macro
+                                                                                                                            Average over all                              organize along a micro-to-macro structure.            communities, and individuals.
+        Institution        Military General                                                                                 1200 Responses
+      L4-Systematic        Sec. Regulator                                                                                                      (one per role per layer)
+
+
+                                                                                                                                                                                     Interpretation                      Evaluations and Findings
+                                                      Qwen3-8B /
+         Nation            Worried Parent                                                                                                                                       L5
+       L5-Macro            Anxious Patient            Llama-3.1-8B-Instruct                                                                                                              • Roles form an ordered       Qwen3-8B
+                                                                                                                                                                                                                       • Cleaner Representation
+                                                                                                                                                                                        micro-to-macro
+                                                                                                  
+                                                                                                                                                                                L4         structure                   • Stable but conservative
+                                                                                                                                                                                                                      steering
+                                                                                                                                                                                         • Intermediate levels
+           5 Prompt Variants                             LLM-as-Judge                                                                                                           L3
+                                                                                                  
+
+
+                                                                                                  
+
+                                                                                                                                                                                           emerge monotonically
+                                                                                                                                                                                                                       Llama-3.1-8B-Instruct
+                                                                                                  
+
+
+        Identity: direct role assignment                 Task: evaluate role consistency          
+                                                                                                                                                                                L2                                     • More responsive steering
+        Role-play: act in character                      Context: given question & answer                                                                                            • Population-level latent
+  -                                                                                                                                                                                                                    • Less stable under
+        Alignment: level-specific behavior               Focus: role embodiment only                                                                                                       direction
+  -                                                                                                      Roles form an ordered representation                                   L1                                       negative steering
+  -     Perspective: first-person, scale-aware           Criteria: granularity-aligned behavior
+        Experience: emotions & constraints               Scoring: 0–3 scale                              space from micro to macro
+
+
+
+
+Figure 1: Overview of the Granularity Axis pipeline. We construct ordered social roles, collect
+role-conditioned responses, extract role-level hidden-state representations, define a contrast-based
+Granularity Axis, and test its behavioral effect through activation steering.
+
+
+
+A central mechanism behind this flexibility is role conditioning [22–27]. By prompting a model
+to respond as a worried parent, a community organizer, a hospital administrator, or a central bank
+governor, one can induce qualitatively different styles of reasoning and response [28, 29]. However,
+an important representational question remains unresolved: does an LLM internally distinguish
+the granularity of prompted social roles, or does it realize such roles through a largely shared
+role-playing template?
+This question matters because differences across social roles are not merely topical. Roles situated
+at different levels of social granularity are associated with different forms of agency, temporal
+horizons, and structural constraints [30–32]. Micro-level roles tend to emphasize immediate concerns,
+personal experience, and bounded information, whereas more macro-level roles are shaped by
+coordination, procedure, institutional constraint, and long-horizon strategy. We refer to a systematic
+mismatch between the social scale a context calls for and the scale at which a model actually reasons
+as granularity confusion: an overly individual perspective in settings that require institutional or
+systemic reasoning, or an overly abstract macro-level perspective in settings that call for local and
+personal judgment. In an LLM-based policy simulation, for instance, if the central bank governor’s
+responses inherit the same role-playing prior as the worried parent’s, the deliberation appears multi-
+perspective in text but collapses to a single perspective in representation, the failure mode that
+nominally multi-stakeholder simulations are most likely to mask [33–36].
+Recent interpretability work suggests that such distinctions should be visible in low-dimensional
+activation structure [37–47]. In particular, Lu et al. [48] show that role-conditioned behavior in
+instruction-tuned models aligns with an interpretable latent direction, the Assistant Axis, that tracks
+movement away from the default assistant persona, and work on activation steering and representation
+engineering establishes that such directions are both diagnostic of and causally manipulable with
+respect to high-level behavior [49–58]. These two strands of evidence converge on a concrete and
+falsifiable prediction for socially grounded prompting: if prompted social roles differ systematically
+in granularity, that difference should surface as a single, ordered direction in the model’s activation
+space rather than as scattered role-specific clusters.
+In this paper, we test this hypothesis by constructing the Granularity Axis. We construct an ordered
+set of 75 social roles spanning five levels of granularity, from individual and community roles to
+organizational, institutional, and macro-level roles. For each role, we collect responses to shared
+general questions under multiple prompt variants, then extract hidden-state representations and
+average them into role-level vectors. Inspired by the contrast-based construction of the Assistant Axis,
+we define the Granularity Axis as the difference between the mean representation of macro-level roles
+and the mean representation of micro-level roles, and we test whether this direction aligns with the
+dominant geometry of the role representation space. Figure 1 provides an overview of this pipeline,
+from ordered social-role construction and role-conditioned response generation to activation-based
+axis discovery and steering evaluation.
+
+
+                                                                                                                              2
+                          Qwen3-8B                                                         Llama-3.1-8B-Instruct
+
+
+
+
+                    Community Organizer
+                                                                              Worried Parent                        NGO Director
+
+         Worried Parent    Granularity Axis        UN Ambassador     PC3                               Granularity Axis                         PC3
+                                                                                                                     Education Minister
+                                  NGO Director
+                                                                                               Community Organizer
+
+                                              Education Minister
+                                                                                                                       UN Ambassador
+
+
+
+                      PC1                                      PC2                               PC1                                      PC2
+
+
+                          L1           L2                L3          L4              L5           Granularity Direction
+
+Figure 2: Role representation space. Role-level hidden-state representations organize along a
+micro-to-macro structure. Colors indicate granularity level (L1–L5), and the dashed arrow denotes
+the contrast-defined Granularity Axis from micro-level to macro-level roles.
+
+
+Three findings support this hypothesis. First, and most strikingly, social role granularity is not one
+factor among many but the dominant geometric axis of the role representation space: in Qwen3-8B,
+our contrast-defined Granularity Axis aligns with PC1 at cosine 0.972, accounts for 52.6% of the
+role-space variance, and yields role projections that increase monotonically across all five granularity
+levels. Second, this structure is robust across layers, endpoint definitions, prompt-template variations,
+held-out prompt/question splits, and score-filtered subsets, and transfers to Llama-3.1-8B-Instruct
+with a similarly ordered representation. Third, the axis is not merely descriptive but behaviorally
+causal: steering along it shifts output granularity in the predicted direction across both models, with
+model-dependent stability that we examine in detail.
+Our findings establish three claims about social role granularity. First, it is a meaningful interpretabil-
+ity target: a graded social property that LLMs internally distinguish, not merely a stylistic surface
+variable. Second, it admits a low-dimensional account: a single contrast-defined direction explains the
+dominant geometric structure of role representations and transfers across model families, indicating
+that role conditioning operates over a representational continuum rather than a discrete library of
+personas. Third, this structure has behavioral consequences: intervening on the axis shifts output
+granularity, making social scale a tunable parameter for role-conditioned generation. We view this
+as a first step toward a broader program: (i) auditing LLM-based simulations for granularity confu-
+sion, for example when agents in a multi-agent debate collapse to the same end of the axis despite
+nominally distinct roles; (ii) controlling social scale at deployment time, suppressing institutional
+voice in personal-support dialogues or amplifying systemic perspective in policy reasoning; and (iii)
+generalizing the contrast-and-project pipeline to other graded social dimensions such as formality,
+time horizon, or risk aversion.
+
+
+2     The Granularity Axis
+
+We define the Granularity Axis as a contrast-based latent direction in role-conditioned activations and
+validate it both geometrically and causally. The section formalizes the problem (§2.1), constructs
+ordered roles and responses (§2.2), defines and validates the axis (§2.3), and probes its causal role via
+activation steering (§2.4); Algorithm 1 summarizes the pipeline.
+
+2.1   Problem Setting
+
+Let M be a language model with hidden dimension d. We study whether M internally encodes
+the granularity of prompted social roles, from micro-level roles centered on individual experience
+to macro-level roles associated with institutional, national, or supranational reasoning. Formally,
+let u be a prompted social role with granularity level y(u) ∈ {1, . . . , 5} (lower = more micro), s a
+
+
+                                                                          3
+

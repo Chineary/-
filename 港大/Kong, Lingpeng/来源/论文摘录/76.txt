@@ -1,0 +1,202 @@
+                         Generating Data for Symbolic Language
+                             with Large Language Models
+
+                      Jiacheng Ye♠ , Chengzu Li♣ , Lingpeng Kong♠ , Tao Yu♠
+                    ♠
+                      The University of Hong Kong ♣ University of Cambridge
+                         {jcye2,lpk,tyu}@cs.hku.hk, cl917@cam.ac.uk
+
+
+
+                     Abstract                                                    Spider [SQL Query]
+                                                               Input: List the type of bed and name of all traditional rooms.
+    While large language models (LLMs) bring                   Output: SELECT roomName,bedType FROM Rooms
+    not only performance but also complexity, re-              WHERE decor = “traditional”
+    cent work has started to turn LLMs into data                             GeoQuery [Prolog Command]
+    generators rather than task inferencers, where             Input: what is the population of montana?
+    another affordable task model is trained for               Output: answer(A,(population(B,A),
+    efficient deployment and inference. How-                                       const(B,stateid(montana))))
+
+    ever, such an approach has primarily been                                 MTOP [TOP Representation]
+    applied to natural language tasks, and has                 Input: Resume the timer in 10 seconds
+    not yet been explored for symbolic language                Output: [IN:RESUME_TIMER [SL:METHOD_TIMER
+                                                               timer ] [SL:DATE_TIME in 10 seconds ] ]
+    tasks with complex structured outputs (e.g.,
+    semantic parsing and code generation). In                                        Break [QDMR]
+    this paper, we propose S YM G EN which uti-                Input: How many large metallic items are there?
+                                                               Output: 1#) return items 2#) return #1 that are large 3#)
+    lizes LLMs for generating various annotation-
+                                                               return #2 that are metallic 4#) return number of #3
+    expensive symbolic language data. S YM G EN
+    consists of an informative prompt to steer gen-
+    eration and an agreement-based verifier to im-         Figure 1: Sample symbolic language datasets with com-
+    prove data correctness. We conduct exten-              plex structured outputs. The names of the symbolic
+    sive experiments on six symbolic language              languages are shown in square brackets.
+    tasks across various settings. Compared with
+    the LLMs, we demonstrate the 1%-sized task
+    model can achieve comparable or better perfor-         et al., 2021).
+    mance, largely cutting inference and deploy-              Instead of treating LLMs as edge task infer-
+    ment costs. We also show that generated data           encers, a recent line of work leverage LLMs as
+    with only a few human demonstrations can               data generators, with the generated data being used
+    be as effective as over 10 times the amount
+    of human-annotated data when training the
+                                                           to train more affordable task-specific models for
+    task model, saving a considerable amount of            efficient deployment and inference (Schick and
+    annotation effort. S YM G EN takes a step to-          Schütze, 2021; Meng et al., 2022; Ye et al., 2022b,
+    ward data generation for annotation-expensive          inter alia). With only a few or even without demon-
+    complex tasks, and we release the code at              stration examples, the LLMs can generate high-
+    https://github.com/HKUNLP/SymGen.                      quality data via in-context learning (Brown et al.,
+                                                           2020) or prompting (Radford et al., 2019). The task
+1   Introduction                                           models trained on these generated data can achieve
+In the natural language processing (NLP) literature,       comparable or even better performance than the
+the march of scaling language models has been an           LLMs and enjoy a low inference cost at the same
+unending yet predictable trend, with new models            time.
+constantly surpassing previous ones in not only per-          However, previous work mainly focuses on gen-
+formance but also complexity (Radford et al., 2019;        erating natural language data. To what extent this
+Brown et al., 2020; Chowdhery et al., 2022). Such          approach works for complex structured data, such
+large language models (LLMs), however, incur               as meaning representation and codes (Figure 1),
+a large computational cost in practice, especially         remains an open question. The investigation of
+when deployed in resource-restricted systems and           data generation via LLMs in the context of such
+inference in low-latency applications (Bommasani           symbolic language tasks is also extremely intrigu-
+                                                      8418
+      Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, pages 8418–8443
+                         December 6-10, 2023 ©2023 Association for Computational Linguistics
+ing for two reasons: 1) the human annotation pro-           Overall Prompt
+                                                                                                         Symbolic Knowledge
+cedure for these tasks requires expensive domain             %geobase.pl
+                                                             :- ensure_loaded(library('lists')).
+expert efforts (Clarke et al., 2010) and carefully-          :- ensure_loaded(library('ordsets')).
+designed strategies (Wang et al., 2015; Iyer et al.,         :- ensure_loaded(geobase).
+                                                             country(countryid(usa)).
+2017; Herzig and Berant, 2019, inter alia); 2) con-          state(stateid(State)) :- state(State,_,_,_,_,_,_,_,_,_).
+                                                             city(cityid(City,St)) :- city(_,St,City,_).
+ventional data augmentation methods aiming at en-            river(riverid(R)) :- river(R,_,_).
+riching datasets for these tasks require handcrafted         …
+                                                                                                             Natural Instruction
+rules, a considerable number of expert demonstra-            %Translate the natural language description to prolog commands.
+
+tion examples, and are mostly task-specific (Jia and                                                         Demonstrations
+Liang, 2016; Yu et al., 2018a; Andreas, 2020, inter          %Natural Language: what state is the biggest?
+                                                             answer(A,largest(A,state(A)))
+alia).
+                                                             %Natural Language: what is the population of montana?
+   To address these issues, we propose Symbolic              answer(A,(population(B,A),const(B,stateid(montana))))
+                                                             …
+data Generation (S YM G EN) for various annotation-                                                      Generated Example
+expensive symbolic language tasks. S YM G EN                 %Natural Language: name the states that the mississippi river
+works with an LLM trained on code (i.e., Codex-              flows through .
+                                                             answer(A,(river(B),traverse(B,A),const(B,riverid(mississippi))))
+175B; Chen et al. 2021) and optional task-specific
+structure knowledge (e.g., database for SQL; Iyer       Figure 2: An example of an overall prompt that consists
+et al. 2017) through prompting or in-context learn-     of symbolic knowledge, natural instruction and demon-
+ing. S YM G EN also comprises an agreement-based        strations, and a newly generated example by Codex for
+verification module, in which the outputs are ver-      the GeoQuery dataset.
+ified by execution (e.g., programs, logical forms)
+or formatting (e.g., pseudo-logical forms), to en-
+                                                             • During data generation for symbolic language,
+sure high-quality generations. With the generated
+                                                               symbolic knowledge and demonstrations have
+data, we train efficient task models with around 1%
+                                                               a greater impact than natural language instruc-
+size of Codex for task inference (e.g., T5 with size
+                                                               tions, and verification is essential to ensure
+770M and 3B; Raffel et al. 2020).
+                                                               data quality (§3.7, §4.2).
+   We experiment on six symbolic languages which
+are SQL, Bash, Python, Prolog, Task Oriented Pars-      2      S YM G EN
+ing representation (TOP-representation; Gupta et al.
+2018) and Question Decomposition Meaning Rep-           To automatically curate numerous data for vari-
+resentation (QDMR; Wolfson et al. 2020). We con-        ous annotation-expensive symbolic language tasks,
+sider generating data in zero-shot, few-shot, and       we propose a unified pipeline, named S YM G EN.
+full data settings. Our key research findings include   S YM G EN comprises data generation by prompt-
+the following:                                          ing LLMs and data verification by executing or
+                                                        formatting.
+   • Compared with the gigantic LLM inferencer,
+                                                        2.1      Prompt-based Generation
+     the approximately 1%-sized task inferencer
+     can achieve comparable or superior per-            Human annotators need to carefully review the an-
+     formance, producing state-of-the-art perfor-       notation instructions to perform annotation, and
+     mance in some tasks (§3.4);                        the same is true for LLMs. We include natural
+                                                        language instructions, task-related symbolic knowl-
+   • Compared with human annotations, the per-          edge (i.e., database, ontology), and a few labeled
+     formance on few-shot generated data is com-        examples into prompt construction to steer the gen-
+     parable with that on more than 10x or 100x         eration. An example of the prompt is shown in
+     human-annotated data, greatly reducing anno-       Figure 2. We display prompts for each task in Ap-
+     tation effort for complex tasks (§3.5);            pendix G.
+                                                           Different from previous work in classifica-
+   • In a zero-shot setting, the small task model       tion (Schick and Schütze, 2021; Meng et al., 2022;
+     can surpass the same model trained with full       Ye et al., 2022b) where one of the limited label de-
+     human annotations as well as the larger Codex      scriptions is used to guide the generation of xi for
+     on specific symbolic language such as SQL          classification tasks, the output structures for sym-
+     (§3.6);                                            bolic language is unenumerable and requires task-
+                                                    8419
+specific strategies to construct. Hence, we first gen-      Dataset        exec(·)     sim(·, ·)    Evaluation
+erate input xi and then the output yi conditioned           Spider       Execution         EM           EM, EX
+on the generated xi . LLMs may generate erroneous           NL2Bash       Bashlex        BLEU             BLEU
+                                                            MBPP         Execution         EM               EX
+outputs due to not satisfying different grammatical
+                                                            GeoQuery     Execution         EM           EM, EX
+constraints defined in different symbolic languages.        MTOP         TOP Tree          EM      EM, Template
+Therefore, we over-generate multiple candidates             Break      QDMR Graph          EM            LF-EM
+for further verification. After prompt-based gen-
+eration, we have a dataset D = {(xi , {yi,j })} for      Table 1: Summary of evaluation metric(s), execution
+each task.                                               function exec(·) and similarity function sim(·, ·) used
+                                                         in verification module for each task. EM and EX refers
+2.2 Agreement-based Verification                         to Exact-Match and Execution accuracy.
+In this work, we adopt an over-generation and ver-
+ification approach to improve generation quality.
+Formally, given a set of sampled output answers          or execution function exec, similarity function sim,
+{yi,j } for input xi , we verify each answer yi,j by     and evaluation metrics for each dataset in Table 1.
+calculating:                                             Details of the datasets and evaluation metrics are
+              X                                          illustrated in Appendix A.
+      wi,j =      sim(exec(yi,j ), exec(yi,k )), (1)
+               k
+
+where exec = (·) is a task-specific execution or         3.2   Comparison Methods
+formatting function (e.g., executing python pro-
+gram, formatting QDMR into graph representa-             We generate data under various settings such as
+tion), sim = (·, ·) ∈ [0, 1] is a similarity function    zero-shot and few-shot, and then train task models,
+to compare the two results after running function        e.g., T5-large and T5-3B, for inference. We com-
+exec. A large value of wi,j indicates the j-th an-       pare the performance of the task models with both
+swer is highly similar to others, and is thus less       LLM inferencers and the task models that are di-
+prone to be mistakenly labeled. The value of the         rectly finetuned with human-annotated data rather
+most confident answer wi = max wi,j is used to           than LLM-generated data:
+measure the quality of the input-output pair, and
+                                                             • Codex (Chen et al., 2021). The tuning-
+we only keep those with wi larger than a certain
+                                                               free method that performs prompt-based in-
+threshold T , indicating the input-output pair is suf-
+                                                               context learning with Codex. Due to the
+ficiently confident.
+                                                               length restriction, we perform prompt retrieval
+   In practice, when performing exec, we discard
+                                                               to include as many similar examples as possi-
+yi,j that fails in exec, which means it contains
+                                                               ble in the full data setting.
+grammatical errors. When using Exact-Match
+                                                             • Codex + Verification. The method is similar
+(EM) as the similarity function, the similarity score
+                                                               to the above but further includes the answer
+ranges in {0, 1}, with 1 indicating that the two ex-
+                                                               verification module as discussed in § 2.2.
+ecution results are exactly the same. If multiple
+                                                             • T5-Large (Raffel et al., 2020). The tuning-
+answers have the same value, we choose the an-
+                                                               based method that directly fine-tunes T5-large
+swer that has the maximum log-likelihood during
+                                                               model with few or full human-annotated data
+generation.
+                                                               instead of generated data.
+3   Experiments                                              • T5-3B (Raffel et al., 2020). The same method
+                                                               as the one above, but using a T5-3B model.
+3.1 Datasets and Evaluation Metrics                          • SOTA. The state-of-the-art models for each
+We consider five datasets that cover a range of                dataset. The models and the corresponding
+programming languages and symbolic meaning                     number of parameters are Spider (Scholak
+representations: Spider (SQL; Yu et al. 2018b),                et al. 2021; 3B), NL2Bash (Shi et al. 2022;
+NL2Bash (Bash; Lin et al. 2018), MBPP (Python;                 175B), MBPP (Chen et al. 2022; 175B),
+Austin et al. 2021), MTOP (TOP-representation;                 MTOP (Xie et al. 2022; 3B), Break (Has-
+Li et al. 2021) and Break (QDMR; Wolfson et al.                son and Berant 2021; ∼300M) and GeoQuery
+2020). We summarize the choice of the execution                (Qiu et al. 2022b; 11B).
+
+                                                     8420
+

@@ -1,0 +1,207 @@
+            SORTIE : Dependency-Aware Symbolic Reasoning for Logical
+                             Data-to-text Generation
+ Xueliang Zhao1†, Tingchen Fu2†, Lemao Liu3 , Lingpeng Kong1 , Shuming Shi3 Rui Yan2,4∗
+                        1
+                          The University of Hong Kong 3 Tencent AI Lab
+             2
+               Gaoling School of Artificial Intelligence, Renmin University of China
+  4
+    Engineering Research Center of Next-Generation Intelligent Search and Recommendation,
+                                      Ministry of Education
+               {xlzhao,lpk}@cs.hku.hk {tingchenfu,ruiyan}@ruc.edu.cn
+                           {redmondliu,shumingshi}@tencent.com
+                        Abstract                                 Date           Home
+                                                                                        1992 - 1993 Vancouver Canucks Season
+                                                                                                  Visitor          Score     Series         Attendance
+                                                                 May 2          Vancouver         Los Angeles      2-5       1-0            16150
+    Logical data-to-text generation is a representa-             May 5          Vancouver         Los Angeles      6-3       1-1            16150
+
+    tive task in measuring the capabilities of both              May 7          Los Angeles       Vancouver        4-7       1-2            16005
+
+    language generation and complex reasoning.                   May 9          Vancouver         Log Angeles      7-2       2-2            16150
+
+
+    Despite the introduction of reasoning skills in                Neural
+                                                                                 There are 4 games with the attendance of 16000, the highest
+                                                                                 attendance in 1992 - 93 Vancouver Canucks season.
+    generation, existing works still rely on neu-                                 COUNT(FILTER(<attendance>, EQ(16005)))=1            MAX(<attendance>)=16150
+    ral language models to output the final table               Chronological
+                                                                                         Step1:                                         Step2:
+                                                                                  There are [ENT1] games with the attendance of [ENT2], the
+    description. However, due to the inefficacy                 Reasoning
+                                                                                  highest attendance in 1992 - 93 Vancouver Canucks season.
+    of neural language models in complex reason-                                  COUNT(FILTER(<attendance>, EQ(16150)))=3            MAX(<attendance>)=16150
+                                                                                         Step2:                                          Step1:
+    ing, these methods inevitably have difficulty                                 There are [ENT1] games with the attendance of [ENT2], the
+    working out key entities in the description and                               highest attendance in 1992 - 93 Vancouver Canucks season.
+    might produce unfaithful descriptions. To al-
+    leviate these issues, we propose a dependency-              Figure 1: A table from LogicNLG (Chen et al., 2020a).
+    aware symbolic reasoning framework that rea-                Without symbolic reasoning, neural models fabricate
+    sons out each entity in the table description               entities that do not appear in the table; with symbolic
+    with our designed table-compatible program-                 reasoning in chronological order ([ENT1]→[ENT2]), it
+    ming language. To figure out the dependency                 is difficult to directly work out [ENT1] since [ENT1] de-
+    relationship among entities, we devise an en-               pends on 16150 ([ENT2]); SORTIE perform dependency-
+    tity scheduling mechanism to determine the                  aware symbolic reasoning ([ENT2]→[ENT1]) and
+    order of programme synthesis such that the rea-             solves two entities correctly.
+    soning of an entity only relies on other “re-
+    solved” entities. Experiments on three datasets
+    and three backbones show that ours outper-                  the given table to produce a logically-consistent
+    forms previous methods not only in surface-                 description (Chen et al., 2020a).
+    level fidelity but also in logical fidelity. No-               To realize intricate reasoning on tables, a wide
+    tably, the proposed framework enhances GPT-                 spectrum of methods have been proposed such
+    2, BART and T5 with an absolute improvement                 as table pre-training with diverse self-supervision
+    of 5.7% ∼ 11.5% on SP-Acc.
+                                                                tasks (Andrejczuk et al., 2022; Liu et al., 2022;
+                                                                Zhao et al., 2022) or coarse-to-fine text delibera-
+1    Introduction                                               tion (Chen et al., 2020a). Generally, existing meth-
+Generating logical-consistent sentences is an inte-             ods attempt to internalize the reasoning ability with
+gral part of human intelligence and has attracted               neural model parameters, but they take the direct
+broad research interests in the field of natural lan-           output from neural models as the final table descrip-
+guage processing recently (Chen et al., 2020a,c;                tion, ignoring the fact that neural language models
+Wei et al., 2022; Creswell et al., 2022; Kazemi                 suffer from hallucination when performing open-
+et al., 2022). One of the most prominent attempts               ended generation task (Maynez et al., 2020). In
+to investigate this capability in neural models is              addition, since neural language models (even the
+logical data-to-text generation (Chen et al., 2020a),           large scale ones) often suffer from limited multi-
+which requires conducting intricate reasoning on                step reasoning ability, methods based on these thus
+                                                                struggle to reason out key entities in description and
+   †
+     Xueliang Zhao and Tingchen Fu contribute equally to this   thus perform poorly on generation faithfulness (Liu
+work. This work was done during their internship at Tencent
+AI Lab.
+                                                                et al., 2022).
+   * Corresponding author: Rui Yan (ruiyan@ruc.edu.cn).            With the recent surge of combining contempo-
+                                                           11247
+                 Findings of the Association for Computational Linguistics: ACL 2023, pages 11247–11266
+                              July 9-14, 2023 ©2023 Association for Computational Linguistics
+rary deep learning methods and symbolic AI, we          we design a table-compatible python-like program-
+get inspiration from recent neural symbolic liter-      ming language that is more feature-rich and table-
+ature (Gao et al., 2022) that decouples complex         friendly compared to previous ones. (3) We empiri-
+reasoning with language generation. In specific,        cally validate the efficacy of SORTIE on three bench-
+we delegate the inference of entities mentioned in      marks for logical data-to-text generation, including
+the table description to a programme interpreter.       LogicNLG (Chen et al., 2020a), Logic2Text (Chen
+The interpreter executes our generated python-like      et al., 2020c), and SciGen (Moosavi et al., 2021).
+programme, thus working out the entities correctly      When applied on GPT-2, BART or T5, our methods
+and alleviating hallucination.                          substantially enhance the SP-Acc which is a crucial
+   However, synthesizing such a programme to            measurement for logical fidelity with an absolute
+infer entities is not a trivial task due to two         improvement of 5.7% ∼ 11.5%.
+major challenges: First, though there are some
+                                                        2     Related Work
+domain-specific programming languages on natu-
+ral text (Chen et al., 2020b; Gupta et al., 2019),      2.1    Data-to-text Generation
+we need to design a table-compatible and easy-
+                                                        Early data-to-text generation mainly focuses on
+to-execute programming language to support the
+                                                        surface-level descriptions of the table contents (Le-
+reasoning over entities in the table. Second, the
+                                                        bret et al., 2016; Liu et al., 2018; Ma et al., 2019;
+entities to infer are not independent but have a com-
+                                                        Wang et al., 2020). However, in spite of generation
+plex dependency relationship and the inference of
+                                                        fluency, neural-based generation models struggle
+one might rely on the others. For instance, as is
+                                                        to perform rich inference based on the facts in ta-
+shown in Figure 1, we can not count the appear-
+                                                        ble (Chen et al., 2020a,c). To make up for that, log-
+ance of 16150 unless we work out the 16150 first.
+                                                        ical table-to-text generation is proposed as a new
+Thus, figuring out the synthesis order of the enti-
+                                                        task with the aim of generating logically-consistent
+ties is fundamental to the reasoning process. To
+                                                        descriptions from open-domain tables (Chen et al.,
+make it worse, there is no human annotation of
+                                                        2020a,c).
+programmes or synthesis order for the entities.
+                                                           In recent years, to endow neural models
+   To mitigate the aforementioned problems, we          with complex reasoning ability, DCVED (Chen
+propose SORTIE (SymbOlic Reasoning with enTIty          et al., 2021) applies causal intervention meth-
+schEduling), a framework that reasons out each          ods to reduce the spurious correlation in entities.
+named entities in the table description with            PLOG (Liu et al., 2022) and TABT5 (Andrejczuk
+dependency-aware symbolic reasoning. Specifi-           et al., 2022) introduce table-to-logical-form or ta-
+cally, (1) we introduce a table-compatible program-     ble denoising as self-supervision tasks in the pre-
+ming language that defines the grammar and opera-       training stage. Similarly, REASTAP (Zhao et al.,
+tors for reasoning on the tabular data and delegates    2022) introduces 7 pre-training tasks to mimic the
+the reasoning of each entity to the execution of the    7 types of reasoning skills of humans. It is worth
+programme; (2) we devise a new pipeline to predict      noting that this line of research is orthogonal to
+the dependency relationship between entities and        ours since they primarily concentrate on developing
+synchronously synthesize the programmes to work         training instances that reflect the desired reasoning
+out each entity; (3) we heuristically search pseudo     skills. Similar to the programming language in our
+labels for both the programmes and synthesis order      proposal, Saha et al. (2022) introduce logic string
+of entities. We further adjust the sample weight of     as an intermediate step to guide generation. How-
+pseudo labels to alleviate the spurious correlation     ever, the surface realization from the logic string to
+issue with a self-adaptive training algorithm.          the final description is very prone to hallucinations
+   To summarize, our contributions are three-fold:      as it is done purely by neural language models.
+(1) To our best knowledge, we are the first to model
+the dependency relationship between entities in the     2.2    Symbolic Reasoning
+table description and propose a new pipeline to syn-    The idea of symbolic reasoning has garnered con-
+chronously predict the order of entities and reason     siderable attention in numerous natural language
+them out one by one. (2) We successfully apply          processing and computer vision tasks. Andreas
+symbolic reasoning to logical data-to-text gener-       et al. (2016) make the first attempt to combine sym-
+ation tasks. To support the reasoning of entities,      bolic reasoning with visual question answering,
+                                                   11248
+          Category           Operator          Arguments                     Output         Description
+                             SUM
+                                          v0: a numerical value                             Return the sum, difference
+                             DIFF                                      a numerical value
+                                          v1: a numerical value                             or ratio of two values.
+                             DIV
+          Value Operator
+                             COUNT                 v: list            a numerical number    Count the number of element.
+                             SELECT       v0: a list. v1: an index           value          Select an element from a list.
+                             MAX                                                            Return the maximum or
+                                                  v: a list                  value
+                             MIN                                                            minimum value of a list.
+                                                v0: a list.                                 Filter elements that meets
+                             FILTER                                            list
+                                             v1: a condition                                specific conditions from a list.
+          List Operator      UNIQUE                v: list                     list         Remove the dublicated value.
+                             ARGMAX                                                         Return the index of the
+                                                   v: list                   index
+                             ARGMIN                                                         maximum or minimum value.
+                                                v0: a list.                                 Return the list of index of the elements
+                             ARGWHERE                                    list of index
+                                             v1: a condition                                that meets specific conditions.
+                             EQ GE GEQ                                                      Constitute a condition for
+          Boolean Operator               v: a numerical parameter         a condition
+                             LE LEQ                                                         FILTER and ARGWHERE.
+
+                                    Table 1: The operators used in our symbolic reasoning.
+
+parsing questions into linguistic substructures and                      [e1 , e2 , · · · , en ] to fill in the placeholders to form
+constructing question-specific deep networks from                        a complete description Y . We focus on the sec-
+smaller modules that each tackle one subtask. Fol-                       ond step in this work while following Chen et al.
+lowing this work, numerous efforts have been made                        (2020a) for the first step.
+to directly predict the instance-specific network lay-
+outs in an end-to-end manner (Hu et al., 2017), to                       Road Map We first introduce our designed table-
+alleviate the requirement for mediate supervision                        compatible programming language in § 3.2. The
+on semantic parsers (Hu et al., 2018; Mao et al.,                        architecture of our model, mostly composed of
+2019), to infer the answer with a purely symbolic                        three components, is illustrated at § 3.3. Finally,
+executor (Yi et al., 2018), and to conduct visual                        the learning algorithm to deal with the scarcity of
+co-reference resolution (Kottur et al., 2018). Very                      human annotation labels is described at § 3.4.
+recently, Gupta et al. (2019) and Chen et al. (2020b)                    3.2          Table-compatible programming language
+concurrently proposed using neural symbolic ap-
+proaches to answer questions in machine reading                          To reason out the named entities faithfully from
+comprehension, which demonstrates advantages                             the table, we introduce a programming language
+in numerical reasoning and interpretability. Com-                        composed of a series of specially designed opera-
+pared to the previous tasks, which only need to                          tors and named entities as operands. We list our
+derive a single entity or value, the task of logical                     operators in Table 1.
+table-to-text generation requires the generation of                         Based on the type of output, we roughly sort
+a complete natural language sentence containing                          all the operators into three categories: value oper-
+multiple entities or logical types.                                      ators, list operators, and boolean operators. Bor-
+                                                                         rowed from Chen et al. (2020b), the value oper-
+3    Methodology                                                         ators are designed to select a value from the ta-
+                                                                         ble (SELECT, MAX and MIN) and calculate some sim-
+3.1 Problem Formulation and Overview                                     ple arithmetic (SUM, DIFF, DIV and COUNT). Apart
+Given a table T , the task of the logical data-to-                       from that, since the layout of the data in a table
+text generation is to generate a description Y that                      is in the format of columns with each column in-
+is both fluent and logically consistent. Following                       cluding homogeneous information, we design list
+Chen et al. (2020a), we decompose the problem                            operators (FILTER or UNIQUE) and index opera-
+into a two-step pipeline: template generation and                        tors (ARGMAX, ARGMIN, ARGWHERE) directed against
+entity instantiation. Specifically, we first generate                    a single column 2 to obtain a new list or indies of a
+a template Ỹ with n placeholders1 P1 , P2 , · · · , Pn ,                list respectively. Finally, we also include boolean
+and then seek for a sequence of named entities                           operation (EQ, GE, LE, GEQ, LEQ) as an integral part
+    1                                                                       2
+      Template is a draft table description that all the named                In this work, we use the column and the list interchange-
+entities are replaced temporarily with special “[ENT]” tokens.           ably.
+
+                                                                     11249
+

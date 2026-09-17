@@ -1,0 +1,239 @@
+                                         Preprint
+
+
+
+
+                                         SubgoalXL: S UBGOAL - BASED E XPERT L EARNING FOR
+                                         T HEOREM P ROVING
+                                             Xueliang Zhao1∗ Lin Zheng1 Haige Bo2 Changran Hu2                Urmish Thakker2     Lingpeng Kong1
+                                          1
+                                             The University of Hong Kong 2 SambaNova Systems
+
+
+
+                                                                                         A BSTRACT
+
+
+
+
+arXiv:2408.11172v1 [cs.LG] 20 Aug 2024
+                                                      Formal theorem proving, a field at the intersection of mathematics and computer
+                                                      science, has seen renewed interest with advancements in large language models
+                                                      (LLMs). This paper introduces SubgoalXL, a novel approach that synergizes
+                                                      subgoal-based proofs with expert learning to enhance LLMs’ capabilities in formal
+                                                      theorem proving within the Isabelle environment. SubgoalXL addresses two criti-
+                                                      cal challenges: the scarcity of specialized mathematics and theorem-proving data,
+                                                      and the need for improved multi-step reasoning abilities in LLMs. By optimiz-
+                                                      ing data efficiency and employing subgoal-level supervision, SubgoalXL extracts
+                                                      richer information from limited human-generated proofs. The framework inte-
+                                                      grates subgoal-oriented proof strategies with an expert learning system, iteratively
+                                                      refining formal statement, proof, and subgoal generators. Leveraging the Isabelle
+                                                      environment’s advantages in subgoal-based proofs, SubgoalXL achieves a new
+                                                      state-of-the-art performance of 56.1% in Isabelle on the standard miniF2F dataset,
+                                                      marking an absolute improvement of 4.9%. Notably, SubgoalXL successfully
+                                                      solves 41 AMC12, 9 AIME, and 3 IMO problems from miniF2F. These results
+                                                      underscore the effectiveness of maximizing limited data utility and employing
+                                                      targeted guidance for complex reasoning in formal theorem proving, contributing
+                                                      to the ongoing advancement of AI reasoning capabilities. The implementation is
+                                                      available at https://github.com/zhaoxlpku/SubgoalXL.
+
+
+                                         1        I NTRODUCTION
+
+                                         Formal theorem proving, a field at the intersection of mathematics and computer science, has flour-
+                                         ished alongside the development of languages like Lean (de Moura et al., 2015) and Isabelle (Paulson,
+                                         1994). These two prominent communities have been instrumental in advancing the field’s core
+                                         challenge: mechanizing mathematical reasoning and proof verification (Li et al., 2020). Through the
+                                         creation of rigorously verified proofs, this discipline strengthens the foundations of mathematical
+                                         certainty, potentially opening doors to new mathematical discoveries.
+                                         The field has recently garnered renewed attention, driven by advancements in artificial intelligence,
+                                         particularly in large language models (LLMs). The significance of this resurgence lies in its potential
+                                         to push the boundaries of reasoning capabilities in modern AI methods, especially LLMs (Wu et al.,
+                                         2022; Jiang et al., 2022a; Zhao et al., 2024; Xin et al., 2023; Lin et al., 2024). Formal theorem proving
+                                         represents a new frontier in AI reasoning, challenging LLMs to perform complex, logically rigorous
+                                         tasks that were previously considered beyond their capabilities. From an application perspective,
+                                         this breakthrough in language models’ ability to engage in sophisticated mathematical reasoning
+                                         has profound implications that reach far beyond pure mathematics, extending to various fields of
+                                         scientific research and automated decision-making systems.
+                                         In this work, we introduce SubgoalXL (Figure 1), a novel approach that synergizes subgoal-based
+                                         proofs with expert learning to enhance LLMs’ capabilities in formal theorem proving. SubgoalXL
+                                         tackles the scarcity of specialized mathematics and theorem proving data (Lin et al., 2024; Wu et al.,
+                                         2024) by optimizing data efficiency, extracting richer information from limited human-generated
+                                         proofs. Concurrently, it augments LLMs’ multi-step reasoning abilities through subgoal-level super-
+                                         vision. At its core, SubgoalXL integrates subgoal-oriented proof strategies with an expert learning
+                                              ∗
+                                                  Corresponding author: Xueliang Zhao (xlzhao22@connect.hku.hk).
+
+
+                                                                                               1
+Preprint
+
+
+
+
+                     Informal Statement
+ When Rachel divides her favorite number by 7, she gets a
+ remainder of 5. What will the remainder be if she multiplies                                                    rate                             Sc
+                                                                                                                                                    or
+                                                                                                            ne                                        e
+ her favorite number by 5 and then divides by 7? Show that it                                            Ge
+                                                                                                                           F. Proof
+ is 4.                                                                                                                    Generator
+
+                         Informal Proof                         Formal     Informal Formal
+ Let 𝑛 be Rachel's favorite number. Then 𝑛 ≡ 5 (mod 7), so       Stat.               Proof    Subgoal
+                                                                             Stat.                                                                  pl
+                                                                                             Generator Up                                              e
+ 5𝑛 ≡ 5 . 5 ≡ 25 ≡ 4 (mod 7).                                                                                da
+                                                                                                               te
+                                                                                                                                              Sa
+                                                                                                                                                m
+                                                                                                                        Subgoal-based
+           Formal Statement + Formal Proof                                                                                  Proof
+       (Subgoal-Based Proof as Inline Comments)
+ theorem mathd_numbertheory_335:
+   fixes n :: nat
+   assumes h0 : "n mod 7 = 5"                                                                               rate                     Sc
+                                                                                                       ne                              or
+                                                                                                    Ge                                   e
+   shows "(5 * n) mod 7 = 4"                                                                                        Subgoal
+ proof -                                                                                                           Generator
+   (* Step 1: Given 𝑛 ≡ 5 (mod 7), substitute 5 for 𝑛 in
+  5 ∗ 𝑛 mod 7. *)                                               Informal     Subgoal-based    F. Stat.
+   have c0: "(5 * n) mod 7 = (5 * 5) mod 7"                       Stat.          Proof       Generator
+                                                                                                                                           pl
+     using h0                                                                                       Up
+                                                                                                      da                             Sa
+                                                                                                                                              e
+                                                                                                        te                             m
+     by simp
+                                                                                                                        Formal
+                                                                                                                         Stat.
+    (* Step 2: Calculate 25 mod 7 = 4. *)
+    then have "\<dots> = 4"
+      by simp
+
+    (* Step 3: Thus, 5 ∗ 𝑛 mod 7 simplifies to 4. *)                                                                           ne   rate                            Score
+                                                                                                                            Ge
+    then have "(5 * n) mod 7 = 4"                                                                   Generate                                  P. Subgoal
+      using c0                                                                                                                                Generator
+      by simp
+                                                                Informal     Subgoal-based    F. Stat.         F. Proof
+                                                                  Stat.          Proof       Generator        Generator
+  (* Therefore, the remainder when 5 times Rachel's favorite                                                                                                                      pl
+                                                                                                                                                                                     e
+                                                                                                                           Up                                                 m
+ number is divided by 7 is 4. *)                                                                                             da
+                                                                                                                               te                                           Sa
+  then show ?thesis                                                                                                                         Formal         Formal
+    by simp                                                                                                                                  Stat.          Proof
+ qed
+
+
+
+              (a) Subgoal-based Proof                                                (b) Expert Learning Framework
+
+Figure 1: Left: Examples of informal statement, informal proof, formal statement, formal proof, and
+subgoal-based proof. Right: Overview of the subgoal-based expert learning framework. Abbrevia-
+tions: “Stat.” for “Statement”, “F.” for “Formal”, and “P.” for “Posterior”. Each iteration samples
+subgoal-based proofs, formal statements, and formal proofs from their optimal distributions.
+
+
+framework, iteratively refining formal statement, proof, and subgoal generators. By leveraging sam-
+pling from estimated optimal distributions, SubgoalXL significantly elevates LLMs’ performance in
+theorem-proving tasks, enhancing their capacity to navigate intricate logical structures and generate
+more robust and precise formal proofs.
+Leveraging the Isabelle environment’s advantages in subgoal-based proofs, SubgoalXL significantly
+advances theorem-proving capabilities. It achieves a new state-of-the-art performance of 56.1% in
+Isabelle on the standard miniF2F dataset (Zheng et al., 2021), an absolute improvement of 4.9% over
+Zheng et al. (2023). SubgoalXL successfully solves 41 AMC12, 9 AIME, and 3 IMO problems
+from miniF2F. The iterative expert learning process drives steady performance gains, underscoring
+SubgoalXL’s robustness and effectiveness. These results highlight the critical role of maximizing
+limited data utility and employing effective guidance for complex reasoning, complementing large-
+scale data efforts (Wu et al., 2024; Xin et al., 2024a;b).
+
+
+2        R ELATED W ORK
+
+Formal theorem proving has advanced significantly through machine learning, focusing on enhancing
+proof search strategies and leveraging Large Language Models (LLMs) for autoformalization Polu
+& Sutskever (2020); Polu et al. (2022); Jiang et al. (2022a). Improvements in the proof search
+include self-supervised strategies in Expert Iteration (Polu et al., 2022) and PACT (Han et al., 2021),
+integrations of language models with automated provers in HyperTree Proof Search (HTPS)(Lample
+et al., 2022) and Thor(Jiang et al., 2022b), and transformer-based premise selection in Magnusham-
+mer (Mikuła et al., 2023). Despite these advancements, scalability remains a challenge due to
+the increasing complexity of theorems. The application of LLMs for autoformalization and proof
+generation has also been explored, with Wu et al. (2022) and Jiang et al. (2022a) demonstrating
+the conversion of mathematical problems into formal specifications. Baldur (First et al., 2023)
+further enhances proving capabilities by producing full proofs and incorporating a proof repair model.
+Additionally, LEGO-Prover (Xin et al., 2023) and Lyra Zheng et al. (2023) contribute uniquely to
+
+
+                                                                            2
+Preprint
+
+
+
+
+theorem proving by focusing on the incremental development of reusable theorems and integrating
+error messages from external verifiers for proof post-processing, respectively. DeepSeek-Prover (Xin
+et al., 2024a) highlights the potential of large-scale synthetic data, while Lean-STaR (Lin et al., 2024)
+leverages informal information to boost theorem-proving capabilities by training language models to
+produce informal thoughts before each proof step. InternLM2-StepProver (Wu et al., 2024) addresses
+data scarcity by utilizing extensive formal data from Lean 4 repositories on GitHub. Zhao et al. (2024)
+introduce a subgoal-based demonstration learning framework that constructs and refines distinct
+subgoals for each example, significantly enhancing proof search efficiency in LLMs.
+Nevertheless, challenges remain in addressing data scarcity and enhancing deep, multi-step rea-
+soning in formal theorem proving. Building upon the insights from subgoal-based demonstration
+learning (Zhao et al., 2024), we introduce SubgoalXL, a novel framework that combines subgoal-
+based proofs with an expert learning system. This approach iteratively enhances formal statement,
+proof, and subgoal generation, aiming to improve data efficiency and achieve robust performance.
+SubgoalXL complements existing methods by focusing on maximizing the utility of limited data and
+refining complex reasoning strategies.
+
+
+3     A PPROACH
+
+3.1   P ROBLEM F ORMALIZATION
+                                                          |I|
+Suppose we have an informal dataset I = {(sIi , piI )}i=1 , where sIi is an informal statement and
+                                                                                     |F|
+piI is an informal proof. Similarly, we have a formal dataset F = {(SiF , PiF )}i=1 , where SiF is a
+                            F
+formal statement and Pi is a formal proof. The goal is to train a language model pfpg (p, P | s, S)
+using both I and F. Consequently, given a new informal statement s and its formal version S, the
+model can generate both the informal proof p and the formal proof P, following the distribution
+pfpg (p, P | s, S). In this paper, we treat (p, P) as a sequence of language tokens, with p representing
+the prefix and P representing the suffix. In cases where an informal proof p is available, the model
+can directly generate the formal proof P following pfpg (P | s, S, p).
+The challenges mainly lie in (1) the limited effectiveness of informal proofs in I due to discrep-
+ancies between human-written informal proofs and the established practices of formal proofs in
+theorem-proving languages; and (2) the difficulty in constructing the full training dataset, which
+requires aligned (s, S, p, P) quadruples. Inspired by Zhao et al. (2024), we use subgoal-based
+proofs (Figure 1a) to replace informal proofs in I, achieving better consistency with the structure of
+formal proofs (see §3.2). Additionally, we develop an expert learning framework (Figure 1b) that
+samples (s, S, p, P) quadruples by estimating their optimal distributions through iterative refinement,
+leveraging probabilistic modeling and gradient estimation techniques (see §3.3).
+
+3.2   S UBGOAL - BASED P ROOF
+
+To annotate subgoal-based proofs for the informal statements in I, we begin by manually creating
+demonstration examples to serve as input for in-context learning (see Figure 1a). We select a subset
+of problems from the miniF2F validation set and manually construct the verified formal proof for
+each problem. Then, we prompt GPT-4o to generate subgoal-based proofs g, conditioned on the
+informal statement s, formal statement S, and formal proof P. This process ensures that: (1) the
+subgoal-based proofs are produced by autoregressive models; (2) they exhibit a consistent style,
+reducing the learning burden, as noted by Gu et al. (2018); and (3) each subgoal corresponds to a
+corresponding formal intermediate goal in Isabelle. These demonstrations are then used as in-context
+examples to annotate subgoal-based proofs for the informal statements in I (see Appendix A for
+further details).
+
+3.3   S UBGOAL - BASED E XPERT L EARNING
+
+We introduce the SubgoalXL framework, which comprises a formal proof generator (pfpg ), a formal
+statement generator (pfsg ), and a subgoal generator (psg ). Inspired by gradient estimation in proba-
+bilistic modeling (Schulman et al., 2015), this framework estimates optimal training data distributions
+
+
+                                                   3
+

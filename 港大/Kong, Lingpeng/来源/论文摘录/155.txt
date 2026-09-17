@@ -1,0 +1,181 @@
+                                        Dream-Coder 7B: An Open Diffusion Language Model for Code
+                                                      Zhihui Xie1∗ Jiacheng Ye1∗ Lin Zheng1∗ Jiahui Gao2∗
+                                                  Jingwei Dong1 Zirui Wu1 Xueliang Zhao1 Shansan Gong1
+                                                                  Xin Jiang2 Zhenguo Li2† Lingpeng Kong1†
+                                                              1
+                                                                The University of Hong Kong 2 Huawei Noah’s Ark Lab
+                                                          DreamLM/Dream-Coder                         Dream-Coder                 Demo
+                                                                                       July 15, 2025
+
+
+
+
+arXiv:2509.01142v1 [cs.CL] 1 Sep 2025
+                                                                                           Abstract
+                                                   We present Dream-Coder 7B, an open-source discrete diffusion language model for code genera-
+                                               tion that exhibits emergent any-order generation capabilities. Unlike traditional autoregressive
+                                               (AR) models that decode strictly left-to-right, Dream-Coder 7B adaptively determines its decoding
+                                               strategy based on the coding task: sketch-first generation for complex algorithms, left-to-right
+                                               generation for straightforward completions, and interleaved reasoning generation for code under-
+                                               standing tasks. We adapt a pretrained AR checkpoint to a discrete diffusion frameworks with a
+                                               continuous-time weighted cross-entropy objective. Our post-training recipe comprises (i) super-
+                                               vised fine-tuning, where we mitigate padding pathologies via random truncation and a padding
+                                               penalty to improve sample efficiency and stabilize generation; and (ii) reinforcement learning with
+                                               verifiable rewards over a curated high-quality prompt set drawn from open-source datasets, using a
+                                               tailored reinforcement learning recipe for diffusion language models. The resulting Dream-Coder
+                                               7B Instruct attains 21.4% pass@1 on LiveCodeBench (2410–2505) and demonstrates competitive
+                                               performance on HumanEval, MBPP, BigCodeBench, and CRUXEval. We release Dream-Coder-7B
+                                               and Dream-Coder-7B-Instruct checkpoints, training recipes, preprocessing pipelines, and inference
+                                               code to facilitate reproducibility and further research.
+
+
+                                        1      Introduction
+                                        The rapid advancement of large language models has fundamentally transformed software development,
+                                        with AI-powered coding assistants becoming indispensable tools for millions of developers world-
+                                        wide (Anthropic, 2025; OpenAI, 2025; Comanici et al., 2025). The current landscape is dominated by
+                                        autoregressive (AR) models that generate code through sequential left-to-right token prediction. While
+                                        these models have demonstrated remarkable capabilities in code completion and generation, a central
+                                        question remains: What architectural paradigms might define the next generation of code generation
+                                        models?
+                                            This question becomes increasingly critical as AR models exhibit inherent limitations in complex
+                                        programming scenarios (Bachmann and Nagarajan, 2024). Consider code refactoring, where developers
+                                        need to simultaneously modify function signatures, update call sites, and maintain consistency across
+                                        entire codebases. Or debugging scenarios where understanding requires bidirectional context flow
+                                        and iterative hypothesis testing. These tasks demand global program understanding, flexible infilling,
+                                        and multi-step refinement—capabilities where sequential left-to-right generation struggles. The rigid
+                                        token-by-token AR paradigm constrains holistic reasoning about program structure and semantics.
+                                            Discrete diffusion models offer a compelling alternative for code generation by beginning with
+                                        completely corrupted sequences and gradually denoising them through multiple refinement steps (Austin
+                                        et al., 2021a; Zheng et al., 2023). This architectural shift unlocks several theoretical advantages that
+                                        directly address autoregressive limitations. The bidirectional nature of diffusion enables richer contextual
+                                            ∗ Equal contribution
+                                            † Core advising
+
+
+
+
+                                                                                               1
+modeling by incorporating information from all positions simultaneously, leading to more coherent
+and globally consistent code generation (Li et al., 2022). Furthermore, the iterative refinement
+process naturally supports controllable generation and provides flexible quality-speed trade-offs through
+adjustable inference steps, opening new dimensions for test-time optimization (Snell et al., 2024) that
+complement existing techniques.
+    Recent developments have begun to demonstrate the practical viability of diffusion models for
+code generation. While general-purpose diffusion language models like LLaDA (Nie et al., 2025a) and
+Dream 7B (Ye et al., 2025b) have established the foundation for scaled diffusion modeling, code-specific
+applications present unique challenges and opportunities. Commercial implementations such as Mercury
+Coder (Khanna et al., 2025) have shown promising results, while research efforts like DiffuCoder (Gong
+et al., 2025b) have explored masked diffusion strategies specifically for programming languages. However,
+significant gaps remain in achieving performance parity with state-of-the-art autoregressive code models
+while fully leveraging the unique capabilities of diffusion-based generation.
+    In this work, we present Dream-Coder 7B, a specialized diffusion language model that bridges
+this performance gap while demonstrating novel capabilities inherent to the diffusion paradigm for
+code generation. Building upon the foundational advances of Dream 7B in general diffusion language
+modeling, we introduce a comprehensive training framework specifically tailored for code generation
+tasks. Our approach combines AR-based initialization from Qwen2.5-Coder with context-adaptive noise
+scheduling and novel post-training techniques including verifiable reward-driven reinforcement learning.
+Through extensive evaluation, we establish that diffusion models can match autoregressive performance
+on standard coding benchmarks while providing distinct advantages in complex programming scenarios,
+offering unprecedented generation flexibility through adaptive pattern selection and iterative refinement
+capabilities.
+
+      Takeaways
+
+       • We present Dream-Coder 7B, the first open-source diffusion language model for code
+         generation to achieve competitive performance with AR baselines while offering unique
+         generation capabilities.
+       • We demonstrate three emergent adaptive generation patterns—sketch-first scaffolding,
+         left-to-right completion, and interleaved reasoning—that naturally arise from diffusion
+         training and adapt to different coding task complexities.
+
+       • We release the model, training recipes, preprocessing pipelines, and inference code to
+         facilitate reproducibility and further research.
+
+
+
+2     Dream-Coder-7B
+2.1    Background: Discrete Diffusion Modeling
+Discrete diffusion models (Austin et al., 2021a; Hoogeboom et al., 2021; Campbell et al., 2022) are a
+class of latent variable models characterized by a forward noising process and a learned reverse denoising
+process. Let xt denote the noised Q  sequence at timestep t, with [MASK] tokens used to represent noise.
+                                       T
+The forward process q(x1:T |x0 ) = t=1 q(xt |xt−1 ) progressively corrupts the original data x0 := x into
+increasingly noisy sequences x1:T := x1 , . . . , xT . At each timestep, a noise schedule αt controls the
+probability that each token remains unmasked. The backward process then learns to gradually denoise
+the masked sequence back to the original data distribution by iteratively predicting masked tokens as t
+decreases from T to 0:
+                                            X             T
+                                                          Y
+                                  pθ (x) =         p(xT )    pθ (xt−1 | xt ),
+                                          x1:T ∼q       t=1
+
+where the denoising steps leverage full-sequence context rather than the left-context prediction of
+autoregressive models.
+    While traditional discrete diffusion employs fixed discrete timesteps t ∈ {0, . . . , T }, this can
+introduce bias by restricting xt to predetermined noise levels. Following Kingma et al. (2021); Campbell
+et al. (2022); Sahoo et al. (2024); Shi et al. (2024); Ou et al. (2025), we adopt a continuous-time
+
+
+                                                    2
+parameterization where t ∈ [0, 1], enabling q(xt |xs ) for any 0 ≤ s < t ≤ 1. This allows for flexible noise
+schedules and sampling across arbitrary noise levels. We use absorbing-state diffusion and train with a
+weighted cross-entropy loss:
+                                                                       N
+                                                                       X
+                   L(θ) = −Ex0 ∼q(x),t∼U (0,1),xt ∼q(xt |x0 ) w(t)           1[xnt =MASK] log pθ (xn0 | xt ),      (1)
+                                                                       n=1
+
+where the indicator 1[xnt =MASK] ensures the loss is computed only on masked positions, and w(t) ∈ (0, 1]
+is a time-dependent reweighting term determined by the noise schedule αt (Zheng et al., 2023; Shi
+et al., 2024; Gong et al., 2025a). This formulation provides a tractable variational upper bound on the
+negative log-likelihood, making it a practical and effective training objective for large-scale diffusion
+language models.
+
+2.2      Architecture
+Dream-Coder 7B is a discrete diffusion language model based on the Qwen2.5-Coder 7B model (Hui
+et al., 2024). Following Gong et al. (2025a); Ye et al. (2025b), we adopt the shift operation strategy to
+adapt the autoregressive model architecture while retaining the learned knowledge from initialization.
+    Specifically, unlike standard diffusion models that predict tokens at their masked positions, the
+shift operation allows the model to leverage its pretrained capabilities while gaining the benefits of
+bidirectional context and parallel generation inherent in diffusion modeling. For details, please refer to
+Gong et al. (2025a).
+
+
+3      Pre-training
+3.1      Objective
+The Dream-Coder 7B model is trained to predict clean tokens from their noised counterparts under a
+continuous-time discrete diffusion framework (Equation 1). At each training step, we sample a clean
+sequence x0 from the pretraining corpus, draw a noise level t ∼ U(0, 1), and apply the forward noising
+process q(xt | x0 ) to replace a subset of tokens with [MASK] according to the noise schedule αt . The
+model then predicts the original tokens at the masked positions using the full context of xt .
+   Specifically, we apply Context-Adaptive Token-Level Noise Rescheduling (Ye et al., 2025b):
+                                                              N
+                                                              X
+                 L(θ) = −Ex0 ∼q(x),t∼U (0,1),xt ∼q(xt |x0 )         1[xnt =MASK] w(t, xt , n) log pθ (xn0 |xt ),   (2)
+                                                              n=1
+
+where w(t, xt , n) generalizes the term w(t) and can be flexibly designed based on xt ’s structure. This
+approach assigns higher noise rates to harder-to-predict tokens, improving both convergence speed and
+final generation quality.
+
+3.2      Data Mixture
+We pretrain Dream-Coder 7B on a mixture of publicly available code, math, and general language
+datasets, totaling 322B tokens. The corpora include: (1) OpenCoder1 (Huang et al., 2025): Code-
+related data extracted from FineWeb (Penedo et al., 2024). (2) Stack-Edu2 (Allal et al., 2025): A
+dataset of educational code filtered from The Stack v2 (Lozhkov et al., 2024), containing only the
+highest-quality educational programming content across 15 programming languages. (3) Dolmino3 : A
+high-quality dataset mixture for annealing training. (4) DCLM-Baseline4 (Li et al., 2024): A dataset
+derived from CommonCrawl, providing high-quality general text to complement our code-focused
+training data. These datasets collectively cover general programming tasks, algorithmic problem
+solving, software engineering best practices, and mathematical reasoning, ensuring broad coverage and
+robustness across coding tasks while maintaining strong general language capabilities.
+    1 OpenCoder-LLM/opencoder-datasets
+    2 HuggingFaceTB/stack-edu
+    3 allenai/dolmino-mix-1124
+    4 mlfoundations/dclm-baseline-1.0
+
+
+
+
+                                                              3
+

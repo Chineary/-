@@ -1,0 +1,190 @@
+                                         PromptCoT 2.0: Scaling Prompt Synthesis for Large Language
+                                                              Model Reasoning
+
+                                                           Xueliang Zhao1,2 , Wei Wu2† , Jian Guan2 , Zhuocheng Gong2 , Lingpeng Kong1†
+                                                                                  1 The University of Hong Kong              2 Ant Group
+
+
+
+
+arXiv:2509.19894v1 [cs.LG] 24 Sep 2025
+                                                                                                         Abstract
+                                                     Large language models (LLMs) are evolving from conversational systems into strong reason-
+                                                     ers for tasks such as Olympiad mathematics and competitive programming. While scaling
+                                                     parameters and test-time computation has driven progress, a key bottleneck is the lack
+                                                     of high-quality training problems: human-curated datasets are costly and limited, while
+                                                     existing synthetic corpora are often too easy or narrow. PromptCoT 1.0 showed that in-
+                                                     jecting rationales into prompt synthesis increases problem difficulty. Building on this, we
+                                                     present PromptCoT 2.0, a scalable framework that replaces hand-crafted heuristics with
+                                                     an expectation–maximization (EM) loop, where rationales are iteratively refined to guide
+                                                     prompt construction. This produces problems that are both harder and more diverse than
+                                                     prior corpora. The synthetic prompts support two post-training regimes: (1) Self-Play, where
+                                                     strong models improve autonomously via verifiable feedback without stronger teachers;
+                                                     and (2) Supervised Fine-Tuning (SFT), where weaker models learn from teacher-distilled
+                                                     traces. Extensive experiments demonstrate the effectiveness of this approach. In self-play,
+                                                     applying PromptCoT 2.0 to Qwen3-30B-A3B-Thinking-2507 sets new state-of-the-art results
+                                                     at the 30B scale, with +4.4, +4.8, and +5.3 on AIME 24/25 and HMMT 25, +6.1 and +5.0 on
+                                                     LiveCodeBench v5/v6, and +35 Elo on Codeforces. In SFT, training Qwen2.5-7B-Instruct
+                                                     solely on synthetic prompts boosts accuracy to 73.1 (AIME 24), 65.6 (AIME 25), and 53.4
+                                                     (LiveCodeBench v5), surpassing models trained on human or hybrid data. Analyses fur-
+                                                     ther confirm that PromptCoT 2.0 yields fundamentally harder and distributionally distinct
+                                                     problems. These results establish prompt synthesis as a new axis for scaling reasoning
+                                                     and position PromptCoT 2.0 as a scalable foundation for future open-source models. The
+                                                     implementation is available at https://github.com/inclusionAI/PromptCoT.
+
+                                         1   Introduction
+                                         Large language models (LLMs) have advanced from basic chatbots (Ouyang et al., 2022; Achiam et al.,
+                                         2023; Hurst et al., 2024) to sophisticated reasoners (Jaech et al., 2024; Guo et al., 2025) capable of addressing
+                                         complex tasks (e.g., Olympiad-level mathematics) through structured problem decomposition, deliberate
+                                         planning, and reflective self-correction—all without reliance on external knowledge. More recently, the LLM
+                                         community has begun to explore the development of agentic intelligence (Moonshot, 2025; Zeng et al., 2025),
+                                         which aims to endow LLMs with extended capacities to interface with external tools and environments,
+                                         thereby enabling the autonomous pursuit and completion of more demanding tasks (Phan et al., 2025). Along
+                                         this trajectory, while large-scale pre-training remains the primary driver of model capability (Gandhi et al.,
+                                         2025), scaling test-time computation is emerging as a complementary avenue for further enhancing LLM
+                                         intelligence (Snell et al., 2024).
+                                         As test-time scaling continues to attract growing attention within the LLM community, we posit that two
+                                         lines of research are poised to become the primary technical drivers of this emerging paradigm. The first is
+                                         Reinforcement Learning (RL) (Guo et al., 2025; Schulman et al., 2017), which offers a principled framework
+                                         for shaping LLM output distributions via carefully designed reward signals, thereby enabling models to
+                                         learn effectively from experience (Silver & Sutton, 2025). The second, which has received comparatively less
+                                         attention but may prove even more consequential, is Task Synthesis (Yang et al., 2025b; Li et al., 2025; Zhao
+                                         et al., 2025b; Liu et al., 2025)—automatic and scalable methods for generating task data that constitute the
+                                         training ground for RL and thus initiate the process of learning from experience.
+                                             †
+                                                 Correspondence to: W. Wu <wuwei19850318@gmail.com> and L. Kong <lpk@cs.hku.hk>
+                                                                                                               1
+While human-crafted data continues to play an important role in LLM training (Moshkov et al., 2025; Ahmad
+et al., 2025), we argue that synthesized task data will become increasingly central to advancing the frontier
+of LLM intelligence. The shift is driven by two factors: (1) as LLMs grow more capable, the quality of
+synthesized data will correspondingly improve; and (2) the tasks posed to LLMs will grow substantially
+more challenging, with their scope expanding dramatically (e.g., in the pursuit of agentic intelligence).
+Consequently, reliance on human-generated and curated task data will become prohibitively costly, making
+scalable synthesis indispensable.
+In a broad sense, task synthesis may encompass multiple dimensions, including task definition, problem
+generation, solution synthesis, environment construction, and even the development of evaluation protocols.
+In this work, we focus on Prompt Synthesis as a simplified yet representative form of task synthesis, where
+an instance of a task is expressed as a textual prompt. Although prompt synthesis has contributed to
+recent advances in LLMs (Yang et al., 2025a; Zeng et al., 2025; Moonshot, 2025; Adler et al., 2024), the
+underlying technical details are often scarcely disclosed. Publicly available studies, by contrast, typically
+rely on deliberately engineered prompts to guide powerful LLMs in generating new prompts (Wang et al.,
+2023; Xu et al., 2024; Huang et al., 2025; Tang et al., 2024; Yue et al., 2024; Li et al., 2024; Luo et al., 2023b; Wei
+et al., 2023; Huang et al., 2024; Xu et al., 2025; Liu et al., 2025; Yang et al., 2025b) -an approach that is neither
+learnable or scalable. As a result, the datasets produced often fall short in difficulty (Zhao et al., 2025b) and
+diversity, particularly with respect to expression variation (Xu et al., 2024) and domain coverage (i.e., being
+restricted to one specific domain). Recently, Zhao et al. (2025b) introduces “rationale”-a form of “thinking
+process”-into prompt synthesis, demonstrating substantial improvements in the difficulty of synthesized
+prompts. This method, however, remains dependent on human-engineered prompts and is confined to the
+mathematical domain. Consequently, we believe that a fully open-sourced pipeline that integrates advanced
+prompt synthesis and post-training methods would provide a useful resource for both advancing established
+capabilities (e.g., mathematical reasoning) and supporting exploration of emerging areas in LLM reasoning
+(e.g., agentic intelligence, scientific discovery, and beyond).
+In this work, we present PromptCoT 2.0, a principled and scalable framework for prompt synthesis that
+extends the concept–rationale–prompt paradigm beyond the constraints of PromptCoT 1.0 (Zhao et al.,
+2025b). Our method introduces an EM-based optimization procedure in which rationales are iteratively
+refined to guide prompt construction, thereby generating more challenging and diverse problems across
+both mathematics and programming domains. Unlike prior approaches that rely heavily on hand-crafted
+instructions or domain-specific heuristics, PromptCoT 2.0 is fully learnable and domain-agnostic, enabling
+synthesis pipelines that can generalize to new reasoning tasks with minimal human intervention.
+We demonstrate the effectiveness of PromptCoT 2.0 through comprehensive experiments under two post-
+training regimes: (1) Self-Play, where synthesized problems provide automatically verifiable feedback that
+enables models to improve without stronger external teachers; and (2) Supervised Fine-Tuning (SFT), where
+weaker base models are trained from complete reasoning traces distilled from a teacher. In the self-play
+setting, PromptCoT 2.0 delivers substantial improvements over strong Qwen3 baselines and outperforms
+all existing open-source corpora. For example, when applied to Qwen3-30B-A3B-Thinking-2507, our method
+improves accuracy on AIME 24 from 87.7 to 92.1, on AIME 25 from 85.0 to 89.8, and on HMMT Feb 25
+from 71.4 to 76.7, while also achieving notable gains on LiveCodeBench v5 (+6.1) and v6 (+5.0). Overall,
+these results establish new state-of-the-art performance at the 30B parameter scale across all six benchmarks.
+In the SFT setting, we initialize from Qwen2.5-7B-Instruct and train exclusively on prompts synthesized
+by PromptCoT 2.0. Despite relying solely on synthetic problems, the resulting model achieves consistent
+improvements over both human-curated and hybrid datasets. For instance, accuracy improves from 12.8
+to 73.1 on AIME 24, from 8.0 to 65.6 on AIME 25, from 2.7 to 46.5 on HMMT Feb 25, from 14.7 to 53.4
+on LiveCodeBench v5, and from 13.7 to 48.9 on LiveCodeBench v6, while also achieving the strongest
+Codeforces performance (706 → 1815). Extended investigation further demonstrates that PromptCoT 2.0
+produces prompts that exhibit striking semantic differences from human-created ones and are considerably
+more challenging than those generated by PromptCoT 1.0.
+Our contributions can be summarized as follows:
+
+      • We introduce a new rationale-driven prompt synthesis method, PromptCoT 2.0, which integrates
+        EM optimization to jointly refine rationale generation and prompt construction. This framework
+        moves beyond handcrafted instructions and scales naturally to multiple domains.
+   A prompt may also incorporate multimodal elements such as images, videos, or tools. We defer the exploration of
+multimodal prompt synthesis to future work.
+
+
+                                                          2
+                               Problem (𝒙)                                                    Concepts        Problem               Concepts
+                                                                 Rationale (𝒛)
+                  Find the least odd prime
+                  factor of 20198 + 1
+                                                    Select core tools…
+                                                    weave exponent laws with
+                                                    modular orders…
+                                                    pose constraints…
+                               Concepts (𝒄)
+                                                    iterate counterexamples…
+                                                    refine structure…
+                 1.    Properties of Exponents      ensure minimal prime emerges.                    Rationale               Rationale   Problem
+                 2.    Modular Arithmetic
+                 3.    Prime Numbers                                                            Rationale Gen. Model          Prompt Gen. Model
+                 4.    Congruence Theorems
+                                                               Cold-start Initialization (Sec. 3.2.1 )
+
+                      E-Step                                                            M-Step
+                                             Concepts        Problem                                       Concepts       Problem
+
+
+
+                                                                  Iter 𝑖                      Iter 𝑖 + 1
+                      Iter 𝑖                     Rationale                                                    Rationale                  Iter 𝑖
+
+
+                                   ∆∅            Reward                                                                      ∆𝜃
+
+                                                          Prompt Gen. Model              Rationale Gen. Model
+                  Iter 𝑖 + 1                                                                                                             Iter 𝑖 + 1
+
+
+                           Rationale Gen. Model                                                                         Prompt Gen. Model
+
+                                                                  EM Optimization (Sec. 3.2.2 )
+
+
+
+
+Figure 1: Overview of PromptCoT 2.0. We begin with open-source problems and annotate their associated
+concepts and rationales, forming concept–rationale–problem triples that provide cold-start data for the
+rationale generation model and the prompt generation model. During EM optimization, the E-step updates
+the rationale generation model by maximizing the reward defined in Eq. 5, while the M-step updates the
+prompt generation model to better align with the generated rationales.
+
+
+     • We show how synthesized prompts can be effectively used for LLM post-training. Specifically, we
+       present two complementary regimes—self-play and supervised fine-tuning—and demonstrate con-
+       sistent improvements over strong Qwen3 and Qwen2.5 baselines across six challenging benchmarks.
+     • We contribute a large-scale corpus of synthetic prompts fundamentally different from existing
+       open-source datasets, with both distributional and difficulty analyses confirming that PromptCoT 2.0
+       produces problems that are more diverse and substantially more challenging. This resource provides
+       a new foundation for advancing reasoning in open-source LLMs.
+
+2   Preliminaries
+2.1 Problem Formulation: Prompt Synthesis
+We consider the setting where a prompt is constructed from a set of underlying concepts. Let C denote the
+concept space and X the prompt space. Each prompt x ∈ X is associated with a subset of concepts c ⊆ C.
+Prompt synthesis is then formulated as modeling the conditional distribution p( x | c), with the objective of
+generating a prompt instance x that faithfully reflects the specified concepts and ultimately enhances the
+reasoning capabilities of LLMs.
+2.2 The PromptCoT Framework
+A central challenge in prompt synthesis is that mapping concepts directly to prompts often yields under-
+specified or brittle problem statements (Zhao et al., 2025b). To address this, PromptCoT (Zhao et al., 2025b)
+introduces an intermediate latent variable—the rationale. Instead of modeling p( x | c) directly, PromptCoT
+factorizes it via rationales z, yielding:
+
+                                                        p( x | c) = ∑ p( x | z, c) p(z | c).                                                          (1)
+                                                                           z
+
+
+
+
+                                                                                    3
+

@@ -1,0 +1,113 @@
+// Mappings below were read from paper title pages, not inferred from publication year.
+export const affiliations = {};
+function set(ids, institution, stage='香港大学；助理教授；2020-至今') {
+  for(const id of ids) affiliations[id]={institution,stage,page:1};
+}
+set([1,2,3,12,13,14], 'Google DeepMind', 'Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）');
+set([5,6,7], '卡内基梅隆大学', '硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）');
+set([4], 'Google', 'Google Research；研究实习；2016（论文发表2017；具体研究时间待核验）');
+set([8,9,10,17,18,19,22,25,27,29,30,31,33,34,35,36,38,39,41,42,43,46,47,48,49,50,51,52,54,55,56,59,61,62,63,64,66,67,68,69,70], '香港大学');
+set([73,76,77,79,81,83,84,85,86,87,88,90,92,93,99,101,105,108,110,131,136,137,138,140,145,146,147,149,151,153,154,155,157,159,160,161,162,164,166,168,169,170,171,172,173,174,175,177], '香港大学');
+set([94,95,96,98,100,103,104,106,107,109,111,112,134], '香港大学；上海人工智能实验室', '阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）');
+set([113], '香港大学（首页与Allen AI复用同一单位符号；对应关系待核验）', '阶段待核验');
+set([114,116], 'Google DeepMind', 'Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）');
+set([117,118,119,120,121,122,123,124,125,129,130], '卡内基梅隆大学', '硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）');
+set([126], '北京语言大学', '本科；北京语言大学；2011毕业');
+set([127], 'NEC中国研究院', 'NEC中国研究院；研究实习；2011');
+export const corresponding = {
+  9:'否',10:'否',18:'是',22:'是',25:'是',29:'否',31:'否',33:'是',34:'是',35:'否',36:'否',39:'是',48:'是',63:'是',
+  86:'否',87:'否',88:'是',92:'否',94:'否',98:'否',103:'否',104:'否',106:'否',107:'否',109:'否',134:'是',146:'否',147:'否',149:'是',153:'是',157:'是',159:'否',160:'否',161:'否',162:'是',164:'否',169:'否',170:'是',171:'是',172:'否',173:'否',174:'是',175:'是',177:'否',
+};
+export const cofirst = new Set([13,119]);
+export const coauthorAffiliations = {
+  17:{'Wendong Xu':'香港大学','Jing Xiong':'香港大学','Chenyang Zhao':'加州大学洛杉矶分校；LMSYS Org','Qiujiang Chen':'LMSYS Org','Haoran Wang':'清华大学','Hui Shen':'密歇根大学安娜堡分校','Zhongwei Wan':'俄亥俄州立大学','Jianbo Dai':'爱丁堡大学','Taiqiang Wu':'香港大学','He Xiao':'香港大学','Chaofan Tao':'香港大学','Z. Morley Mao':'密歇根大学安娜堡分校','Ying Sheng':'LMSYS Org','Zhijiang Guo':'香港科技大学（广州）','Hongxia Yang':'香港理工大学','Bei Yu':'香港中文大学','Quanquan Gu':'加州大学洛杉矶分校','Ngai Wong':'香港大学'},
+  73:{'*':'香港大学；XLANG Lab','Chen Xing':'Salesforce Research','Qian Liu':'Sea AI Lab；XLANG Lab','Weijia Shi':'华盛顿大学','Binyuan Hui':'XLANG Lab','Bailin Wang':'MIT CSAIL','Caiming Xiong':'Salesforce Research'},
+  76:{'*':'香港大学','Chengzu Li':'剑桥大学'},77:{'*':'香港大学','Jiangtao Feng':'独立研究者','Zhiyong Wu':'上海人工智能实验室'},
+  79:{'Qingxiu Dong':'北京大学','Jingjing Xu':'上海人工智能实验室','Zhifang Sui':'北京大学','Lei Li':'卡内基梅隆大学'},
+  81:{'Zhiyong Wu':'上海人工智能实验室','Yaoxiang Wang':'厦门大学','Jiacheng Ye':'香港大学'},
+  83:{'*':'上海人工智能实验室','Wenhao Zhu':'南京大学','Lei Li':'加州大学圣塔芭芭拉分校'},
+  84:{'*':'南京大学','Jingjing Xu':'上海人工智能实验室'},85:{'*':'香港大学'},
+  86:{'Xueliang Zhao':'香港大学','Tingchen Fu':'中国人民大学','Lemao Liu':'腾讯AI Lab','Shuming Shi':'腾讯AI Lab','Rui Yan':'中国人民大学'},
+  87:{'Jiacheng Ye':'香港大学；上海人工智能实验室','Zhiyong Wu':'上海人工智能实验室','Jiangtao Feng':'上海人工智能实验室','Tao Yu':'香港大学'},
+  88:{'*':'上海人工智能实验室','Shuyang Jiang':'上海人工智能实验室；上海交通大学','Lin Zheng':'香港大学'},
+  90:{'Lin Zheng':'香港大学','Jianbo Yuan':'字节跳动','Chong Wang':'Apple'},93:{'*':'上海人工智能实验室'},
+  94:{'Sijie Cheng':'复旦大学；上海人工智能实验室','Zhiyong Wu':'上海人工智能实验室','Jiangjie Chen':'复旦大学','Zhixing Li':'满帮集团','Yang Liu':'清华大学'},
+  95:{'Jiacheng Ye':'香港大学；上海人工智能实验室','Jiahui Gao':'香港大学','Jiangtao Feng':'上海人工智能实验室','Zhiyong Wu':'上海人工智能实验室','Tao Yu':'香港大学；华盛顿大学'},
+  96:{'Jiacheng Ye':'香港大学；上海人工智能实验室','Jiahui Gao':'香港大学','Qintong Li':'香港大学','Hang Xu':'华为诺亚方舟实验室','Jiangtao Feng':'上海人工智能实验室','Zhiyong Wu':'上海人工智能实验室','Tao Yu':'香港大学；华盛顿大学'},
+  99:{'*':'香港科技大学'},100:{'Chenxin An':'复旦大学；上海人工智能实验室','Jiangtao Feng':'上海人工智能实验室','Kai Lv':'复旦大学','Xipeng Qiu':'复旦大学','Xuanjing Huang':'复旦大学；上海智能信息处理创新中心'},
+  101:{'Yixuan Su':'剑桥大学','Tian Lan':'腾讯AI Lab','Yan Wang':'腾讯AI Lab','Dani Yogatama':'Google DeepMind','Nigel Collier':'剑桥大学'},
+  103:{'Lin Zheng':'香港大学','Chong Wang':'字节跳动'},104:{'*':'香港大学'},105:{'*':'乔治城大学'},
+  106:{'Qintong Li':'香港大学','Piji Li':'腾讯AI Lab','Wei Bi':'腾讯AI Lab','Zhaochun Ren':'山东大学','Yuxuan Lai':'香港大学'},
+  107:{'Zhiyong Wu':'香港大学；上海人工智能实验室','Wei Bi':'腾讯AI Lab','Xiang Li':'华东师范大学','Ben Kao':'香港大学'},
+  108:{'Hao Peng':'华盛顿大学','Jungo Kasai':'华盛顿大学','Nikolaos Pappas':'Amazon Web Services','Dani Yogatama':'Google DeepMind','Zhaofeng Wu':'Allen AI','Roy Schwartz':'耶路撒冷希伯来大学','Noah A. Smith':'华盛顿大学；Allen AI'},
+  110:{'Han Shi':'香港科技大学','Jiahui Gao':'香港大学','Hang Xu':'华为诺亚方舟实验室','Xiaodan Liang':'中山大学','Zhenguo Li':'华为诺亚方舟实验室','Stephen M. S. Lee':'香港大学','James T. Kwok':'香港科技大学'},
+  111:{'Lin Zheng':'香港大学；中山大学','Zhiyong Wu':'香港大学'},112:{'Zhiyong Wu':'香港大学','Wei Bi':'腾讯AI Lab','Xiang Li':'华东师范大学','Ben Kao':'香港大学'},
+  114:{'*':'Google DeepMind','Zihang Dai':'卡内基梅隆大学；Google Brain'},116:{'*':'Google DeepMind'},
+  117:{'Liang Lu':'丰田芝加哥技术学院','Chris Dyer':'Google DeepMind','Noah A. Smith':'华盛顿大学'},
+  118:{'*':'卡内基梅隆大学','Miguel Ballesteros':'IBM T.J. Watson研究中心','Chris Dyer':'卡内基梅隆大学；Google DeepMind','Noah A. Smith':'华盛顿大学'},
+  119:{'Liang Lu':'爱丁堡大学','Chris Dyer':'卡内基梅隆大学','Noah A. Smith':'华盛顿大学','Steve Renals':'爱丁堡大学'},
+  120:{'*':'卡内基梅隆大学','Miguel Ballesteros':'庞培法布拉大学','Chris Dyer':'卡内基梅隆大学；Google DeepMind','Noah A. Smith':'华盛顿大学'},
+  121:{'Chris Dyer':'卡内基梅隆大学','Noah A. Smith':'华盛顿大学'},122:{'Dani Yogatama':'卡内基梅隆大学','Noah A. Smith':'华盛顿大学'},
+  123:{'*':'卡内基梅隆大学','Alexander M. Rush':'Facebook AI Research'},124:{'*':'卡内基梅隆大学'},125:{'*':'卡内基梅隆大学'},126:{'Likun Qiu':'北京大学'},
+  127:{'*':'NEC中国研究院','Likun Qiu':'北京大学；NEC中国研究院','Lei Wu':'中国科学院自动化研究所；NEC中国研究院'},
+  129:{'Yangfeng Ji':'佐治亚理工学院','Trevor Cohn':'墨尔本大学','Chris Dyer':'卡内基梅隆大学','Jacob Eisenstein':'佐治亚理工学院'},130:{'*':'卡内基梅隆大学'},
+  131:{'Hao Wang':'国防科技大学；商汤','Yangguang Li':'商汤','Zhen Huang':'国防科技大学','Yong Dou':'国防科技大学','Jing Shao':'商汤'},
+  134:{'*':'上海人工智能实验室','Yiheng Xu':'上海人工智能实验室；香港大学'},
+  136:{'Chenxin An':'香港大学；复旦大学','Jiangtao Feng':'未公开','Fei Huang':'清华大学CoAI组','Xipeng Qiu':'复旦大学'},
+  137:{'*':'北京大学','Lei Li':'香港大学','Yuwei Yin':'香港大学','Mukai Li':'上海人工智能实验室','Yazheng Yang':'香港大学','Jingjing Xu':'上海人工智能实验室','Qi Liu':'香港大学'},138:{'*':'香港大学'},
+  140:{'Qintong Li':'香港大学','Leyang Cui':'腾讯AI Lab','Wei Bi':'腾讯AI Lab'},145:{'*':'香港大学','Jiyue Jiang':'香港大学；香港中文大学','Yu Li':'香港中文大学'},
+  146:{'*':'SambaNova Systems','Xueliang Zhao':'香港大学','Lin Zheng':'香港大学'},149:{'*':'复旦大学','Lei Li':'香港大学','Xiachong Feng':'香港大学','Qi Liu':'香港大学'},
+  151:{'Haiteng Zhao':'北京大学','Chang Ma':'香港大学','Fangzhi Xu':'西安交通大学','Zhi-Hong Deng':'北京大学'},153:{'Xueliang Zhao':'香港大学；蚂蚁集团','Wei Wu':'蚂蚁集团'},
+  154:{'*':'香港大学','Jiahui Gao':'华为诺亚方舟实验室','Xin Jiang':'华为诺亚方舟实验室','Zhenguo Li':'华为诺亚方舟实验室'},
+  155:{'*':'香港大学','Jiahui Gao':'华为诺亚方舟实验室','Xin Jiang':'华为诺亚方舟实验室','Zhenguo Li':'华为诺亚方舟实验室'},
+  157:{'*':'蚂蚁集团','Xueliang Zhao':'香港大学；蚂蚁集团'},159:{'*':'香港科技大学','Feng Ju':'香港科技大学；中国科学技术大学'},
+  160:{'*':'香港大学','Liyang Fan':'中国科学院深圳先进技术研究院','Hui Shen':'密歇根大学安娜堡分校','Min Yang':'中国科学院深圳先进技术研究院'},
+  161:{'*':'华为研究','Kecheng Chen':'香港城市大学','Xijia Tao':'香港大学','Hui Liu':'香港城市大学','Haoliang Li':'香港城市大学'},
+  162:{'*':'华为','Jiacheng Ye':'香港大学','Shansan Gong':'香港大学','Wei Bi':'独立研究者'},164:{'*':'香港大学','Qian Liu':'TikTok'},166:{'*':'香港大学','Jiyue Jiang':'香港中文大学'},
+  168:{'*':'北京大学','Zhihui Xie':'香港大学','Chenxin An':'香港大学','Lei Li':'香港大学','Qi Liu':'香港大学'},169:{'Chonghan Qin':'香港大学','Xiachong Feng':'香港大学','Weitao Ma':'哈尔滨工业大学','Xiaocheng Feng':'哈尔滨工业大学'},
+  170:{'*':'哈尔滨工业大学','Xiachong Feng':'香港大学','Libo Qin':'哈尔滨工业大学（深圳）'},171:{'*':'哈尔滨工业大学','Xiachong Feng':'香港大学','Chonghan Qin':'香港大学','Libo Qin':'哈尔滨工业大学（深圳）'},
+  172:{'*':'香港大学','Ziyun Song':'哈尔滨工业大学','Xiaocheng Feng':'哈尔滨工业大学'},173:{'*':'华为研究','Kecheng Chen':'香港城市大学','Xijia Tao':'香港大学','Hui Liu':'香港城市大学','Yibing Liu':'香港城市大学','Haoliang Li':'香港城市大学'},
+  174:{'*':'香港大学','Zirui Wu':'香港大学；北京大学','Yansong Feng':'北京大学','Wei Bi':'未公开'},
+  175:{'*':'华为研究','Xijia Tao':'香港大学','Kecheng Chen':'香港城市大学','Yuzhi Zhao':'华中科技大学'},177:{'*':'香港大学','Junwei Su':'中国科学技术大学'},
+  1:{'*':'Google DeepMind'},
+  2:{'Jiangtao Feng':'复旦大学','Po-Sen Huang':'Google DeepMind','Chong Wang':'Google','Da Huang':'Google','Jiayuan Mao':'清华大学','Kan Qiao':'Google','Dengyong Zhou':'Google'},
+  3:{'*':'Google DeepMind'},4:{'*':'Google'},5:{'*':'Google','Lingpeng Kong':'卡内基梅隆大学'},7:{'*':'卡内基梅隆大学'},
+  8:{'Xiachong Feng':'香港大学','Longxu Dou':'独立研究者','Qinghao Wang':'北京大学','Haochuan Wang':'哈尔滨工业大学','Yu Guo':'哈尔滨工业大学','Chang Ma':'香港大学','Minzhi Li':'待核验（PDF姓名为Ella Li）'},
+  12:{'*':'Google DeepMind'},
+  13:{'*':'Google DeepMind','Adhiguna Kuncoro':'Google DeepMind；牛津大学','Daniel Fried':'加州大学伯克利分校','Phil Blunsom':'Google DeepMind；牛津大学'},
+  14:{'*':'Google DeepMind','Phil Blunsom':'Google DeepMind；牛津大学'},
+  18:{'*':'哈尔滨工业大学','Xiachong Feng':'哈尔滨工业大学；香港大学','Lingpeng Kong':'香港大学'},
+  22:{'*':'香港大学','Zirui Wu':'香港大学；北京大学','Yansong Feng':'北京大学','Zhenguo Li':'华为诺亚方舟实验室','Wei Bi':'快手','Guorui Zhou':'快手'},
+  25:{'Xueliang Zhao':'香港大学；蚂蚁集团','Wei Wu':'蚂蚁集团','Jian Guan':'蚂蚁集团','Qintong Li':'香港大学'},
+  27:{'*':'香港大学','Jiyue Jiang':'香港中文大学'},
+  29:{'*':'香港大学','Jianghan Shen':'南京大学','Fanghua Ye':'伦敦大学学院','Zhongwei Wan':'俄亥俄州立大学','Xun Wu':'微软亚洲研究院','Chuanyang Zheng':'香港中文大学','Zhijiang Guo':'香港科技大学（广州）','Min Yang':'中国科学院深圳先进技术研究院'},
+  30:{'*':'香港大学','Jiyue Jiang':'香港中文大学','Yanyu Chen':'香港中文大学','Jiuming Wang':'香港中文大学','Yu Li':'香港中文大学'},
+  31:{'*':'北京大学','Zirui Wu':'北京大学；香港大学','Lingpeng Kong':'香港大学'},
+  33:{'Xiachong Feng':'香港大学；Sea AI Lab','Longxu Dou':'Sea AI Lab'},
+  34:{'Xueliang Zhao':'香港大学；蚂蚁集团','Wei Wu':'蚂蚁集团','Jian Guan':'蚂蚁集团'},
+  35:{'*':'哈尔滨工业大学','Xiaocheng Feng':'哈尔滨工业大学；鹏城实验室','Bing Qin':'哈尔滨工业大学；鹏城实验室','Yuchun Fan':'东北大学','Tong Xiao':'东北大学','Xiachong Feng':'香港大学','Baoxin Wang':'科大讯飞研究院','Dayong Wu':'科大讯飞研究院','Guoping Hu':'科大讯飞研究院'},
+  36:{'*':'字节跳动Seed','Zhihui Xie':'香港大学'},
+  38:{'*':'香港大学','Yuancheng Wei':'华南理工大学','Xuqing Yang':'上海交通大学','Yifan Song':'北京大学','Peiyi Wang':'北京大学','Tianyu Liu':'北京大学','Sujian Li':'北京大学','Bill Yuchen Lin':'华盛顿大学；Allen AI'},
+  39:{'*':'香港大学','Zhenguo Li':'华为诺亚方舟实验室'},
+  41:{'*':'香港大学','Jingwei Dong':'西安交通大学','Boyang Xue':'香港中文大学','Jiyue Jiang':'香港中文大学'},
+  42:{'Chang Ma':'香港大学','Haiteng Zhao':'北京大学','Junlei Zhang':'浙江大学；西湖大学','Junxian He':'香港科技大学'},
+  43:{'*':'香港大学','Jiahui Gao':'华为诺亚方舟实验室','Xin Jiang':'华为诺亚方舟实验室','Zhenguo Li':'华为诺亚方舟实验室'},
+  46:{'*':'香港大学','Jun Zhang':'字节跳动','Ming Zhong':'伊利诺伊大学厄巴纳-香槟分校','Yao Luo':'字节跳动','Jingjing Xu':'字节跳动'},
+  47:{'*':'香港大学','Shivam Agarwal':'伊利诺伊大学厄巴纳-香槟分校','Yizhe Zhang':'Apple','Peilin Zhao':'腾讯AI Lab','Wei Bi':'腾讯AI Lab','Hao Peng':'伊利诺伊大学厄巴纳-香槟分校','Jiawei Han':'伊利诺伊大学厄巴纳-香槟分校'},
+  48:{'*':'香港大学','Jiahui Gao':'香港大学；华为诺亚方舟实验室','Renjie Pi':'香港科技大学','Xin Jiang':'华为诺亚方舟实验室','Zhenguo Li':'华为诺亚方舟实验室'},
+  49:{'*':'香港大学'},50:{'Zhiheng Lyu':'香港大学','Kevin Yang':'加州大学伯克利分校','Daniel Klein':'加州大学伯克利分校'},
+  51:{'*':'香港大学','Jiyue Jiang':'香港中文大学','Yu Li':'香港中文大学'},
+  52:{'*':'香港大学','Jiahui Gao':'华为诺亚方舟实验室','Han Shi':'华为诺亚方舟实验室','Xin Jiang':'华为诺亚方舟实验室','Zhenguo Li':'华为诺亚方舟实验室','Wei Bi':'腾讯AI Lab'},
+  55:{'*':'香港大学','Shunian Chen':'香港中文大学（深圳）','Benyou Wang':'香港中文大学（深圳）','Peiyi Wang':'北京大学','Liang Chen':'北京大学','Qi Liu':'待核验（所获PDF未列该作者）'},
+  56:{'Haiteng Zhao':'北京大学','Chang Ma':'香港大学','Guoyin Wang':'字节跳动','Jing Su':'字节跳动','Jingjing Xu':'字节跳动','Zhi-Hong Deng':'北京大学','Hongxia Yang':'字节跳动'},
+  59:{'Lin Zheng':'香港大学','Jianbo Yuan':'字节跳动','Lei Yu':'Google DeepMind'},
+  61:{'Chenxin An':'复旦大学；香港大学','Shansan Gong':'香港大学','Ming Zhong':'伊利诺伊大学厄巴纳-香槟分校','Xingjian Zhao':'复旦大学','Mukai Li':'香港大学','Jun Zhang':'上海人工智能实验室','Xipeng Qiu':'复旦大学'},
+  62:{'*':'香港大学','Boyang Xue':'香港中文大学','Jiyue Jiang':'香港中文大学'},
+  63:{'*':'香港大学','Leyang Cui':'腾讯AI Lab','Wei Bi':'腾讯AI Lab'},
+  64:{'*':'香港大学','Boyang Xue':'香港中文大学','Jiyue Jiang':'香港中文大学'},
+  66:{'Xueliang Zhao':'香港大学','Xinting Huang':'腾讯AI Lab','Wei Bi':'腾讯AI Lab'},
+  67:{'*':'腾讯AI Lab','Xueliang Zhao':'香港大学','Qintong Li':'香港大学','Shansan Gong':'香港大学'},
+  68:{'*':'北京大学','Binghuai Lin':'腾讯云AI','Yunbo Cao':'腾讯云AI','Tianyu Liu':'腾讯云AI','Qi Liu':'香港大学'},
+  69:{'Lin Zheng':'香港大学','Jianbo Yuan':'字节跳动','Zhi Zhang':'字节跳动','Hongxia Yang':'字节跳动'},
+  70:{'Chenxin An':'香港大学；阿里巴巴','Fei Huang':'阿里巴巴','Jun Zhang':'待核验（未见单位标记）','Shansan Gong':'香港大学','Xipeng Qiu':'复旦大学','Chang Zhou':'阿里巴巴'},
+};

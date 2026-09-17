@@ -1,0 +1,227 @@
+                                                          In-Context Learning with Many Demonstration Examples
+
+
+                                                                        Mukai Li 1 Shansan Gong 1 Jiangtao Feng 1 Yiheng Xu 1 2
+                                                                             Jun Zhang 1 Zhiyong Wu 1 Lingpeng Kong 1 2
+
+
+                                                                  Abstract                                  methods that require updating parameters, in-context learn-
+                                                                                                            ing allows for good model performance with a prompt that
+                                             Large pre-training language models (PLMs) have                 only includes natural language instructions and/or a few
+
+
+
+
+arXiv:2302.04931v1 [cs.CL] 9 Feb 2023
+                                             shown promising in-context learning abilities.                 demonstrations (Dong et al., 2023). In addition to that, a
+                                             However, due to the backbone transformer archi-                recent line of research on instruction tuning shed new light
+                                             tecture, existing PLMs are bottlenecked by the                 on closing the gap between pre-training and in-context learn-
+                                             memory and computational cost when scaling up                  ing (Chung et al., 2022; Min et al., 2022), facilitating the
+                                             to a large context size, leaving instruction tun-              usage of natural language instructions to interact with the
+                                             ing and in-context learning of many demonstra-                 PLMs.
+                                             tion examples, as well as long-range language
+                                             modeling under-explored. In this study, we pro-                However, the computational overhead of the backbone
+                                             pose a long-range language model E VA LM based                 vanilla transformer architecture prevents existing PLMs
+                                             on an efficient transformer mechanism. E VA LM                 from a longer context. A maximum context size (i.e., 2048)
+                                             is trained with 8k tokens per batch line and can               is set in the most popular pre-training models (e.g., GPT3,
+                                             test up to 256k-lengthed contexts with extrapo-                Brown et al. 2020b; OPT, Zhang et al. 2022c; PaLM Chowd-
+                                             lation, 128× to the limit of existing PLMs (e.g.               hery et al. 2022). The direct consequence is scaling up to
+                                             GPT3). Based on E VA LM, we scale up the size                  large numbers of samples in instruction tuning or in-context
+                                             of examples efficiently in both instruction tun-               learning becomes under-explored. How effectively can we
+                                             ing and in-context learning to explore the bound-              improve the in-context learning performance of the PLMs
+                                             ary of the benefits from more annotated data.                  by serving more demonstration examples?
+                                             Experimental results on a diverse set of tasks                 To answer this question, we start from responding to
+                                             show that E VA LM achieves 4.1% higher accu-                   the challenge of long-range language models (LRLMs).
+                                             racy on average, and the average length of achiev-             We train an LRLM named E VA LM (§ 3.2), which back-
+                                             ing the best accuracy score over tasks is around               bones on a state-of-the-art efficient transformer architecture
+                                             12k. We find that in-context learning can achieve              EVA (Zheng et al., 2023), with modifications to handle
+                                             higher performance with more demonstrations                    the extrapolation of position embeddings (§ 3.1). E VA LM
+                                             under many-shot instruction tuning (8k), and fur-              with many-shot instruction tuning achieves better perfor-
+                                             ther extending the length of instructions (16k) can            mance in long-range language modeling with cheap memory
+                                             further improve the upper bound of scaling in-                 and computational costs (§ 4.4). The learned circular posi-
+                                             context learning. Code is available on https:                  tion embedding and incremental encoding we propose help
+                                             //github.com/Shark-NLP/EVALM.                                  E VA LM to extrapolate to an input length of 256k tokens
+                                                                                                            effectively. We then conduct a series of experiments testing
+                                                                                                            the performance of E VA LM when scaling up the number of
+                                        1. Introduction                                                     demonstration examples in ICL in various tasks. We find
+                                                                                                            that with more demonstration examples, E VA LM is able
+                                        With the increasing scale of pre-trained language models
+                                                                                                            to achieve better ICL performance than comparable PLMs
+                                        (PLMs), in-context learning (ICL) has emerged as a novel
+                                                                                                            with rare extra overheads. We summarize our contribution
+                                        paradigm for utilizing PLMs (Brown et al., 2020b; Zhang
+                                                                                                            as follows:
+                                        et al., 2022c; Chowdhery et al., 2022). Unlike learning
+                                            1
+                                              Shanghai Artificial Intelligence Laboratory 2 Department of     1. We pre-train a long-range language model named
+                                        Computer Science,The University of HongKong. Correspondence              E VA LM using similar training costs with OPT, which
+                                        to: Jiangtao Feng <fengjiangtao@pjlab.org.cn>, Lingpeng Kong
+                                        <lpk@cs.hku.hk>.                                                         enables the scale-up of instruction tuning and in-
+                                                                                                                 context learning, showing that many-shot instruction
+                                        Preprint, under review                                                   tuning can help ICL achieve higher performance with
+                                   In-Context Learning with Many Demonstration Examples
+
+     larger demonstrations, and with longer instructions,          demonstrated on a wide range of NLP tasks, including ques-
+     this phenomenon is more obvious. However, this in-            tion answering (Joshi et al., 2017), information retrieval (Tay
+     creasing trend is not endless.                                et al., 2022), math word problem (Cobbe et al., 2021), com-
+  2. We enable many-shot instruction tuning and in-context         monsense reasoning (Geva et al., 2021), and fact check-
+     learning inference with the cooperation of incremen-          ing (Rae et al., 2021) etc. Several recent studies (Liu et al.,
+     tal encoding to ensure efficiency and circular position       2022; Wu et al., 2022) have observed a positive correlation
+     embedding to ensure extrapolation.                            between the number of in-context examples and ICL’s per-
+  3. We conduct experiments on 10 commonly used                    formance: increasing the number of in-context examples
+     datasets covering diverse tasks with different prompt-        can bring steady improvements. Further investigation is
+     ing strategies. E VA LM with many-shot instruction            carried out to pack and/or distill more examples into the
+     tuning achieves 4.1% higher accuracy on average, at           context through continued pre-training (Choi et al., 2022),
+     12k inputs length on average.                                 and instruction tuning (Snell et al., 2022). However, the in-
+                                                                   put length limitation of current PLMs still restricts us from
+                                                                   directly feeding more in-context examples into the model.
+2. Related Work
+Pre-trained Language Model PLMs are trained on large               3. E VA LM
+and general corpora and then finetuned or few-shot trans-
+ferred to perform various NLU and NLG tasks. Among                 We propose a long-range language model named E VA LM to
+them, besides encoder-decoder Transformer (Vaswani et al.,         scale up the sequence length reached by existing pre-trained
+2017) architecture such as T5 (Raffel et al., 2020), there         language models. The rest of this section is organized as
+are auto-regressively pre-trained models, like XLNet (Yang         follows: § 3.1 introduces the overall architecture of E VA LM;
+et al., 2019), GPT (Radford et al., 2019; Brown et al.,            § 3.2 focuses on learning E VA LM on both of pre-training
+2020a; Black et al., 2022), OPT (Zhang et al., 2022c),             and instruction tuning; § 3.3 shows how E VA LM scales up
+PaLM (Chowdhery et al., 2022), BLOOM (Scao et al.,                 the maximum size of shots in in-context learning, with an
+2022), and etc. These decoder-based causal language mod-           incremental encoding technique. The overall architecture is
+els soon occupy kinds of NLP leaderboards, showing ex-             shown in Figure 1.
+cellent language modeling and in-context learning ability
+of them. However, the huge computing overhead (includ-             3.1. Architecture
+ing memory and time consumption) makes nonprofits and
+                                                                   We adopt EVA (Zheng et al., 2023), a recently introduced
+smaller labs difficult to create or even use PLMs. Further-
+                                                                   attention competitor, as an efficient alternative to vanilla
+more, this also prevents PLMs from encoding longer inputs.
+                                                                   softmax attention (Vaswani et al., 2017), for its high effi-
+                                                                   ciency in long sequence modeling and strong performance.
+Efficient Attention A surge of efficient attention mod-
+                                                                   The original EVA performs both causal and noncausal at-
+els are devised to enhance the efficiency of the original
+                                                                   tention in sequence modeling, and here we focus on its
+Transformer model (Vaswani et al., 2017). These models
+                                                                   causal version for its adaption to language modeling. A
+explore diverse philosophies to improve the efficiency, in-
+                                                                   general computation process of causal EVA is described
+cluding sparse attention matrix (Luong et al., 2015; Tay
+                                                                   as follows. Given a query qt ∈ Rd , and key-value se-
+et al., 2020; Beltagy et al., 2020; Zaheer et al., 2020; Ainslie
+                                                                   quences K1:t , V1:t ∈ Rt×d , where d is the dimension-
+et al., 2020), memory compression (Liu et al., 2018; Lee
+                                                                   ality and t is the timestamp, EVA learns attentive fea-
+et al., 2019; Rae et al., 2020; Wang et al., 2020) low-rank de-
+                                                                   tures as: a) chunking key-value features K1:t , V1:t as
+composition (Xiong et al., 2021; Lu et al., 2021; Chen et al.,
+                                                                   Kr , Kl = C(K1:t ), Vr , Vl = C(V1:t ), where C(·) is
+2021), kernel-based linear attention (Choromanski et al.,
+                                                                   a chunking function with chunk size c, and superscripts
+2021; Peng et al., 2021; 2022; Zheng et al., 2022; 2023),
+                                                                   r and l denote the remote features beyond present chunk
+state-space model (Gu et al., 2022; Gupta et al., 2022; Dao
+                                                                   of qt and the local features within the chunk; b) com-
+et al., 2022b), and CUDA re-implementation (Dao et al.,
+                                                                   pressing remote features within each chunk by another
+2022a). Thus models with efficient attention architecture are
+                                                                   efficient attention and pooling operation M(·) as K̂r =
+promising to handle longer input sequences when memory
+                                                                   M(Kr ), V̂r = M(Vr ), where the efficient attention
+consumption is saved. H3 (Dao et al., 2022b) is pre-trained
+                                                                   here is LARA (Zheng et al., 2022); c) performing vanilla
+as an efficient language model but fails to scale up the train-
+                                                                   attention on concatenated remote and local features by
+ing sequence length which remains 2048.
+                                                                   EVA(qt ) = softmax(qt [K̂r ; Kl ]> )[V̂r ; Vl ]> . It is worth
+                                                                   noting that EVA is capable of handling long-term dependen-
+In-Context Learning With the increasing scale and ca-              cies by performing attention on remote compressed features
+pacity of PLMs, ICL has become a new paradigm for                  K̂r , V̂r . We refer interested readers to (Anonymous, 2023)
+NLP (Brown et al., 2020a). The success of ICL has been
+                                               In-Context Learning with Many Demonstration Examples
+
+Data Stream        :                                                            Model architecture:
+ Pretraining                                                                     Causal EVA
+                                                                                       </s>                                          𝑥1
+                                                                                                     Decoder Block   × 𝐿𝑎𝑦𝑒𝑟𝑠
+                                                                                        𝑥1                                           𝑥2
+                                                                                                           Feed Forward
+                                                                                        𝑥2                                           𝑥3
+ Instruction Tuning                                                                                   EVA Attention Network
+
+ task 1:   Is it a positive or negative opinion …                                       𝑥3                                          <pad>
+
+  …
+ task 𝑚:   Determine if the hypothesis is true …                                                     Incremental Encoding
+
+                                                                                     remote compressed ෡    ෡𝑟
+                                                                                                       𝐊𝑟 ; 𝐕
+ In-context Learning                                                                                                               …
+                                                                                     remote 𝐊r ; 𝐕 𝑟
+                         Positive Review: The film has strong performances.                                                     chunk size   𝒟 𝑒 cached as
+                                                                                     local 𝐊𝑙 ; 𝐕𝑙                                           incremental states:
+  demonstration set      Negative Review: This isn’t a new idea.                                                              compression
+   𝒟 𝑒 with 𝑘-shots      …
+                                                                                                                                                        …
+                         Positive Review: A very charming and funny movie.        CPE with max_len
+                                                                                                                              (attend to)
+
+  test sample 𝑥 with     Positive Review: Yet the act is still charming here.                                                                𝑃 𝑦1 |𝑥          √
+ possible answers 𝑦𝑖     Negative Review: Yet the act is still charming here.     incoming tokens:                              output       𝑃 𝑦2 |𝑥
+
+
+
+                                                                                                                                                       Compression
+Figure 1. The illustration of E VA LM scaling up in-context learning. The pre-training stage empowers the language modeling capacity
+                                                                                                                                  …
+of E VA LM, and the instruction tuning explicitly aligns E VA LM with instructions from different tasks. For different downstream  tasks,
+                                                                                                                               chunk size
+E VA LM can in-context learn from the demonstrations. With the help of CPE and incremental encoding technique, k could be scaled up.
+
+
+for further details.                                                                 LRLMs. In E VA LM, we enhance its extrapolation in two
+                                                                                     aspects: a) based on the observation that locality contributes
+Apart from the advanced attention mechanism EVA, we
+                                                                                     to extrapolation (Zhang et al., 2022a), we choose EVA that
+present circular positional embedding (CPE) to enforce po-
+                                                                                     also models the locality; b) we use circular positional em-
+sition information. For i-th token, its positional embedding
+                                                                                     bedding that fledges vanilla learned positional embedding
+is set to pi%M ∈ Rd , where M is the maximum size of
+                                                                                     to extrapolate to longer contexts.
+learned positional embeddings. An intriguing characteristic
+of CPE is its ability on extrapolation and long-term de-
+pendency. CPE implicitly learns a position-aligned matrix                            3.2. Pre-training & Instruction Tuning
+P = {p>  i%M pj%M } between each pair of tokens, which is                            We pre-train a causal language model E VA LM based on
+added to attention matrices. The matrix P is close to the                            EVA transformer decoder with our preprocessed Pile (Gao
+pattern of strided attention (Ho et al., 2019; Tay et al., 2020)                     et al., 2020) corpus and further tune it using Many-Shot
+with stride size M , and encourages feature interaction to                           Instruction Tuning (MSIT).
+distant features.
+
+                                                                                     Pre-training Data processing details are in Appendix A.1,
+Extrapolation Extrapolation is a vital challenge in long-
+                                                                                     Pre-training details are in Appendix A.2. Our E VA LM was
+range language modeling. Remind that the LRLMs are
+                                                                                     trained on a widely-used corpus the Pile (Gao et al., 2020),
+expected to scale the sequence length to tens, hundreds, or
+                                                                                     which is a massive dataset designed for training large lan-
+even more times to the current limitation with thousands
+                                                                                     guage models. We built a preprocessing pipeline including
+of tokens from existing mainstream pre-trained language
+                                                                                     filtering, deduplicating, and blending to prepare the pre-
+models such as GPT (Brown et al., 2020a) and OPT (Zhang
+                                                                                     training corpus to support the large-scale distributed train-
+et al., 2022b). The challenges of LRLMs lie in the two
+                                                                                     ing process. We conducted catalog and content filtering
+aspects. On the one hand, such length is still unaffordable
+                                                                                     following BLOOM (Scao et al., 2022) and deduplicated
+for current models, even for efficient attention models, dur-
+                                                                                     the filtered data using fuzzy deduplication similar to pre-
+ing the training stage, despite incremental decoding (Ott
+                                                                                     vious work (Zhang et al., 2022b; Smith et al., 2022). The
+et al., 2019) helping reduce memory consumption in the
+                                                                                     final corpus roughly contains 121B tokens. Please refer to
+inference stage. On the other hand, pre-trained data from
+                                                                                     Appendix A.1 for detailed data processing and comparison.
+long-range texts are limited. Thus a practical solution is
+“train short, test long”, a.k.a. extrapolation. Thus finding an                      The training process E VA LM mainly follows GPT3 (Brown
+architecture with extrapolation capability is important for                          et al., 2020a) and OPT (Zhang et al., 2022c), optimizing the
+

@@ -1,0 +1,194 @@
+                    SEGO: Sequential Subgoal Optimization for Mathematical
+                                       Problem-Solving
+
+                        Xueliang Zhao♠∗ Xinting Huang⋆ Wei Bi⋆ Lingpeng Kong♠
+                                        ♠
+                                          The University of Hong Kong
+                                               ⋆
+                                                 Tencent AI Lab
+                                       xlzhao22@connect.hku.hk
+
+
+                               Abstract                                  In this paper, we draw inspiration from the suc-
+          Large Language Models (LLMs) have driven                    cessful application of subgoal-based methods in
+          substantial progress in artificial intelligence in          both RL and LLMs (Zhang et al., 2020; Zhao et al.,
+          recent years, exhibiting impressive capabilities            2023) and introduce a novel framework called
+          across a wide range of tasks, including mathe-              SEGO (SEquential subGoal Optimization). Intu-
+          matical problem-solving. Inspired by the suc-               itively, a good subgoal should serve as a bridge
+          cess of subgoal-based methods, we propose a                 to solving a bigger problem, such that breaking
+          novel framework called SEquential subGoal                   down the problem into these subgoals makes the
+          Optimization (SEGO) to enhance LLMs’ abil-
+                                                                      subproblems easier to solve, thereby increasing the
+          ity to solve mathematical problems. By es-
+          tablishing a connection between the subgoal                 likelihood of solving the entire problem. SEGO
+          breakdown process and the probability of solv-              quantifies this intuition by establishing a theoret-
+          ing problems, SEGO aims to identify better                  ical connection between the subgoal breakdown
+          subgoals with theoretical guarantees. Address-              process and the probability of solving the problem
+          ing the challenge of identifying suitable sub-              (Eq. 6). Concretely, we construct a lower bound
+          goals in a large solution space, our framework              on the probability of solving the complete prob-
+          generates problem-specific subgoals and ad-
+                                                                      lem using a proposal distribution considering a
+          justs them according to carefully designed cri-
+          teria. Incorporating these optimized subgoals               specific subgoal. We then employ a method in-
+          into the policy model training leads to signifi-            spired by annealed importance sampling (Neal,
+          cant improvements in problem-solving perfor-                2001) to efficiently navigate through vast search
+          mance. We validate SEGO’s efficacy through                  spaces, seeking the subgoal corresponding to the
+          experiments on two benchmarks, GSM8K and                    theoretically optimal proposal distribution, while
+          MATH, where our approach outperforms ex-                    ensuring the process doesn’t get trapped in sub-
+          isting methods, highlighting the potential of               optimal subgoals (§3.2). By incorporating these
+          SEGO in AI-driven mathematical problem-
+                                                                      sequentially optimized subgoals into the training of
+          solving.
+                                                                      the policy model, we achieve significant improve-
+   1      Introduction                                                ments in solving mathematical problems.
+   In recent years, the emergence of Large Language
+   Models (LLMs) has marked a significant milestone
+   in the field of artificial intelligence. Models such as
+   ChatGPT and LLaMA have demonstrated remark-                           To empirically validate the efficacy of SEGO,
+   able capabilities across diverse tasks. Within this                we conducted experiments on two primary bench-
+   context, addressing mathematical problems has at-                  marks: GSM8K (Cobbe et al., 2021) and
+   tracted considerable interest from researchers, as                 MATH (Hendrycks et al., 2021). Our approach
+   it serves as a prominent showcase of the reasoning                 demonstrated marked superiority against existing
+   capabilities inherent in LLMs. Reasoning involves                  methods with comparable model sizes, highlight-
+   a multitude of aspects, among which the ability to                 ing the potential of SEGO in advancing the field
+   decompose the overall problem into smaller, more                   of AI-driven mathematical problem-solving. We
+   manageable subproblems (i.e., subgoals) is particu-                hope that our findings can open up new avenues
+   larly essential for effective problem-solving.                     for future research on the applicability of LLMs to
+          ∗
+              This work was done during an internship at Tencent AI   complex tasks in diverse domains (Yao et al., 2022;
+   Lab.                                                               Liu et al., 2023).
+                                                                  7544
+Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 7544–7565
+                              August 11-16, 2024 ©2024 Association for Computational Linguistics
+2    Preliminaries                                                         The subgoal collection phase is central to this
+                                                                        framework and follows a “generate-select” pipeline.
+2.1 Problem Formulation                                                 Specifically, for a challenging goal g, the process
+This study focuses on a goal-conditioned reinforce-                     generates a variety of potential subgoals, each
+ment learning (RL) framework, consisting of goal                        paired with its respective state. A suitable sub-
+space (G), state space (S), action space (A), transi-                   goal, g w , and its state, sw 1 , are then selected based
+tion probability (P), and reward function (R). The                      on criteria that vary among different algorithms (Li
+transition probability P(s′ |s, a) indicates the prob-                  et al., 2022; Zhang et al., 2021; Chane-Sane et al.,
+ability of transitioning from a current state s to a                    2021). These criteria typically ensure that the cho-
+new state s′ after an action a. The reward function                     sen subgoal is attainable from the initial state and
+R(s, g) gives a reward of 1 if the goal g is reached                    facilitates achieving the final goal. For example,
+at state s, and 0 otherwise. The policy π(a|s, g)                       the subgoal might be “Calculate the radian value of
+maps state-goal pairs to actions in A.                                  30◦ ” with the state “import math; def solve(): angle
+    Building on the goal-conditioned RL framework,                      = math.radians(30);”. In the trajectory sampling
+in mathematical problem-solving, an action de-                          phase, trajectories τ1 and τ2 are drawn from the dis-
+notes a step in the solution process, while the state                   tributions p(τ |ŝ, g w ) and p(τ |sw , g) respectively.
+comprises cumulative actions. The (sub-)goal is                         The final training phase utilizes these trajectories to
+the specific problem targeted for resolution. The                       optimize the policy network, thereby enhancing the
+transition probability, P(s′ |s, a), uniquely assigns                   ability to achieve both subgoals and the ultimate
+a probability of 1 to the state s′ = [s; a] where [; ]                  goal.
+represents sequence concatenation, and 0 to all oth-
+ers. The reward function R(s, g) evaluates whether                      3    Method
+state s correctly solves the goal g. In this work,
+we employ a program-aided approach (Gao et al.,                         This work addresses challenges in subgoal-based
+2023; Chen et al., 2022; Drori et al., 2022) to form                    RL, focusing on the suboptimality of generated sub-
+the solution. For illustration, consider the goal g as                  goals and their selection process’s lack of theoreti-
+“Calculate sin(30◦ )”. Here, a state s could be “im-                    cal guarantees. We introduce the SEGO framework,
+port math; def solve(): angle = math.radians(30);”,                     which innovates beyond the traditional “generate-
+and an action a, “return math.sin(angle)”. This                         select” pipeline. SEGO employs a “generate-
+work aims to create a policy network that predicts                      (sequentially) optimize-select” approach (Figure 1),
+trajectories for new goals. It uses a demonstration                     encompassing a policy network, subgoal generator,
+dataset D = {τ : (g; s0 , a0 , . . . , sℓ , aℓ )}, where                subgoal optimizer, reward network, and value net-
+τ represents a trajectory of length ℓ with states st                    work. Notably, only the policy network is used in
+and actions at at every timestep. The special state,                    the testing phase.
+ŝ, consists solely of essential imports and function                      The “generate-(sequentially) optimize-select”
+definitions. The task is to predict a trajectory, start-                pipeline starts with initial subgoal generation, fol-
+ing from ŝ and aligned with a given goal g. This is                    lowed by sequential optimizations. In each itera-
+formulated as:                                                          tion, a new subgoal is proposed and evaluated for
+                     ℓ
+                     Y
+                                                                        its increased likelihood of achieving the goal. Im-
+    p(τ | ŝ, g) =         π(at | st , g) · P(st+1 | at , st ),         proved subgoals are retained for further refinement.
+                                                                  (1)
+                     t=0
+                                                                        This results in a collection of refined subgoals, from
+                 with s0 = ŝ.
+                                                                        which the most suitable are selected based on spe-
+                                                                        cific criteria.
+2.2 Subgoal-based Reinforcement Learning
+                                                                           SEGO presents substantial advantages: (1) Its
+The main idea behind subgoal-based RL involves                          sequential optimization aligns generated subgoals
+decomposing a challenging task into two more                            more closely with an optimal subgoal distribution.
+manageable sub-tasks, each of which can be ad-                          (2) It accurately calculates subgoal weights based
+dressed by the existing policy (Li et al., 2022). In                    on an unbiased estimate of the probability of reach-
+subgoal-based RL, a typical approach consists of                        ing a goal from a given state.
+three phases: subgoal collection, trajectory sam-
+pling, and training, which together form a cyclical                         1
+                                                                              In this work, the subscript “w” denotes “waypoint”, which
+process.                                                                is used interchangeably with “subgoal”.
+
+                                                                    7545
+                                                         𝑣!
+                                            (#,%)         𝑟         (#,#)          (#,()           (#)
+                                         𝑠!                        𝑠!             𝑠!           𝛼
+                                                         𝑣!                             𝑣!
+                                                                                         𝑟
+                                                     ℎ        Δ                                               Calculate sin(30°)
+                                                                                        𝑣!
+                                                                                                              def solve():
+                                          (#,%)                     (#,#)           (#,()                𝑠!
+                                 𝑔       𝑔!                        𝑔!             𝑔!                            angle = math.radians(30)
+                                                                                                                …
+            Calculate sin(30°)
+                                     𝑓
+            def solve():                                                                      vs              Calculate the radian of 30°
+              …
+                                                         𝑣!
+                                          (',%)                     (',#)          (',()                      def solve():
+                                         𝑠!               𝑟        𝑠!             𝑠!                     𝑔!     …
+                                                         𝑣!
+                                                     ℎ        Δ
+
+                                            (',%)                    (',#)          (',()          (')
+                                         𝑔!                        𝑔!             𝑔!           𝛼
+
+
+
+                                 Generate           Sequentially Optimize                   Select
+
+
+Figure 1: An overview of the “generate-(sequentially) optimize-select” pipeline. Within this pipeline, the symbols f ,
+h, r, and v π correspond to the subgoal generator, subgoal optimizer, reward network, and value network, respectively.
+The terms g, sw , and gw denote the intended goal, the subgoal state, and the subgoal. The pipeline initiates by
+generating a diverse set of subgoals. Each subgoal is then optimized in sequence. The process ends with the
+selection of the most appropriate subgoal.
+
+
+Road Map. We start by discussing the initializa-                             ensures manageable progression towards the ul-
+tion fine-tuning in §3.1, which includes setting up                          timate goal. The subgoal optimizer h, denoted
+key components and preparing initial training data.                          as s′w , g ′w = h(sw , g w , s, g), refines these sub-
+Next, we detail subgoal-based fine-tuning in §3.2,                           goals and states to improve goal decomposition
+the core of our framework. This section explains                             efficiency.
+the “generate-(sequentially) optimize-select” pro-
+cess and how the resultant data updates various                              Reward Network and Value Network. The re-
+component parameters. The overall algorithm is                               ward network r(s, g) evaluates if the current state
+outlined in §3.3.                                                            achieves the goal, acting as a surrogate for the
+                                                                             actual reward function R. The value network
+3.1 Initialization Fine-tuning                                               v π (s, g), a regression model, assesses the success
+The SEGO framework employs the following key                                 probability from a given state under policy π.
+components: policy network, subgoal generator,                                  Training of the SEGO components begins with a
+subgoal optimizer, reward network, and value net-                            goal collection, Dg = {g}, and a trajectory dataset,
+work, all of which are implemented using large                               D = {τ : (g; s0 , a0 , s1 , a1 , . . .)}, created using
+language models (LLMs) (Touvron et al., 2023a,b;                             GPT-3.5-turbo.2 This dataset comprises various
+Rozière et al., 2023). We defer the training de-                             mathematical problem-solving trajectories. The
+tails of these components after an overview of their                         policy network is trained with triplets (g, si , ai )
+implementation. More details about these compo-                              from D to predict action ai for a given state si and
+nents are provided in Appendix B.                                            goal g. For each trajectory, a state st is randomly
+                                                                             chosen, and GPT-3.5-turbo predicts the intermedi-
+Policy Network. The policy network π(a | s, g)                               ate subgoal g w and its state sw . This step trains
+processes the current state and goal, represented as                         the subgoal generator to predict subgoals and their
+token sequences, to predict actions. This network                            states from (st , g). GPT-3.5-turbo also introduces
+employs standard decoding methods like greedy                                slight modifications to g w and sw , producing g̃ w
+search or top-k sampling (Holtzman et al., 2019).                            and s̃w . The subgoal optimizer is trained to restore
+Subgoal Generator and Subgoal Optimizer.                                     (g w , sw ) from these corrupted versions, consider-
+The subgoal generator f , represented as sw , g w =                          ing the current state st and goal g.
+f (s, g), breaks complex tasks into simpler sub-                                After initializing the policy network, it gener-
+tasks, transforming the current state and goal into                              2
+                                                                                   Further details regarding the trajectory dataset are elabo-
+a subgoal and its associated state. This method                              rated in Appendix C.
+
+                                                                   7546
+

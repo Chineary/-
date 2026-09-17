@@ -1,0 +1,210 @@
+    I MPLICIT M EM B ENCH: Measuring Unconscious Behavioral Adaptation in
+                           Large Language Models
+
+            Chonghan Qin1 , Xiachong Feng1 * , Weitao Ma2 , Xiaocheng Feng2 , Lingpeng Kong1
+                                     1
+                                       The University of Hong Kong
+                                    2
+                                      Harbin Institute of Technology
+                               qinch@connect.hku.hk, fengxc@hku.hk
+
+
+
+                              Abstract                             reliably, these systems require memory: the abil-
+                                                                   ity to accumulate and leverage experience across
+            Existing memory benchmarks for LLM agents              interactions. Recent work establishes this need
+            evaluate explicit recall of facts, yet over-           (He et al., 2024; Zhang et al., 2025a,b), with pro-
+            look implicit memory where experience be-
+                                                                   duction systems deploying memory features (Ope-
+            comes automated behavior without conscious
+            retrieval. This gap is critical: effective assis-      nAI, 2024). Benchmarks such as LoCoMo, Long-
+            tants must automatically apply learned pro-            MemEval, MADial-Bench, MemBench, Memo-
+            cedures or avoid failed actions without ex-            ryAgentBench, MEMTRACK, and GoodAI LTM
+            plicit reminders. We introduce I MPLIC -               now evaluate multi-session QA, retrieval, dialogue,
+            IT M EM B ENCH , the first systematic bench-           state tracking, and conversational integration under
+            mark evaluating implicit memory through three          explicit, actively triggered settings spanning con-
+            cognitively grounded constructs drawn from
+                                                                   texts from 400 tokens to 1.5M tokens, or variable
+            standard cognitive-science accounts of non-
+            declarative memory: Procedural Memory (one-            long-horizon environments (Maharana et al., 2024;
+            shot skill acquisition after interference), Prim-      Wu et al., 2025; He et al., 2025; Tan et al., 2025;
+            ing (theme-driven bias via paired experimental/-       Hu et al., 2026; Deshpande et al., 2025; Castillo-
+            control instances), and Classical Conditioning         Bolado et al., 2024).
+            (Conditioned Stimulus–Unconditioned Stimu-                Despite this progress, existing benchmarks pre-
+            lus (CS–US) associations shaping first deci-           dominantly evaluate explicit memory: conscious
+            sions). Our 300-item suite employs a unified           retrieval of factual information. Table 1 shows
+            Learning/Priming–Interfere–Test protocol with
+                                                                   prior work uniformly adopts query-response pro-
+            first-attempt scoring. Evaluation of 17 models
+            reveals severe limitations: no model exceeds           tocols where models are explicitly prompted to re-
+            66% overall, with top performers DeepSeek-             call facts, limiting evaluation to deliberate retrieval
+            R1 (65.3%), Qwen3-32B (64.1%), and GPT-5               rather than unconscious behavioral adaptation. Yet
+            (63.0%) far below human baselines. Analy-              critical failures arise from missing implicit mem-
+            sis uncovers dramatic asymmetries (inhibition          ory, experience that becomes automated behav-
+            17.6% vs. preference 75.0%) and universal              ior rather than explicit recollection. Effective as-
+            bottlenecks requiring architectural innovations
+                                                                   sistants should automatically apply learned proce-
+            beyond parameter scaling. I MPLICIT M EM -
+            B ENCH reframes evaluation from “what agents           dures after distractions or avoid repeatedly-failed
+            recall” to “what they automatically enact” 1 .         tools without explicit reminders. Existing bench-
+                                                                   marks fail to diagnose this because they (i) em-
+    1       Introduction                                           ploy QA formats explicitly cueing target informa-
+                                                                   tion, (ii) stress storage capacity over first-attempt
+    Large language models (LLMs) have demonstrated                 triggers after interference, and (iii) utilize costly
+    remarkable capabilities across diverse domains                 pipelines hindering reproducibility.
+    (Zhao et al., 2023; Wu et al., 2024), maturing                    We introduce I MPLICIT M EM B ENCH, a cog-
+    into assistants for daily productivity and special-            nitively grounded benchmark evaluating implicit
+    ized workflows (DeepSeek-AI et al., 2025; Zeng                 memory in LLM agents. We operationalize three
+    et al., 2025; OpenAI, 2025; Anthropic, 2025; Qwen              constructs: Procedural Memory assesses one-shot
+    et al., 2024; Yang et al., 2025). To serve users               skill acquisition persisting after interference, Prim-
+        * Corresponding author.                                    ing measures theme-driven biases via paired ex-
+        1
+            Code and data are available at ImplicitMemBench.       perimental/control instances, and Classical Condi-
+                                                                28232
+Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 28232–28261
+                                 July 2-7, 2026 ©2026 Association for Computational Linguistics
+ Benchmark                  Memory     Evaluation         Context         Evaluation      Task Focus
+                            Type       Trigger            Scale           Size
+                                                          (tokens)
+ LoCoMo (Maharana           Explicit   Active             9K              300             Multi-session QA
+ et al., 2024)                         (Explicit query)                   conversations
+ LongMemEval (Wu            Explicit   Active             115K–1.5M       500 questions   Information retrieval
+ et al., 2025)                         (Explicit query)
+ MADial-Bench (He           Explicit   Active             400             160 dialogues Emotional dialogue
+ et al., 2025)                         (Emotion cued)
+ MemBench (Tan et al.,      Explicit   Active             1K–100K         53,000 QAs      Reflective memory during
+ 2025)                                 (Explicit query)                                   observation
+ MemoryAgentBench           Explicit   Active             100K–1.4M       14 datasets /   4 Competencies (Retrieval, Test-time
+ (Hu et al., 2026)                     (Explicit query)                   2,071 QAs       Learning, Long Range
+                                                                                          Understanding, Selective Forgetting)
+ MEMTRACK                   Explicit   Active             Variable        210 instances   Multi-platform State Tracking
+ (Deshpande et al.,                    (Explicit task)
+ 2025)
+ GoodAI LTM                 Explicit   Active           2K–500K           Variable        Conversational / Info Integration
+ (Castillo-Bolado et al.,              (Explicit query)
+ 2024)
+ I MPLICIT M EM B ENCH Implicit        Passive            500             300 instances Unconscious adaptation
+ (Ours)                                (Scenario)
+
+Table 1: Comparison of I MPLICIT M EM B ENCH with existing memory benchmarks. Most prior benchmarks target
+explicit memory through active retrieval triggers, whereas I MPLICIT M EM B ENCH evaluates implicit memory through
+passive, scenario-driven behavioral adaptation.
+
+
+tioning evaluates whether Conditioned Stimulus–                      (GPT-5, Claude-4.1-opus, Gemini-2.5-pro) and
+Unconditioned Stimulus (CS–US) exposure shapes                       open-source systems (DeepSeek-R1, Qwen3-32B,
+first decisions. Our paradigm selection is guided by                 LLaMA-3.3-70B). As Figure 2 shows, results re-
+the classical taxonomy of non-declarative memory                     veal fundamental limitations. First, a severe ceiling
+(Squire, 2004). We focus on three mechanisms that                    effect emerges: top performers remain far below
+are especially relevant to LLM agents: procedural                    human baselines, with no model exceeding two-
+memory for internalizing new routines, priming                       thirds overall accuracy. Second, paradigm asym-
+for context-driven adaptation without explicit in-                   metry shows dramatic variance: procedural mem-
+struction, and classical conditioning for forming                    ory proves most tractable while classical condition-
+automatic protective responses from experience.                      ing creates substantial bottlenecks, and priming
+We exclude non-associative learning in this ver-                     clusters in a narrow moderate range. Third, capa-
+sion because it is less directly aligned with the                    bility dissociation reveals that excellence in one
+high-level semantic decision-making emphasized                       paradigm fails to predict success in others, with
+in current agentic systems. This grounding lets us                   the strongest procedural learner suffering dramatic
+map established cognitive constructs to text-based                   drops on classical conditioning. Fine-grained anal-
+agent evaluation through functional isomorphism                      ysis uncovers systematic failures: models struggle
+rather than surface analogy. All 300 items follow a                  profoundly with inhibition versus preference-based
+unified Learning/Priming–Interfere–Test protocol                     learning, and multiple categories remain univer-
+with first-attempt scoring isolating automatized                     sally challenging across all architectures.
+behavior from explicit recall. Figure 1 illustrates                     Our main contributions are: (1) We present the
+our framework: procedural tasks use rule-based                       first benchmark of implicit memory in LLMs, oper-
+validators, priming employs LLM judges compar-                       ationalizing procedural learning, priming, and clas-
+ing experimental versus control conditions, and                      sical conditioning under a unified protocol isolating
+classical conditioning tracks binary first-attempt                   automatized behavior through first-attempt scoring.
+avoidance. This design enables lightweight, re-                      (2) We design an evaluation framework combining
+producible evaluation revealing that implicit mem-                   rule-based validators and LLM judges, enabling
+ory formation poses profound challenges with no                      reproducible assessment via a compact 300-item
+model achieving human-like automaticity.                             suite. (3) We evaluate 17 models revealing crit-
+   We evaluate 17 models spanning proprietary                        ical weaknesses: severe behavioral asymmetries
+                                                            28233
+                      Dataset Generation
+                                              Configuration Files                     Proc. Mem.               Priming         Clas. Cond.                               Final Dataset
+                                                                                      Task Seed Pool       Priming Source       Task Seed Pool
+                                                                                    • Alien Filesystem   • Orbital Mech.      • Api Aversion
+                                                                                    • Scribe’s Sign      • Mycelium Net.      • Brevity
+                              Select                                                                                                                LLM-Finetune
+                                                                                    • Omega Op.          • Cathedral Arch.    • Dir. Restriction
+
+                           Target Config                              Generator     • Courtly Protocol   • Renaiss. Alchemy   • Filetype Pref.       Human-Edit
+                                              Specify task types,                   • …                  • …                  • …                                    Contains Procedural
+                                              sizes, and decide the                                                                                                  Memory, Priming,
+                                                                                                                                                                     Classical Conditioning
+                                              LLM for generation.
+                                                                                                                                                                     tasks
+
+
+
+                       Evaluation Metrics
+                     For procedural memory and                        For Procedural Memory, we apply a                                            Configuration Files
+                     classical conditioning (with                     hybrid evaluation combining LLM-as-
+                     standard answers), we record                     judge and rule-based detection                                                                               Select
+                     the FTA                                                                                                                                                       Target
+                                                                                                                                                                                   Config
+                     For priming, we obtain its                       For priming and classical
+                     Priming Influence Score, as                      conditioning, we use only LLM-as-                          Evaluator
+                                                                      judge, since correctness and influence                                       Specify tasks types,
+                     this can only evaluate the
+                                                                      intensity is hard to capture with                                            models used as judge，
+                     degree of influence, not the
+                                                                      patterns.                                                                    models under test
+                     accuracy
+
+
+
+  Figure 1: Overall framework. (a) Dataset generation pipeline using LLM-generated candidates refined via fine-
+  tuning and human editing. (b) Evaluation metrics: hybrid automatic/human validation for Procedural Memory
+  (FTA), LLM-as-Judge for Priming (Priming Influence Score) and Classical Conditioning (FTA).
+
+                                                                       ImplicitMemBench Ranking List
+                70
+                             Closed-Source                                                                 64.1 65.3
+                                                                                       60.9 61.8 62.4 63.0
+                             Open-Source                                          57.6
+
+
+Overall Score
+                60
+                                                                   55.4 55.6 55.7                                    Avg: 55.3
+
+                50                        49.4 49.8 50.3 50.8 50.9
+                             43.5 44.2
+                40
+
+                30
+
+                20
+                    -7B -8B        0B net -4o          2B      ini ash           us pro 4.5 igh -o3 -8B GPT-5 3-32B ek-R1
+                -2.5 MA-3.1 A-3.3-7 e-4-son GPT n-2.5-7 PT-4o-m i-2.5-fl e-4.1-opini-2.5- GLM- -mini-h GPT Qwen3    n      e
+             e n
+           Qw LLa LLaM Claud                 Qwe      G emin laud Gem                         T-o4               Qwe DeepS
+                                                          G       C                       G P
+                                                                                              Models
+   Figure 2: Performance ranking of all evaluated models on I MPLICIT M EM B ENCH. Models are sorted by overall
+   score, with closed-source models shown in red-coral and open-source models in teal. The horizontal dashed line
+   indicates the average performance across all models.
+
+
+   and universal bottlenecks requiring architectural                                                  trieval and multi-session reasoning tasks. MADial-
+   innovations beyond parameter scaling. (4) We fur-                                                  Bench (He et al., 2025) focuses on emotion-support
+   ther show that representative memory-augmented                                                     dialogue in 160 dialogues. MemBench (Tan et al.,
+   agents do not consistently improve performance                                                     2025) expands evaluation to factual and reflective
+   on I MPLICIT M EM B ENCH, suggesting that implicit                                                 memory across participation/observation scenar-
+   memory cannot be reduced to explicit storage and                                                   ios with contexts ranging from 1K to 100K to-
+   retrieval alone.                                                                                   kens. More recent benchmarks broaden task cov-
+                                                                                                      erage while retaining the same explicit framing:
+   2                 Related Work                                                                     MemoryAgentBench (Hu et al., 2026) evaluates
+                                                                                                      four competencies—accurate retrieval, test-time
+  Existing memory benchmarks for LLM agents pre-                                                      learning, long-range understanding, and selective
+  dominantly evaluate explicit memory through ac-                                                     forgetting—over 14 datasets / 2,071 QAs in 100K–
+  tive retrieval triggers. LoCoMo (Maharana et al.,                                                   1.4M-token settings; MEMTRACK (Deshpande
+  2024) studies multi-session dialogue continuity                                                     et al., 2025) studies multi-platform state tracking in
+  via QA and event summarization over 300 con-                                                        variable long-horizon environments; and GoodAI
+  versations of roughly 9k tokens each. Long-                                                         LTM (Castillo-Bolado et al., 2024) emphasizes con-
+  MemEval (Wu et al., 2025) examines long-context                                                     versational information integration in 2K–500K-
+  memory in 115k–1.5M-token settings across re-
+                                                                                           28234
+

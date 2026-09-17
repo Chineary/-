@@ -1,0 +1,231 @@
+                                        Published as a conference paper at ICLR 2026
+
+
+
+
+                                        D REAM O N : D IFFUSION L ANGUAGE M ODELS F OR
+                                        C ODE I NFILLING B EYOND F IXED - SIZE C ANVAS
+                                         Zirui Wu1,4* , Lin Zheng1* , Zhihui Xie1 , Jiacheng Ye1 , Jiahui Gao1 , Shansan Gong1 ,
+                                         Yansong Feng4 , Zhenguo Li3 , Wei Bi2 , Guorui Zhou2 , Lingpeng Kong1†
+                                         1
+                                           The University of Hong Kong 2 Kuaishou Technology 3 Huawei Noah Ark Lab
+                                         4
+                                           Peking University
+                                         ziruiwu@pku.edu.cn, lzheng2@cs.hku.hk, lpk@cs.hku.hk
+
+
+
+                                                                                       A BSTRACT
+
+
+
+
+arXiv:2602.01326v1 [cs.CL] 1 Feb 2026
+                                                     Diffusion Language Models (DLMs) present a compelling alternative to autore-
+                                                     gressive models, offering flexible, any-order infilling without specialized prompt-
+                                                     ing design. However, their practical utility is blocked by a critical limitation:
+                                                     the requirement of a fixed-length masked sequence for generation. This con-
+                                                     straint severely degrades code infilling performance when the predefined mask
+                                                     size mismatches the ideal completion length. To address this, we propose D REA -
+                                                     M O N , a novel diffusion framework that enables dynamic, variable-length gen-
+                                                     eration. D REAM O N augments the diffusion process with two length control
+                                                     states, allowing the model to autonomously expand or contract the output length
+                                                     based solely on its own predictions. We integrate this mechanism into ex-
+                                                     isting DLMs with minimal modifications to the training objective and no ar-
+                                                     chitectural changes. Built upon Dream-Coder-7B and DiffuCoder-7B, D REA -
+                                                     M O N achieves infilling performance on par with state-of-the-art autoregressive
+                                                     models on HumanEval-Infilling and SantaCoder-FIM and matches oracle per-
+                                                     formance achieved with ground-truth length. Our work removes a fundamental
+                                                     barrier to the practical deployment of DLMs, significantly advancing their flex-
+                                                     ibility and applicability for variable-length generation. Our code is available at
+                                                     https://github.com/DreamLM/DreamOn.
+
+
+                                        1       I NTRODUCTION
+
+                                        In recent years, autoregressive language models have achieved remarkable progress (Comanici et al.,
+                                        2025; OpenAI, 2025; Guo et al., 2025; Qwen et al., 2025). They model language as generating text
+                                        sequentially in a fixed left-to-right manner. While dominant, this paradigm is now being comple-
+                                        mented by Diffusion Language Models (DLMs) (Hoogeboom et al., 2021; Austin et al., 2021; Zheng
+                                        et al., 2023; Singh et al., 2023; Lou et al., 2024; Sahoo et al., 2024; Shi et al., 2024; Nie et al., 2025;
+                                        Ye et al., 2025; DeepMind, 2025; Labs et al., 2025), which have emerged as a promising alternative
+                                        and are gaining significant attention.
+                                        DLMs operate through a multi-step denoising process, progressively refining a masked sequence to
+                                        enable flexible, any-order generation (Austin et al., 2021; Hoogeboom et al., 2021). This property
+                                        makes them inherently suited for infilling tasks—generating content to fill between a given prefix
+                                        and suffix (Bavarian et al., 2022; Fried et al., 2023; Allal et al., 2023). In contrast, autoregressive
+                                        models must resort to cumbersome workarounds for infilling, such as permuting the target span to
+                                        the end of the sequence (Fried et al., 2023; Guo et al., 2024a; Hui et al., 2024; Seed et al., 2025). Such
+                                        methods not only disrupt the natural contextual structure but also necessitate specialized prompting
+                                        during training and infenence.
+                                        Despite the theoretical advantage, the practical application of DLMs is hindered by a critical bot-
+                                        tleneck: the reliance on a pre-specified, fixed-length mask. Current DLMs (Ye et al., 2025; Nie
+                                        et al., 2025; Xie et al., 2025; Gong et al., 2025b) require the input and output sequences to have
+                                            * Equal contribution.
+                                            †
+                                                Corresponding author.
+
+
+                                                                                             1
+Published as a conference paper at ICLR 2026
+
+
+
+
+                          Prefix                                                Prefix
+                                                       def correct_bracketing(brackets):
+                                                           """ brackets is a string of "<" and ">".
+     def has_close_elements(numbers, threshold):           return True if every opening bracket
+         """                                               has a corresponding closing bracket.
+         Check if in given list are any two numbers        """
+         closer to each other than given threshold.        depth = 0
+         “”"                                               for b in brackets:
+         for idx, elem in enumerate(numbers):                  if b == "<":
+                                                                   depth += 1
+
+
+       Infilling with 4 [MASK]                           Infilling with 16 [MASK]
+              for elem:                                        elif b == “>” and depth > 0:# closing bracket
+
+       Ground Truth                                      Ground Truth
+              for idx2, elem2 in enumerate(numbers):           elif b == “>”:
+
+                          Suffix                                                Suffix
+                 if idx != idx2:                                    depth -= 1
+                     distance = abs(elem - elem2)               if depth < 0:
+                     if distance < threshold:                       return False
+                         return True                        return depth == 0
+         return False
+
+
+
+Figure 1: Example of DreamCoder-7B failing at code infilling due to the length mismatch between
+masked input and ground truth. Incorrect and correct code is marked in red and green. With too
+few masked tokens, diffusion models lack sufficient room for meaningful code infilling. Too many
+masks cause over-generation of unnecessary code snippet (e.g., depth > 0 that is incorrect).
+
+
+identical lengths, which prevents them from dynamically determining the length of the output. This
+limitation is especially damaging for code infilling, where solution lengths can vary significantly
+across examples. As shown in Figure 1, Dream-Coder-7B (Xie et al., 2025) produces incomplete or
+over-generated code when the mask length does not align with the ground truth. More critically, we
+observe an average performance drop of 38% on HumanEval-Infilling (Bavarian et al., 2022) when
+the predefined mask length does not align with the ground truth length (Table 2), highlighting the
+extreme sensitivity of current DLMs to this hyperparameter.
+To address this bottleneck, we propose D REAM O N, a discrete diffusion language modeling frame-
+work equipped with adaptive length adjustment (§3.1). D REAM O N introduces dynamic length adap-
+tation through two dedicated special tokens, [expand] and [delete], requiring no architectural
+modifications. We augment the standard diffusion training process with auxiliary length-control
+states, allowing D REAM O N to be trained with minimal deviation from conventional DLM objec-
+tives (§3.2). During inference, the model adaptively expands and contract the masked sequence
+solely on its predictions without external guidance (§3.3). Based on Dream-Coder-7B (Xie et al.,
+2025) and DiffuCoder-7B (Gong et al., 2025b), D REAM O N achieves competitive infilling perfor-
+mance with state-of-the-art autoregressive models on HumanEval-Infilling (Bavarian et al., 2022)
+and SantaCoder-FIM (Allal et al., 2023) (§4), and approaches oracle-level performance achieved
+with ground truth length (§5.1).
+
+• We alleviate the fixed-length bottleneck of diffusion language models (DLMs) by introducing
+  D REAM O N, which allows the model to dynamically expand or contract sequences during gener-
+  ation without any architectural changes.
+• Our method achieves variable-length generation with two special states [expand] and
+  [delete], and supports scalable end-to-end learning of length adaptation through simple aug-
+  mentation techniques with minimal deviation from standard diffusion objectives.
+• On multiple infilling benchmarks, D REAM O N delivers an average absolute performance boost of
+  26.4% over diffusion baselines, matches the performance achieved with oracle length, and brings
+  diffusion models close to or on par with state-of-the-art autoregressive models.
+
+2   P RELIMINARY
+
+Let x0 = [x10 , . . . , xN
+                         0 ] be a sequence of N discrete tokens sampled from the data distribution q(x).
+Each token takes values from a vocabulary of size V + 1, consisting of V regular symbols plus
+an additional absorbing state [mask]. We represent each token x0,n , as well as the absorbing
+
+
+                                                        2
+Published as a conference paper at ICLR 2026
+
+
+
+
+ Forward Augmentation and Noising
+       Diffusion      LMs             For              Code         Infilling       Beyond          Fixed-size   Canvas
+
+
+
+       Diffusion                   <|expand|>                       Infilling                <|expand|>          Canvas             <|delete|>   <|delete|>
+
+
+
+                                                                                …
+       <|mask|>                    <|mask|>                         Infilling                <|mask|>            Canvas             <|mask|>     <|mask|>
+
+
+
+                                                                                …
+       <|mask|>                    <|mask|>                         <|mask|>                 <|mask|>            <|mask|>           <|mask|>     <|mask|>
+
+
+
+ Backward Denoising
+
+       <|mask|>                    <|mask|>                         Infilling                <|mask|>            Canvas             <|mask|>     <|mask|>
+
+
+
+       Diffusion                   <|expand|>                       Infilling                <|mask|>            Canvas             <|mask|>     <|delete|>
+
+
+
+
+       Diffusion        <|mask|>                <|mask|>            Infilling                <|mask|>            Canvas             <|mask|>
+
+
+
+
+Figure 2: Overview of the augmented diffusion process. Top: the forward augmentation-and-
+noising procedure maps the input sequence x0 to an augmented latent z0 containing [expand]
+and [delete] states, and then applies a standard masked diffusion process over z0 to obtain zt
+and eventually zT . Bottom: a single denoising step where [mask] positions in zt can be predicted
+as either regular tokens or special states; [expand] deterministically expands into two [mask]
+tokens, while [delete] will remove the corresponding position, yielding a new sequence zt−1
+with a different length from zt .
+
+
+
+state [mask], as one-hot vectors in {0, 1}V +1 . Typical discrete-time masked diffusion models
+are defined as a class of latent variable models over such sequences with a forward and backward
+transition process. In the forward process q, each token is preserved with a certain probability or
+replaced by [mask] otherwise, giving q(xt | x0 ) = αt x0 + (1 − αt )[mask] with a prede-
+fined schedule αt . As t increases, the schedule is designed such that the sequence converges to full
+mask tokens. The generative model reverses this process, starting from xT and applying parame-
+terized transitions pθ (xt−1 | xt ) that approximate the true posterior q(xt−1 | xt , x0 ). This yields
+                    QT
+pθ (x0:T ) = p(xT ) t=1 pθ (xt−1 | xt ).
+This class of generative models can be generalized to continuous-time parameterization by consid-
+ering t ∈ [0, 1], which avoids the bias introduced by predefined discretization over time steps. We
+adopt the frameworks in Kingma et al. (2021); Campbell et al. (2022); Sahoo et al. (2024); Shi et al.
+(2024); Ou et al. (2025) and train pθ with a weighted cross-entropy loss objective,
+                                                              "          N
+                                                                                                                            #
+                                                                         X
+                   L(θ) = −E x0 ∼q(x)                             w(t)          1[xnt =[mask]] log pθ (xn0 | xt )               ,                        (1)
+                                         t∼U (0,1)                       n=1
+                                        xt ∼q(xt |x0 )
+
+
+where the indicator 1[xnt =[mask]] implies the loss is only evaluated on masked positions, and w(t) ∈
+(0, 1] is a time-dependent weighting term derived from the noise schedule αt (Shi et al., 2024;
+Gong et al., 2025a). This objective provides a tractable variational upper bound on the negative
+log-likelihood and serves as an effective training target for large-scale diffusion language models.
+
+
+3    M ETHOD
+
+In this section, we present our formulation for extending masked diffusion models beyond fixed-
+length generation. We begin with an overview of our framework in §3.1, followed by training and
+inference procedures in sections 3.2 and 3.3, and practical implementation details in §3.4.
+
+
+                                                                            3
+

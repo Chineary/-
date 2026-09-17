@@ -1,0 +1,209 @@
+                             S TRATAGEM: Learning Transferable Reasoning via
+                                   Trajectory-Modulated Game Self-Play
+
+     Xiachong Feng1 * , Deyi Yin2 * , Xiaocheng Feng2† , Yi Jiang2 , Libo Qin3 , Yangfan Ye2 , Lei Huang2 ,
+                    Weitao Ma2 , Qiming Li2 , Yuxuan Gu2 , Bing Qin2 , Lingpeng Kong1†
+1
+  The University of Hong Kong 2 Harbin Institute of Technology 3 Harbin Institute of Technology, Shenzhen
+                        fengxc@hku.hk, xcfeng@ir.hit.edu.cn, lpk@cs.hku.hk
+
+
+
+                                  Abstract                              Traditional Self-Play                  S TRATAGEM
+
+                                                                              Game Trajectories              Game Trajectories
+                Games offer a compelling paradigm for de-
+                veloping general reasoning capabilities in lan-               Terminal Reward            φ: Abstraction ψ: Evolution
+                guage models, as they naturally demand
+                                                                           Game-Speciﬁc Heuristics           Abstract Reasoning
+                strategic planning, probabilistic inference, and
+                adaptive decision-making. However, exist-                      7 Poor Transfer                3 Strong Transfer
+                ing self-play approaches rely solely on termi-
+                nal game outcomes, providing no mechanism              Figure 1: Traditional self-play learns game-speciﬁc
+                to distinguish transferable reasoning patterns         heuristics from terminal rewards. S TRATAGEM modu-
+                from game-speciﬁc heuristics. We present               lates trajectory advantages via abstraction (φ) and evo-
+                S TRATAGEM, which addresses two fundamen-              lution (ψ), selectively reinforcing transferable reason-
+                tal barriers to reasoning transfer: domain             ing.
+                speciﬁcity, where learned patterns remain an-
+                chored in game semantics, and contextual sta-
+                sis, where static game contexts fail to culti-
+                vate progressive reasoning. S TRATAGEM se-
+                                                                       all cognitive skills that underpin intelligent be-
+                lectively reinforces trajectories exhibiting ab-       havior across diverse domains (Xu et al., 2024;
+                stract, domain-agnostic reasoning through a            Hu et al., 2025). This observation has moti-
+                Reasoning Transferability Coefﬁcient, while            vated a growing body of work exploring games
+                incentivizing adaptive reasoning development           as training environments for language models (Hu
+                via a Reasoning Evolution Reward. Exper-               et al., 2024; Tong et al., 2025; Xie et al., 2025),
+                iments across mathematical reasoning, gen-             premised on the hypothesis that reasoning pat-
+                eral reasoning, and code generation bench-
+                                                                       terns developed through gameplay may transfer to
+                marks demonstrate substantial improvements,
+                with particularly strong gains on competition-         downstream tasks such as mathematical problem-
+                level mathematics where multi-step reasoning           solving and code generation.
+                is critical. Ablation studies and human evalu-            Self-play has emerged as a promising paradigm
+                ation conﬁrm that both components contribute           within this agenda, enabling models to improve
+                to transferable reasoning.1
+                                                                       through competitive interaction without requiring
+        1       Introduction                                           curated datasets (Zhang et al., 2024; Zhao et al.,
+                                                                       2025). Historical successes in game-playing AI,
+        Games have long served as a proving ground for                 from AlphaGo (Silver et al., 2016) to OpenAI
+        artiﬁcial intelligence, offering structured environ-           Five (Berner et al., 2019), demonstrate that self-
+        ments where complex reasoning emerges from                     play can produce superhuman performance in spe-
+        simple rules (Silver et al., 2016; Berner et al.,              ciﬁc domains. Recent work has extended this
+        2019; Vinyals et al., 2019). Beyond serving as                 paradigm to language models: SPIRAL (Liu et al.,
+        evaluation benchmarks, games provide a unique                  2025) trains LLMs through self-play on text-based
+        opportunity for cultivating general reasoning ca-              zero-sum games, showing that game-derived re-
+        pabilities: they demand strategic planning, prob-              wards can improve reasoning capabilities. How-
+        abilistic inference, and adaptive decision-making,             ever, SPIRAL relies on terminal game outcomes
+            * Equal contribution.                                      (win/loss) to provide learning signals, offering no
+            †
+                Corresponding author.                                  explicit mechanism to identify or reinforce rea-
+            1
+                Code: a Stratagem.                                     soning patterns that transfer beyond game-speciﬁc
+                                                                   19595
+    Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 19595–19614
+                                     July 2-7, 2026 ©2026 Association for Computational Linguistics
+contexts. As a result, models may learn to win                                                   πθ
+                                                        Player 0
+games through domain-speciﬁc heuristics (e.g.,            (0)
+                                                                     even turns
+                                                        a0                                 (0)
+
+“King beats Queen”) that fail to generalize, while
+                                                                                          a2
+                                                                                                                                   R0 (τ ) = +1
+                                                                      T               T               T                ···
+                                                             s0              s1                  s2         s3               sT
+transferable reasoning (e.g., “enumerate cases and                                                                                 R1 (τ ) = −1
+                                                          t=0            t = 1 a(1)         t=2           t=3                t=T
+compute expected value”) receives no preferential               odd turns
+                                                                                 1                               (1)
+                                                                                                                a3
+
+                                                                           Player 1
+reinforcement.
+   To address this limitation, we propose              Figure 2: Two-player zero-sum Markov game structure.
+S TRATAGEM (Self-Play TRajectory AdvanTage             Both players share a single policy πθ with role condi-
+Activated GamE LearMing), which learns                 tioning. Players alternate turns: Player 0 acts at even
+transferable reasoning by selectively reinforcing      timesteps (t mod 2 = 0), Player 1 at odd timesteps.
+trajectories that exhibit domain-agnostic and          The transition function T governs state dynamics based
+                                                       on actions. At terminal state sT , rewards satisfy the
+adaptive reasoning patterns. Our key insight
+                                                       zero-sum constraint R0 (τ ) + R1 (τ ) = 0.
+is that transfer requires addressing two funda-
+mental challenges: domain speciﬁcity, where
+game-learned patterns remain anchored in game             tivizes progressive reasoning development.
+semantics rather than abstract principles; and
+                                                       • We demonstrate strong transfer across mathe-
+contextual stasis, where static game environments
+                                                         matical reasoning, general reasoning, and code
+fail to cultivate the progressive reasoning needed
+                                                         generation, with notable gains on competition-
+for evolving problem contexts. S TRATAGEM
+                                                         level problems requiring multi-step reasoning.
+tackles both challenges by modulating trajectory
+advantages with two complementary signals: a           2 Preliminaries
+Reasoning Transferability Coefﬁcient (φ) that
+measures the abstraction level of reasoning            2.1 Task Formulation
+patterns, and a Reasoning Evolution Reward             We formulate multi-turn reasoning as a turn-
+(ψ) that incentivizes reasoning that deepens and       level Markov Decision Process (MDP) M =
+adapts across turns. By multiplicatively scaling       (S, A, T, r, γ), where states s ∈ S represent com-
+advantage based on transferability and additively      plete contexts (e.g., game conﬁgurations) and ac-
+rewarding reasoning evolution, S TRATAGEM              tions a ∈ A correspond to full responses rather
+ensures that only trajectories demonstrating both      than individual tokens (see Appendix G for ex-
+abstract reasoning and progressive development         tended background). At each turn t, the model
+receive maximal reinforcement.                         generates response yt containing reasoning ct and
+   We evaluate S TRATAGEM on benchmarks span-          executable action at .
+ning mathematical reasoning, general reasoning,           For competitive interactions, we extend this to
+and code generation. Training on three text-           a two-player zero-sum Markov game (Littman,
+based games using Qwen3-4B-Base, S TRATAGEM            1994) G = (S, A0 , A1 , T, r, γ) with opposed re-
+achieves consistent improvements across all cat-       wards:
+egories, with strong gains on competition-level
+mathematics where multi-step reasoning is criti-       r0 + r1 = 0 ∀(s, a(0) , a(1) ),    R1 (τ ) = −R0 (τ ).
+cal. Ablation studies conﬁrm that both modula-                                                             (1)
+tion components contribute meaningfully, while         Figure 2 illustrates this structure for trajectory τ =
+                                                               (0) (1)
+human evaluation validates that S TRATAGEM pro-        {(st , at , at )}Tt=0 .
+duces more abstract and progressive reasoning.
+                                                       2.2 SPIRAL
+   Our contributions are:
+                                                       SPIRAL (Liu et al., 2025) trains language models
+• We identify domain speciﬁcity and contextual
+                                                       through self-play on turn-based zero-sum games
+  stasis as two fundamental barriers to reasoning
+                                                       G = {G1 , . . . , Gn } with sparse terminal rewards
+  transfer in game-based self-play, and propose
+                                                       Rp (τ ) ∈ {−1, 0, 1} (see Appendix K for details).
+  S TRATAGEM to address both through selective
+                                                       Both players share a single policy πθ with role con-
+  trajectory advantage modulation.                                                                   (p)
+                                                       ditioning: player p = t mod 2 generates yt ∼
+• We introduce the Reasoning Transferability Co-       πθ (·|st , p, G) at turn t.
+  efﬁcient (φ) that quantiﬁes abstraction level, and      To handle asymmetric expected returns across
+  Reasoning Evolution Reward (ψ) that incen-           roles, SPIRAL employs Role-conditioned Advan-
+                                                  19596
+tage Estimation (RAE) with separate baselines             where φ(τ ) ∈ {0, 0.5, 1} is the Reasoning
+bG,p per game-role pair:                                  Transferability Coefﬁcient that addresses do-
+                                                          main speciﬁcity by measuring the abstraction
+    AG,p (τ ) = Rp (τ ) − bG,p ,                    (2)   level of reasoning patterns (§3.2), and ψ(τ ) ∈
+                 [∑                                ]
+      ∇θ J = E
+                                            (p)           {−1, 0, +1} is the Reasoning Evolution Reward
+                      t∈Tp AG,p ∇θ log πθ (yt |st ) ,
+                                                          that addresses contextual stasis by incentivizing
+where Tp indexes turns of player p and baselines          reasoning that progressively adapts and deepens
+are updated via exponential moving average.               across turns (§3.3). The hyperparameter β con-
+                                                          trols the relative contribution of the reasoning evo-
+3     Method                                              lution.
+                                                             This formulation achieves selective reinforce-
+This section presents S TRATAGEM, which selec-
+                                                          ment through the multiplicative term Agame · φ:
+tively reinforces transferable reasoning patterns
+                                                          trajectories with abstract, domain-agnostic reason-
+through trajectory advantage modulation. We ﬁrst
+                                                          ing (φ ≈ 1) retain their full game-derived advan-
+provide an overview (§3.1), then detail the Reason-
+                                                          tage, while those with domain-speciﬁc reasoning
+ing Transferability Coefﬁcient (§3.2) and Reason-
+                                                          (φ ≈ 0) have their inﬂuence diminished. The ad-
+ing Evolution Reward (§3.3).
+                                                          ditive term β · ψ rewards trajectories that demon-
+3.1 Overview                                              strate progressive reasoning development, prepar-
+Transferring reasoning capabilities from games to         ing the model for the evolving contexts of real-
+domains such as mathematics and coding faces              world problem-solving. Figure 3 illustrates this
+two fundamental challenges:                               modulation framework.
+1. Domain Speciﬁcity:       Reasoning patterns            3.2 Reasoning Transferability Coefﬁcient
+   learned from games tend to be anchored in
+   game-speciﬁc concepts, terminology, and                Motivation. The domain speciﬁcity challenge
+   heuristics (e.g., “King beats Queen”) rather           arises because game training naturally produces
+   than abstract, domain-agnostic patterns (e.g.,         reasoning tied to game semantics. Consider two
+   “enumerate cases and compute expected                  reasoning traces from the same game:
+   value”).                                                  Game-Speciﬁc (φ ≈         Abstract (φ ≈ 1)
+                                                             0)
+                                                                                       “Enumerate cases: Case 1
+2. Contextual Stasis: Games present static prob-          “I have the lowest card       yields −2 × 0.5 = −1;
+   lem contexts where the rules, setting, and prob-        and the opponent bet,        Case 2 yields +2 × 0.5 =
+   lem description remain ﬁxed throughout in-              which usually indicates     +1. Select the option max-
+                                                           strength. I should fold.”    imizing expected utility.”
+   teraction. In contrast, mathematical problem-
+   solving involves evolving contexts where de-           The ﬁrst relies on game-speciﬁc heuristics with no
+   composition creates new sub-problems, inter-           utility outside its original context. The second em-
+   mediate results reshape the solution space, and        ploys case enumeration and expected value, frame-
+   reasoning must continuously adapt to changing          works applicable to any decision problem. To ad-
+   conditions.                                            dress domain speciﬁcity, we quantify how well rea-
+These challenges limit reasoning transfer: domain-        soning patterns can transfer by measuring their ab-
+speciﬁc patterns fail to generalize, and models           straction level.
+trained on static contexts cannot adapt to evolving
+problem states. To incentivize transferable reason-       Formulation. We operationalize transferabil-
+ing, we design S TRATAGEM to tackle both chal-            ity through three dimensions that characterize
+lenges through trajectory advantage modulation.           domain-independent reasoning (Figure 4):
+   Given a trajectory τ from a zero-sum game,             • Abstraction Level (α): The extent to which
+SPIRAL computes the role-conditioned advantage               reasoning employs domain-agnostic concepts
+Agame (τ ) = Rp (τ )−bG,p based solely on terminal          (e.g., “expected value,” “probability distribu-
+game outcomes. S TRATAGEM extends this formu-                tion”) versus game-speciﬁc terminology (e.g.,
+lation by introducing two complementary signals             “King beats Queen”).
+designed to capture reasoning quality:                    • Structural Clarity (σ): The presence of
+                                                             reusable reasoning frameworks such as case-by-
+     Amod (τ ) = Agame (τ ) · φ(τ ) + β · ψ(τ ),   (3)       case analysis, if-then chains, or systematic enu-
+                                                     19597
+

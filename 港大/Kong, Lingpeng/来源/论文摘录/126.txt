@@ -1,0 +1,226 @@
+                                   2011 International Conference on Asian Language Processing
+
+
+
+
+                  Formalization and Rules for Recognition of Satirical Irony
+
+
+                         Lingpeng Kong                                                             Likun Qiu
+       Department of Computer Science and Technology                             Key Laboratory of Computational Linguistics
+          Beijing Language and Culture University                                 (Peking University), Ministry of Education
+                       Beijing, China                                                          Beijing, China
+               e-mail: ikekonglp@gmail.com                                                e-mail: qiulk@pku.edu.cn
+
+
+   Abstract—Satirical irony(" ৽ 䇭 ") is a very important                    To solve these problems, we first give clear definitions
+   language phenomena. Its recognition is of great                          of irony, satire and satirical irony. Then we discuss in
+   importance to sentiment analysis. However, researches on                 what level satirical irony occurs. Finally, we propose
+   this topic are still quite rare and existing studies have                some features (including features which can be well
+   problems such as unclear definition and unclear objects of               formalized and features which can not be well
+   study. To solve these problems, we first give clear
+   definitions of satirical irony. Then we discuss in what level
+                                                                            formalized now) of satirical irony -- the main cause of
+   satirical irony occurs. Finally, we propose some features of             the incorrectness in the analysis results.
+   satirical irony.
+                                                                                                   II.   TERMS
+   Irony Satire Formalizaiton(key words)                                    In this section, we will present some related terms and
+                                                                            their explanation below.
+                                                                            Antiphrasis: the usually ironic or humorous use of
+                         I.    INTRODUCTION
+                                                                            words in senses opposite to the generally accepted
+   Irony ("৽䈝") and satire ("䇭ࡪ") are very important                        meanings. (as in “this giant of 3 feet 4
+   phenomena in languages. They become more and more                        inches”)[Merriam-Webster's 11th Collegiate Dictionary]
+   popular with the development of twitter, blog, and bbs                   Irony: I) the use of words to express something other
+   (Bulletin Board System). From people forum 1 , we                        than and especially the opposite of the literal meaning.
+   sampled 2479 sentences, each of which has more                           II) b : a usually humorous or sardonic literary style or
+   positive words than negative words, and found that 259                   form characterized by irony.[Merriam-Webster's 11th
+   sentences relate to either satire or irony2.                             Collegiate Dictionary]
+   Satirical irony ("৽䇭") is critical for opinion mining                    Verbal Irony: a figure of speech in which what is said
+   system and commodity recommendation system. If they                      is the opposite of what is meant. [Dictionary.com's 21st
+   are not identified, the analysis result may be wrong. For                Century Lexicon]
+   example, for the following sentence, the result "The
+                                                                            Satire: I) Trenchant wit, irony, or sarcasm used to
+   officials in Taiwan ! positive" will be got if the
+                                                                            expose and discredit vice or folly. [Merriam-Webster's
+   satirical irony is not identified. The correct result should
+                                                                            11th Collegiate Dictionary]
+   be "The officials in Taiwan ! negative".
+                                                                            䇭ࡪ˄fěng cì˅(Satire): I) ⭞∊௱Ƚ཮ᕖȽਃ䈣ㅿ㺞
+         ਦ⒴ᇎ઎ⵕᱥ㚠᱄஀θງौࡸਹҼ  ᒪᢃ                                              䗴ᢁ⌋䘑㺂ᣡ䵨Ƚ᢯䇺Ƚᡌ౨ᔺȾ>⧦ԙ≿䈣㿺㤹䈃
+         ḛ࠰ᶛȾ The officials in Taiwan are really                           ޮ @ (To expose, critic or ridicule, using metaphor,
+         smart. They ate industrial plasticizer for 30                      hyperbole or irony or other ways of expression.) II) ⭞
+         years before it was found out.)
+                                                                           ∊௱Ƚ཮ᕖㅿᢁ⌋ሯу㢥Ⲻᡌᝐ㹘Ⲻ㺂Ѱ䘑㺂ᨣ䵨
+   Very little work has been done on irony or satire.                       ᡌ᢯䇺Ⱦ>⧦ԙ≿䈣䈃ޮ(The Dictionary of Modern
+   Problems such as unclear definition and unclear objects                  Chinese)@ (To expose or critic vice or folly using
+   of study occur in the current existing researches.                       metaphor or hyperbole or other ways of expression.)
+   Besides, misconceptions between the definitions of                       ৽䈝˄fǎn yǔ˅(Irony): I) ‫ؤ‬䗔ᯯᕅҁжθ⭞䗔фⵕ
+   irony and satire, irony and satirical irony("ਃ䇳") are                    ↙Ⲻᝅᙓ⴮ਃθཐ੡ᴿ౨ᔺ䇳ࡰⲺᝅ઩Ⱦ>䗔Ⓠ
+   not rare. Although we use the word "৽䇭" (satirical                        ᒪ⡾(Ciyuan, the 1988 version)@(A figures of
+   irony) often, we find no definition of this word in                  Speech which using words opposite to its real meaning.
+   ᒪ⡾Ʌ䗔⎭Ɇ (CiHan, the 1965 version),  ⡾Ʌ䗔                               Usually used in mock and satire.) II) ਃ䈓θ᭻ᝅ䈪Ⲻ
+   ⓆɆ(Ciyuan, the 1988 version),Ʌ⧦ԙ≿䈣䈃ޮɆ                                    䐕 ᵢ ᝅ ⴮ ਃ Ⲻ 䈓 Ⱦ > ⧦ ԙ ≿ 䈣 㿺 㤹 䈃 ޮ (Standard
+   (The Dictionary of Modern Chinese)and Ʌ⧦ԙ≿䈣                             Dictionary of Modern Chinese)@ (A statement in which
+   㿺㤹䈃ޮɆ(Standard Dictionary of Modern Chinese)                           the speaker says intentionally what is opposite to the
+                                                                            meaning he wants to express.)
+   1
+     http://bbs.people.com.cn/                                                              III.   RELATED WORKS
+   2
+     We choose sentences have more positive words because
+                                                                            [1][3] proposed a unified theory of irony which
+   satirical irony is mainly in these sentences which are literally
+   a positive sentence.                                                     emphasizes the of irony environment. However, it is
+
+
+978-0-7695-4554-7/11 $26.00 © 2011 IEEE                               135
+DOI 10.1109/IALP.2011.14
+hard to formalize the irony environment in real                     C. Definition of Satirical Irony and The Relationship
+applications because the expectation, which is the core                 between Irony and Satire
+of irony environment, must be realized based on                     According to the definitions of irony and satire we can
+semantic meaning. [5][7] proposed a semi-supervised                 see that irony is a formal one (It's a matter of form.),
+method to recognize sarcastic sentences from online                 while satire is a functional one (It focuses on what
+product reviews. But consider only simple sentence                  function it will perform). It is clear that irony and satire
+pattern and punctuation information without any lexical             are not the same. Their relationship should like the
+information which is of highly importance to the                    figure below.
+recognition of satire according to [6]. Moreover, they
+have a misconception between the definitions of verbal
+irony and sarcasm. [8] experiments with SVMs, feature
+scaling, and a number of lexical and semantic feature
+types for automatic satire detection. Different from [8],
+we mainly focuse on the sentence level. Nowadays in an
+age of an explosion of twitter and BBS, sentence level
+study has an increasing importance.
+
+
+     IV.   DEFINITIONS OF IRONY AND SATIRE AND
+                  SATIRICAL IRONY
+
+A. Definition of Irony
+                                                                       Figure 1 The relationship between irony and satrie
+According to the definitions in Section II, English
+words irony, antiphrasis and verbal irony corresponds to            We define the set of all sentences as Sall, and the set of
+Chinese concept "ਃ䈣" (in the following, we use irony                ironical sentences SFA ⊂ Sall and the set of satirical
+as a representative of those words). The core of irony is           sentences SFE ⊂ Sall. The intersection of SFA and SFE is
+that its real sense is opposite to the superficial meaning.
+                                                                    irony which used in satire, namely satirical irony ("ਃ䇳
+The ironical part of a sentence can be displayed in some
+                                                                    " ).
+words (“འք” in A1) or not (A2).
+                                                                    To be more specifically, first we should note that not all
+ $ ᡵԭᱥ 70' འքҼθ߃⏞ᆹжⲴ‫ك‬ь⮂ቧའᒩ                                         the irony is satirical. In other words, the function of
+ҼȾ House prices are too damn low.The country)                       irony is obviously more than used in a satire. For
+(A2)ᒨ㜼θ ኷䘶ՇቧᇂҼȾ(It is a good choice to                           example, the following sentence is surely not a satire.
+retire in the age of 30.)                                           (Eg1)ᙱ⨼ⵕᱥའㅞҼθ䜳жᣀᒪ㓠Ҽθ䘎ᱥ┗ь⮂
+A1 type of sentence is especially interested because the            Ⲻ䐇θީᗹ਍⚴Ⲻ㗚Սθж⛯‫ݵ‬ҕу⌞ᝅ㠠ᐧⲺ䓡
+sentiment analysis will be wrong if it is not identified.           ։Ⱦ(The prim minister is such an idiot. In his old age,
+E.g, the result of sentiment analysis on A1 is "ᡵԭ                  he travels everywhere, giving comfort to those stricken
+(house prices)!ք(low)", while the correct one should               civilians, but never takes care of his own health.)
+be "ᡵԭ(house prices)!儎(high)".                                     Sencondly, satire do not have to use irony as its form.
+                                                                    For example,
+B. Definition of Satire
+                                                                    (Eg2)Winston Churchill who, when told by a lady that
+In this paper, we use satire as the counterpart of "䇳ࡰ"             he was drunk, said "my dear, you are ugly ... but
+in English. Of course, we can still use a lot of words to           tomorrow I shall be sober"[9]
+express the meaning of " 䇳 ࡰ " including mordacity,                 This sentence is said by Winston Churchill to satirise a
+pasquinade, satire, quip, stinger, irony, caricature,               lady. It belongs to neither A1 nor A2 which we
+burlesque, lampoon, sting, sarcasm, innuendo and nip                mentioned in Section IV.A. But it does accomplish
+( 㔪〇 ≿㤧䈃 ޮ (Weike Chinese-English Dictionary)).                     functions which we mentioned in Section IV.B which is
+Despite so many words we can use, the common feature                to cut or gave pain.
+of all these words are simple. That is they all perform             So actually, we believe that irony can in fact be regarded
+same functions in discourse. So the definition of "satire"          as a template. By using irony, we can create a satire. In
+(䇳ࡰ) should be functional. Its function is to cut or give           Section VI, we will pay special attention satirical irony
+pain in emotion (Merriam-Webster's 11th Collegiate                  get our special attention for two reasons 1) we believe
+Dictionary -- sarcasm) and to expose and discredit vice             the amount of sentences using irony as satire is much
+or folly as its purpose.                                            more than using it to show a positive sentiment in
+We can create a satirical sentence in many ways -- using            forums. 2) as we mentioned above, this part always
+metaphor or hyperbole mentioned in definition for                   leads to critical error in modern computer analysis
+example. But to determine if a statement is a satire, we            systems -- this kind of sentences will usually be listed in
+should follow its functional definition as we mentioned             sentences with positive sentiment.
+above.
+
+
+
+
+                                                              136
+            V.    LEVELS OF SATIRICAL IRONY                            to extract the satirised object from the sentence is not
+To study satirical irony, there is another important                   enough. Eg4 is such a case. Satirical irony seldom
+problem we should pay attention to -- the satirised object             occurs in mere word-level satire and therefore this
+of it (i.e. What does the sentence satirise?) In this section,         situation is almost negligible.
+we first divide satire into three levels based on objects of                     VI.    FEATURES OF SATIRICAL IRONY
+satires. Then we discuss on what level satirical irony
+occurs.                                                                In this section, we will discuss features of satirical irony.
+                                                                       The following rules are not necessary and sufficient. But
+A. Three Levels of Satire                                              with the occurrence of the following features, the
+In word level, we can use homophony only (or other                     sentence is more likely to be an satirical irony. Few
+methods ) to accomplish a satirical effect. For example,               sentences that contains no features are still satirical irony.
+(Eg1)㗄ѳྮӰδ㗄࡟ඐӰεᵢ䓡ж䍥ቧᱥぼᐪ᣿‫ށ‬                                              (We examined 185 satirical ironies and found that 169
+Ⲻ᭥ᤷ㘻Ⱦ(United States of America itself supports                         of them have features in R1-Class.)
+Mubarak consistently.)(In Chinese, "United States of                   A. R1-Class, Rules that can be well formalized
+America" and "beautiful unscrupulous traitors" are
+                                                                       ǏR1.1ǐThe use of some mood particles
+homophonic.)
+                                                                       Although in text we do not have information such as
+(Eg2)ᡇᣀԌԢ〦Ѱćᇗḛ⥠Ĉδᇗḛ㓺εȾѣള⤢
+                                                                       tone or manner of speaking, to provide the reader greater
+ᴿⲺж〃ࣞ⢟૷〃Ⱦ(I call them "examining pigs(pigs                             opportunity to recognize an satirical irony, the writer
+and group are homophonic in Chinese)" -- an unique                     often uses some mood particles such as "૸૸"(ahah) or
+animal species in China.)
+                                                                       "૷ຎ"(wow) etc. Through writing them explicitly, they
+In Eg1 we can see that " 㗄 ѳ ྮ Ӱ " (beautiful
+                                                                       play the role of tone and manner of speaking in oral
+unscrupulous traitors) is a satirical word but the meaning             language. For example,
+of the sentence is USA supports Mubarak which has
+                                                                       ૽ಱέᡇԀཟⲺ഑Ѡᑌᆆ䜳䘑Ҽഔ᭬ㄏȽ㦙ᒮ஀έ
+nothing to do with satire. So Eg1 is a word-level satire.
+                                                                       (Wow!What an honor! All 4 posts that I published today
+In Eg2, "ᇗḛ⥠" (examining pigs) is a satirical name
+                                                                       were put into the recycle bin..)
+for examining group, and the whole sentence shows a
+                                                                       ǏR1.2ǐThe occurrence of absolute words or words
+discontent toward the examining group. So it is both a
+                                                                       used to stress or emphasize
+word-level and a sentence-level satire. On the other hand,
+                                                                       In satirical irony, there are often positive words
+a satire only in sentence-level surely exists. For example,
+                                                                       exaggerated to extremes. That can strengthen the effect
+(Eg3)ഔཪ∊∊्Ӣ⥵Ӱθᢃ⸛䚉⧦൞Ⲻ⭕⍱ᴿཐᒮ
+                                                                       of satire. Words like "ᴰ"(most), "ཚ"(too),"ⵏᱟ,ⵏཏ,
+⿅ Ⱦ (Only comparing to sinanthropus, can we know
+                                                                       ቡᱟ"(really,just) etc. and words like "ᆼ㖾"(perfect),"
+what a wonderful life we live now. )
+Additionally, although the amount of above-sentence                    ≨䘌"(forever) etc. should be paid more attention.
+satires is not very large, it do occurs in certain situations.         ᴶՕཝⲺӰ≇ᡎҿ⨼䇰઀䇿ᡇԢφ㾷⭞྽ྩૂ‫ݵ‬ㄛ
+We can not find the object of satire in the sentence. In               ‫ ڐ‬Ӱ 䍞 ⢂ θ 㾷 䇟 ᡶ ᴿ Ӱ ভ ‫ ⇁ ޛ‬䞭 Ⲻ ᡎ ҿ έ (The
+other words, we need to understand the satirical meaning               greatest people's war theory tell us that we should use
+of the sentence based on information from the context or               women and children as hostages and involve all the
+even from common knowledge. For example,                               people to the war. )
+(Eg4)ᡇ㿿ᗍ㺷ьࠥⲺᑓ࡬䘸ਾള᛻Ⱦ(I think Yuan                                       ǏR1.3ǐThe use of punctuations like question mark
+Shikai's imperial system is suitable to national                       and exclamatory mark in a consecutive manner
+condition..)                                                           This feature is mentioned in [4][5][6][7]. satirical irony
+If we read this sentence alone, we can hardly tell what                usually has an apparent and strong emotion[1]. Question
+the object of the satire, even whether it is a satire. But if          marks and exclamatory marks used in a consecutive
+we read what the thread starter says (The above post is a              manner can show this emotion clearly.
+reply.), we will know the meaning of the above sentence.               㚼ԕ  ӵ㗄࠶஀θⵕ WP ┪уᱥѠቅᮦθㄕ❬㜳ᚺ
+The thread starter says,                                               ᰖ ༦ᚥ  䘏‫࠼ ݻ‬։ ⧦Ҽ ᭵ᓒ Ⲻ㜳 ࣑ ફ ફ (Four
+Ḇᇎ઎䈪儎ᡵԭ䘸ਾള᛻Ⱦ(An official says that high                                hundred and fifty billion dollars! A damn big number!
+house prices are suitable to national condition.)                      Unexpectedly we did not even know that! It show the
+So we know that the reply is to satirise the official and              government's ability clearly!!!!)
+points out that what the official says is very absurd.                 ǏR1.4ǐThe use of quotation marks which show stress
+B. Levels where Satirical Irony Occurs                                 or negating to some extends
+                                                                       Unlike in English, we don't have capitalization like
+As a subset of satire, satirical irony does not cover the
+                                                                       "GREAT!" in Chinese. But we can use quotation marks
+three levels of satire evenly. The sentence-level is
+                                                                       to accomplish the same function.
+where satirical irony occurs most. (i.e. The satirised
+                                                                       ɋᳪ࣑Ɍ䘏Ѡ䈃⭞ⲺćᖾླĈέέέԄ়ਨрθ֖
+object of satirical irony is in the sentence.) Eg2, Eg3
+above are both examples of satirical irony in sentence-                ж䍥Ⲻ㄁൰ᶛⵁθɋᳪ࣑ɌᱥѠ㽈ѿ䈃έ(Violence
+level. At the same time, satirical irony does sometimes                is a "great" word!!! Historically, you insist that violence
+occur in above-sentence-level. That is to say, just trying             is a commendatory term.)
+
+
+
+                                                                 137
+

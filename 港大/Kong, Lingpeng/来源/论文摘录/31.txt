@@ -1,0 +1,192 @@
+        R ECIPE 2P LAN: Evaluating Planning Abilities of LLMs for
+Efficient and Feasible Multitasking with Time Constraints Between Actions
+
+               Zirui Wu1,2 , Xiao Liu1 , Jiayi Li1 , Lingpeng Kong2 and Yansong Feng1 *
+                           1
+                             Peking University, 2 The University of Hong Kong
+                           ziruiwu@pku.edu.cn, fengyansong@pku.edu.cn
+
+
+
+                          Abstract                              plans in the scenarios of web browsing (Yao et al.,
+                                                                2022a; Zhou et al., 2023), tool usage (Qin et al.,
+        While Large Language Model-based agents                 2023; Li et al., 2023), computer manipulation (Xie
+        have demonstrated substantial progress in task
+                                                                et al., 2024b; Gou et al., 2024) and agent naviga-
+        completion, existing evaluation benchmarks
+        tend to overemphasize single-task performance,          tion (Shridhar et al., 2020; Wang et al., 2022).
+        with insufficient attention given to the crucial           However, the ability to manage concurrent ob-
+        aspects of multitask planning and execution ef-         jectives remains an often overlooked yet crucial
+        ficiency required in real-world scenarios. To           requirement in real-world applications, as exempli-
+        bridge this gap, we present R ECIPE 2P LAN,             fied by everyday scenarios where humans prepare
+        a novel benchmark framework based on real-              multiple dishes simultaneously for a meal or con-
+        world cooking scenarios. Unlike conventional
+                                                                duct parallel laboratory experiments (Russell and
+        benchmarks, R ECIPE 2P LAN challenges agents
+        to optimize cooking time through parallel task          Norvig, 2010; Zhang et al., 2024; Wu et al., 2024).
+        execution while respecting temporal constraints         Current planning benchmarks assume that models
+        i.e. specific actions need to be performed              execute tasks by decomposing the overall goal into
+        within a particular time intervals following the        steps and achieving these subgoals sequentially,
+        preceding steps. Overly aggressive local paral-         one at a time (Liu et al., 2023; Ma et al., 2024).
+        lelization may disrupt this constraint, poten-          Consequently, these datasets fail to account for the
+        tially compromising the entire cooking pro-             duration of an action and the potential for multitask-
+        cess. This strict time constraint between ac-
+                                                                ing. The multitasking scenario proposes a different
+        tions raises a unique challenge for agents to
+        balance between maximizing concurrent op-               objective in addition to feasibility. It challenges the
+        erations and adhering to critical timing con-           model to optimize the efficiency to reach multiple
+        straints. Extensive experiments with state-of-          goals simultaneously.
+        the-art models reveal challenges in maintaining            Time constraints between actions are often im-
+        this balance between efficiency and feasibil-           posed in the recipe of dishes or experiments, indi-
+        ity. The results highlight the need for improved        cating specific actions must be performed within a
+        temporal awareness and global multitasking
+                                                                particular time interval after the preceding step is
+        capabilities in large language models. We
+        open-source our benchmark and code at https:            completed. For instance, the pouring and dripping
+        //github.com/WilliamZR/Recipe2Plan.                     actions for pour-over coffee must be carried out
+                                                                in sequence without any delay, as recommended
+1       Introduction                                            by professionals (Hoffmann, 2018). This property
+                                                                introduces a unique challenge for multitask plan-
+Large Language Models (LLMs) (OpenAI, 2023;                     ning apart from conventional benchmarks. The first
+Team and Google, 2023; Touvron et al., 2023;                    plan in Figure 1 illustrates that if the agent priori-
+Qwen Team, 2024) have demonstrated the ability                  tizes maximizing efficiency by rushing to multitask
+to plan and reason step by step (Wei et al., 2022).             whenever it is idle, it may inadvertently violate fu-
+Leveraging this ability, LLM-based agents can au-               ture time constraints. Consequently, the agent must
+tomate complex real-world tasks (Yao et al., 2022b;             balance the need for efficiency with adherence to
+Shinn et al., 2024; Sun et al., 2024).                          time constraints to achieve feasible multitask plan-
+   The effectiveness of LLM-based agents is pri-                ning as shown in the second plan in Figure 1.
+marily evaluated based on the feasibility of their                 We propose a new benchmark R ECIPE 2P LAN
+    *    Corresponding author.                                  based on real-world recipes and constraints to eval-
+                                                           4279
+                   Findings of the Association for Computational Linguistics: EMNLP 2025, pages 4279–4301
+                             November 4-9, 2025 ©2025 Association for Computational Linguistics
+                          Action                                               Multitask Agent
+                                                                                                                                                       Observation
+               Pour Water       Drip Coffee
+                                                             Complete multiple recipes in the shortest time possible.
+                                                                                                                                 Both drippers are occupied.
+                                                                                                                                 The kettle is occupied, the temperature of water is 96.
+
+
+                                                                                                                                                    Feedback
+                Occupied           Idle
+                                                                                                                                 Action of Recipe B can not be executed.
+                                                                                                                                 Agent is occupied.
+                                 Recipe A: Iced Coffee
+                                                                                                                                                           Violation of time constraints
+           Preparation
+                                                                                        Plan 1: Efficiency              Feasibility
+                         Boil        Grind                      Ice
+
+                                                                                                Boil Water
+                     Pour         Drip              Pour       Drip
+                                                                                        Grind Coffee                   Pour       Drip              Pour           Drip
+           Brewing                        Time Constraints
+                                                                                                        Grind Coffee           Pour          Drip                  Pour
+
+                                  Recipe B: Hot Coffee
+           Preparation                                                                  Plan 2: Efficiency              Feasibility
+
+                         Boil        Grind                                                       Boil Water
+                                                                                        Grind Coffee                    Pour          Drip          Pour            Drip        Ice
+                     Pour         Drip              Pour       Drip
+                                                                                                        Grind Coffee                     Pour       Drip            Pour              Drip
+           Brewing                        Time Constraints
+
+
+
+
+Figure 1: A simplified demonstration of our benchmark. Actions will either occupy the agent or leave it idle. The
+four steps of brewing must be executed sequentially as time constraints between actions. The goal for the agent is to
+plan multitasking to complete the recipes in the shortest time possible without violating any constraints. The first
+plan illustrates a scenario where the agent attempts always to keep the agent occupied for higher efficiency, resulting
+in violations of time constraints. The second plan maintains the balance between the efficiency and feasibility of the
+plan by leaving the agent idle on purpose to maintain the time constraints for all actions.
+
+
+uate the multitasking abilities of agents. We high-                                                    greedy manner. R ECIPE 2P LAN aims to push the
+light three main challenges as: (1) Commonsense                                                        boundaries of current agent planning capabilities,
+Reasoning: The agent must identify idle periods                                                        towards designing embodied agents that are capa-
+in the recipe as opportunities for multitasking, rec-                                                  ble of handling complex multitasking for industry-
+ognize action dependencies, and consider physical                                                      level tasks with time constraints between actions.
+constraints to construct feasible action sequences.                                                       In this study, we experiment with various sizes
+(2) Dynamic Local Planning: As recipe states                                                           of open-source models, such as Qwen2.5 (Qwen
+evolve based on executed actions, the agent must                                                       Team, 2024) and Llama3.1 (Dubey et al., 2024), as
+continuously determine executable actions at each                                                      well as closed-source models, including Gemini-
+timestep. Additionally, if the agent’s initial assump-                                                 1.5-Pro (Team et al., 2024) and GPT-4o (Ope-
+tions about properties or constraints do not align                                                     nAI, 2023). Our experiments reveal that GPT-4o
+with real-world conditions, it must dynamically                                                        achieves the highest success rate of only 21.5% and
+adapt its beliefs and revise the plan accordingly. (3)                                                 the main failure source is the violation of time con-
+Strategic Global Planning: The agent is required                                                       straints between actions. It suggests that current
+to allocate the use of physical objects and schedule                                                   LLMs fail to deliver feasible plans while attempting
+actions on a timeline to enable efficient multitask-                                                   efficient multitasking. We show that LLMs can de-
+ing. It is crucial to avoid planning multitasking                                                      liver feasible plans if time constraints between ac-
+in a purely local and greedy manner, as this could                                                     tions are absent. However, their efficiency still lags
+lead to violations of time constraints. It challenges                                                  significantly behind a simple heuristic method (§4).
+the agent to maximize efficiency while maintaining                                                     We also indicate that GPT-4o can trade efficiency
+feasibility from a global perspective.                                                                 for success rate if focusing solely on feasibility
+   Our benchmark provides a testbed for the effi-                                                      (§5.1). Overall, we demonstrate that current LLMs
+ciency of LLM-based agents, as they are approach-                                                      struggle to balance efficiency and feasibility when
+ing the upper limits of feasibility in current text-                                                   multitasking with time constraints. We further ana-
+based agent benchmarks (Sun et al., 2024) and                                                          lyze the commonsense reasoning, local planning,
+multitasking scenarios without time constraints                                                        and global planning capabilities of LLMs. By iso-
+between actions (Table 3). By introducing time                                                         lating each ability, we identify global planning as
+constraints between actions, our benchmark eval-                                                       the primary source of task failure and inefficient
+uates the planning abilities of agents to maintain                                                     multitasking (§5.3). Reasoning models excel un-
+a delicate balance between efficiency and feasibil-                                                    der time constraints compared with non-reasoning
+ity, rather than simply maximizing efficiency in a                                                     models but struggle with action concurrency (§ 6).
+                                                                                             4280
+   Our contributions are as follows:                     dar scheduling. TravelPlan (Xie et al., 2024a) deals
+• We introduce time constraints between actions to       with more complex commonsense constraints and
+restrict the time interval between steps for multitask   strict restrictions. T IME A RENA primarily evaluates
+planning. This property highlights a new perspec-        the multitasking capabilities of LLMs in scenarios
+tive to evaluate the planning abilities as balancing     without time constraints between actions. In con-
+efficiency and feasibility compared with existing        trast, our work focuses on assessing the ability to
+works focusing on feasibility solely.                    balance efficiency and feasibility under time con-
+• We construct a benchmark R ECIPE 2P LAN based          straints between actions. While T IME A RENA only
+on real-world recipes for multitask planning. It         analyzes task failures arising from a mix of com-
+challenges the model to allocate the usage of phys-      monsense reasoning, local planning, and global
+ical objects and schedule actions on the timeline to     planning, our work conducts extensive analysis to
+complete the recipes in the shortest time possible       isolate each challenge, identifying global planning
+without violating time constraints between actions.      as the primary bottleneck. This systematic analysis
+• Our results show that LLMs struggle with plan-         provides deeper insights into the complexities of
+ning multitasking under time constraints between         time-sensitive multitasking.
+actions, resulting in a low success rate for the task.   Planning Methods. Different methods use feed-
+This highlights the need for further development in      back and instructions in various ways. Open-loop
+temporal reasoning and global planning capabili-         methods such as Chain-of-Thought (Wei et al.,
+ties of LLM agents.                                      2022), least-to-most (Zhou et al., 2022) and plan-
+                                                         and-solve (Wang et al., 2023) plan the action se-
+2   Related Work
+                                                         quence without any feedback from the environment.
+                                                         This type of method is vulnerable to the hallucina-
+Planning Benchmarks. To evaluate the planning            tion of execution constraints and environment dy-
+abilities of LLM-based agents, researchers have          namics. Closed-loop methods such as ReAct (Yao
+proposed benchmarks across various domains such          et al., 2022b) and Reflexion (Shinn et al., 2024)
+as web browsing (Yao et al., 2022a; Zhou et al.,         only refine local actions, which might result in
+2023; Deng et al., 2024), tool usage (Qin et al.,        global failure due to time constraints. AdaPlan-
+2023; Li et al., 2023), and computer manipula-           ner (Sun et al., 2024) refines the entire plan based
+tion (Xie et al., 2024b; Gou et al., 2024). These        on environmental feedback and past failures.
+benchmarks assess an agent’s ability to execute a
+sequence of actions to achieve a general goal in a       3     R ECIPE 2P LAN
+partially observable environment (Liu et al., 2023;      R ECIPE 2P LAN evaluates the planning ability of
+Ma et al., 2024). However, these environments do         LLMs for efficient and feasible multitasking un-
+not account for the duration of each action. Ad-         der constraints. Specifically, we provide the model
+ditionally, they evaluate planning abilities based       with multiple goals that can be achieved by follow-
+solely on feasibility, without comparing the effi-       ing recipes. Each recipe A is represented as a lin-
+ciency of task completion between different agents.      ear sequence of actions A = (a0 , a1 , ..., an ), with
+Scheduling Benchmarks. Apart from the typi-              each action assigned a specific execution time tn .
+cal planning task in which the agent interacts with      The task is to plan the action sequence to complete
+a partially observable environment without prior         all goals in the shortest time possible, adhering
+knowledge of how to achieve the goal, the schedul-       to the properties and constraints detailed in §3.1
+ing task provides the agent with a complete de-          and §3.2. R ECIPE 2P LAN challenges the model to
+scription of the task. The objective is to deliver       apply commonsense reasoning to infer any unwrit-
+an action sequence from a small set of fixed ac-         ten constraints from the recipe, including action
+tions to meet the given objectives (Pinedo and Ha-       concurrency, action dependencies, and resource
+davi, 1992; Smith et al., 2000; Valmeekam et al.,        limitations while planning the action sequence to
+2024). Graph coloring (Stechly et al., 2024) investi-    minimize overall execution time.
+gates whether LLMs can self-critique their answers       3.1    Properties of Actions
+for violations of scheduling constraints. NATU -
+RAL P LAN assesses scheduling abilities in contexts      Action Duration. This refers to the time required
+such as trip planning, meeting planning, and calen-      for an agent to complete a specific action. For the
+                                                     4281
+

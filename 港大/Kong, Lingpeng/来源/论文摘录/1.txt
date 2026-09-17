@@ -1,0 +1,161 @@
+                                                                  Learning and Evaluating
+                                                                General Linguistic Intelligence
+
+                                                 Dani Yogatama, Cyprien de Masson d’Autume, Jerome Connor,
+                                                      Tomas Kocisky, Mike Chrzanowski, Lingpeng Kong,
+                                                Angeliki Lazaridou, Wang Ling, Lei Yu, Chris Dyer, Phil Blunsom
+                                                              DeepMind, London, United Kingdom
+                                             {dyogatama,cyprien,jeromeconnor,tkocisky,chrzanowskim}@google.com
+                                               {lingpenk,angeliki,lingwang,leiyu,cdyer,pblunsom}@google.com
+
+
+
+
+arXiv:1901.11373v1 [cs.LG] 31 Jan 2019
+                                                                                          Abstract
+                                                   We define general linguistic intelligence as the ability to reuse previously acquired knowl-
+                                               edge about a language’s lexicon, syntax, semantics, and pragmatic conventions to adapt to new
+                                               tasks quickly. Using this definition, we analyze state-of-the-art natural language understand-
+                                               ing models and conduct an extensive empirical investigation to evaluate them against these
+                                               criteria through a series of experiments that assess the task-independence of the knowledge
+                                               being acquired by the learning process. In addition to task performance, we propose a new
+                                               evaluation metric based on an online encoding of the test data that quantifies how quickly
+                                               an existing agent (model) learns a new task. Our results show that while the field has made
+                                               impressive progress in terms of model architectures that generalize to many tasks, these models
+                                               still require a lot of in-domain training examples (e.g., for fine tuning, training task-specific
+                                               modules), and are prone to catastrophic forgetting. Moreover, we find that far from solving
+                                               general tasks (e.g., document question answering), our models are overfitting to the quirks of
+                                               particular datasets (e.g., SQuAD). We discuss missing components and conjecture on how to
+                                               make progress toward general linguistic intelligence.
+
+
+
+                                         1    Introduction
+                                         Advances in deep learning techniques (e.g., attention mechanisms, memory modules, and
+                                         architecture search) have considerably improved natural language processing (NLP) models on
+                                         many important tasks. For example, machine performance on both Chinese–English machine
+                                         translation and document question answering on the Stanford question answering dataset
+                                         (SQuAD; Rajpurkar et al., 2016) has been claimed to have surpassed human levels (Hassan
+                                         et al., 2018; Devlin et al., 2018). While the tasks that initiated learning-based NLP models were
+                                         motivated by external demands and are important applications in their own right (e.g., machine
+                                         translation, question answering, automatic speech recognition, text to speech, etc.), there is a
+                                         marked and troubling tendency for recent datasets to be set up to be easy to solve with little in
+                                         the way of generalization or abstraction; for instance, ever larger datasets created by crowd-sourcing
+                                         processes that may not well approximate the natural distributions they are intended to span,
+                                         although there are some notable counter-examples (Kwiatkowski et al., 2019). When there exist
+                                         multiple datasets that are representative of the exact same task from different domains (e.g.,
+                                         various question answering datasets), we rarely evaluate on all of them. This state of affairs
+                                         promotes development of models that only work well for a specific purpose, overestimates our
+                                         success at having solved the general task, fails to reward sample efficient generalization that
+                                         requires the ability to discover and make use of rich linguistic structures, and ultimately limits
+                                         progress.
+
+
+                                                                                              1
+    Despite these methodological difficulties, recent breakthroughs demonstrate that models that
+are pretrained on a large unlabeled corpus perform well on many language understanding tasks
+with minimal modifications (Radford et al., 2018; Peters et al., 2018; Devlin et al., 2018). These
+models are trained on a large corpus in an unsupervised fashion on tasks such as language
+modeling (predicting the next word given a context), masked language modeling (predicting a
+missing word in a sentence from the context), and next sentence predictions (predicting whether
+two sentences are consecutive sentences). The models can then be used on various NLP tasks
+by adding an extra task-specific final layer and fine tuning on supervised data for the task of
+interest. Variants of these models achieve impressive results on the GLUE benchmark (sentence
+and sentence pair classification tasks; Wang et al., 2018) and the SQuAD question answering
+dataset, showing the clear benefit of, and significant progress on, transfer learning in NLP.
+    Another promising avenue is to train a model on multiple tasks simultaneously. McCann et al.
+(2018) train a question-answering language model on many different NLP tasks (e.g., machine
+translation, summarization, sentiment analysis, etc.) by formulating every task as question
+answering in order to make the input and output of the model be consistent. This model can
+then be used to perform multiple tasks by asking different questions at test time. While their
+overall multitask results are still below task-specific models, it represents a prototype for models
+of general linguistic intelligence.
+    In order to make progress toward models that manifest general linguistic intelligence, we
+argue for an evaluation paradigm that rewards abilities to (i) deal with the full complexity
+of natural language across a variety of tasks, (ii) effectively store and reuse representations,
+combinatorial modules (e.g, which compose words into representations of phrases, sentences,
+and documents), and previously acquired linguistic knowledge to avoid catastrophic forgetting
+(McCloskey & Cohen, 1989; French, 1999), and (iii) adapt to new linguistic tasks in new environ-
+ments with little experience (i.e., robustness to domain shifts). This is inspired by the evolving
+artificial general intelligence task suites that are used to develop generic exploration, planning,
+and reasoning abilities in agents that learn to interact with simulated visual environments (Beattie
+et al., 2016; Brockman et al., 2016). Here, we focus on language processing modules that learn
+using primarily supervised and unsupervised methods from static corpora. We leave extensions
+to learning through interactions with simulated linguistic environments to future work.
+    In this paper we analyze the capabilities of previously proposed algorithms as models of
+general linguistic intelligence. To directly quantify how quickly an existing model adapts to a
+new task we propose a new evaluation metric (§4) based on online (prequential) coding (Blier &
+Ollivier, 2018). This evaluation considers the number of task-specific training examples needed to
+reach high performance, thus rewarding sample efficiency. Our experiments show that existing
+models still require considerable fine tuning on each task before they perform well (§5.1), and
+although they significantly benefit from transfer learning on other datasets from related tasks
+(§5.2), they generalize poorly to different datasets from the same task without fine tuning (§5.3),
+and suffer from catastrophic forgetting when trained on multiple datasets and tasks in a continual
+learning setup (§5.4). We discuss the implications of our findings and conclude by outlining
+potential directions toward general linguistic intelligence models (§6).
+
+
+2     Tasks
+In this section, we describe the tasks and datasets that we consider in our experiments. We
+evaluate many of our models on two main tasks: reading comprehension on SQuAD 1.11
+    1 https://rajpurkar.github.io/SQuAD-explorer/
+
+
+
+
+                                                    2
+(Rajpurkar et al., 2016) and Multi Genre Natural Language Inference (MNLI2 ; Williams et al.,
+2018). However, we also use the following tasks and datasets for training and evaluation (e.g., in
+a multitask setup, for pretraining, and for evaluation on out-of-domain genre).
+
+Reading Comprehension. We use two additional reading comprehension datasets: TriviaQA3
+(Joshi et al., 2017) and QuAC4 (Choi et al., 2018) in our experiments. While SQuAD 1.1, TriviaQA,
+and QuAC are from the same task, they have different characteristics. SQuAD1.1 is a reading
+comprehension dataset constructed from Wikipedia articles. It includes almost 90,000 training
+examples and 10,000 validation examples. TriviaQA is a dataset with question-answer pairs
+written by trivia enthusiasts and evidence collected retrospectively from Wikipedia and the web.
+We use the Web section of TriviaQA that contains 76,000 training examples and 300 verified
+validation examples. QuAC is an information-seeking dialog-style dataset where a student asks
+questions about a Wikipedia article and a teacher answers with a short excerpt from the article.
+It has 80,000 training examples and approximately 7,000 validation examples.
+
+Semantic Role Labeling. We consider a question-answer driven semantic role labeling task
+from FitzGerald et al. (2018), where semantic role labeling is presented as a span prediction
+problem. Given a sentence and a predicate-driven wh-question, the goal is to predict the start
+and end indices of the answer in the sentence. There are around 200,000 training questions and
+25,000 test questions in the dataset.5
+
+Relation Extraction. Relation extraction is the task of extracting factual knowledge from a
+corpus. Levy et al. (2017) show that it can be formulated as a question answering problem by
+associating questions with relation slots. We use their zero-shot relation extraction dataset6
+which consists of over 900,000 training examples and almost 5,000 test examples.
+
+Natural Language Inference Natural language inference is a sentence pair classification prob-
+lem where the goal is to predict relationships between two sentences from entail, contradict,
+and neutral. In addition to the MNLI dataset, we also use the Stanford Natural Language
+Inference (SNLI7 ; Bowman et al., 2015) dataset. MNLI (SNLI) contains 400,000 (550,000) training
+pairs and 20,000 (10,000) test pairs respectively.
+
+
+3     Models
+We focus on two classes of models: self-attention models (i.e., Transformer; Vaswani et al., 2017)
+and recurrent neural networks.
+    For self-attention models, we start from a pretrained BERT model (Devlin et al., 2018),8
+which has been shown to be state-of-the-art on many natural language processing tasks. BERT
+is a big Transformer model (Vaswani et al., 2017) which is trained on two unsupervised tasks:
+masked language modeling and next sentence prediction. Devlin et al. (2018) also show that
+these unsupervised pretraining tasks result in better models compared to the standard language
+modeling task (i.e., next word prediction). We use the BERTbase model which has 12 Transformer
+    2 https://www.nyu.edu/projects/bowman/multinli/
+    3 http://nlp.cs.washington.edu/triviaqa/
+    4 http://quac.ai/
+    5 http://qasrl.org/
+    6 http://nlp.cs.washington.edu/zeroshot/
+    7 https://nlp.stanford.edu/projects/snli/
+    8 https://github.com/google-research/bert
+
+
+
+
+                                                      3
+

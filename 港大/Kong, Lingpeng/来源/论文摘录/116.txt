@@ -1,0 +1,208 @@
+                                         Published as a conference paper at ICLR 2019
+
+
+
+
+                                         VARIATIONAL S MOOTHING IN R ECURRENT N EURAL
+                                         N ETWORK L ANGUAGE M ODELS
+                                          Lingpeng Kong, Gabor Melis, Wang Ling, Lei Yu, Dani Yogatama
+                                          DeepMind
+                                          {lingpenk, melisgl, lingwang, leiyu, dyogatama}@google.com
+
+
+
+                                                                                     A BSTRACT
+
+
+
+
+arXiv:1901.09296v1 [cs.CL] 27 Jan 2019
+                                                  We present a new theoretical perspective of data noising in recurrent neural network
+                                                  language models (Xie et al., 2017). We show that each variant of data noising is an
+                                                  instance of Bayesian recurrent neural networks with a particular variational distribu-
+                                                  tion (i.e., a mixture of Gaussians whose weights depend on statistics derived from
+                                                  the corpus such as the unigram distribution). We use this insight to propose a more
+                                                  principled method to apply at prediction time and propose natural extensions to
+                                                  data noising under the variational framework. In particular, we propose variational
+                                                  smoothing with tied input and output embedding matrices and an element-wise
+                                                  variational smoothing method. We empirically verify our analysis on two bench-
+                                                  mark language modeling datasets and demonstrate performance improvements over
+                                                  existing data noising methods.
+
+
+
+                                         1   I NTRODUCTION
+
+                                         Recurrent neural networks (RNNs) are state of the art models in various language processing tasks.
+                                         However, their performance heavily depends on proper regularization at training time (Melis et al.,
+                                         2018b; Merity et al., 2018). The two predominant approaches to regularize RNNs are dropout
+                                         (randomly zeroing out neurons; Srivastava et al., 2014) and `2 regularization (applying `2 penalty
+                                         to model parameters; Hoerl & Kennard, 1970). Recently, Xie et al. (2017) proposed data noising
+                                         to regularize language models. Their method is formulated as a data augmentation method that
+                                         randomly replaces words with other words drawn from a proposal distribution. For example, we can
+                                         use the unigram distribution which models the number of word occurrences in the training corpus, or
+                                         a more sophisticated proposal distribution that takes into account the number of bigram types in the
+                                         corpus. Data noising has been shown to improve perplexity on small and large corpora, and that this
+                                         improvement is complementary to other regularization techniques and translates to improvements on
+                                         downstream models such as machine translation.
+                                         Xie et al. (2017) derived connections between data noising and smoothing in classical n-gram
+                                         language models, which we review in §2. In smoothing (Chen & Goodman, 1996), since empirical
+                                         counts for unseen sequences are zero, we smooth our estimates by a weighted average of higher order
+                                         and lower order n-gram models. There are various ways to choose the weights and the lower order
+                                         models leading to different smoothing techniques, with Kneser-Ney smoothing widely considered to
+                                         be the most effective. Xie et al. (2017) showed that the pseudocounts of a noised data correspond to a
+                                         mixture of different n-gram models.
+                                         In this paper, we provide a new theoretical foundation for data noising and show that it can be
+                                         understood as a form of Bayesian recurrent neural network with a particular variational distribution
+                                         (§4.1 and §4.2). Our derivation relates data noising to dropout and variational dropout (Gal &
+                                         Ghahramani, 2016b), and naturally leads to a data dependent `2 regularization coefficient. We use
+                                         this insight to arrive at a more principled way to do prediction with data noising—i.e., by taking the
+                                         mean of the variational distribution, as opposed to the mode—and propose several extensions under
+                                         the variational framework in §4.3. Specifically, we show how to use variational smoothing with tied
+                                         input and output embeddings and propose element-wise smooothing. In §5, we validate our analysis
+                                         in language modeling experiments on the Penn Treebank (Marcus et al., 1994) and Wikitext-2 (Merity
+                                         et al., 2017) datasets.
+
+
+                                                                                            1
+Published as a conference paper at ICLR 2019
+
+
+
+
+2    R ECURRENT N EURAL N ETWORK L ANGUAGE M ODELS
+We consider a language modeling problem where the goal is to predict the next word xt given
+previously seen context words x<t = {x0 , x1 , . . . , xt−1 }. Let W be parameters of a recurrent neural
+network, and p(xt | x<t ; W) = RNN(x<t ; W). Following previous work in language modeling
+(Melis et al., 2018b; Merity et al., 2018), we use LSTM (Hochreiter & Schmidhuber, 1997) as our
+RNN function, although other variants such as GRU (Cho et al., 2014) can be used as well.
+Given a training corpus D = {x0 , . . . , xT }, the likelihood we would like to maximize is:
+                                                  T
+                                                  Y
+                                   L(W; D) =            p(xt | x<t ; W).
+                                                  t=1
+
+
+Directly optimizing the (log) likelihood above often leads to overfitting. We typically augment the
+objective function with a regularizer (e.g., `2 regularizer where R(W) = λkWk22 ) or use dropout by
+randomly zeroing out neurons (Srivastava et al., 2014).
+
+Data noising as smoothing. Xie et al. (2017) proposed a method to regularize recurrent neural
+network language models by noising the data. For each input word i in x<t (sometimes also the
+corresponding output word), we replace it with another word sampled from a proposal distribution T
+with probability γi . They introduced various methods on how to choose γi and T.
+For example, if γi = γ for all i ∈ V and T is the unigram distribution of words in the corpus,
+ET [p(xt | noiseγ,T (x<t ); W)] corresponds to a mixture of n-gram models with fixed weights (i.e.,
+linear interpolation smoothing).
+Another option is to set γi = γ distinct(i,•)
+                                  count(i) , where distinct(i, •) denotes the number of distinct continu-
+ations preceded by word i (i.e., the number of bigram types that has i as the first word), and count(i)
+denotes the number of times i appears in the corpus. For this choice of γi , when T is the unigram
+distribution, the expectation corresponds to absolute discounting; whereas if Ti = P distinct(•,i)
+                                                                                          v∈V distinct(•,v)
+and we replace both the input and output words, it corresponds to bigram Kneser-Ney smoothing. We
+summarize their proposed methods in Table 1.
+At prediction (test) time, Xie et al. (2017) do not apply any noising and directly predict p(xt |
+x<t ; W). They showed that a combination of smoothing and dropout achieves the best result on their
+language modeling and machine translation experiments.
+
+                           Name             Noised                     γi                   Tx
+                      Blank noising               x0                    γ            T“_” = 1
+                   Linear interpolation           x0                    γ            unigram
+                  Absolute discounting            x0       γ distinct(i,•)
+                                                               count(i)              unigram
+                       Kneser-Ney            x0 , x1       γ distinct(i,•)
+                                                               count(i)
+                                                                             P distinct(•,i)
+                                                                              v∈V distinct(•,v)
+
+
+Table 1: Variants of data noising techniques proposed in Xie et al. (2017) for context word x0 and
+target word x1 . Blank noising replaces an input word with a blank word, denoted by “_”.
+
+
+3    BAYESIAN R ECURRENT N EURAL N ETWORKS
+In Bayesian RNNs, we define a prior over our parameters W and consider the following maximization
+problem:
+                                          T
+                                        Z Y
+                              L(D) =             p(xt | x<t ; W)p(W)dW .
+                                           t=1
+
+A common prior is the standard normal distribution p(W) = N(0, I).
+
+
+                                                       2
+Published as a conference paper at ICLR 2019
+
+
+
+
+For recurrent neural networks, the posterior over W given the data D is intractable. We approximate
+the posterior with a variational distribution q(W), and minimize the KL divergence between the
+variational distribution and the true posterior by:
+                                                    Z
+  KL(q(W)kp(W | D)) = KL(q(W)kp(W)) − log p(D | W)q(W)dW + constant
+                                                                T Z
+                                                                X
+                                = KL(q(W)kp(W)) −                       log p(xt | x<t ; W)q(W)dW + constant
+                                                                t=1
+The integral is often approximated with Monte Carlo integration with one sample W̃ ∼ q(W):1
+                  Z
+                     log p(xt | x<t ; W)q(W)dW ≈ log p(xt | x<t ; W̃)q(W̃)dW̃ .             (1)
+
+At test time, for a new sequence y0 , . . . , yT , we can either set W to be the mean of q(W) or sample
+                                               PS
+and average the results: p(yt | y<t ) = S1 s=1 p(yt | y<t ; W̃s ), where S is the number of samples
+and W̃s ∼ q(W).
+
+4       VARIATIONAL S MOOTHING
+We now provide theoretical justifications for data smoothing under the variational framework. In
+a recurrent neural network language model, there are three types of parameters: an input (word)
+embedding matrix E, an LSTM parameter matrix R, and an output embedding matrix O that produces
+logits for the final softmax function. We have W = {E, R, O}.
+
+4.1       L INEAR INTERPOLATION SMOOTHING .
+
+We first focus on the simplest data noising method—linear interpolation smoothing—and show how
+to extend it to other data noising methods subsequently.
+
+Word embedding matrix E. Denote the word vector corresponding to word i ∈ V in the input
+embedding matrix E by ei . We obtain a similar effect to linear interpolation smoothing by using the
+following mixture of Gaussians variational distribution for ei :
+                                                       X
+                 ei ∼ q(ei ) = (1 − γ)N(ei , σI) + γ       Uv N(ev , σI)
+                                                                      v∈V
+                                                                             X
+                                    = (1 − γ + γUi )N(ei , σI) + γ                   Uv N(ev , σI),       (2)
+                                                                            v6=i∈V
+where Uv is the unigram probability of word v and σ is small. In other words, with probability γUv ,
+we replace the embedding ei with another embedding sampled from a normal distribution centered at
+ev .
+Note that noising the input word is equivalent to choosing a different word embedding vector to be
+used in a standard recurrent neural network. Under the variational framework, we sample a different
+word embedding matrix for every sequence t at training time, since the integral is approximated with
+Monte Carlo by sampling from q(ei ) (Eq. 1).
+The above formulation is related to word embedding dropout (Dai & Le, 2015; Iyyer et al., 2015;
+Kumar et al., 2016), although in word embedding dropout q(ei ) = (1 − γ)N(ei , σI) + γN(0, σI).
+
+KL term. For p(ei ) = N(0, I), we use Proposition 1 in Gal & Ghahramani (2016a) and approxi-
+mate the KL divergence between a mixture of Gaussians q(ei ) and p(ei ) as:
+                                X θi
+                                     v
+                                        e> ev + tr(σI) − V (1 + log 2π) − log |σI|
+                                                                                   
+          KL(q(ei )kp(ei )) ≈ λ
+                                    2 v
+                                         v∈V
+                                          X θi
+                                                v
+                                    =λ              kev k22 + constant,
+                                               2
+                                         v∈V
+    1
+        In the followings, we use x̃ to denote a sample from a distribution q(x).
+
+
+                                                            3
+

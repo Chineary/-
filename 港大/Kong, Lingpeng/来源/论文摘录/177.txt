@@ -1,0 +1,190 @@
+                                         Published in Transactions on Machine Learning Research (08/2026)
+
+
+
+
+                                         Structuring Semantic Embeddings for Principle Evaluation:
+                                         A Prototype-Guided Contrastive Learning Approach
+
+                                         Che Shen                                                                               shenche@connect.hku.hk
+                                         Department of Computer Science
+                                         The University of Hong Kong, Hong Kong, China
+
+                                         Junwei Su*                                                                              junweisu.cs@gmail.com
+                                         School of Artificial Intelligence and Data Science
+                                         University of Science and Technology of China, Hefei, Anhui, China
+
+
+
+
+arXiv:2608.15224v2 [cs.LG] 22 Aug 2026
+                                         Lingpeng Kong                                                                                    lpk@cs.hku.hk
+                                         Department of Computer Science
+                                         The University of Hong Kong, Hong Kong, China
+
+                                         Chuan Wu*                                                                                       cwu@cs.hku.hk
+                                         Department of Computer Science
+                                         The University of Hong Kong, Hong Kong, China
+
+
+                                         Reviewed on OpenReview: https: // openreview. net/ forum? id= nZCPG2Aarv
+
+
+
+                                                                                           Abstract
+
+                                                  Reliable post-hoc evaluation asks whether already generated text satisfies a target criterion
+                                                  after generation. In this paper we study a focused frozen-embedding setting using principle-
+                                                  evaluation proxy tasks: toxicity detection, fine-grained emotion categorization, and ordinal
+                                                  review rating. General-purpose text embeddings are widely deployed for such tasks, but
+                                                  broad semantic similarity can place semantically similar yet task-distinct examples in over-
+                                                  lapping regions of the representation space. We introduce Prototype-Guided Contrastive
+                                                  Learning (PGCL), a prototype-guided geometric regularization module built on top of frozen
+                                                  text embeddings. The module combines a semantic stream, a prototype-anchor attention
+                                                  stream, supervised contrastive learning, offset-based prototype-margin regularization, and
+                                                  stream regularization to produce a compact task-adapted representation without updat-
+                                                  ing the base encoder. Controlled experiments show that PGCL improves over raw frozen
+                                                  embeddings on all three datasets and gives the clearest direct-baseline margin on Amazon-
+                                                  Reviews, while remaining competitive with strong direct frozen metric-learning baselines on
+                                                  GoEmotions and ToxicComment. We also add supervised residual-adapter, encoder-LoRA,
+                                                  full fine-tuning, objective ablation, sensitivity, and fully logged few-shot LLM protocol di-
+                                                  agnostics to define the boundary of the claim. The theoretical analysis is revised as a
+                                                  sufficient-condition account for prototype-margin behavior under explicit assumptions in
+                                                  the prototype-mapping space, rather than as an unconditional training or final-embedding
+                                                  separation guarantee.
+
+
+                                         1    Introduction
+
+                                         Capturing task-relevant distinctions in text representations remains a fundamental challenge for post-hoc
+                                         evaluation and natural language understanding (Su & Wu, 2025b; Weidinger et al., 2021; Bommasani et al.,
+                                         2021; Hendrycks et al., 2023). While much of the alignment literature focuses on steering model behavior
+                                             ∗: corresponding author
+
+
+                                                                                                1
+Published in Transactions on Machine Learning Research (08/2026)
+
+
+
+
+during text generation (Christiano et al., 2017; Ouyang et al., 2022; Bai et al., 2022), an equally important
+problem is how to determine whether a generated text satisfies a target criterion after it has been produced.
+This problem, commonly referred to as post-hoc evaluation, is central to applications such as content moder-
+ation, safety auditing, rating prediction, and large-scale monitoring of model outputs (Gehman et al., 2020;
+Rae et al., 2021). In this paper, we study a narrower setting than broad alignment evaluation: lightweight
+classification or rating tasks that serve as principle-evaluation proxies. The evaluated datasets cover toxicity
+detection, selected emotion categories, and ordinal review ratings; they are useful probes of representation
+quality, but they should not be interpreted as direct measurements of general safety, fairness, helpfulness, or
+human-value adherence.
+At scale, post-hoc evaluation is typically built on high-dimensional text embeddings (Reimers & Gurevych,
+2019; Neelakantan et al., 2022). Recent advances have produced large general-purpose embedding models,
+such as NV-Embed and GTE-style models, with billions of parameters (Li et al., 2023; Lee et al., 2024).
+Trained on diverse corpora, these models aim to learn broadly reusable semantic representations and achieve
+strong performance on broad benchmarks such as MTEB (Muennighoff et al., 2023). Consequently, they are
+widely used as frozen feature extractors for downstream evaluation tasks.
+
+Limitations of Existing Methods Despite their strong general-purpose performance, these embedding
+models are not designed to resolve every fine-grained distinction required by a downstream evaluation task.
+Their objective of capturing broad semantic similarity can lead to representations that smooth over subtle
+but critical differences between texts. In many practical scenarios, texts can be highly similar at the lexical
+and semantic levels while reflecting different evaluation targets. For example, in e-commerce moderation,
+the reviews “The package never arrived, terrible seller” and “The package never arrived, terrible courier”
+share nearly identical surface semantics but correspond to distinct targets. Similarly, in content safety, a
+non-toxic expression such as “I absolutely hate this garbage situation” can be lexically similar to a toxic
+attack like “I absolutely hate you, you are garbage” (Gehman et al., 2020; Welbl et al., 2021). Standard
+embedding models—including those refined via unsupervised contrastive learning such as SimCSE (Gao
+et al., 2021)—can map such examples to overlapping regions of the representation space. We refer to this
+phenomenon as representational entanglement: semantically similar texts that correspond to different task
+labels are not cleanly organized according to the downstream label structure. This overlap can make frozen
+features less convenient for lightweight downstream probes and can obscure the subtle, context-dependent
+signals required for accurate post-hoc evaluation (Devlin et al., 2019; Zhou & Srikumar, 2022).
+
+Challenges for Tackling the Limitations Addressing representational entanglement is challenging.
+Two common approaches are (i) adapting the embedding model via fine-tuning or parameter-efficient meth-
+ods, or (ii) bypassing embeddings altogether by leveraging large language models (LLMs) through few-shot
+prompting (Qiu et al., 2020; Brown et al., 2020). Fine-tuning-based methods, including Parameter-Efficient
+Fine-Tuning (PEFT) techniques such as LoRA (Hu et al., 2022), can be effective when raw text and training
+compute are available, and we report separate adaptation diagnostics in the revised experiments. They
+nevertheless change the deployment setting relative to frozen-embedding post-hoc evaluation. On the other
+hand, leveraging in-context learning (ICL) with large LLMs for evaluation introduces nontrivial protocol,
+latency, and cost considerations (Dong et al., 2024). Using generative models for discriminative tasks can be
+difficult to deploy at scale (Zheng et al., 2023; Wang et al., 2023). Taken together, these considerations mo-
+tivate lightweight methods that can improve a frozen embedding store through a small task-specific module,
+while keeping the base encoder fixed.
+
+Proposed Method To address this gap, we propose Prototype-Guided Contrastive Learning (PGCL), a
+lightweight and plug-and-play framework for task-adapting frozen text embeddings for post-hoc evaluation
+proxy tasks. PGCL operates on top of frozen base embeddings and projects them into a low-dimensional,
+task-specific subspace through an attention-based transformation. In this subspace, we introduce a set of
+learnable prototype anchors that serve as class-level reference points for the evaluated labels. To reduce label-
+relevant entanglement in the frozen-feature setting, we further design a geometry-aware contrastive objective
+augmented with an offset penalty. This objective encourages texts associated with the same label to cluster
+near their corresponding anchors, while increasing the relative margin from competing anchors. By adding
+
+
+                                                       2
+Published in Transactions on Machine Learning Research (08/2026)
+
+
+
+
+    Input and frozen encoder: text xi → frozen encoder E(·) → zi ∈ R1024 .
+     Semantic stream           zi → MLPsem → si preserves task-relevant semantic context.
+     Prototype stream          zi , prototype anchors {ck }C
+                                                           k=1 → query/key/value attention → mi .
+     Fusion                    ẽi = αsi + (1 − α)mi , then ei = ẽi /∥ẽi ∥2 .
+     Losses                    supervised contrastive loss on ei ; offset margin on (mi , cyi ); orthogonal-
+                               ity between si and mi ; optional ordinal magnitude loss on mi .
+
+Figure 1: Architecture and loss diagram for PGCL. The base text encoder is frozen. The learnable module
+contains a semantic MLP stream, a prototype-anchor attention stream, fusion and normalization, and the
+loss terms used for prototype-guided regularization.
+
+
+task-relevant geometric regularization to fixed representations, PGCL produces task-adapted embeddings
+for lightweight post-hoc evaluation.
+
+Contributions Our contributions are threefold. First, we propose a lightweight and modular architecture
+that maps general-purpose text embeddings into a structured subspace for principle-evaluation proxy tasks,
+without updating the underlying encoder. Second, we introduce a prototype-guided training objective that
+combines supervised contrastive learning, offset-based prototype margins, and stream regularization; our
+theory is presented as a sufficient-condition analysis of the geometry encouraged by this objective. Third,
+we add controlled comparisons against direct metric-learning baselines (SupCon projection head, center
+loss, triplet loss, prototype classifier, ArcFace, and CosFace), supervised adaptation diagnostics, objective
+ablations and sensitivity analyses, and a fully logged local few-shot LLM protocol. The revised evidence
+supports a bounded empirical claim: PGCL improves over raw embeddings across the evaluated proxy tasks
+and provides a favorable same-protocol comparison against direct frozen metric-learning baselines, with
+its clearest margin on AmazonReviews and smaller margins on GoEmotions and ToxicComment; encoder-
+updating adaptation methods remain a distinct setting.
+
+
+2   Related Work
+
+General-Purpose Text Embeddings and Subspace Learning. Massive general-purpose embedding
+models have become the foundational paradigm for text representation. However, while these models excel
+at capturing broad semantic context, they can conflate subtle task-specific distinctions (Devlin et al., 2019;
+Zhou & Srikumar, 2022). To extract task-relevant features from these entangled spaces, prior works have
+explored subspace learning and task-specific projections (Fukumizu et al., 2003; Edelman & Intrator, 1997;
+Peng et al., 2019). Yet, general dimensionality reduction techniques, such as UMAP (McInnes et al., 2018)
+or Spectral Embedding (Von Luxburg, 2007), are primarily optimized for structural visualization rather than
+supervised task-specific representation learning. Similarly, while geometric embeddings successfully structure
+representation spaces for tasks like knowledge graph querying (Ren et al., 2020; Su et al., 2023; 2024b;a; 2025;
+Liu et al., 2026; Su & Wu, 2025a), they are not designed for the frozen text-embedding post-hoc evaluation
+setting studied here. Our framework addresses this by learning a structured, low-dimensional subspace on
+top of fixed embeddings and evaluating it through downstream classifiers.
+
+Metric Learning and Prototype-Based Classification. PGCL is closely related to supervised metric
+learning rather than being an unrelated alternative. Contrastive and supervised contrastive objectives en-
+courage same-label examples to cluster while separating different labels (Hadsell et al., 2006; Chen et al.,
+2020; Khosla et al., 2020; Su & Wu, 2024; Su et al., 2026). Large-margin metric learning and triplet-style
+objectives impose relative distance constraints (Weinberger & Saul, 2009; Schroff et al., 2015). Center loss
+and prototypical methods introduce class-level anchors or prototypes (Wen et al., 2016; Snell et al., 2017),
+while angular-margin classifiers such as CosFace and ArcFace improve separation on normalized representa-
+tions (Wang et al., 2018; Deng et al., 2019). PGCL belongs to this broader family. Its specific contribution is
+to study a frozen-text-embedding setting with a dual stream projection, prototype-anchor attention, offset-
+based prototype margins, and stream regularization. For this reason, the revised experiments compare
+
+
+                                                         3
+

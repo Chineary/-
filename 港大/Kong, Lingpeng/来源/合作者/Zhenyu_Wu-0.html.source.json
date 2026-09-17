@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/numbmelon",
+  "date": "2026-09-17",
+  "status": "失败: Command failed: curl -L --max-time 40 --retry 1 -sS -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/来源/合作者/Zhenyu_Wu-0.html https://github.com/numbmelon\ncurl: (28) Operation timed out after 40002 milliseconds with 0 bytes received\ncurl: (28) Operation timed out after 40002 milliseconds with 0 bytes received\n",
+  "file": "合作者/Zhenyu_Wu-0.html"
+}

@@ -1,0 +1,179 @@
+           An Empirical Revisiting of Linguistic Knowledge Fusion in
+                       Language Understanding Tasks
+
+    Changlong Yu1 Tianyi Xiao1 Lingpeng Kong2 Yangqiu Song1 Wilfred Ng1
+            1
+              HKUST, Hong Kong 2 The University of Hong Kong, Hong Kong
+        {cyuaq, yqsong, wilfred}@cse.ust.hk, txiao@connect.ust.hk, lpk@cs.hku.hk
+
+
+
+                      Abstract                                 However, the concerns about the effect or vi-
+                                                            ability of linguistic knowledge have been raised.
+    Though linguistic knowledge emerges during
+                                                            On the one hand, the performance gains highly
+    large-scale language model pretraining, recent
+    work attempt to explicitly incorporate human-           rely on the availability of human-annotated depen-
+    defined linguistic priors into task-specific fine-      dency parsers (Sachan et al., 2021) or oracle se-
+    tuning. Infusing language models with syn-              mantic graphs (Prange et al., 2022), which limits
+    tactic or semantic knowledge from parsers has           the real-world applications. Developing accurate
+    shown improvements on many language under-              semantic graph parsers is yet challenging (Oepen
+    standing tasks. To further investigate the ef-          et al., 2019; Bai et al., 2022). On the other hand,
+    fectiveness of structural linguistic priors, we         incorporating trees induced from pretrained lan-
+    conduct empirical study of replacing parsed
+                                                            guage models (Wu et al., 2020) can outperform
+    graphs or trees with trivial ones (rarely carry-
+    ing linguistic knowledge e.g., balanced tree)           the ones fused with dependency-parsed trees for
+    for tasks in the GLUE benchmark. Encod-                 aspect-level sentiment analysis (Dai et al., 2021).
+    ing with trivial graphs achieves competitive            This discovery is in line with the similar findings
+    or even better performance in fully-supervised          of trivial trees for tree-LSTM encoders in sequence
+    and few-shot settings. It reveals that the gains        modeling tasks (Shi et al., 2018). In this work,
+    might not be significantly attributed to explicit       we push the envelop and answer the following two
+    linguistic priors but rather to more feature in-
+                                                            questions. Do knowledge fusion methods in Wu
+    teractions brought by fusion layers. Hence
+    we call for attention to using trivial graphs as        et al. (2021) benefit from trivial graphs that contain
+    necessary baselines to design advanced knowl-           no linguistic information? If that’s the case, where
+    edge fusion methods in the future.                      might the performance gains come from?
+                                                               With the above questions, we empirically re-
+1   Introduction
+                                                            visit the effectiveness of linguistic knowledge fu-
+Recently large-scale pretrained language mod-               sion in language understanding tasks. Motivated
+els (Devlin et al., 2019; Liu et al., 2019; Raffel          by Shi et al. (2018), we compare the perfor-
+et al., 2020) have shown to gain linguistic knowl-          mance between original dependency-parsed trees
+edge from unlabeled corpus and achieve strong per-          and balanced trees for syntax fusion, and com-
+formance on many downstream natural language                pare the results between parsed semantic graphs
+processing (NLP) tasks. Though probing analysis             and sequential graphs for semantic fusion. To
+indicate that, to some extent, they can implicitly          our surprise, trivial graphs outperform syntactic
+capture syntactic or semantic structures (Hewitt            trees or semantic graphs in full-supervised set-
+and Manning, 2019; Goldberg, 2019; Tenney et al.,           ting and achieve competitive results in few-shot
+2018; Hou and Sachan, 2021), whether they can               setting. All the evidence again shows that the
+further benefit from more explicit linguistic knowl-        linguistic inductive bias might not be the ma-
+edge remains an open problem. Attempts have                 jor contributor of consistent improvements over
+been made to inject syntactic biases into language          baselines. Additional analysis gives some clues
+model pretraining (Kuncoro et al., 2020; Wang               that the possible reasons are extra model param-
+et al., 2021; Xu et al., 2021b) or infuse finetun-          eters and feature interactions from fusion mod-
+ing with semantic information (Zhang et al., 2020a;         ules. This work encourages future research to add
+Wu et al., 2021), and positive results are reported         trivial graphs as necessary baselines when design-
+on downstream tasks.                                        ing more advanced knowledge fusion methods for
+                                                         10064
+     Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 10064–10070
+                         December 7-11, 2022 ©2022 Association for Computational Linguistics
+downstream tasks. Our experimental code is avail-                                                           
+
+able at https://github.com/HKUST-KnowComp/                                                          
+                                                                                                                  
+revisit-nlu-linguistic-knowledge.                                              
+                                                                                                            
+                                                                                                               
+
+2   Study Design                                                                                                
+                                                                                                          
+                                                                                                         
+                                                                                                
+In this section, we briefly introduce two linguistic                           
+                                                                                                                         
+                                                                                                               
+graphs, i.e., syntactic dependency trees and seman-
+tic graphs. As a comparison, we manually con-                 Figure 1: An example of dependency tree (blue) and
+struct two trivial graphs to infuse with task-specific        DM semantic graph (red).
+finetuning.
+
+2.1 Linguistic Graph                                          consistent improvements over RoBERTa (Liu et al.,
+Graphs have intuitively represented various lin-              2019) baselines on the GLUE (Wang et al., 2019).
+guistic phenomena in natural languages including                 DM graphs (Ivanova et al., 2012) define 59 types
+sentence structures (Chomsky, 1957) and mean-                 to characterize predicate-argument relationships.
+ings (Koller et al., 2019).                                   In order to investigate the effect of different seman-
+Syntactic Dependency Tree. Syntactic trees are                tic relations, we consider to only keep six common
+one of the most commonly-used linguistic struc-               relation types, which appear in most parsed graphs,
+tures and have long been shown useful for many                named skeleton graphs. These relations include
+NLP tasks. Syntactic dependency mainly models                 ARG1, ARG2, ARG3, ARG4, compound and BV. We are
+head-dependent relations between words. Depen-                interested in whether downstream tasks would still
+dency parsers parse the sentence into tree struc-             benefit from the core semantics instead of the entire
+tures, which are further incorporated into LMs via            linguistic graphs.
+syntax-aware attention (Nguyen et al., 2019) or
+graph neural networks (GNN Sachan et al. 2021).               2.2        Trivial Graph
+Semantic Graphs. Different from syntactic de-
+pendency, semantic graphs aim to map sentences                Though linguistic graphs convey useful structures,
+to high-order meaning representations with more               high-quality parsers are not easily available due to
+complex structures. Normally semantics concern                limited annotated graph banks (Oepen et al., 2019).
+about predicate-argument relations, where predi-              If structure priors are unavailable, Shi et al. (2018)
+cates evoke relations of various arity and arguments          demonstrated that trivial trees, such as gumbel tree
+filled with semantic roles that are related to each           outperform syntactic trees when they are incorpo-
+specific predicate.1 One example is shown in Fig-             rated into tree LSTM encoders (Tai et al., 2015).
+ure 1, and the characteristics of semantic graphs are            However, infusing trivial linguistic graphs with
+the following: 1) Argument sharing leads to nodes             pretrained transformer models has not been ex-
+whose in-degrees are more than one. 2) Some to-               plored. Similarly, we also create two types of triv-
+kens do not contribute to meaning and not appear              ial trees or graphs, which rarely contain linguistic
+in the graphs. 3) There exist multiple roots. Com-            inductive bias, to reproduce knowledge fusion ex-
+plex semantic structures enable them to capture               periments in Wu et al. (2021).
+information that is not explicit in the single-rooted         Binary Balanced Tree. Compared with syntactic
+syntactic trees. Semantics could be formalized by             trees, binary balanced trees are shallower and pos-
+different frameworks with respect to special lin-             sibly easier to propagate information from leaves
+guistic assumptions. Some representative semantic             to the root. We assume GNN layers might benefit
+formalisms are AMR (Abstract Meaning Represen-                from the shallowness of balanced trees.
+tation, Banarescu et al., 2013) and UCCA (Abend               Sequential Bidirectional Graph. As the most nat-
+and Rappoport, 2013). Recently Wu et al. (2021)               ural and straight-forward way, tokens in the sen-
+proposed semantics-infused finetuning (SIFT) to               tence are connected in the sequential order, which
+infuse DM (DELPH-IN Minimal Recursion Se-                     combines left-to-right and right-to-left chains. By
+mantics, Ivanova et al., 2012) graphs and achieved            doing so, GNN layers only aggregate local informa-
+   1
+     We refer the readers to the ACL tutorial Koller et al.   tion rather than potentially long dependency from
+(2019) for detailed explanations.                             linguistic graphs.
+                                                         10065
+ Models            CoLA      MRPC        STS-B       SST-2            RTE        QNLI        QQP         MNLI       Avg.
+ RO BERTA         63.1±0.9   90.1±0.8   91.0±0.0    94.6±0.3         79.0±1.6   93.0±0.3    91.8±0.1    87.7±0.2    86.3
+ SIFT             64.8±0.4   90.5±0.7   91.3±0.1    95.1±0.4         81.0±1.4   93.2± 0.2   91.9± 0.1   87.9± 0.2   87.0
+ SIFT (S KE )     65.6±0.8   90.6±0.8   91.4±0.2    95.2±0.2         81.8±0.3   93.2±0.2    91.9±0.0    87.9±0.0    87.2
+ SIFT (S EQ )♠    65.5±0.3   90.9±0.3   91.4±0.0    95.2±0.2         81.3±1.8   93.2±0.1    91.9±0.1    87.9±0.0    87.2
+ S YNTAX          63.5±0.6   90.4±0.5   91.1±0.2    94.7±0.5         80.9±1.0   92.8±0.2    91.8±0.0    87.9±0.1    86.6
+ BALANCED♥        65.3±0.9   90.5±0.2   91.5± 0.1   95.4± 0.3        81.1±0.7   93.2± 0.1   91.9± 0.1   87.9± 0.1   87.1
+                                                     (a) Base
+
+ Models            CoLA      MRPC        STS-B       SST-2            RTE        QNLI        QQP         MNLI       Avg.
+ RO BERTA         68.0±0.6   90.1±0.8   92.3±0.2    96.1±0.3         85.1±1.0   94.5±0.2    91.9±0.1    90.3±0.1    88.5
+ SIFT             69.7±0.5   91.3±0.4   92.6±0.0    96.3±0.3         87.0±1.1   94.7± 0.1   92.1± 0.1   90.4± 0.1   89.3
+ SIFT (S KE )     71.6±0.3   91.8±0.3   92.6±0.1    96.4±0.2         88.5±1.2   94.8±0.1    92.1±0.1    90.4±0.2    89.8
+ SIFT (S EQ )♠    70.7±0.7   91.9±0.5   92.6±0.1    96.5±0.3         88.7±0.3   94.7±0.1    92.1±0.1    90.4±0.1    89.7
+ S YNTAX          69.6±1.2   91.0±0.5   92.4±0.1    95.9±0.3         86.0±1.6   94.6±0.1    92.0±0.0    90.4±0.3    89.0
+ BALANCED♥        70.5±1.0   91.5±0.4   92.6± 0.0   96.5± 0.2        88.0±0.3   94.7± 0.1   92.1± 0.1   90.4±0.1    89.5
+                                                     (a) Large
+
+Table 1: GLUE benchmark development results using RoBERTa base (top) and large (bottom). ♠: we replace
+parsed semantic graphs (SIFT) with trivial sequential graphs. ♥: we replace parsed dependency trees (S YNTAX)
+with balanced trees. SIFT (SKE) means encoding with skeleton graphs. Trivial graphs could outperform parsed
+linguistic graphs in both base and large models.
+
+
+2.3 Encoding Graph Structures                              transformer-based models only take the [CLS] em-
+Structural information can be incorporated into pre-       bedding as the classification feature. For sentence
+trained transformer models by two typical strate-          pair tasks, two graphs are separately encoded by
+gies: adopt GNN on top of the output of trans-             RGCN with inner-attention and then aggregated to
+formers (Wu et al., 2021; Peng et al., 2021)               one representation as Wu et al. (2021).
+and fuse structures with transformer attention lay-
+ers (Nguyen et al., 2019; Zhang et al., 2020b). Fol-       3         Experiments
+lowed Wu et al. (2021), in this work we use the
+former one, where the linguistic effects are easily        3.1         Implementation Details
+disentangled for analysis.                                 We use the GLUE benchmark (Wang et al., 2019),
+   Formally, given an input sentence xi =                  a general natural language understanding test suite
+{w1 , w2 , ..., wL } with the length L and the corre-      which contains eight datasets for text classification
+sponding graph Gi (either linguistic graph or trivial      tasks (Details listed in Appendix A). Following the
+graph), we obtain the last hidden representation,          common practice, we report the averaged results of
+H after pretrained transformer layers (Vaswani             development sets over multiple seeds.
+et al., 2017), which also serves as the node em-              We directly adopt parsed semantic graphs from
+bedding initialization of relational graph neural net-     Wu et al. (2021)2 for each dataset, using the ranked-
+works (RGCN Schlichtkrull et al. 2018) to encode           first parser (Che et al., 2019) in the CoNLL2019
+Gi . At RGCN layers, each node’s representation            shared task (Oepen et al., 2019). For the construc-
+would be updated by aggregating its neighbors’ fea-        tion of trivial graphs, we randomly sample edge la-
+tures with relational bias. We max-pool over the           bels from the relation list due to their unavailability.
+final RGCN layer’s output as the graph representa-         To be comparable with Wu et al. (2021), we apply
+tion Og :                                                  the same model architecture and tuned the same set
+    Og = MaxPooling(RGCN([Gi , H])).                (1)    of parameters such as learning rate, RGCN graph
+                                                           layer, RGCN hidden dimension, when infusing
+And the final classification feature is the con-           graph structures into LMs.
+catenation of [CLS] token embedding H0 and
+pooled graph representation Og . Note that vanilla               2
+                                                                     https://github.com/ZhaofengWu/SIFT
+
+                                                      10066
+

@@ -1,0 +1,196 @@
+                              Cascaded Head-colliding Attention
+
+                       Lin Zheng♠♦ Zhiyong Wu♠ Lingpeng Kong♠♣
+                ♠
+                  Department of Computer Science, The University of Hong Kong
+                 ♦
+                   School of Data and Computer Science, Sun Yat-sen University
+                           ♣
+                             Shanghai Artificial Intelligence Laboratory
+              zhenglin6@mail2.sysu.edu.cn,{zywu,lpk}@cs.hku.hk
+
+
+
+                      Abstract                              An attention function can be described as mapping
+                                                            a query and a set of key-value pairs to an output,
+    Transformers have advanced the field of natu-
+    ral language processing (NLP) in many ways.             where the query, keys, values, and output are all
+    At the heart of the Transformer architecture            vectors. The output is computed as a weighted
+    is the multi-head attention (MHA) mechanism             sum of the values, where the weight assigned to
+    which models pairwise interactions between              each value is computed by a compatibility func-
+    the elements of the sequence. Despite its mas-          tion of the query with the corresponding key. A
+    sive success, the current framework ignores in-         multi-head attention (MHA) mechanism extends
+    teractions among different heads, leading to
+                                                            the idea through performing multiple separately pa-
+    the problem that many of the heads are redun-
+    dant in practice, which underutilizes the ca-
+                                                            rameterized attention functions acting in parallel to
+    pacity of the model. To improve parameter               contextualize the input representations. Their out-
+    efficiency, we re-formulate the MHA as a la-            puts are then gathered by an affine transformation,
+    tent variable model from a probabilistic per-           allowing the model to jointly attend to information
+    spective. We present cascaded head-colliding            from different representation subspaces at different
+    attention (CODA) which explicitly models the            positions.
+    interactions between attention heads through a             Despite its massive success, the current frame-
+    hierarchical variational distribution. We con-
+                                                            work ignores the interactions among different
+    duct extensive experiments and demonstrate
+    that CODA outperforms the transformer base-             heads, leading to the problem that many of the
+    line, by 0.6 perplexity on Wikitext-103                 heads are redundant in practice (i.e., attending to
+    in language modeling, and by 0.6 BLEU on                the same regions of the sequence), which under-
+    WMT14 EN-DE in machine translation, due to              utilizes the capacity of the model (Voita et al.,
+    its improvements on the parameter efficiency.1          2019; Michel et al., 2019a). At the same time,
+                                                            recent research (Tang et al., 2018; Clark et al.,
+1   Introduction
+                                                            2019; Voita et al., 2019; Wu et al., 2020, inter
+Transformers (Vaswani et al., 2017) have advanced           alia) demonstrates that heads in MHA have the po-
+the field of natural language processing (NLP) on a         tential to capture distinct information from input
+variety of important tasks, including language mod-         sequences, ranging from syntactic and semantic
+eling (Dai et al., 2019; Baevski and Auli, 2019),           features to alignment information between source
+language understanding (Devlin et al., 2019; Yang           and target sentence pairs. These observations sug-
+et al., 2019b), and machine translation (Vaswani            gest that multiple heads should be encouraged to
+et al., 2017; Dehghani et al., 2019; Liu et al.,            extract complementary information. Therefore, it
+2020). It has also found its place in computer vi-          is highly appealing to take into account the inter-
+sion (Dosovitskiy et al., 2020), and in intelligent         actions among different attention heads from the
+agents (Vinyals et al., 2019) where sequence mod-           perspective of parameter efficiency and the expres-
+eling plays a key role as well. The cornerstone of          siveness of the model.
+the transformer architecture is the multi-head at-             In this work, we introduce head-colliding atten-
+tention (MHA) mechanism which models pairwise               tion (§3). We formulate MHA as a probabilistic
+interactions between the elements of the sequence.          model, where each attention head is represented
+  1
+    Our implementation is publicly available at https://    by a latent variable and all of them collide into
+github.com/LZhengisme/CODA.                                 the observed sequence data (Figure 1a). In this
+
+                                                        536
+                Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics
+              and the 11th International Joint Conference on Natural Language Processing, pages 536–549
+                          August 1–6, 2021. ©2021 Association for Computational Linguistics
+probabilistic graphical model structure, attention             The final output of a single attention block is the
+heads work as individual factors to explain the data.        weighted sum of Vei :
+Although each factor is independent of each other
+a priori, they interact with each other automati-                                        Hi = ai Vei .
+cally, conditioning on observations, thanks to the           As we can see, the core of MHA is to calculate
+explaining-away effects (Pearl, 1989; Wellman and            ai in each head. We thus refer to ai as the i-th
+Henrion, 1993).                                              attention head.
+   The head-colliding attention mechanism intro-                In sequence prediction tasks, the model takes
+duces new computational challenges in training               as input a source sequence of length m and out-
+the model. We will discuss how we tackle these               puts a target sequence of length n in an auto-
+using variational methods (Blei et al., 2017). We            regressive manner. It predicts each token Y within
+propose cascaded head-colliding attention (CODA,             the target sequence through a categorical distribu-
+Figure 1b). As our main model, CODA adopts a hi-             tion pvanilla (Y|X), where X includes the source
+erarchical variational distribution (Ranganath et al.,       sequence as well as a previously generated pre-
+2016) to allow both rich head interactions and ef-           fix. With respect to an MHA block a1 , . . . , ah ,
+fective computations (§4).                                   the model predicts target tokens Y by first feed-
+   We validate our method in language modeling               ing these heads into a complex non-linear trans-
+and machine translation experiments (§5). CODA               formation3 denoted by φ(·), and then passing it
+outperforms the vanilla MHA transformer on both              through a softmax function over the entire vocab-
+tasks, on Wikitext-103 by 0.6 perplexity and                 ulary. Therefore, the output probability can be
+on WMT14 EN-DE by 0.6 BLEU. Further analysis                 written as pvanilla (Y|X) = f (a1 , . . . , ah ), where
+shows that CODA learns to encourage diversity in
+different heads (Figure 2) and to promote parameter                  f (a1 , . . . , ah ) := softmax(φ(a1 , . . . , ah )).
+efficiency when increasing the number of heads
+(§5.3).                                                          3       Head-colliding Attention
+                                                                 In this section, we introduce head-colliding atten-
+2       Background                                               tion. Specifically, we formulate MHA as a prob-
+Multi-head attention (MHA) mechanism plays an                    abilistic model, where each attention head is rep-
+important role in modern transformer architecture                resented by a latent variable. The name reflects
+(Vaswani et al., 2017). It extends the classical at-             a “collider” in the context of probabilistic graphi-
+tention mechanism by running multiple attention                  cal models (Figure 1a). We will first explain how
+function heads in parallel.                                      head-colliding attention permits the modeling of
+   An MHA module is composed of h identical                      interactions among different heads and then discuss
+blocks (usually referred to as attention heads).                 how vanilla MHA can be viewed as a marginalized
+Each head will generate a hidden state Hi based on               version of head-colliding attention, which ignores
+the input Query, Key and Value matrices, denoted                 any head interactions.
+as Q, K, and V respectively. The hidden states                      Considering a single MHA block, we cast each
+from different heads are then                                    attention head ai as a latent variable. The proba-
+                                 P aggregated as the             bility of target Y conditioning on input X can be
+output of the MHA module: ni=1 Hi Wio , where
+Wio are model parameters.                                        obtained by marginalizing over all heads A (we
+   In the i-th head, the input matrices Q, K and V               denote A := {a1 , . . . , ah }):
+are first linearly projected into different subspace                               Z
+representations Q e i, K
+                       fi , and Vei , based on different                p(Y|X) =        p(Y|A, X)p(A|X)dA
+                                                                                        A
+learnable parameters. After that, we compute the
+                                                                                   = Ep(A|X) [f (A)] .
+inner product over all projected queries and keys
+as the attention logits zi , which are then passed               p(A|X) is the joint prior distribution. The corre-
+through a row-wise softmax2 to obtain head atten-                sponding directed graphical model is demonstrated
+tion weights ai :                                                    3
+                                                                      Since a transformer typically stacks several attentive lay-
+                                                                 ers, for an MHA block in some layer, subsequent layers will
+        ai = softmax(zi ) = softmax(Q  fT ).
+                                    e iK             (1)         induce a non-linear transformation φ(·) for its attention heads.
+                                        i
+                                                                 For instance, φ(·) may include several other MHA blocks and
+    2
+        We omit the scaling factor for simplicity.               feed-forward networks.
+
+                                                           537
+                                  a11     a12       ...   a1h               in head-colliding attention the distribution of Y is
+                                                                            defined as:
+
+   a1      a2       ...   ah      a21     a22       ...   a2h                    p(Y|X) = Ep(a1 ,...,ah |X) [f (a1 , . . . , ah )] .
+
+                                                                        Note the inherent difference of when to take the
+                Y
+                                  aL
+                                   1      aL
+                                           2
+                                                    ...   aL
+                                                           h            expectation in vanilla and head-colliding attention.
+                                                                        Since f (·) is a complex non-linear function (§2),
+                                                Y                       these two formulations are not equivalent in gen-
+                                                                        eral and may have a large gap between the two
+ (a) Head-colliding atten-      (b) Cascaded head-colliding
+ tion.                          attention (CODA).                       distributions. Concretely, vanilla MHA ignores any
+                                                                        possible interactions among different heads. As
+Figure 1: (a) Left: Probabilistic graphical model                       indicated in equation 2, it first marginalizes out ev-
+(PGM) diagram of head-colliding attention. Although                     ery single head before observing targets – one head
+each head variable is independent a priori, they inter-
+                                                                        will not learn what other heads are attending to
+act with each other after observing targets Y, which
+is referred as explaining-away effect. (b) Right: PGM                   despite the fact Y is observed. This is why vanilla
+diagram of a 3-layer cascaded head-colliding attention                  MHA is prone to redundancy as many previous
+(CODA). ali denotes the i-th attention head at trans-                   studies (Voita et al., 2019; Michel et al., 2019a,
+former layer l. Note that all dependencies from X are                   inter alia) discovered. Head-colliding attention,
+omitted in these diagrams for simplicity.                               on the other hand, permits rich head interactions
+                                                                        due to the expressive non-linear function f (·) in-
+in Figure 1a, where the links from different heads                      side the expectation over different latent variables
+collide on the observation variable Y. A crucial                        a1 , . . . , ah . However, the complexity of head inter-
+property of this graphical model is the “explaining-                    actions also leads to intractability in training the
+away” effect (Pearl, 1989; Wellman and Henrion,                         model, which we will discuss in the next section.
+1993) of attention heads A when observing the                               4    Training Head-colliding Attention
+output Y. In other words, if a head ai attends
+to part of the input which accords well with ob-                        We train the model by performing maximum likeli-
+servation, it immediately discourages other heads                       hood estimation. Here, the log marginal likelihood
+from attending to the same part of the input but                        can be expressed as:
+encourages them to look into complementary in-
+formation.4 This mechanism effectively reduces                                   log p(Y|X) = log Ep(A|X) [p(Y|A, X)] .
+head redundancy and in turn improves parameter
+                                                                            Unfortunately, this is intractable in general because
+efficiency.
+                                                                            it requires marginalizing over all possible configu-
+Vanilla vs. head-colliding attention We now                                 rations of attention heads. The standard technique
+take a closer look at the vanilla MHA (§2). Recall                          is to use variational inference, which optimizes
+that in vanilla MHA, all attention heads are deter-                         the log marginal by maximizing its evidence lower
+ministic. From the perspective of latent variable                           bound (called ELBO) (Blei et al., 2017):
+models, this is computationally equivalent to taking                                                                   
+                                                                                                   p(Y|A, X)p(A|X)
+expectations of latent head variables. The output                             L := Eq(A|X) log                                (3)
+                                                                                                         q(A|X)
+probability distribution pvanilla (Y|X) can then be
+expressed as:                                                                    = log p(Y|X) − KL(q(A|X)||p(A|X, Y))
+                                                                                 ≤ log p(Y|X),
+        f (Ep(a1 |X) [a1 ] , . . . , Ep(ah |X) [ah ]).          (2)
+                                                                        where q(A|X) is the variational distribution5 over
+This means we are only interested in the individ-                       latent variables A. p(A|X, Y) is the intractable
+ual expectations when using the attention heads                         posterior distribution of all heads given observa-
+in vanilla MHA for predictions. On the contrary,                        tions Y and the input X, which encodes the rich
+   4                                                                            5
+     In other words, if we confirm that some head accords                         Although the variational distribution q should depend on
+well with the observation, then the probability of other heads              target Y in principle, such conditioning renders testing diffi-
+should be reduced since there is less need to invoke them,                  cult since the target information is not available during testing.
+according to Occam’s razor.                                                 For this reason, we only consider the source X hereafter.
+
+                                                                      538
+

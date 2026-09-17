@@ -1,0 +1,6 @@
+{
+  "url": "https://scholar.google.com/citations?view_op=search_authors&mauthors=Lingpeng+Kong&hl=en",
+  "date": "2026-09-17",
+  "status": "失败: Command failed: curl -L --max-time 40 --retry 1 -sS -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/来源/scholar-search.html https://scholar.google.com/citations?view_op=search_authors&mauthors=Lingpeng+Kong&hl=en\ncurl: (28) Connection timed out after 40003 milliseconds\ncurl: (28) Connection timed out after 40005 milliseconds\n",
+  "file": "scholar-search.html"
+}

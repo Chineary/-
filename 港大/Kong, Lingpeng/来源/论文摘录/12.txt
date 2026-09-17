@@ -1,0 +1,211 @@
+                          Adaptive Semiparametric Language Models
+
+                 Dani Yogatama, Cyprien de Masson d’Autume, Lingpeng Kong
+
+                                              DeepMind
+                                        London, United Kingdom
+                             {dyogatama,cyprien,lingpenk}@google.com
+
+
+                        Abstract                                            weights of a large parametric neural network
+                                                                            via end-to-end training. We see an increasingly
+    We present a language model that combines                               larger transformer become a better language
+    a large parametric neural network (i.e., a                              model (Radford et al., 2018, 2019; Shoeybi et al.,
+    transformer) with a non-parametric episodic
+                                                                            2019; Brown et al., 2020). In this scale approach,
+    memory component in an integrated architec-
+    ture. Our model uses extended short-term con-                           the knowledge is implicitly represented in the
+    text by caching local hidden states—similar                             weights of a parametric neural network, and it is
+    to transformer-XL—and global long-term                                  not straightforward to interpret whether a model
+    memory by retrieving a set of nearest neighbor                          contains a particular knowledge without asking
+    tokens at each timestep. We design a gat-                               the model to produce a response—for example,
+    ing function to adaptively combine multiple                             via a cloze-style question (Petroni et al., 2020) or
+    information sources to make a prediction.
+                                                                            a prompt (Brown et al., 2020).
+    This mechanism allows the model to use
+    either local context, short-term memory, or                                An alternative strategy is to design a modular
+    long-term memory (or any combination of                                 architecture that separates memory storage and
+    them) on an ad hoc basis depending on                                   computational processing, where each module
+    the context. Experiments on word-based and                              has a clear purpose. Recent progress in memory-
+    character-based language modeling datasets                              augmented neural networks has given rise to
+    demonstrate the efficacy of our proposed
+                                                                            many variants of memory-augmented transformer
+    method compared to strong baselines.
+                                                                            language models that fall under this category. For
+1 Introduction                                                              example, attempts to incorporate extended local
+                                                                            context to a neural network—such as those found
+Human language processing is facilitated by com-                            in neural cache (Grave et al., 2017c), transformer-
+plex systems interacting together. A core compo-                            XL (Dai et al., 2019), compressive transformer
+nent that enables such a process is human memory.                           (Rae et al., 2020), performers (Choromanski
+Memory in humans consists of specialized sys-                               et al., 2021), longformer (Beltagy et al., 2020),
+tems, which form a basis for intelligent behaviors                          and reformer (Kitaev et al., 2020)—can be seen as
+(Tulving, 1985; Rolls, 2000; Eichenbaum, 2012).                             models of working memory. Models of episodic
+For language processing, working (short-term)                               memory include kNN-LM (Khandelwal et al.,
+memory is a temporary storage that can be used to                           2020) and architectures that are designed for more
+comprehend sentences and follow conversations.                              complicated tasks such as question answering
+Episodic (long-term) memory stores individual                               (de Masson d’Autume et al., 2019; Guu et al.,
+experience and events. Semantic memory stores                               2020) and machine translation (Khandelwal et al.,
+facts and knowledge about words and concepts.1                              2021). In machine learning and natural language
+   In artificial language processing systems (e.g.,                         processing, memory-augmented neural networks
+language models), a popular approach to design                              is used to refer to all types of memory systems.
+a better model is by encoding all of the desired                               In this paper, inspired by the modular design
+knowledge (to produce grammatical sentences,                                of human memory systems, we present a lan-
+process long text, remember events, etc.) in the                            guage model architecture (SPALM) with storage
+    1
+      We refer readers to Nematzadeh et al. (2020) for
+                                                                            modules that resemble working and episodic
+discussions on human and artificial language processing                     memory systems, which we combine with a large
+memory systems.                                                             parametric neural network that is responsible for
+                                                                      362
+
+          Transactions of the Association for Computational Linguistics, vol. 9, pp. 362–373, 2021. https://doi.org/10.1162/tacl a 00371
+                     Action Editor: Mihai Surdeanu. Submission batch: 10/2020; Revision batch: 1/2021; Published 4/2021.
+                            c 2021 Association for Computational Linguistics. Distributed under a CC-BY 4.0 license.
+computation (§2). Our hypothesis is that encour-
+aging each component to focus on a specific
+function (e.g., storing long-term information, cap-
+turing extended context, modeling local infor-
+mation) facilitates easier training that produces an
+overall better language model.2
+   Specifically, we follow transformer-XL (Dai
+et al., 2019) to capture extended context by
+caching hidden states in a temporary short-term
+memory. For long-term context, we use a persis-
+tent key-value database and perform sparse re-
+trieval with (approximate) k-nearest neighbors. In
+contrast to previous language models that either
+interpolate output probabilities (Merity et al.,
+2017; Grave et al., 2017c; Khandelwal et al.,
+2020; Kassner and Schutze, 2020) or use input
+concatenation (Guu et al., 2020; Xu et al., 2020)
+to combine information from different sources,
+we design a context-dependent gating mechanism
+to incorporate local, extended, and global context.
+We discuss similarities and differences to related
+work in §3.                                                       Figure 1: Our language model architecture has three
+                                                                  main components: (i) a transformer that processes the
+   In language modeling, many tokens can be pre-
+                                                                  current local context, (ii) a short-term memory module
+dicted from their local context without requiring                 that stores hidden states from an extended context, (iii)
+long-term information. Our model can adaptively                   and a key-value (hidden state-output token) database
+decide whether the current (local) context is                     that stores compressed long-term context. At each
+enough, or whether it needs to use information                    timestep, our model combines the current context
+from the short-term and/or long-term memory.                      and short-term memory with a mechanism similar to
+   In §4, we compare SPALM with strong                            transformer-XL. It then retrieves a set of past output
+                                                                  tokens that are used in a similar context from the long-
+baselines—including transformer-XL and kNN-
+                                                                  term memory module. These past output tokens are
+LM—on word-based and character-based lan-                         then encoded and aggregated to a single vector that
+guage modeling. Our positive results establish                    represents long-term information. We use a context-
+the benefit of the proposed architecture. They also               dependent gate to combine information from multiple
+indicate the generality of our approach and its                   sources for making a final prediction.
+potential applicability to other sequence modeling
+tasks.                                                            p(xt+1 | x≤t ; W). Given a corpus of T words,
+   We analyze how SPALM uses long vs. short-term                  the log likelihood of the corpus is:
+context (§5) to better understand how the model
+                                                                                  X
+                                                                                  T
+operates when making predictions. We conclude                               L=          log p(xt+1 | x≤t ; W),
+by discussing limitations and future directions                                   t=0
+(§6).
+                                                                  where x0 is the start of sentence symbol.
+2 Model                                                              SPALM consists of three main components: (i)
+                                                                  a large parametric neural network in the form
+We consider a language model that takes as input                  of a transformer to process local context, (ii) a
+a sequence of words x≤t = {x0 , . . . , xt } and                  short-term memory to store extended context, and
+outputs a probability distribution of the next word               (ii) a non-parametric episodic memory module
+                                                                  that stores information from long-term context.
+    2
+                                                                  We integrate these components in a single archi-
+      We note that SPALM is not intended to be a model
+of human language processing system. We merely take
+                                                                  tecture with a gating mechanism. Figure 1 shows
+inspirations from human memory systems to design a better         an illustration of our model, which we discuss in
+artificial language model.                                        detail below.
+
+                                                            363
+2.1 Base Model                                              The key is a vector representation of a context
+We use transformer (Vaswani et al., 2017) as our            x̃≤i (i.e., we compress x̃≤i into a vector). Each
+base model. Given the input sequence x≤t , trans-           context is paired with the output token for that
+former performs multiple layers of self-attention           context xi+1 , which is stored as the value. In our
+between every pair of tokens in the input sequence          experiments, we store a key-value entry for each
+to produce token representations.                           context-token pair in the training corpus, so the
+                                                            number of entries is equal to the number of tokens
+   A core limitation of transformer is that its
+                                                            in the training corpus.
+computational complexity is quadratic in the
+input sequence length. As a result, instead of                 There are many choices that can be used for the
+considering all previous tokens x≤t , transformer           key representation, which we denote by di . For
+truncates the input to be the most recent N words           example, we can use hR      i or a separate pretrained
+x̃≤t = {xt−N +1 , . . . , xt } and only operates on         encoder such as BERT (Devlin et al., 2018). We
+this fixed-length window in practice. A large               pretrain a vanilla transformer language model and
+transformer, no matter how many parameters it               use the final-layer hidden state for di .
+has, is limited by the input sequence length.                  For predicting a new token xt+1 given x̃≤t ,
+                                                            we first obtain dt from the separate pretrained
+2.2 Short-term Memory                                       language model. We then use dt to do a k-nearest
+                                                            neighbor search on the database. Since dt is a con-
+We use transformer-XL (Dai et al., 2019) as our
+                                                            textual representation, this search finds contexts
+working memory model. Given the current con-
+                                                            that are similar to x̃<t in the database. For the top
+text x̃<t , denote the extended context of length
+                                                            k such contexts, we retrieve the values associated
+M by x̃≤t−N = {xt−N −M +1 , . . . , xt−N }. In other
+                                                            with those contexts, which are the output (next)
+words, the extended context is the M tokens
+                                                            tokens when those contexts are encountered in the
+prior to the current context. In transformer-XL,
+                                                            past. Denote the output tokens retrieved from the
+hidden states for x̃≤t−N (obtained from a previous
+                                                            database by y1 , . . . yK .
+computation when predicting xt−N +1 ) are cached.
+                                                               For each yk , we create a vector representation
+They are then used as additional states that can be
+                                                            yk by using the same word embedding matrix that
+attended to during the forward pass when com-
+                                                            is used in our base model. We then combine the
+puting hidden states for the current context x̃≤t ,
+                                                            long-term memory information obtain from the
+but the values of the states are not updated during
+                                                            database with the extended local context with a
+the backward pass to save computation time.
+                                                            gating mechanism as follows:
+   Formally, denote the hidden state for xt at
+layer r by hrt . Denote the hidden states asso-                                X
+                                                                               K
+                                                                                         exp yk⊤ hR
+                                                                                                  t
+ciated with the current (truncated) context x̃<t                      mt =            PK          ⊤ R
+                                                                                                           yk
+by Hr = [hrt−N , . . . hrt ] and the hidden states                             k =1     j =1 exp yj ht
+associated with the extended context x̃<t−N by                        gt = σ (VhR
+                                                                                t )
+Er = [SG(hrt−N −M +1 ), . . . SG(hrt−N )], where SG
+                                                                      zt = (1 − gt ) ⊙ mt + gt ⊙ hR
+is the stop gradient function. Together, Hr and Er                                                  t
+
+are used as an input to an attention function (with                   p(xt+1 | x≤t ) = softmax(zt ; W),
+relative positional encodings) where each vector
+is transformed into a key, value, query triplet             where V is a parameter matrix, σ is the sig-
+which are used to produce Hr+1 (i.e., hidden                moid function, and W is the word embedding
+states for the next layer).                                 matrix that is shared for input and output word
+                                                            embeddings (Inan et al., 2017).3
+   Note that while transformer-XL extends the
+context window, the extra information is still                 In the above formulation, we first aggregate
+‘‘local’’ with respect to the sequence.                     information from y1 , . . . yK with a simple atten-
+                                                            tion mechanism using hR   t as the attention query.
+                                                                                                                4
+
+2.3 Long-term Memory                                           3
+                                                                 In a preliminary experiment, we incorporate the nearest
+We design a long-term episodic memory mod-                  neighbor distance as a bias term in the computation of mt .
+                                                            However, this does not improve performance, so we use the
+ule that allows our language model to retrieve              above equation in the final model.
+‘‘global’’ information. The long-term memory                   4
+                                                                 It is possible to first transform hR
+                                                                                                    t (e.g., by doing a linear
+module is implemented as a key-value database.              projection) before using it as an attention query. We choose
+
+
+                                                      364
+

@@ -1,0 +1,668 @@
+{
+  "papers": {
+    "1": {
+      "摘要": "语言模型能否复用词汇、句法和语义知识，快速适应新任务？ 用跨任务实验和在线编码指标衡量学习效率。 指出大量任务内样本依赖、灾难性遗忘和数据集偏差仍限制通用语言能力。"
+    },
+    "2": {
+      "摘要": "短语级翻译如何兼顾训练效率与跨域泛化？ 短语注意力结合动态规划，并在解码中接入外部短语词典。 在标准数据上保持竞争力，在训练与测试分布不同的场景下改善表现。"
+    },
+    "3": {
+      "摘要": "句子表示如何利用词语间的高阶关系与句法结构？ 将监督或潜在依存树约束加入循环关系网络。 通过关系选择和多轮传播增强句子分类、句对分类与翻译表示。"
+    },
+    "4": {
+      "摘要": "如何构建多语言依存句法分析的强基线？ 在DRAGNN中结合转移式循环分析、词性标注和字符级表示。 在52个Universal Dependencies树库上报告相对既有公开系统的准确率改进。"
+    },
+    "5": {
+      "摘要": "如何根据中间预测动态连接循环网络，同时支持多任务？ 提出带离散状态转移的TBRU单元并组合为DRAGNN。 同一单元可同时作为编码器和解码器，支持依存分析与抽取式摘要。"
+    },
+    "6": {
+      "摘要": "动态网络结构如何兼顾编程灵活性和计算效率？ 以轻量计算图和优化的C++后端实现DyNet。 支持按输入动态构图及C++、Python接口，并报告与静态框架的速度比较。"
+    },
+    "7": {
+      "摘要": "获得Stanford依存结构时，准确率与速度如何取舍？ 比较分析算法、词性输入、替代依存表示和分布式词表示。 重新评估直接依存分析的可行性，并提供配套软件。"
+    },
+    "8": {
+      "摘要": "如何系统评价博弈场景下语言智能体的社会能力？ 按博弈框架、智能体和评价协议组织已有研究。 梳理偏好、信念、推理与交互对决策的影响，并总结研究空缺。"
+    },
+    "9": {
+      "摘要": "视觉自回归生成有哪些表示方式、框架与应用限制？ 按像素、词元和尺度级表示综述视觉自回归模型。 连接图像、视频、三维及多模态生成，并比较其他生成范式。"
+    },
+    "10": {
+      "摘要": "相对位置编码如何保留线性Transformer的复杂度优势？ 以规范形式和酉变换构造LRPE编码族。 给出可设计新编码方法的统一框架，并在语言和视觉任务验证。"
+    },
+    "11": {
+      "摘要": "高分辨率视觉Transformer如何降低注意力的二次开销？ 按二维曼哈顿距离加入局部偏置，并降低特征维度。 Vicinity Attention与VVT结合，在降低参数和计算增长的同时保持视觉性能。"
+    },
+    "12": {
+      "摘要": "语言模型如何按上下文选择短期和长期记忆？ 将Transformer、局部隐藏态缓存和近邻词元检索用门控组合。 让模型自适应利用局部上下文、短期缓存与非参数长期记忆。"
+    },
+    "13": {
+      "摘要": "大规模BERT预训练是否仍受益于明确的句法归纳偏置？ 蒸馏层次句法语言模型在双向上下文中的近似边缘分布。 在多种结构化预测任务减少相对错误，但GLUE结果并非一致提升。"
+    },
+    "14": {
+      "摘要": "缺少平行文档时，如何利用跨句信息提升文档翻译？ 用贝叶斯法则组合文档语言模型先验与反向句级翻译概率。 仅需平行句子和单语文档即可引入跨句依赖，并支持从左到右束搜索。"
+    },
+    "15": {
+      "摘要": "神经分段模型在端到端语音识别中如何训练和搜索？ 比较声学编码器、有限状态解码器、权重函数和多种损失。 系统研究搜索空间、多阶段与端到端训练，以及分段和帧级多任务训练。"
+    },
+    "16": {
+      "摘要": "计算机操作智能体能否完成真实科学工作流？ 构建多领域科学软件环境与169项人工验证任务。 揭示先进智能体仍难以可靠完成复杂科研流程，并提供可重复评测环境。"
+    },
+    "17": {
+      "摘要": "代码智能体如何在真实协作与持续集成流程中解决仓库问题？ 让提交者与审查者模型对抗协作，并加入检索增强代码生成。 以真实GitHub问题检验补丁、测试与CI验证，而非仅使用静态测试集。"
+    },
+    "18": {
+      "摘要": "语言模型的人格如何在推理时动态组合和调节？ 从激活中提取近似正交的人格方向，使用向量代数控制强度与组合。 无需梯度更新即可进行人格控制，并提出动态人格适应评测。"
+    },
+    "19": {
+      "摘要": "测试时推理扩展如何降低同步、内存和延迟开销？ 用保形预测、在线校准与三级拒绝采样实现异步扩展。 同时沿并行与顺序维度扩展，并在给定数学任务上保持准确率。"
+    },
+    "20": {
+      "摘要": "掩码扩散代码模型的生成顺序和强化学习应如何设计？ 分析DiffuCoder的去噪过程，并用互补掩码噪声构建coupled-GRPO。 降低似然估计方差，提升代码生成表现并减少对自回归偏置的依赖。"
+    },
+    "21": {
+      "摘要": "多模态浏览智能体是否真正追踪并核验视觉线索？ 构建311项搜索任务，并加入标记、裁剪和定向检索模块。 要求多轮图文交叉核验，揭示网页定位与相似事件辨别的困难。"
+    },
+    "22": {
+      "摘要": "固定掩码长度如何不再限制扩散代码补全？ 在扩散中增加两种长度控制状态，允许预测驱动的扩展与收缩。 不改网络架构即可生成可变长度补全，在给定基准上接近已知真实长度的表现。"
+    },
+    "23": {
+      "摘要": "视频模型缺少时间监督时，如何改善时序推理？ 构造时序扰动偏好对，并在SFT前实施渐进DPO对齐。 通过难度课程和训练顺序设计，以较少自生成数据补充时序监督。"
+    },
+    "24": {
+      "摘要": "大规模合成数据如何避免重复和分布覆盖不足？ 用树递归划分互斥且完备的任务子空间，再分配和生成样本。 既可从头生成多样数据，也可重平衡已有数据集。"
+    },
+    "25": {
+      "摘要": "顺序推理如何自动构建紧凑且有效的候选动作集合？ 从推理语料提取动作草图，以次模目标和贪心算法兼顾效用与多样性。 减少手工动作空间的限制，在多个任务改善效果且控制额外延迟。"
+    },
+    "26": {
+      "摘要": "如何把长上下文理解能力转化为长思维链生成能力？ URT课程逐步将输入中的推理步骤移至模型输出。 发展复杂推理能力的同时，保留长上下文理解表现。"
+    },
+    "27": {
+      "摘要": "视觉推理如何避免语言知识掩盖必要的图像信息？ 将主动视觉感知与文本推理解耦，多轮补充所需视觉描述。 支持接入文本LLM补足推理能力，并生成用于蒸馏的视觉推理数据。"
+    },
+    "28": {
+      "摘要": "量化推理如何同时获得速度和多步推理质量？ 用低精度联合量化起草、高精度权重量化验证，并共享权重与KV缓存。 无需额外训练或辅助模型，实现近零成本切换和质量保持。"
+    },
+    "29": {
+      "摘要": "如何识别长上下文KV缓存中的结构化稀疏性？ 以截断矩阵熵估计不确定性，动态分配缓存压缩。 把不确定性与检索头、检索层的稀疏模式联系起来，改善长文本部署效率。"
+    },
+    "30": {
+      "摘要": "粤语高质量训练语料不足如何缓解？ 汇集多源粤语文本，经过语言、质量、内容过滤和去重，再进行任务微调。 提供超过20亿词元的粤语语料，并在粤语基准上验证训练效果。"
+    },
+    "31": {
+      "摘要": "智能体如何在动作时间约束下兼顾多任务并行与可行性？ 以烹饪流程构建Recipe2Plan，评估全局调度与时间间隔约束。 揭示局部激进并行可能破坏整体约束，强调时间意识与全局规划。"
+    },
+    "32": {
+      "摘要": "在线视频模型如何实时处理连续且冗余的视频帧？ 差分词元丢弃保留有意义的时间变化，并用流式交互数据训练。 在给定评测中大量减少视觉词元，同时支持主动响应和实时交互。"
+    },
+    "33": {
+      "摘要": "更强推理是否必然改善角色扮演？ 比较24个模型、6项角色基准与3种角色扮演策略。 发现思维链和推理优化模型可能损害角色表现，并提出角色感知推理的研究线索。"
+    },
+    "34": {
+      "摘要": "如何自动构造足够困难且高质量的数学题？ PromptCoT依据数学概念与出题理由合成奥赛级问题。 结合理论目标与多项数学基准，验证问题合成质量和数据扩展能力。"
+    },
+    "35": {
+      "摘要": "微调知识与预训练知识不匹配引发的幻觉如何缓解？ 训练特殊拒答词元，并在推理中用拒答概率惩罚不确定预测。 让模型选择性承认知识不足，在多个问答任务缓解幻觉。"
+    },
+    "36": {
+      "摘要": "如何训练能真正帮助代码修正的批评模型？ CTRL通过强化学习最大化固定生成器的纠错收益。 无需人工反馈训练批评者，并支持迭代修正及测试时扩展。"
+    },
+    "37": {
+      "摘要": "无需训练的超长上下文扩展如何克服内存和注意力偏置？ 并行分块压缩与KV淘汰，并分析注意力汇聚、近因和中部偏置。 使短窗口模型在单卡上处理更长上下文，并提升预填充效率。"
+    },
+    "38": {
+      "摘要": "视觉语言生成式奖励模型的判断是否可靠？ 构建1250个经人工核验的偏好样本，覆盖视觉幻觉和复杂推理。 识别奖励判断中的视觉感知瓶颈，并关联基准表现与Best-of-N收益。"
+    },
+    "39": {
+      "摘要": "语言模型的对抗脆弱性与奖励函数错设有何关系？ 提出ReGap度量，并在奖励错设空间开展自动化红队评测。 提供理解对齐漏洞及攻击迁移性的分析视角。"
+    },
+    "40": {
+      "摘要": "视频模型的时序推理瓶颈来自视觉编码还是语言能力？ 用诊断探针分析表示，并合成纯文本时序任务进行迁移训练。 无需视频训练数据即可提升视频时间关系理解，显示跨模态时序能力联系。"
+    },
+    "41": {
+      "摘要": "LoRA参数共享如何避免缺少差异化带来的性能损失？ MoS组合层间、层内共享与分片选择、配对解耦等机制。 在保持低秩适配结构的同时减少可训练参数。"
+    },
+    "42": {
+      "摘要": "自回归生成的局部决策如何兼顾长期规划？ 用模型预测控制与前瞻轨迹重加权生成分布。 在数学、代码和智能体任务改善非短视规划，并降低搜索成本。"
+    },
+    "43": {
+      "摘要": "扩散模型能否缓解复杂推理中的困难子目标学习失衡？ 提出按难度学习子目标的多粒度扩散建模MGDM。 在Countdown、数独和SAT任务中无需显式搜索即可改善推理表现。"
+    },
+    "44": {
+      "摘要": "能否把类似搜索的规划能力内化进生成模型？ DiffuSearch使用离散扩散预测未来世界状态。 在国际象棋任务对比无搜索及MCTS策略，提供隐式搜索可行性的实验证据。"
+    },
+    "45": {
+      "摘要": "多模态模型如何理解几何元素并解答几何题？ 借助几何逻辑与可缩放性构造Geo170K，再训练G-LLaVA。 同时改善几何图形理解与解题能力，提供多模态几何数据。"
+    },
+    "46": {
+      "摘要": "模型有效上下文长度为何短于训练窗口？ 分析相对位置频率偏差，并用STRING移动训练充分的位置编码。 无需再训练即可改善远距离信息利用与窗口内表现。"
+    },
+    "47": {
+      "摘要": "如何利用现有自回归模型降低大规模扩散语言模型的训练门槛？ 连接自回归与扩散目标，通过持续预训练转换GPT和LLaMA。 发布不同规模的扩散模型，并验证语言建模、推理及填空能力。"
+    },
+    "48": {
+      "摘要": "合成数据如何主动覆盖目标模型的薄弱情形？ ReverseGen训练提议者生成使目标模型失败的问题，再构造训练数据。 在安全、诚实和数学任务验证失败驱动的数据探索。"
+    },
+    "49": {
+      "摘要": "视觉语言模型对训练数据中的图像后门有多脆弱？ 研究被污染图文训练对引发的安全失效，并比较污染比例和参数位置。 建立攻击成功与隐蔽性评价指标，提供多模态对齐风险证据。"
+    },
+    "50": {
+      "摘要": "故事世界中的事实变化如何与事实矛盾区分？ FactTrack提取原子事实、维护时间有效区间并持续更新世界状态。 将时间意识引入故事提纲的矛盾检测，改善事实一致性判断。"
+    },
+    "51": {
+      "摘要": "如何检验大模型的粤语知识、逻辑与推理能力？ 梳理粤语NLP资源，建立事实、数学和复杂推理等基准。 指出粤语资源与能力缺口，并为后续模型和数据建设提供评价依据。"
+    },
+    "52": {
+      "摘要": "思维链能否在扩散语言模型中以非从左到右的方式生成？ DoT把思维链与迭代扩散结合，允许推理步骤随去噪过程演化。 展示计算与推理表现的灵活取舍、自我修正和自一致性收益。"
+    },
+    "53": {
+      "摘要": "如何比较多轮、部分可观测任务中的智能体行为？ 构建AgentBoard统一环境，并用细粒度进度率衡量中间进展。 超越单一最终成功率，支持对任务过程和能力限制的分析。"
+    },
+    "54": {
+      "摘要": "蛋白质模型是否必须依赖昂贵的多序列比对？ 把进化信息利用视为检索增强，直接添加检索到的序列。 RSA省去比对与繁重预处理，并改善蛋白质结构、属性和新设计蛋白的预测。"
+    },
+    "55": {
+      "摘要": "如何低成本扩展视觉语言模型的偏好监督？ 构建82K以上多模态指令的AI反馈数据，并用DPO训练Silkie。 验证AI反馈对帮助性、视觉忠实性和安全性的作用，强调偏好多样性。"
+    },
+    "56": {
+      "摘要": "智能体如何从失败经验中学习新的动作？ LearnAct迭代创建与修改Python函数形式的动作。 将固定动作空间扩展为可学习的开放动作集合，在交互任务中提高成功率。"
+    },
+    "57": {
+      "摘要": "多个语言模型能否协作弥补单模型推理局限？ Corex组合辩论、审查和检索三种协作模式。 在多类推理任务提升可靠性，并分析协作成本与标注效率。"
+    },
+    "58": {
+      "摘要": "视觉输入为何削弱多模态模型的安全意识？ 用安全原则提示与输出分布校准放大已有安全信号。 CoCA在保持原有理解能力的同时改善多模态安全表现。"
+    },
+    "59": {
+      "摘要": "离散扩散的采样表达能否支持更有效的训练和生成？ 推导等价的重参数化采样形式，并据此设计训练与解码方法。 提供灵活的离散扩散统一框架，改善文本生成表现。"
+    },
+    "60": {
+      "摘要": "视觉语言模型如何理解科学论文中的抽象图形？ 从arXiv构建图文配对与科学图形问答数据。 提供ArXivCap和ArXivQA，揭示学术图表理解缺口并验证领域训练收益。"
+    },
+    "61": {
+      "摘要": "长上下文模型如何获得更规范且贴近人工判断的评测？ L-Eval提供多领域长文档任务，并比较长度指令与模型裁判指标。 将长文本数据构造和评价指标一起规范化，支持跨模型比较。"
+    },
+    "62": {
+      "摘要": "并发部署多个LoRA时如何进一步减少参数？ PRoLoRA使用层内共享、部分旋转、共享精炼与校正初始化。 在受限参数预算下改善微调表现，并保持LoRA的可部署性。"
+    },
+    "63": {
+      "摘要": "数学题表述变化会否暴露大模型的推理脆弱性？ 在GSM8K上加入多种数学扰动，评测25个模型和提示方法。 GSM-Plus揭示新增条件、目标变化等情况下的鲁棒性缺口。"
+    },
+    "64": {
+      "摘要": "少量参数的LoRA为何仍过拟合，何种dropout适用？ 按丢弃位置、结构模式与补偿机制统一分析dropout。 提出HiddenKey，并验证其对参数高效微调的改进。"
+    },
+    "65": {
+      "摘要": "低资源基准是否高估模型处理困难样本的能力？ 分析低资源学习难点，构建包含11个语言与视觉数据集的Achilles-Bench。 显示常规基准上的优势未必转化为困难样本的鲁棒性。"
+    },
+    "66": {
+      "摘要": "如何为数学求解选择更有效的中间子目标？ SEGO生成问题相关子目标，并依求解概率联系进行顺序优化。 把优化后的子目标纳入策略训练，改善GSM8K和MATH表现。"
+    },
+    "67": {
+      "摘要": "视觉与领域专用语言的推理过程如何协同？ BBA分别生成视觉和DSL推理链，再解决两者的不一致。 在几何、棋局与分子任务中改善多模态推理。"
+    },
+    "68": {
+      "摘要": "模型裁判是否受候选回答出现顺序影响？ 改变回答排列检测位置偏差，再通过校准与人工偏好对照。 揭示裁判可被顺序操纵，并提出更贴近人工判断的校准框架。"
+    },
+    "69": {
+      "摘要": "自回归代码生成如何利用后缀信息和循环修订？ 自填充解码先生成周围上下文，再以中断与循环机制修改片段。 将单向生成变为非单调过程，提高代码规整性与质量。"
+    },
+    "70": {
+      "摘要": "不继续训练能否让模型处理超过预训练长度的文本？ Dual Chunk Attention分解块内与块间注意力，并保留相对位置信息。 实现超过10万词元的上下文扩展，并可结合FlashAttention。"
+    },
+    "71": {
+      "摘要": "证明示例的子目标与排列如何影响形式化定理证明？ 构造并优化示例子目标，以扩散模型同时选择和排序示例。 提升miniF2F证明准确率与采样效率，连接子目标学习与示例组织。"
+    },
+    "72": {
+      "摘要": "大模型在多语言翻译中的优势和限制是什么？ 评测多个大模型的大规模语言方向，并分析提示与跨语言示例。 发现低资源翻译仍有明显差距，跨语言示例可能比同语对示例更有效。"
+    },
+    "73": {
+      "摘要": "通用语言智能体如何平衡自然语言与代码能力？ Lemur以代码密集语料预训练，再进行文本与代码指令微调。 在沟通、工具使用与环境交互中验证两种能力平衡的价值。"
+    },
+    "74": {
+      "摘要": "语言模型是否理解物体材料、质量和温度等物理概念？ 构建VEC基准，比较语言与视觉增强模型，并蒸馏具身知识。 发现规模扩展无法解决所有概念，而视觉表示可提供有效物理知识。"
+    },
+    "75": {
+      "摘要": "目标检测如何根据用户意图寻找未明确命名的物体？ DetGPT连接多模态推理与开放词汇检测器。 把自然语言需求和场景知识用于目标定位，扩展交互式检测方式。"
+    },
+    "76": {
+      "摘要": "结构化输出任务的昂贵标注如何由大模型生成？ SymGen以信息丰富的提示生成符号语言数据，再用一致性验证器筛选。 用合成数据训练小型任务模型，降低语义解析与代码任务的标注和部署成本。"
+    },
+    "77": {
+      "摘要": "序列到序列扩散如何降低训练与采样开销？ 引入软吸收状态连接离散变化与高斯空间，并使用ODE求解器。 同时加速训练收敛与生成采样，使条件文本扩散更接近实用。"
+    },
+    "78": {
+      "摘要": "分子属性标注不足时，能否用自然语言指令完成新任务？ GIMLET以统一位置编码和解耦注意力共同建模分子图与指令。 用两千余项分子任务预训练，改善指令式零样本迁移。"
+    },
+    "79": {
+      "摘要": "如何衡量模型面对不同问法时仍可靠掌握的事实知识？ KaRR比较多样提示下的正确实体生成概率与随机生成概率。 建立大规模实体关系评测，分析规模扩展和指令微调对知识可靠性的影响。"
+    },
+    "80": {
+      "摘要": "非自回归生成如何摆脱注意力的二次复杂度？ AMLP用依输入生成的自适应投影代替静态MLP投影。 实现线性时空复杂度，并在语音合成和翻译中验证效果。"
+    },
+    "81": {
+      "摘要": "不同输入应如何选择并排序上下文示例？ 以自适应的先选择后排序框架组织示例。 在多项NLP任务优于随机采样，并展示缩小ICL与微调差距的潜力。"
+    },
+    "82": {
+      "摘要": "如何让模型给出的自然语言解释既充分又简洁？ EIB用信息瓶颈目标重新生成初次提示产生的解释。 保留支持预测的证据，减少冗余和不充分的解释。"
+    },
+    "83": {
+      "摘要": "大规模多语言翻译如何减少语言间参数干扰和推理成本？ Lego-MT使用可拆卸语言分支与统一表征训练方案。 在覆盖433种语言的翻译资源上改善性能与训练效率。"
+    },
+    "84": {
+      "摘要": "近邻翻译如何在平滑表示空间的同时减少推理开销？ INK训练少量参数调整近邻表示，并异步刷新检索库。 改善翻译质量，同时降低检索内存与解码开销。"
+    },
+    "85": {
+      "摘要": "认知受损老年人的对话系统如何结合认知刺激和情绪支持？ 构建中文CSConv，并融合治疗原则与情绪支持策略生成回答。 提供带策略标签的对话资源和多源知识融合方法，表现仍与人工有差距。"
+    },
+    "86": {
+      "摘要": "表格描述如何避免复杂逻辑推理导致的不忠实内容？ SORTIE使用表格编程语言与实体依赖调度完成符号推理。 按已解决实体逐步合成程序，改善表面与逻辑忠实性。"
+    },
+    "87": {
+      "摘要": "示例集合如何兼顾与输入的相关性及组合互补性？ CEIL用行列式点过程建模子集，并以对比目标学习模型偏好。 在多类分类和生成任务验证选择、迁移与组合泛化能力。"
+    },
+    "88": {
+      "摘要": "高效注意力的评测是否覆盖真实任务中的不同注意力形式？ CAB按因果与非因果、自注意力与交叉注意力建立四类任务评测。 比较多架构、多任务的性能和效率，补足仅测双向自注意力的限制。"
+    },
+    "89": {
+      "摘要": "如何生成包含物体、位置、动作与声音细节的视频描述？ 建立中英文FAVDBench，结合音视频语言Transformer和两类生成损失。 提出实体完整度与音频描述指标，支持段落级细粒度描述。"
+    },
+    "90": {
+      "摘要": "随机特征注意力与精确softmax注意力的误差如何缩小？ 将随机特征近似分解为控制变量估计器，并改进控制变量形式。 保持线性复杂度的同时降低近似误差，在视觉和语言任务验证。"
+    },
+    "91": {
+      "摘要": "零样本学习如何处理合成训练数据中的噪声？ SunGen以抗噪重加权自动学习样本质量，不依赖人工标签。 通过理论和文本分类实验验证更高质量的合成数据。"
+    },
+    "92": {
+      "摘要": "序列模型如何降低复杂度并支持长度外推？ 使用相对位置编码的Toeplitz矩阵与快速矩阵向量乘法。 以固定参数预算获得对数线性复杂度和跨长度建模能力。"
+    },
+    "93": {
+      "摘要": "离散文本的条件生成如何适配扩散建模？ DiffuSeq针对序列到序列任务设计文本扩散模型。 同时验证生成质量与多样性，并分析与自回归、非自回归模型的联系。"
+    },
+    "94": {
+      "摘要": "没有解释标注时，如何说明一句话为什么错误？ Neon先生成正确实例，再据此寻找冲突点并产生解释。 两阶段无监督方法在常识与推理解释任务中得到验证。"
+    },
+    "95": {
+      "摘要": "如何减少零样本合成数据中的低信息和重复样本？ ProGen将小型任务模型的反馈作为上下文示例引导后续生成。 以逐步反馈提高样本利用率，减少达到相近性能所需的数据量。"
+    },
+    "96": {
+      "摘要": "零样本任务能否用小模型获得更低的推理成本？ ZeroGen先用预训练模型无监督生成数据，再训练小型任务模型。 把大模型知识转移到合成数据，支持无需标注的高效任务部署。"
+    },
+    "97": {
+      "摘要": "不同结构化知识任务如何共享统一训练与评测形式？ UnifiedSKG将21项任务转化为文本到文本格式，并进行多任务前缀微调。 促进跨任务系统比较，揭示零样本和少样本结构化知识利用的困难。"
+    },
+    "98": {
+      "摘要": "线性Transformer性能下降的关键原因是什么？ 分析无界梯度与注意力稀释，以归一化和早层局部注意力解决。 TransNormer兼顾梯度稳定和邻近结构，改善序列建模性能。"
+    },
+    "99": {
+      "摘要": "显式语言结构带来的收益是否来自语言知识本身？ 用平衡树等平凡图替代真实句法、语义结构进行对照。 发现额外特征交互也能解释部分提升，建议加入平凡图基线。"
+    },
+    "100": {
+      "摘要": "对比学习为何未充分改善神经文本生成？ CoNT联合改进对比样本、损失和解码策略。 在翻译、摘要等多种生成任务验证序列级训练的收益。"
+    },
+    "101": {
+      "摘要": "文本生成怎样减少重复退化而保持连贯？ SimCTG校准词元表示空间，并用对比搜索平衡多样性和上下文一致性。 将各向异性表示与生成退化联系起来，提供训练和解码的联合方案。"
+    },
+    "102": {
+      "摘要": "如何在视频帧中像素级定位发声物体？ 构建AVSBench，以时间像素级音视频交互引导分割。 建立单声源与多声源评测，并用正则化促进音画对应。"
+    },
+    "103": {
+      "摘要": "随机特征softmax近似的偏差如何理解和减少？ 从自归一化重要性采样推导随机注意力，再组合为线性LARA。 连接无偏估计与计算效率，改善多领域的近似质量。"
+    },
+    "104": {
+      "摘要": "视觉序列化如何保留二维空间邻近关系？ Ripple Attention按空间距离加权，并以动态规划高效计算。 在次二次复杂度下恢复局部视觉线索。"
+    },
+    "105": {
+      "摘要": "不同句法、语义图能为语言建模提供多少额外信息？ 用GPT-2与七种真实图结构集成，对比下一词预测和困惑度。 在已知正确图的实验中，语义成分结构最有帮助；结论不等于自动解析场景效果。"
+    },
+    "106": {
+      "摘要": "开放式故事和对话如何安排事件间的因果与关系？ 先由事件转移规划器生成粗略情节，再由文本模型细化。 粗到细生成改善连贯性和多样性。"
+    },
+    "107": {
+      "摘要": "对话模型如何把词汇知识融入内部参数？ 用维基百科弱监督训练对比式词元知识检索器，再进行知识内化。 在多种对话模型与数据上验证内部知识增强的通用性。"
+    },
+    "108": {
+      "摘要": "注意力内存如何固定大小而尽量保留建模能力？ ABC把高效注意力统一为有界内存控制，并学习上下文化的内存组织。 连接不同注意力变体，在语言与翻译任务改善时空效率。"
+    },
+    "109": {
+      "摘要": "线性注意力如何保留softmax的非负性与集中分布？ cosFormer结合线性算子和余弦距离重加权。 在因果、交叉注意力及长序列任务保持效率与准确率。"
+    },
+    "110": {
+      "摘要": "BERT层数增加后的表示过平滑由什么引起？ 从图传播角度分析层归一化，并自适应融合不同层表示。 给出低秩收敛条件与层次融合缓解方法。"
+    },
+    "111": {
+      "摘要": "多头注意力如何减少头部冗余？ CODA用潜变量和层次变分分布显式建模头间交互。 提高注意力参数利用率，并在语言建模和翻译中验证。"
+    },
+    "112": {
+      "摘要": "多模态翻译的性能提升是否真正来自视觉信息？ 设计可解释模型并分析视觉信息的使用情况。 发现部分提升可由正则化解释，提醒不能仅凭指标增益认定视觉贡献。"
+    },
+    "113": {
+      "摘要": "softmax注意力如何降低长序列的二次计算成本？ 用随机特征线性近似softmax，并提供可选近因门控。 作为注意力替代模块改善长序列内存和解码速度。"
+    },
+    "114": {
+      "摘要": "词表示学习能否用统一的互信息目标解释？ 把经典词嵌入与上下文表示解释为互信息下界最大化。 据此提出句子与局部n-gram之间的自监督目标。"
+    },
+    "115": {
+      "摘要": "连续接收不同数据时如何减少灾难性遗忘？ 使用情景记忆中的稀疏经验回放与局部适应。 证明两者可互补，并以随机存储降低记忆空间。"
+    },
+    "116": {
+      "摘要": "语言模型的数据加噪如何获得统一概率解释？ 将加噪视为带特定变分分布的贝叶斯循环网络。 提出绑定嵌入和逐元素变分平滑，改善预测。"
+    },
+    "117": {
+      "摘要": "CTC和分段条件随机场能否互补训练语音模型？ 共享循环编码器，联合优化SCRF与CTC损失。 多任务目标改善两种解码方式，CTC预训练还可加快收敛。"
+    },
+    "118": {
+      "摘要": "循环神经文法实际学到了哪些句法信息？ 用模型消融与注意力增强的RNNG检查结构组合与中心词作用。 表明显式组合对性能关键，并分析短语表示与非终结符标签的关系。"
+    },
+    "119": {
+      "摘要": "声学建模如何在没有外部分段的情况下端到端训练？ 联合循环特征提取与分段CRF，对所有分段边界进行边缘化。 提供自包含训练解码方法，并在TIMIT验证识别效果。"
+    },
+    "120": {
+      "摘要": "多个依存分析器的知识如何压缩到一个结构化模型？ 用最小贝叶斯风险共识与包含集成不确定性的结构化铰链损失蒸馏。 避免结构化交叉熵计算困难，在多语言依存分析中保持集成收益。"
+    },
+    "121": {
+      "摘要": "如何联合预测序列分段与片段标签？ 双向循环网络编码片段，再用半马尔可夫CRF整合评分。 支持边界已知或潜在的训练，在手写识别与中文分词标注中验证。"
+    },
+    "122": {
+      "摘要": "文本分类中如何自动选择词频、词组和正则化等表示配置？ 使用序贯模型优化联合搜索文本表示与超参数。 让简单线性模型在主题分类和情感分析中接近更复杂模型，减少人工调参。"
+    },
+    "123": {
+      "摘要": "如何把依存树快速转换成高质量短语结构树？ 将依存到短语结构转换建模为结构化预测，并进行粗到细解码。 在中英文基准上取得接近先进系统的准确率，同时降低解析复杂度。"
+    },
+    "124": {
+      "摘要": "新闻语料训练的句法分析器如何适应非规范推文？ 构建Tweebank标注语料，调整统计解析算法并利用域外Penn Treebank。 提供面向英文推文的解析器和语料，并在新测试集取得超过80%的无标签依存准确率。"
+    },
+    "125": {
+      "摘要": "微博文本的噪声和领域差异如何影响中文依存分析？ 建立超过18000词元的微博树库，以可编程概率一阶逻辑并行预测依存弧。 在论文实验中优于现成中文解析器和同域MaltParser基线。"
+    },
+    "126": {
+      "摘要": "情感分析如何区分讽刺、反语和讽刺性反语？ 明确术语定义，讨论表达层级并归纳可形式化和暂不可形式化的特征。 为讽刺性反语识别提出概念区分和规则特征，不宣称完成通用识别器。",
+      "关键词": "原文关键词（中译）：反语；讽刺；形式化"
+    },
+    "127": {
+      "摘要": "中文依存分析如何减少数据稀疏和自动解析错误？ 以自消歧模式提取带标签依存三元组，再通过标签传播扩展并接入MST解析器。 降低对基线解析器的依赖，并在实验中改善中文依存分析表现。",
+      "关键词": "原文关键词（中译）：依存分析；自消歧模式；原始语料"
+    },
+    "129": {
+      "摘要": "语言模型如何利用句外上下文改善篇章连贯性？ DCLM以多层级循环网络同时建模词、句和文档上下文。 较词级模型略改善预测似然，并更明显改善文档连贯性评价。"
+    },
+    "130": {
+      "摘要": "如何覆盖双字中文词的派生与复合构词结构？ 构建细分类型方案和约11000词语料，训练构词分类器。 发布ACBiMA语料与工具，复合词分类宏平均F值约66%。"
+    },
+    "131": {
+      "摘要": "句子嵌入如何区分表面相似和语义相似？ 以否定句构造软负样本，并加入双向边界损失。 缓解对比学习的特征压制，改善语义相似性评测。"
+    },
+    "132": {
+      "摘要": "无需再训练的语言模型如何接受图像引导？ MAGIC将CLIP图文分数加入文本解码，约束语义与上下文连贯。 支持零样本图像描述和视觉故事生成，无需梯度更新。"
+    },
+    "133": {
+      "摘要": "音视频分割如何从发声区域扩展到物体语义类别？ 在AVSBench中增加语义标签子集，并使用音画交互和正则化。 扩展单声源、多声源及语义分割三种评测；属于原工作的期刊扩展，单独保留并注明。"
+    },
+    "134": {
+      "摘要": "更多演示样例能否继续提高上下文学习表现？ 用高效Transformer构建长上下文EVALM，并扩展指令训练和样例数量。 分析多样例ICL的性能边界及训练长度与推理收益的联系。"
+    },
+    "135": {
+      "摘要": "低资源视觉任务如何获得多样且可控的增强数据？ TTIDA先生成详细文本，再以文本到图像模型生成带标签图像。 在域内、跨域、长尾等设置验证生成式数据增强的鲁棒性收益。"
+    },
+    "136": {
+      "摘要": "非自回归生成如何学习多模态目标分布？ 从模型分布采样，并加入对比约束稳定训练。 结合DA-Transformer，在翻译、摘要和改写任务改善并行生成质量。"
+    },
+    "137": {
+      "摘要": "视觉语言模型如何获得跨任务、跨语言的指令数据？ 将40个数据集整理成视觉到文本格式，并翻译关键任务到80种语言。 发布M3IT及对应模型，支持复杂问答与未见语言指令。"
+    },
+    "138": {
+      "摘要": "英语中心模型的跨语言推理迁移是否弱于多语言模型？ 跨四类推理任务比较模型、源语言和规模。 发现多语言预训练并非总占优，迁移能力依任务与源语言而变。"
+    },
+    "139": {
+      "摘要": "如何把英语较强的大模型能力迁移到其他语言？ 使用翻译和跨语言指令数据进行语义对齐，并按规模规律分配数据。 构建跨语言与多语言LLaMA，分析中间层的语义空间对齐。"
+    },
+    "140": {
+      "摘要": "LLM能否按不同任务标准可靠替代人工评价？ 细粒度比较模型与专家对评价标准的理解和执行。 发现复杂标准仍困难，并观察到模型预评可减少部分人工主观波动。"
+    },
+    "142": {
+      "摘要": "线性注意力如何避免因果和无界上下文中的效率退化？ 以正交分解压缩固定大小记忆，同时保留局部信息与相对位置。 提高因果语言建模效率及长度外推能力。"
+    },
+    "143": {
+      "摘要": "计算机智能体如何跨软件执行任务并积累技能？ OS-Copilot统一网页、终端、文件及应用接口，构建自改进FRIDAY。 在通用助手与办公软件任务验证从经验迁移到未见应用的能力。"
+    },
+    "144": {
+      "摘要": "神经代码智能的模型、任务与评价如何演变？ 按历史阶段综述代表模型、任务类别和代码智能应用。 梳理从循环网络到大模型的技术变化及真实复杂任务挑战。"
+    },
+    "145": {
+      "摘要": "低资源心理对话如何进行保留上下文的多轮数据增强？ 组合渐进思维、心理知识与多轮对话三个生成模块。 用专业知识控制生成偏移，并在心理对话数据上评测。"
+    },
+    "146": {
+      "摘要": "有限人工证明数据如何支持更强的形式化多步推理？ SubgoalXL在Isabelle中联合子目标监督和专家迭代学习。 交替优化形式陈述、证明和子目标生成器，提高miniF2F证明成功率。"
+    },
+    "147": {
+      "摘要": "随机分块造成的语义不一致如何影响长上下文RAG？ 以信噪比定义片段不确定性，训练无监督检索器并改进采样。 改善分布变化下的检索校准、鲁棒性与数据效率。"
+    },
+    "148": {
+      "摘要": "如何全面且可扩展地评测语言模型的博弈推理？ TMGBench覆盖144类双人博弈，并以顺序、并行和嵌套形式组合。 检验理性、稳健性与心智理论，揭示策略推理的不一致。"
+    },
+    "149": {
+      "摘要": "多模态基准实际衡量了视觉推理还是语言先验？ 移除或分离视觉输入贡献，并自动识别语言主干的知识缺口。 发现部分基准可不看图取得高分，强调更细致的多模态评测。"
+    },
+    "151": {
+      "摘要": "LLM能否推理复杂、受扰动的生物通路？ BioMaze从真实研究构建5.1K问题，PathSeeker交互导航子图。 展示通路推理困难，并探索贴近科学结构的智能体方法。"
+    },
+    "153": {
+      "摘要": "复杂推理能否摆脱注意力和KV缓存开销？ 以Mamba-2状态空间层结合PromptCoT数据及两阶段课程微调。 探索固定内存推理架构在数学和代码推理上的能力。"
+    },
+    "154": {
+      "摘要": "开放扩散语言模型如何兼顾通用能力和灵活生成？ Dream 7B由自回归模型初始化，使用上下文自适应噪声调度。 发布基础与指令模型，支持任意顺序、填空及质量速度取舍。"
+    },
+    "155": {
+      "摘要": "代码扩散模型如何形成适应任务的生成顺序？ 从自回归检查点转换，结合截断、填充惩罚和可验证奖励训练。 Dream-Coder展示草图优先、顺序补全和交错推理等生成行为。"
+    },
+    "156": {
+      "摘要": "长程交互中的情绪理解如何评价？ LongEmotion涵盖情绪识别、知识应用和共情生成，并结合检索及多智能体。 把连续长上下文纳入情绪智能评价，分析推理模式与检索的影响。"
+    },
+    "157": {
+      "摘要": "高难度训练问题如何自动扩大规模和覆盖范围？ PromptCoT 2.0以EM迭代优化出题理由，支持自博弈和教师蒸馏。 生成更难且多样的数学与代码问题，为推理后训练提供数据。"
+    },
+    "158": {
+      "摘要": "移动界面智能体的危险操作如何被可靠检测？ MobileRisk-Live提供真实轨迹，OS-Sentinel结合形式验证与多模态情境判断。 同时覆盖明确系统违规和依赖上下文的风险，提高多项安全检测指标。"
+    },
+    "159": {
+      "摘要": "如何提高推理训练和测试采样的解法多样性？ RPD对齐并比较中间推理步骤，据此选择一题多解训练集。 以多种有效轨迹改善pass@k，扩展强化学习的探索空间。"
+    },
+    "160": {
+      "摘要": "RoPE的低频结构为何可能破坏长上下文外推？ 以频谱和矩阵熵分析噪声头，再用高斯分布重参数化注意力。 DoPE无需微调即可提高长度外推与抗扰动表现。"
+    },
+    "161": {
+      "摘要": "只依置信度的扩散解码如何保持跨步一致性？ CCD用历史轨迹修正和条件互信息调整每步解除掩码预算。 同时改善采样轨迹质量和生成速度。"
+    },
+    "162": {
+      "摘要": "扩散语言主干能否改善视觉规划与机器人控制？ 构建Dream-VL，再以机器人数据持续训练Dream-VLA。 利用双向性进行动作分块与并行生成，在模拟及实体任务验证。"
+    },
+    "163": {
+      "摘要": "如何把含视觉和物理约束的现实问题转为形式命题？ MMFormalizer递归完成感知落地与公理组合，并自适应停止。 建立PhyX-AF多模态自动形式化评测，连接视觉证据与形式推理。"
+    },
+    "164": {
+      "摘要": "如何保留压缩训练效率，同时在推理时直接处理原始字节？ 联合训练原始字节和外部压缩视图，学习内部对齐。 代理压缩在固定算力下提高字节模型性能，推理无需外部分词器。"
+    },
+    "165": {
+      "摘要": "扩散语言模型是否有可提取和干预的稀疏语义特征？ DLM-Scope使用Top-K稀疏自编码器分析不同层与去噪时刻。 观察到早层插入可降低损失，特征还可辅助生成顺序和行为控制。"
+    },
+    "166": {
+      "摘要": "智能体如何在执行中调整目标、工具和上下文？ ToolSelf把配置更新统一为工具动作，并通过两阶段训练学习调整。 将执行与适应置于同一策略空间，减少静态配置对迁移的限制。"
+    },
+    "167": {
+      "摘要": "如何生成带明确时间戳的细粒度音视频叙述？ 设计六维结构、OmniDCBench和SodaM，并结合SFT与GRPO训练。 提供TimeChat-Captioner及数据，改善音视频推理和时间定位。"
+    },
+    "168": {
+      "摘要": "智能体评测如何同时衡量完成度、安全和稳定性？ Claw-Eval用执行轨迹、审计日志和环境快照对300项任务评分。 区分偶然成功与稳定能力，揭示只看最终结果会漏掉的违规和故障。"
+    },
+    "169": {
+      "摘要": "模型能否把经验转化为无需提醒的行为习惯？ ImplicitMemBench测程序记忆、启动效应和经典条件作用。 以学习、干扰、测试流程显示隐式记忆的局限，区别于事实回忆。"
+    },
+    "170": {
+      "摘要": "博弈自训练如何学到可迁移而非仅适用游戏的推理？ STRATAGEM用推理迁移系数和推理演化奖励选择训练轨迹。 在数学、通用推理和代码任务验证跨领域收益。"
+    },
+    "171": {
+      "摘要": "多轮社会互动中的单句贡献如何分配奖励？ SAVOIR结合预期效用与Shapley值进行信用分配。 以博弈论性质约束社会强化学习奖励，在SOTOPIA上验证。"
+    },
+    "172": {
+      "摘要": "社会角色的个人到组织粒度是否编码在模型表示中？ 用宏观与微观角色隐藏态差值定义粒度轴并进行激活干预。 发现可排序、可迁移且部分可控的潜在角色粒度方向。"
+    },
+    "173": {
+      "摘要": "扩散后训练如何贴近推理时从易到难的去噪轨迹？ TABOM以预测熵的玻尔兹曼分布推导成对排序目标，学习自蒸馏轨迹。 将轨迹用于知识获取而不只加速，并缓解领域适配时的遗忘。"
+    },
+    "174": {
+      "摘要": "分块扩散如何同时获得长思维链能力与并行速度？ DreamReasoner逐步从小块过渡到大块训练，研究训练和推理块大小。 缓解大块训练导致的推理退化，并跨多种推理块大小泛化。"
+    },
+    "175": {
+      "摘要": "自然语言技能说明能否压缩成短小的行为控制前缀？ 冻结基础模型，从文本技能初始化连续前缀并训练软增量。 减少技能词元开销并改善单轮任务；长程智能体行为压缩仍有限。"
+    },
+    "176": {
+      "摘要": "视觉模型裁判能否可靠判断跨平台智能体是否完成任务？ OSReward构建人工核验轨迹及困难子集，并训练OS-Shepherd奖励模型。 揭示宽松判分偏差，探索兼顾可靠性与成本的轨迹奖励。"
+    },
+    "177": {
+      "摘要": "冻结的通用嵌入如何区分语义相似但评价标准不同的文本？ PGCL结合原型锚点、监督对比与边界正则。 在毒性、情绪和评分任务改善表示；理论结论依赖明确假设。"
+    },
+    "178": {
+      "摘要": "智能体如何适应真实用户不完整且多轮的任务表达？ PersonaForge按用户统计校准角色行为，并基于真实种子反向构造交互。 提供多领域多轮数据和基准，改善任务完成与响应质量。"
+    },
+    "179": {
+      "摘要": "多模态模型的视觉注意力如何在节省计算时保持能力？ 量化物体与背景的注意力头分工，并据此设计Ariadne混合注意力。 用可测量的头部专门化指导窗口交互、序列化与softmax分配。"
+    }
+  },
+  "files": {
+    "1": "/materials/Kong%2C%20Lingpeng/论文/2019_Learning%20and%20Evaluating%20General%20Linguistic%20Intelligence.pdf",
+    "2": "/materials/Kong%2C%20Lingpeng/论文/2018_Neural%20Phrase-to-Phrase%20Machine%20Translation.pdf",
+    "3": "/materials/Kong%2C%20Lingpeng/论文/2018_Sentence%20Encoding%20with%20Tree-constrained%20Relation%20Networks.pdf",
+    "4": "/materials/Kong%2C%20Lingpeng/论文/2017_SyntaxNet%20Models%20for%20the%20CoNLL%202017%20Shared%20Task.pdf",
+    "5": "/materials/Kong%2C%20Lingpeng/论文/2017_DRAGNN_%20A%20Transition-based%20Framework%20for%20Dynamically%20Connected%20Neural%20Networks.pdf",
+    "6": "/materials/Kong%2C%20Lingpeng/论文/2017_DyNet_%20The%20Dynamic%20Neural%20Network%20Toolkit.pdf",
+    "7": "/materials/Kong%2C%20Lingpeng/论文/2014_An%20Empirical%20Comparison%20of%20Parsing%20Methods%20for%20Stanford%20Dependencies.pdf",
+    "8": "/materials/Kong%2C%20Lingpeng/论文/2025_A%20Survey%20on%20Large%20Language%20Model-Based%20Social%20Agents%20in%20Game-Theoretic%20Scenarios.pdf",
+    "9": "/materials/Kong%2C%20Lingpeng/论文/2025_Autoregressive%20Models%20in%20Vision_%20A%20Survey.pdf",
+    "10": "/materials/Kong%2C%20Lingpeng/论文/2023_Linearized%20Relative%20Positional%20Encoding.pdf",
+    "12": "/materials/Kong%2C%20Lingpeng/论文/2021_Adaptive%20Semiparametric%20Language%20Models.pdf",
+    "13": "/materials/Kong%2C%20Lingpeng/论文/2020_Syntactic%20Structure%20Distillation%20Pretraining%20for%20Bidirectional%20Encoders.pdf",
+    "14": "/materials/Kong%2C%20Lingpeng/论文/2020_Better%20Document-Level%20Machine%20Translation%20with%20Bayes%E2%80%99%20Rule.pdf",
+    "15": "/materials/Kong%2C%20Lingpeng/论文/2017_End-to-End%20Neural%20Segmental%20Models%20for%20Speech%20Recognition.pdf",
+    "17": "/materials/Kong%2C%20Lingpeng/论文/2026_SwingArena_%20Adversarial%20Programming%20Arena%20for%20Long-Context%20GitHub%20Issue%20Solving.pdf",
+    "18": "/materials/Kong%2C%20Lingpeng/论文/2026_PERSONA_%20Dynamic%20and%20Compositional%20Inference-Time%20Personality%20Control%20via%20Activation%20Vector%20Algebra.pdf",
+    "19": "/materials/Kong%2C%20Lingpeng/论文/2026_ATTS_%20Asynchronous%20Test-Time%20Scaling%20via%20Conformal%20Prediction.pdf",
+    "22": "/materials/Kong%2C%20Lingpeng/论文/2026_DreamOn_%20Diffusion%20Language%20Models%20For%20Code%20Infilling%20Beyond%20Fixed-size%20Canvas.pdf",
+    "25": "/materials/Kong%2C%20Lingpeng/论文/2025_DynaAct_%20Large%20Language%20Model%20Reasoning%20with%20Dynamic%20Action%20Spaces.pdf",
+    "27": "/materials/Kong%2C%20Lingpeng/论文/2025_ProReason_%20Multi-Modal%20Proactive%20Reasoning%20with%20Decoupled%20Eyesight%20and%20Wisdom.pdf",
+    "29": "/materials/Kong%2C%20Lingpeng/论文/2025_UNComp_%20Can%20Matrix%20Entropy%20Uncover%20Sparsity_%20%E2%80%94%20A%20Compressor%20Design%20from%20an%20Uncertainty-Aware%20Perspective.pdf",
+    "30": "/materials/Kong%2C%20Lingpeng/论文/2025_Developing%20and%20Utilizing%20a%20Large-Scale%20Cantonese%20Dataset%20for%20Multi-Tasking%20in%20Large%20Language%20Models.pdf",
+    "31": "/materials/Kong%2C%20Lingpeng/论文/2025_Recipe2Plan_%20Evaluating%20Planning%20Abilities%20of%20LLMs%20for%20Efficient%20and%20Feasible%20Multitasking%20with%20Time%20Constraints%20Between%20Actions.pdf",
+    "33": "/materials/Kong%2C%20Lingpeng/论文/2025_Reasoning%20Does%20Not%20Necessarily%20Improve%20Role-Playing%20Ability.pdf",
+    "34": "/materials/Kong%2C%20Lingpeng/论文/2025_PromptCoT_%20Synthesizing%20Olympiad-level%20Problems%20for%20Mathematical%20Reasoning%20in%20Large%20Language%20Models.pdf",
+    "35": "/materials/Kong%2C%20Lingpeng/论文/2025_Alleviating%20Hallucinations%20from%20Knowledge%20Misalignment%20in%20Large%20Language%20Models%20via%20Selective%20Abstention%20Learning.pdf",
+    "36": "/materials/Kong%2C%20Lingpeng/论文/2025_Teaching%20Language%20Models%20to%20Critique%20via%20Reinforcement%20Learning.pdf",
+    "38": "/materials/Kong%2C%20Lingpeng/论文/2025_VL-RewardBench_%20A%20Challenging%20Benchmark%20for%20Vision-Language%20Generative%20Reward%20Models.pdf",
+    "39": "/materials/Kong%2C%20Lingpeng/论文/2025_Jailbreaking%20as%20a%20Reward%20Misspecification%20Problem.pdf",
+    "41": "/materials/Kong%2C%20Lingpeng/论文/2025_MoS_%20Unleashing%20Parameter%20Efficiency%20of%20Low-Rank%20Adaptation%20with%20Mixture%20of%20Shards.pdf",
+    "42": "/materials/Kong%2C%20Lingpeng/论文/2025_Language%20Model%20Non-Myopic%20Generation%20for%20Reasoning%20and%20Planning.pdf",
+    "43": "/materials/Kong%2C%20Lingpeng/论文/2025_Beyond%20Autoregression_%20Discrete%20Diffusion%20for%20Complex%20Reasoning%20and%20Planning.pdf",
+    "46": "/materials/Kong%2C%20Lingpeng/论文/2025_Why%20Does%20the%20Effective%20Context%20Length%20of%20LLMs%20Fall%20Short_.pdf",
+    "47": "/materials/Kong%2C%20Lingpeng/论文/2025_Scaling%20Diffusion%20Language%20Models%20via%20Adaptation%20from%20Autoregressive%20Models.pdf",
+    "48": "/materials/Kong%2C%20Lingpeng/论文/2025_Forewarned%20is%20Forearmed_%20Harnessing%20LLMs%20for%20Data%20Synthesis%20via%20Failure-induced%20Exploration.pdf",
+    "49": "/materials/Kong%2C%20Lingpeng/论文/2025_ImgTrojan_%20Jailbreaking%20Vision-Language%20Models%20with%20ONE%20Image.pdf",
+    "50": "/materials/Kong%2C%20Lingpeng/论文/2025_FactTrack_%20Time-Aware%20World%20State%20Tracking%20in%20Story%20Outlines.pdf",
+    "51": "/materials/Kong%2C%20Lingpeng/论文/2025_How%20Well%20Do%20LLMs%20Handle%20Cantonese_%20Benchmarking%20Cantonese%20Capabilities%20of%20Large%20Language%20Models.pdf",
+    "52": "/materials/Kong%2C%20Lingpeng/论文/2024_Diffusion%20of%20Thought_%20Chain-of-Thought%20Reasoning%20in%20Diffusion%20Language%20Models.pdf",
+    "54": "/materials/Kong%2C%20Lingpeng/论文/2024_Retrieved%20Sequence%20Augmentation%20for%20Protein%20Representation%20Learning.pdf",
+    "55": "/materials/Kong%2C%20Lingpeng/论文/2024_VLFeedback_%20A%20Large-Scale%20AI%20Feedback%20Dataset%20for%20Large%20Vision-Language%20Models%20Alignment.pdf",
+    "56": "/materials/Kong%2C%20Lingpeng/论文/2024_Empowering%20Large%20Language%20Model%20Agents%20through%20Action%20Learning.pdf",
+    "59": "/materials/Kong%2C%20Lingpeng/论文/2024_A%20Reparameterized%20Discrete%20Diffusion%20Model%20for%20Text%20Generation.pdf",
+    "61": "/materials/Kong%2C%20Lingpeng/论文/2024_L-Eval_%20Instituting%20Standardized%20Evaluation%20for%20Long%20Context%20Language%20Models.pdf",
+    "62": "/materials/Kong%2C%20Lingpeng/论文/2024_PRoLoRA_%20Partial%20Rotation%20Empowers%20More%20Parameter-Efficient%20LoRA.pdf",
+    "63": "/materials/Kong%2C%20Lingpeng/论文/2024_GSM-Plus_%20A%20Comprehensive%20Benchmark%20for%20Evaluating%20the%20Robustness%20of%20LLMs%20as%20Mathematical%20Problem%20Solvers.pdf",
+    "64": "/materials/Kong%2C%20Lingpeng/论文/2024_LoRA%20Meets%20Dropout%20under%20a%20Unified%20Framework.pdf",
+    "66": "/materials/Kong%2C%20Lingpeng/论文/2024_SEGO_%20Sequential%20Subgoal%20Optimization%20for%20Mathematical%20Problem-Solving.pdf",
+    "67": "/materials/Kong%2C%20Lingpeng/论文/2024_BBA_%20Bi-Modal%20Behavioral%20Alignment%20for%20Reasoning%20with%20Large%20Vision-Language%20Models.pdf",
+    "68": "/materials/Kong%2C%20Lingpeng/论文/2024_Large%20Language%20Models%20are%20not%20Fair%20Evaluators.pdf",
+    "69": "/materials/Kong%2C%20Lingpeng/论文/2024_Self-Infilling%20Code%20Generation.pdf",
+    "70": "/materials/Kong%2C%20Lingpeng/论文/2024_Training-%20Free%20Long-Context%20Scaling%20of%20Large%20Language%20Models.pdf",
+    "73": "/materials/Kong%2C%20Lingpeng/论文/2024_Lemur_%20Harmonizing%20Natural%20Language%20and%20Code%20for%20Language%20Agents.pdf",
+    "76": "/materials/Kong%2C%20Lingpeng/论文/2023_Generating%20Data%20for%20Symbolic%20Language%20with%20Large%20Language%20Models.pdf",
+    "77": "/materials/Kong%2C%20Lingpeng/论文/2023_DiffuSeq-v2_%20Bridging%20Discrete%20and%20Continuous%20Text%20Spaces%20for%20Accelerated%20Seq2Seq%20Diffusion%20Models.pdf",
+    "79": "/materials/Kong%2C%20Lingpeng/论文/2023_Statistical%20Knowledge%20Assessment%20for%20Generative%20Language%20Models.pdf",
+    "81": "/materials/Kong%2C%20Lingpeng/论文/2023_Self-Adaptive%20In-Context%20Learning_%20An%20Information%20Compression%20Perspective%20for%20In-Context%20Example%20Selection%20and%20Ordering.pdf",
+    "83": "/materials/Kong%2C%20Lingpeng/论文/2023_Lego-MT_%20Learning%20Detachable%20Models%20for%20Massively%20Multilingual%20Machine%20Translation.pdf",
+    "84": "/materials/Kong%2C%20Lingpeng/论文/2023_INK_%20Injecting%20kNN%20Knowledge%20in%20Nearest%20Neighbor%20Machine%20Translation.pdf",
+    "85": "/materials/Kong%2C%20Lingpeng/论文/2023_A%20Cognitive%20Stimulation%20Dialogue%20System%20with%20Multi-source%20Knowledge%20Fusion%20for%20Elders%20with%20Cognitive%20Impairment.pdf",
+    "86": "/materials/Kong%2C%20Lingpeng/论文/2023_SORTIE_%20Dependency-Aware%20Symbolic%20Reasoning%20for%20Logical%20Data-to-text%20Generation.pdf",
+    "87": "/materials/Kong%2C%20Lingpeng/论文/2023_Compositional%20Exemplars%20for%20In-context%20Learning.pdf",
+    "88": "/materials/Kong%2C%20Lingpeng/论文/2023_CAB_%20Comprehensive%20Attention%20Benchmarking%20on%20Long%20Sequence%20Modeling.pdf",
+    "90": "/materials/Kong%2C%20Lingpeng/论文/2023_Efficient%20Attention%20via%20Control%20Variates.pdf",
+    "92": "/materials/Kong%2C%20Lingpeng/论文/2023_Toeplitz%20Neural%20Network%20for%20Sequence%20Modeling.pdf",
+    "93": "/materials/Kong%2C%20Lingpeng/论文/2023_DiffuSeq_%20Sequence%20to%20Sequence%20Text%20Generation%20with%20Diffusion%20Models.pdf",
+    "94": "/materials/Kong%2C%20Lingpeng/论文/2023_Unsupervised%20Explanation%20Generation%20via%20Correct%20Instantiations.pdf",
+    "95": "/materials/Kong%2C%20Lingpeng/论文/2022_ProGen_%20Progressive%20Zero-shot%20Dataset%20Generation%20via%20In-context%20Feedback.pdf",
+    "96": "/materials/Kong%2C%20Lingpeng/论文/2022_ZeroGen_%20Efficient%20Zero-shot%20Learning%20via%20Dataset%20Generation.pdf",
+    "98": "/materials/Kong%2C%20Lingpeng/论文/2022_The%20Devil%20in%20Linear%20Transformer.pdf",
+    "99": "/materials/Kong%2C%20Lingpeng/论文/2022_An%20Empirical%20Revisiting%20of%20Linguistic%20Knowledge%20Fusion%20in%20Language%20Understanding%20Tasks.pdf",
+    "100": "/materials/Kong%2C%20Lingpeng/论文/2022_CoNT_%20Contrastive%20Neural%20Text%20Generation.pdf",
+    "101": "/materials/Kong%2C%20Lingpeng/论文/2022_A%20Contrastive%20Framework%20for%20Neural%20Text%20Generation.pdf",
+    "103": "/materials/Kong%2C%20Lingpeng/论文/2022_Linear%20Complexity%20Randomized%20Self-attention%20Mechanism.pdf",
+    "104": "/materials/Kong%2C%20Lingpeng/论文/2022_Ripple%20Attention%20for%20Visual%20Perception%20with%20Sub-quadratic%20Complexity.pdf",
+    "105": "/materials/Kong%2C%20Lingpeng/论文/2022_Linguistic%20Frameworks%20Go%20Toe-to-Toe%20at%20Neuro-Symbolic%20Language%20Modeling.pdf",
+    "106": "/materials/Kong%2C%20Lingpeng/论文/2022_Event%20Transition%20Planning%20for%20Open-ended%20Text%20Generation.pdf",
+    "107": "/materials/Kong%2C%20Lingpeng/论文/2022_Lexical%20Knowledge%20Internalization%20for%20Neural%20Dialog%20Generation.pdf",
+    "108": "/materials/Kong%2C%20Lingpeng/论文/2022_ABC_%20Attention%20with%20Bounded-memory%20Control.pdf",
+    "109": "/materials/Kong%2C%20Lingpeng/论文/2022_cosFormer_%20Rethinking%20Softmax%20In%20Attention.pdf",
+    "110": "/materials/Kong%2C%20Lingpeng/论文/2022_Revisiting%20Over-smoothing%20in%20BERT%20from%20the%20Perspective%20of%20Graph.pdf",
+    "111": "/materials/Kong%2C%20Lingpeng/论文/2021_Cascaded%20Head-colliding%20Attention.pdf",
+    "112": "/materials/Kong%2C%20Lingpeng/论文/2021_Good%20for%20Misconceived%20Reasons_%20An%20Empirical%20Revisiting%20on%20the%20Need%20for%20Visual%20Context%20in%20Multimodal%20Machine%20Translation.pdf",
+    "113": "/materials/Kong%2C%20Lingpeng/论文/2021_Random%20Feature%20Attention.pdf",
+    "114": "/materials/Kong%2C%20Lingpeng/论文/2020_A%20Mutual%20Information%20Maximization%20Perspective%20of%20Language%20Representation%20Learning.pdf",
+    "116": "/materials/Kong%2C%20Lingpeng/论文/2019_Variational%20Smoothing%20in%20Recurrent%20Neural%20Network%20Language%20Models.pdf",
+    "117": "/materials/Kong%2C%20Lingpeng/论文/2017_Multi-task%20Learning%20with%20CTC%20and%20Segmental%20CRF%20for%20Speech%20Recognition.pdf",
+    "118": "/materials/Kong%2C%20Lingpeng/论文/2017_What%20Do%20Recurrent%20Neural%20Network%20Grammars%20Learn%20About%20Syntax_.pdf",
+    "119": "/materials/Kong%2C%20Lingpeng/论文/2016_Segmental%20Recurrent%20Neural%20Networks%20for%20End-to-end%20Speech%20Recognition.pdf",
+    "120": "/materials/Kong%2C%20Lingpeng/论文/2016_Distilling%20an%20Ensemble%20of%20Greedy%20Dependency%20Parsers%20into%20One%20MST%20Parser.pdf",
+    "121": "/materials/Kong%2C%20Lingpeng/论文/2016_Segmental%20Recurrent%20Neural%20Networks.pdf",
+    "122": "/materials/Kong%2C%20Lingpeng/论文/2015_Bayesian%20Optimization%20of%20Text%20Representations.pdf",
+    "123": "/materials/Kong%2C%20Lingpeng/论文/2015_Transforming%20Dependencies%20into%20Phrase%20Structures.pdf",
+    "124": "/materials/Kong%2C%20Lingpeng/论文/2014_A%20Dependency%20Parser%20for%20Tweets.pdf",
+    "125": "/materials/Kong%2C%20Lingpeng/论文/2014_Dependency%20Parsing%20for%20Weibo_%20An%20Efficient%20Probabilistic%20Logic%20Programming%20Approach.pdf",
+    "126": "/materials/Kong%2C%20Lingpeng/论文/2011_Formalization%20and%20Rules%20for%20Recognition%20of%20Satirical%20Irony.pdf",
+    "127": "/materials/Kong%2C%20Lingpeng/论文/2011_Improving%20Chinese%20Dependency%20Parsing%20with%20Self-Disambiguating%20Patterns.pdf",
+    "129": "/materials/Kong%2C%20Lingpeng/论文/2016_Document%20Context%20Language%20Models.pdf",
+    "130": "/materials/Kong%2C%20Lingpeng/论文/2015_ACBiMA_%20Advanced%20Chinese%20Bi-Character%20Word%20Morphological%20Analyzer.pdf",
+    "131": "/materials/Kong%2C%20Lingpeng/论文/2022_SNCSE_%20Contrastive%20Learning%20for%20Unsupervised%20Sentence%20Embedding%20with%20Soft%20Negative%20Samples.pdf",
+    "134": "/materials/Kong%2C%20Lingpeng/论文/2023_In-Context%20Learning%20with%20Many%20Demonstration%20Examples.pdf",
+    "136": "/materials/Kong%2C%20Lingpeng/论文/2023_Optimizing%20Non-Autoregressive%20Transformers%20with%20Contrastive%20Learning.pdf",
+    "137": "/materials/Kong%2C%20Lingpeng/论文/2023_M%24%5E3%24IT_%20A%20Large-Scale%20Dataset%20towards%20Multi-Modal%20Multilingual%20Instruction%20Tuning.pdf",
+    "138": "/materials/Kong%2C%20Lingpeng/论文/2023_Language%20Versatilists%20vs.%20Specialists_%20An%20Empirical%20Revisiting%20on%20Multilingual%20Transfer%20Ability.pdf",
+    "140": "/materials/Kong%2C%20Lingpeng/论文/2025_Exploring%20the%20Reliability%20of%20Large%20Language%20Models%20as%20Customized%20Evaluators%20for%20Diverse%20NLP%20Tasks.pdf",
+    "145": "/materials/Kong%2C%20Lingpeng/论文/2024_Data%20Augmentation%20of%20Multi-turn%20Psychological%20Dialogue%20via%20Knowledge-driven%20Progressive%20Thought%20Prompting.pdf",
+    "146": "/materials/Kong%2C%20Lingpeng/论文/2024_SubgoalXL_%20Subgoal-based%20Expert%20Learning%20for%20Theorem%20Proving.pdf",
+    "147": "/materials/Kong%2C%20Lingpeng/论文/2024_UncertaintyRAG_%20Span-Level%20Uncertainty%20Enhanced%20Long-Context%20Modeling%20for%20Retrieval-Augmented%20Generation.pdf",
+    "149": "/materials/Kong%2C%20Lingpeng/论文/2024_Understanding%20the%20Role%20of%20LLMs%20in%20Multimodal%20Evaluation%20Benchmarks.pdf",
+    "151": "/materials/Kong%2C%20Lingpeng/论文/2025_BioMaze_%20Benchmarking%20and%20Enhancing%20Large%20Language%20Models%20for%20Biological%20Pathway%20Reasoning.pdf",
+    "153": "/materials/Kong%2C%20Lingpeng/论文/2025_Scaling%20Reasoning%20without%20Attention.pdf",
+    "154": "/materials/Kong%2C%20Lingpeng/论文/2025_Dream%207B_%20Diffusion%20Large%20Language%20Models.pdf",
+    "155": "/materials/Kong%2C%20Lingpeng/论文/2025_Dream-Coder%207B_%20An%20Open%20Diffusion%20Language%20Model%20for%20Code.pdf",
+    "157": "/materials/Kong%2C%20Lingpeng/论文/2025_PromptCoT%202.0_%20Scaling%20Prompt%20Synthesis%20for%20Large%20Language%20Model%20Reasoning.pdf",
+    "159": "/materials/Kong%2C%20Lingpeng/论文/2025_Reasoning%20Path%20Divergence_%20A%20New%20Metric%20and%20Curation%20Strategy%20to%20Unlock%20LLM%20Diverse%20Thinking.pdf",
+    "160": "/materials/Kong%2C%20Lingpeng/论文/2025_DoPE_%20Denoising%20Rotary%20Position%20Embedding.pdf",
+    "161": "/materials/Kong%2C%20Lingpeng/论文/2025_Beyond%20Confidence_%20Adaptive%20and%20Coherent%20Decoding%20for%20Diffusion%20Language%20Models.pdf",
+    "162": "/materials/Kong%2C%20Lingpeng/论文/2025_Dream-VL%20%26%20Dream-VLA_%20Open%20Vision-Language%20and%20Vision-Language-Action%20Models%20with%20Diffusion%20Language%20Model%20Backbone.pdf",
+    "164": "/materials/Kong%2C%20Lingpeng/论文/2026_Proxy%20Compression%20for%20Language%20Modeling.pdf",
+    "166": "/materials/Kong%2C%20Lingpeng/论文/2026_ToolSelf_%20Unifying%20Task%20Execution%20and%20Self-Reconfiguration%20via%20Tool-Driven%20Emergent%20Adaptation.pdf",
+    "168": "/materials/Kong%2C%20Lingpeng/论文/2026_Claw-Eval_%20Towards%20Trustworthy%20Evaluation%20of%20Autonomous%20Agents.pdf",
+    "169": "/materials/Kong%2C%20Lingpeng/论文/2026_ImplicitMemBench_%20Measuring%20Unconscious%20Behavioral%20Adaptation%20in%20Large%20Language%20Models.pdf",
+    "170": "/materials/Kong%2C%20Lingpeng/论文/2026_Stratagem_%20Learning%20Transferable%20Reasoning%20via%20Trajectory-Modulated%20Game%20Self-Play.pdf",
+    "171": "/materials/Kong%2C%20Lingpeng/论文/2026_SAVOIR_%20Learning%20Social%20Savoir-Faire%20via%20Shapley-based%20Reward%20Attribution.pdf",
+    "172": "/materials/Kong%2C%20Lingpeng/论文/2026_The%20Granularity%20Axis_%20A%20Micro-to-Macro%20Latent%20Direction%20for%20Social%20Roles%20in%20Language%20Models.pdf",
+    "173": "/materials/Kong%2C%20Lingpeng/论文/2026_Self-Distilled%20Trajectory-Aware%20Boltzmann%20Modeling_%20Bridging%20the%20Training-Inference%20Discrepancy%20in%20Diffusion%20Language%20Models.pdf",
+    "174": "/materials/Kong%2C%20Lingpeng/论文/2026_DreamReasoner-8B_%20Block-Size%20Curriculum%20Learning%20for%20Diffusion%20Reasoning%20Models.pdf",
+    "175": "/materials/Kong%2C%20Lingpeng/论文/2026_SoftSkill_%20Behavioral%20Compression%20for%20Contextual%20Adaptation.pdf",
+    "177": "/materials/Kong%2C%20Lingpeng/论文/2026_Structuring%20Semantic%20Embeddings%20for%20Principle%20Evaluation_%20A%20Prototype-Guided%20Contrastive%20Learning%20Approach.pdf"
+  },
+  "coverage": {
+    "description": "采集日期2026-09-17；CV版本2026-01-27（130项，含1篇学位论文），arXiv作者查询165条，ACL作者页60条，按标题与版本编号合并后175篇论文，另列1篇学位论文。可见arXiv最新提交日2026-08-28，不等于全部成果截至日；完整资料截至日期待核验。Scholar主页未确认，引用量全部未获取。全文129篇；其余46篇保留可靠元数据/摘要。",
+    "rawNames": 497,
+    "verifiedProfiles": 28,
+    "focusCandidates": 183
+  }
+}

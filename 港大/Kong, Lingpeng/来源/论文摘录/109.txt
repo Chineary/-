@@ -1,0 +1,214 @@
+                                         Published as a conference paper at ICLR 2022
+
+
+
+
+                                         COS F ORMER : R ETHINKING S OFTMAX IN ATTENTION
+                                             1
+                                               Zhen Qin† 1,3 Weixuan Sun† 1,4 Hui Deng† 3 Dongxu Li 1 Yunshen Wei 1 Baohong Lv
+                                             1
+                                               Junjie Yan 2,5 Lingpeng Kong 1,2 Yiran Zhong∗
+                                             1                         2                            3
+                                               SenseTime Research        Shanghai AI Laboratory       Australian National University
+                                             4                                         5
+                                               Northwestern Polytechnical University     The University of Hong Kong
+                                              {lastnamefirstname}@sensetime.com,lpk@cs.hku.hk
+
+
+
+                                                                                                                         A BSTRACT
+
+
+
+
+arXiv:2202.08791v1 [cs.CL] 17 Feb 2022
+                                                      Transformer has shown great successes in natural language processing, computer
+                                                      vision, and audio processing. As one of its core components, the softmax atten-
+                                                      tion helps to capture long-range dependencies yet prohibits its scale-up due to the
+                                                      quadratic space and time complexity to the sequence length. Kernel methods are
+                                                      often adopted to reduce the complexity by approximating the softmax operator.
+                                                      Nevertheless, due to the approximation errors, their performances vary in differ-
+                                                      ent tasks/corpus and suffer crucial performance drops when compared with the
+                                                      vanilla softmax attention. In this paper, we propose a linear transformer called
+                                                      COS F ORMER that can achieve comparable or better accuracy to the vanilla trans-
+                                                      former in both casual and cross attentions. COS F ORMER is based on two key
+                                                      properties of softmax attention: i). non-negativeness of the attention matrix; ii).
+                                                      a non-linear re-weighting scheme that can concentrate the distribution of the at-
+                                                      tention matrix. As its linear substitute, COS F ORMER fulfills these properties with
+                                                      a linear operator and a cosine-based distance re-weighting mechanism. Extensive
+                                                      experiments on language modeling and text understanding tasks demonstrate the
+                                                      effectiveness of our method. We further examine our method on long sequences
+                                                      and achieve state-of-the-art performance on the Long-Range Arena benchmark.
+                                                      The source code is available at COS F ORMER .
+
+
+                                         1       I NTRODUCTION
+
+                                                                                       56
+                                                                                                 BigBird
+                                                                                                                                                      cosFormer
+                                                                                                           Transformer
+                                                                                       54
+
+
+
+
+                                                              Long-Range Arena Score
+                                                                                                    Longformer
+                                                                                                  Synthesizer                                                    Linformer
+                                                                                       52
+                                                                                                                              Sinkhorn Transformer
+                                                                                                                               Reformer                               Performer
+                                                                                       50        Sparse Transformer
+                                                                                                                                                           Linear Transformer
+
+                                                                                       48
+
+
+                                                                                       46                                                            Local attention
+                                                                                            20              30           40         50               60                70
+                                                                                     Speed (examples per sec)
+                                         Figure 1: Performance (y axis), speed (x axis), and memory footprint (circle sizes) of efficient transformers
+                                         on the Long-Range Arena benchmark. The proposed COS F ORMER achieves an all-around supremacy over
+                                         competing methods in the top left quadrant.
+
+                                         With years of development, the transformer model (Vaswani et al., 2017) and its variants (Zaheer
+                                         et al., 2020; Wang et al., 2020; Tay et al., 2020a) have been successfully adapted to three most
+                                         popular artificial intelligence (AI) fields: i.e., natural language processing (Devlin et al., 2019;
+                                         Liu et al., 2019), computer vision (Dosovitskiy et al., 2020; Carion et al., 2020; Liu et al., 2021)
+                                         and audio processing (Schneider et al., 2019; Baevski et al., 2020). Compared with conventional
+                                             ∗
+                                                 Indicates the corresponding author. † Indicates equal contribution.
+
+
+                                                                                                                               1
+Published as a conference paper at ICLR 2022
+
+
+
+
+recurrent (Hochreiter & Schmidhuber, 1997) and convolutional architectures (He et al., 2016),
+transformer-based architectures are generally more scalable to data volumes (Brown et al., 2020)
+and stronger in capturing global information with less inductive bias, thus excelling on many tasks.
+Dot-product attention with softmax normalization is the cornerstone of the transformer to capture
+long-range dependencies. However, its quadratic space and time complexity with regard to the
+length of the sequence make its computational overhead prohibitive, especially for long inputs. To
+address this issue, numerous methods are proposed recently, such as the sparse attention matrix (Za-
+heer et al., 2020; Beltagy et al., 2020; Tay et al., 2020a; Kitaev et al., 2019; Child et al., 2019),low-
+rank representations (Wang et al., 2020) or kernel-based methods (Peng et al., 2020; Choromanski
+et al., 2020; Katharopoulos et al., 2020), among many others. These methods achieve reduced
+computational complexity with comparable performances when compared with the vanilla attention
+architecture on several selected tasks or corpus.
+However, the improved efficiency is usually achieved via introducing additional yet often impracti-
+cal assumptions on the attention matrix (Wang et al., 2020) or with valid approximation of softmax
+operation only within constrained theoretical bounds (Choromanski et al., 2020; Peng et al., 2020)
+Therefore, when their assumptions are unsatisfied or when approximation errors get accumulated,
+these methods may not always be advantageous over the vanilla architecture (Narang et al., 2021).
+Consequently, performance deficiencies in a broad application spectrum are often observed in these
+transformer variants, especially those with linear complexity. For example, the Performer (Choro-
+manski et al., 2020), RFA (Peng et al., 2020) and Reformer (Kitaev et al., 2019) show less satis-
+factory performance on the GLUE benchmark (Wang et al., 2018) when compared with the vanilla
+architecture as suggested in our preliminary experiments (Tab. 2). Furthermore, many of these afore-
+mentioned methods are not applicable to casual attentions, which are critical for auto-regressive
+training. For example, techniques proposed in Linformer (Wang et al., 2020) and BigBird (Zaheer
+et al., 2020) are specific to cross attentions.
+Since the softmax operator appears to be the main hurdle while efficient yet accurate approximation
+to softmax is difficult to achieve, one question naturally arises: “Can we replace the softmax opera-
+tor with a linear function instead, while maintaining its key properties?”. By digging into the soft-
+max attention, we find two key properties that affect its empirical performance: (i) elements in the
+attention matrix are non-negative (Tsai et al., 2019; Katharopoulos et al., 2020); (ii) the non-linear
+re-weighting scheme acts as a stabilizer for the attention weights (Titsias, 2016; Gao & Pavel, 2017;
+Jang et al., 2016). These findings reveal some new insights of the current approaches. For example,
+the linear transformer (Katharopoulos et al., 2020) achieves property (i) using an exponential linear
+unit (Clevert et al., 2016) activation function. However, due to lack of the re-weighting scheme, it
+underperforms other efficient transformer variants on the Long-Range Arena benchmark as shown
+in Figure 1 as well as the language modeling task (Table 2) based on our controlled experiments.
+In this paper, we propose a new variant of linear transformer called COS F ORMER that satisfies both
+of the above properties. Specifically, we enforce the non-negative property by passing the features
+to a ReLU (Agarap, 2018) activation function before computing the similarity scores. In this way,
+we encourage the model to avoid aggregating negatively-correlated contextual information. Further,
+we adopt a cos re-weighting scheme to stabilize the attention weights. This helps the model to
+amplify local correlations, which usually contain more relevant information for natural language
+tasks. Thanks to the Ptolemy’s theorem, our attention can be exactly decomposed into a linear form.
+We perform extensive experiments on both autoregressive language models and bidirectional models
+on five public benchmarks, including WikiText-103 (Merity et al., 2017), GLUE (Wang et al., 2018),
+IMDB (Maas et al., 2011), AMAZON (Ni et al., 2019) and Long-Range Arena benchmark (Tay
+et al., 2020b). Our model shows much better inference speed and smaller memory footprint, while
+achieving on par performance with the vanilla transformer. It is noteworthy that our method ranks
+1st on the Long-Range Arena benchmark, showing favorable performance than other competitors,
+which well demonstrates its strong capacity in modeling long sequence inputs.
+
+2   O UR M ETHOD
+
+In this section, we provide technique details of our linear transformer called COS F ORMER . The key
+insight of the COS F ORMER is to replace the non-decomposable non-linear softmax operation by a
+linear operation with decomposable non-linear re-weighting mechanism. Our model is applicable
+
+
+                                                   2
+Published as a conference paper at ICLR 2022
+
+
+
+
+to both casual and cross attentions with a linear time and space complexity with regard to the input
+sequence length, thus exhibiting strong capacity in modeling long-range dependencies.
+2.1 T HE G ENERAL FORM OF T RANSFORMER
+Given an input sequence x with length of N , we first represent it in the embedding space x ∈ RN ×d
+with feature dimension of d. A transformer block T : RN ×d → RN ×d with input x is defined as:
+                                       T (x) = F(A(x) + x),                                          (1)
+where F is a feedforward network that contains a residual connection; A is the self-attention func-
+tion that computes the attention matrix A, which has quadratic space and time complexity with
+respect to N , thus becoming the computation bottleneck of T on long inputs.
+There are three key components in A, namely, query (Q), key (K), value (V ) computed through
+three learnable linear matrices WQ , WK , WV : Q = xWQ , K = xWK , V = xWV . We use Mi to
+represent the i-th row of a matrix M , then the output O ∈ RN ×d of A(x) can be computed as:
+                                                 T
+                                                           X S(Qi , Kj )
+                    O = A(x) = [O1 , . . . , ON ] , Oi =      P                Vj ,          (2)
+                                                            j    j S(Qi , Kj )
+
+where S(·) measures the similarity between queries. If S(Q, K) = exp(QK T ), the Eq. 2 becomes
+the dot-product attention with softmax normalization. In this case, the space and time complexity
+to compute one row of the output Oi is O(N ). Therefore, the total space and time complexity for
+computing O grows quadratically with respect to the input length.
+2.2 L INEARIZATION OF S ELF - ATTENTION
+According to Eq. 2, we can select any similarity functions to compute the attention matrix. In order
+to maintain a linear computation budget, one solution is to adopt a decomposable similarity function
+such that:
+                                   S(Qi , Kj ) = φ(Qi )φ(Kj )T ,                                 (3)
+where φ is a kernel function that maps the queries and keys to their hidden representations. Then
+one can rewrite Eq. 2 in the form of kernel functions as:
+                                           PN
+                                            j=1   (φ(Qi )φ(Kj )T )Vj
+                                    Oi =    PN                    T)   .,                            (4)
+                                              j=1 (φ(Qi )φ(Kj )
+
+
+After that, attention operation in linear complexity is achieved via the matrix product property:
+                                (φ(Q)φ(K)T )V = φ(Q)(φ(K)T V ).                                      (5)
+                                                                                       T      N ×N
+In this form (Eq. 5), instead of explicitly computing the attention matrix A = QK ∈ R         , we
+calculate the φ(K)T V ∈ Rd×d first, and then multiplying φ(Q) ∈ RN ×d . By using this trick, we
+only incurs a computation complexity of O(N d2 ). Note that in typical natural language tasks, the
+feature dimension of one head d is always much smaller than the input sequence length N (d  N ),
+so we can safely omit d and achieve computation complexity of O(N ), as illustrated in Figure 2.
+Previous Solutions As aforementioned, the key to the linear attentions is to find a decomposable
+similarity function S(·) that generalizes well to different tasks. Most existing linear transformers are
+trying to find an unbiased estimation of the softmax attention. For example, RFA (Peng et al., 2020)
+approximates the softmax operation with random feature maps using theorem of random fourier
+features (Rahimi & Recht, 2008) and the Performer (Choromanski et al., 2020) utilizes positive
+random features to approximate it. However, we empirically find that these methods are sensitive
+to the selection of sampling rate and becomes unstable if the sampling rate gets too high. Also, to
+accommodate recency bias, gating mechanisms are employed to better exploit more recent context.
+Another group of works attempt to directly replace the softmax with a linear operation. For example,
+the linear transformer (Katharopoulos et al., 2020) model replaces the softmax similarity function
+with a pure dot product S = QK T , and use a non-linear activation function φ(·) = elu(·) + 1 to
+model the pairwise relation between features. However, our controlled experiments show that their
+solution does not necessarily generalize well on many downstream tasks (Tab. 2) or the Long-Range
+Arena benchmark (Tab. 4). In this paper, we propose a new replacement of softmax that not only
+achieves comparable or better performance than the softmax attention in a wide range of tasks, but
+also enjoys linear space and time complexity.
+
+                                                    3
+

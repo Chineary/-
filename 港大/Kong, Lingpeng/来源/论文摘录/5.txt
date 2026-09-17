@@ -1,0 +1,187 @@
+                                             DRAGNN: A Transition-based Framework for Dynamically Connected
+                                                                    Neural Networks
+
+                                              Lingpeng Kong†        Chris Alberti?      Daniel Andor?      Ivan Bogatyy?        David Weiss?
+                                                lingpengk@cs.cmu.edu, {chrisalberti,danielandor,bogatyy,djweiss}@google.com
+                                                                     †
+                                                                         Carnegie Mellon University, Pittsburgh, PA.
+                                                                                 ?
+                                                                                   Google, New York, NY.
+
+
+
+                                                             Abstract                          duces a linearization of the target output structure
+                                                                                               as a sequence of output symbols. Encoder/decoder
+                                              In this work, we present a compact, mod-         is state of the art for several key tasks in natural
+
+
+
+
+arXiv:1703.04474v1 [cs.CL] 13 Mar 2017
+                                              ular framework for constructing novel re-        language processing, such as machine translation
+                                              current neural architectures. Our basic          (Wu et al., 2016).
+                                              module is a new generic unit, the Transi-           However, fixed-size encodings become less
+                                              tion Based Recurrent Unit (TBRU). In ad-         competitive when the input structure can be ex-
+                                              dition to hidden layer activations, TBRUs        plicitly mapped to the output. In the simple case
+                                              have discrete state dynamics that allow          of predicting tags for individual tokens in a sen-
+                                              network connections to be built dynam-           tence, state-of-the-art taggers learn vector repre-
+                                              ically as a function of intermediate acti-       sentations for each input token and predict output
+                                              vations. By connecting multiple TBRUs,           tags from those (Ling et al., 2015; Huang et al.,
+                                              we can extend and combine commonly               2015; Andor et al., 2016). When the input or out-
+                                              used architectures such as sequence-to-          put is a syntactic parse tree, networks that explic-
+                                              sequence, attention mechanisms, and re-          itly operate over the compositional structure of the
+                                              cursive tree-structured models. A TBRU           network typically outperform generic representa-
+                                              can also serve as both an encoder for            tions (Dyer et al., 2015; Li et al., 2015; Bowman
+                                              downstream tasks and as a decoder for            et al., 2016). Implictly learned mappings via at-
+                                              its own task simultaneously, resulting in        tention mechanisms can significantly improve the
+                                              more accurate multi-task learning. We call       performance of sequence-to-sequence (Bahdanau
+                                              our approach Dynamic Recurrent Acyclic           et al., 2015; Vinyals et al., 2015), but require run-
+                                              Graphical Neural Networks, or DRAGNN.            time that’s quadratic in the input size.
+                                              We show that DRAGNN is significantly                In this work, we propose a modular neural
+                                              more accurate and efficient than seq2seq         architecture that generalizes the encoder/decoder
+                                              with attention for syntactic dependency          concept to include explicit structure. Our frame-
+                                              parsing and yields more accurate multi-          work can represent sequence-to-sequence learn-
+                                              task learning for extractive summarization       ing as well as models with explicit structure like
+                                              tasks.                                           bi-directional tagging models and compositional,
+                                                                                               tree-structured models. Our core idea is to define
+                                         1    Introduction
+                                                                                               any given architecture as a series of modular units,
+                                         To apply deep learning models to structured pre-      where connections between modules are unfolded
+                                         diction, machine learning practitioners must ad-      dynamically as a function of the intermediate acti-
+                                         dress two primary issues: (1) how to represent        vations produced by the network. These dynamic
+                                         the input, and (2) how to represent the output.       connections represent the explicit input and output
+                                         The seq2seq encoder/decoder framework (Kalch-         structure produced by the network for a given task.
+                                         brenner and Blunsom, 2013; Cho et al., 2014;             We build on the idea of transition systems from
+                                         Sutskever et al., 2014) proposes solving these        the parsing literature (Nivre, 2006), which lin-
+                                         generically. In its simplest form, the encoder net-   earize structured outputs as a sequence of (state,
+                                         work produces a fixed-length vector representa-       decision) pairs. Transition-based neural networks
+                                         tion of an input, while the decoder network pro-      have recently been applied to a wide variety of
+       Transition Based Recurrent Unit (TBRU)                          Bi-LSTM Tagging (3 TBRU)      Stack-LSTM (2 TBRU)
+                                                                           Y1   Y2   Y3   Y4   Y5     Y1 Y2 Y3 Y4 Y5
+     network activations
+
+        Discrete            Recurrence fcn         Network
+         state             Input embeddings          Cell
+
+
+  Encoder/Decoder (2 TBRU) Y1                 Y2     Y3      Y4   Y5
+
+
+
+
+Figure 1: High level schematic of a Transition-Based Recurrent Unit (TBRU), and common network
+architectures that can be implemented with multiple TBRUs. The discrete state is used to compute
+recurrences and fixed input embeddings, which are then fed through a network cell. The network predicts
+an action which is used to update the discrete state (dashed output) and provides activations that can be
+consumed through recurrences (solid output). Note that we present a slightly simplified version of Stack-
+LSTM (Dyer et al., 2015) for clarity.
+
+
+NLP problems; Dyer et al. (2015); Lample et al.                            tures by providing a finite set of long-range in-
+(2016); Kiperwasser and Goldberg (2016); Zhang                             puts that ‘attend’ to relevant portions of the input
+et al. (2016); Andor et al. (2016), among others.                          space. Unlike recursive neural networks (Socher
+We generalize these approaches with a new ba-                              et al., 2010, 2011) DRAGNN can both predict in-
+sic module, the Transition-Based Recurrent Unit                            termediate structures (such as parse trees) and uti-
+(TBRU), which produces a vector representation                             lize those structures in a single deep model, back-
+for every transition state in the output lineariza-                        propagating downstream task errors through the
+tion (Figure 1). These representations also serve                          intermediate structures. Compared to models such
+as the encoding of the explicit structure defined by                       as Stack-LSTM (Dyer et al., 2015) and SPINN
+the states. For example, a TBRU that attaches two                          (Bowman et al., 2016), TBRUs are a more general
+sub-trees while building a syntactic parse tree will                       formulation that allows incorporating dynamically
+also produce the hidden layer activations to serve                         structured multi-task learning (Zhang and Weiss,
+as an encoding for the newly constructed phrase.                           2016) and more varied network architectures.
+Multiple TBRUs can be connected and learned                                   In sum, DRAGNN is not a particular neural ar-
+jointly to add explicit structure to multi-task learn-                     chitecture, but rather a formulation for describing
+ing setups and share representations between tasks                         neural architectures compactly. The key to this
+with different input or output spaces (Figure 2).                          compact description is a new recurrent unit—the
+   This inference procedure will construct an                              TBRU—which allows connections between nodes
+acyclic compute graph representing the network                             in an unrolled compute graph to be specified dy-
+architecture, where recurrent connections are dy-                          namically in a generic fashion. We utilize tran-
+namically added as the network unfolds. We there-                          sition systems to provide succinct, discrete repre-
+fore call our approach Dynamic Recurrent Acyclic                           sentations via linearizations of both the input and
+Graphical Neural Networks, or DRAGNN.                                      the output for structured prediction. We provide
+   DRAGNN has several distinct modeling advan-                             a straightforward way of re-using representations
+tages over traditional fixed neural architectures.                         across NLP tasks that operate on different struc-
+Unlike generic seq2seq, DRAGNN supports vari-                              tures.
+able sized input representations that may contain                             We demonstrate the effectiveness of DRAGNN
+explicit structure. Unlike purely sequential RNNs,                         on two NLP tasks that benefit from explicit struc-
+the dynamic connections in a DRAGNN can span                               ture: dependency parsing and extractive sentence
+arbitrary distances in the input space. Crucially,                         summarization (Filippova and Altun, 2013). First,
+inference remains linear in the size of the input, in                      we show how to use TBRUs to incrementally add
+contrast to quadratic-time attention mechanisms.                           structure to the input and output of a “vanilla”
+Dynamic connections thus establish a compromise                            seq2seq dependency parsing model, dramatically
+between pure seq2seq and pure attention architec-                          boosting accuracy over seq2seq with no additional
+                                                                                                                        Extractive summarization TBRU
+
+    Multi-task Encoder/Decoder                                                                                     Uniformed      man            laughed
+                                                         Right-to-left LSTM TBRU                                    DROP          KEEP             KEEP
+
+
+                                     Summarization          laughed            man           Uniformed
+        Right-to-left
+           LSTM
+                                                                   Uniformed          man          laughed           laughed       <eos>           <eos>
+                                      Dependency                    SHIFT            SHIFT          LA(nn)            SHIFT       LA(nsubj)       RA(root)
+                                         Trees
+                                                                                          Dependency parsing TBRU
+
+    DRAGNN w/ Intermediate representations
+                                                                                                                     Uniformed       man           laughed
+                                                           Dynamic links as a function of transition state            DROP           KEEP            KEEP
+        Right-to-left
+                                     Summarization
+           LSTM
+                                                               laughed            man           Uniformed
+                                          Dynamic
+                                        unrolled links
+                        Dependency
+                           Trees                                      Uniformed          man             laughed        laughed       <eos>           <eos>
+                                                                       SHIFT            SHIFT             LA(nn)         SHIFT       LA(nsubj)       RA(root)
+                 Intermediate representation
+
+
+
+
+Figure 2: Using TBRUs to share fine-grained, structured representations. Top left: A high level view of
+multi-task learning with DRAGNN in the style of multi-task seq2seq (Luong et al., 2016). Bottom left:
+Extending the “stack-propagation” (Zhang and Weiss, 2016) idea to included dependency parse trees as
+intermediate representations. Right: Unrolled TBRUs for each setup for a input fragment “Uniformed
+man laughed”, utilizing the transition systems described in Section 4.
+
+
+computational cost. Second, we demonstrate how                                 • A set of allowed decisions A(s, x) for all s ∈
+the same TBRUs can be used to provide structured                                 S.
+intermediate syntactic representations for extrac-
+tive sentence summarization. This yields better ac-                            • A transition function t(s, d, x) returning a
+curacy than is possible with the generic multi-task                              new state s0 for any decision d ∈ A(s, x).
+seq2seq (Dong et al., 2015; Luong et al., 2016) ap-
+proach. Finally, we show how multiple TBRUs for                          For brevity, we will drop the dependence on x in
+the same dependency parsing task can be stacked                          the functions given above. Throughout this work
+together to produce a single state-of-the-art depen-                     we will use transition systems in which all com-
+dency parsing model.                                                     plete structures for the same input x have the same
+                                                                         number of decisions n(x) (or n for brevity), al-
+2      Transition Systems                                                though this is not necessary.
+                                                                             A complete structure is then a sequence of deci-
+We use transition systems to map inputs x into                           sion/state pairs (s1 , d1 ) . . . (sn , dn ) such that s1 =
+a sequence of output symbols, d1 . . . dn . For                          s† , di ∈ A(si ) for i = 1 . . . n, and si+1 =
+the purposes of implementing DRAGNN, transi-                             t(si , di ). We will now define recurrent network
+tion systems make explicit two desirable proper-                         architectures that operate over these linearizations
+ties. First, we stipulate that the output symbols                        of input and output structure.
+represent modifications of a persistent, discrete
+state, which makes book-keeping to construct the                         3        Transition Based Recurrent Networks
+dynamic recurrent connections easier to express.
+                                                                         We now formally define how to combine transi-
+Second, transition systems make it easy to enforce
+                                                                         tion systems with recurrent networks into what we
+arbitrary constraints on the output, e.g. the output
+                                                                         call a transition based recurrent unit (TBRU). A
+should produce a valid tree.
+                                                                         TBRU consists of the following:
+   Formally, we use the same setup as Andor
+et al. (2016), and define a transition system T =                              • A transition system T ,
+{S, A, t} as:                                                                  • An input function m(s) that maps states to
+                                                                                 fixed-size vector representations, for exam-
+     • A set of states S(x).                                                     ple, an embedding lookup operation for fea-
+                                                                                 tures from the discrete state, m(s) : S 7→
+     • A special start state s† ∈ S(x).                                          RK
+

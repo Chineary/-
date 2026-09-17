@@ -1,0 +1,218 @@
+                                         Why Does the Effective Context Length of LLMs Fall Short?
+
+
+
+
+                                         W HY D OES THE E FFECTIVE C ONTEXT L ENGTH OF
+                                         LLM S FALL S HORT ?
+                                          Chenxin An1 ∗ Jun Zhang2 Ming Zhong3 Lei Li1 Shansan Gong1
+                                          Yao Luo2 Jingjing Xu2 Lingpeng Kong1
+                                          1
+                                            The University of Hong Kong 2 ByteDance Inc. 3 University of Illinois Urbana-Champaign
+                                          https://github.com/HKUNLP/STRING
+
+
+
+                                                                                         A BSTRACT
+
+
+
+
+arXiv:2410.18745v1 [cs.CL] 24 Oct 2024
+                                                      Advancements in distributed training and efficient attention mechanisms have sig-
+                                                      nificantly expanded the context window sizes of large language models (LLMs).
+                                                      However, recent work reveals that the effective context lengths of open-source
+                                                      LLMs often fall short, typically not exceeding half of their training lengths. In this
+                                                      work, we attribute this limitation to the left-skewed frequency distribution of rela-
+                                                      tive positions formed in LLMs pretraining and post-training stages, which impedes
+                                                      their ability to effectively gather distant information. To address this challenge, we
+                                                      introduce ShifTed Rotray position embeddING (S T R ING). S T R ING shifts well-
+                                                      trained positions to overwrite the original ineffective positions during inference,
+                                                      enhancing performance within their existing training lengths. Experimental results
+                                                      show that without additional training, S T R ING dramatically improves the perfor-
+                                                      mance of the latest large-scale models, such as Llama3.1 70B and Qwen2 72B, by
+                                                      over 10 points on popular long-context benchmarks RULER and InfiniteBench,
+                                                      establishing new state-of-the-art results for open-source LLMs. Compared to com-
+                                                      mercial models, Llama 3.1 70B with S T R ING even achieves better performance
+                                                      than GPT-4-128K and clearly surpasses Claude 2 and Kimi-chat.
+
+
+                                         1       I NTRODUCTION
+
+                                         The increase in context length for large language models (LLMs; OpenAI 2023; Anthropic 2023; Bai
+                                         et al. 2023; Xiong et al. 2023; Llama Team 2024) has facilitated the development of a wide range
+                                         of applications (Pang et al., 2022; Bairi et al., 2023), substantially expanding the capabilities of AI
+                                         systems. Recent advancements in efficient training and attention calculation (Li et al., 2024a; Dao,
+                                         2023; Liu et al., 2023) have made it feasible to train LLMs with exceptionally long context windows.
+                                         For instance, Llama3.1 (Llama Team, 2024) features a context length of 128K tokens, which is 64×
+                                         longer than that of its initial release (Touvron et al., 2023a).
+                                         This trend towards longer context lengths in LLMs promises enhanced capabilities. Previous work
+                                         has primarily focused on extending the context length of LLMs, with significant efforts devoted to
+                                         improving data engineering techniques (Fu et al., 2024b; Hu et al., 2024; Bai et al., 2024; Zhao et al.,
+                                         2024). High-quality natural long-context data are scarce in real-world settings, limiting the availability
+                                         of such data for training purposes. To address this challenge, recent methods aim to generate synthetic
+                                         training data that better capture the nuances of naturally occurring long-context information, despite
+                                         inherent challenges such as time consumption in continual training and potential biases (Zhao et al.,
+                                         2024; An et al., 2024b; Lv et al., 2024). Researchers have also focused on addressing specific
+                                         architectural limitations. Efforts have been made to correct the improper adjustment of the base
+                                         frequency in Rotary Position Embedding (RoPE) (Su et al., 2022; Peng et al., 2023; Chen et al., 2023;
+                                         Lin et al., 2024b; Chen et al., 2024).
+                                         However, recent studies (An et al., 2023; Zhang et al., 2024d; Li et al., 2024b; Wang et al., 2024a)
+                                         reveal a notable discrepancy between these theoretical improvements and observed performance. In
+                                         practice, the effective context utilization of these models often falls substantially below their claimed
+                                         or training context lengths. For example, on the widely used RULER benchmark (Hsieh et al., 2024),
+                                             ∗
+                                                 Work done during internship at ByteDance Inc.
+
+
+                                                                                                 1
+Why Does the Effective Context Length of LLMs Fall Short?
+
+
+
+
+the effective context length of the latest Llama 3.1 70B model is only 64K, despite employing scaled
+RoPE base frequency (Peng et al., 2023) and having sufficient training data (Llama Team, 2024). In
+fact, most open-source models demonstrate an effective context length less than 50% of their training
+length (Hsieh et al., 2024). A key research question emerges from these observations: Why does the
+effective context length of LLMs fall short of their training context lengths?
+In this study, instead of further extending the context window size of current LLMs, we take a fresh
+perspective to understand and address this gap. Our core insight revolves around a phenomenon
+we term the left-skewed position frequency distribution – a pattern of severe undertraining of long-
+distance position indices during pretraining and post-training stages. This skewed distribution
+significantly contributes to the model’s suboptimal performance in long-range modeling tasks. In
+SlimPajama-627B (Cerebras, 2023), a widely used pretraining corpus (Geng & Liu, 2023; Zhang
+et al., 2024b), we clearly observe this left-skewed phenomenon. As illustrated in Figure 1a, even with
+presumably adequate long-sequence data, the frequency of position indices decreases dramatically as
+distances increase. For instance, when training a model with a 2048 context length on SlimPajama,
+the frequency of position indices used to model relationships between distant tokens (distances
+≥ 1024) is less than 20%, and for even longer distances (≥ 1536), it drops below 5%. Probing
+experiments conducted during pretraining reveal that the frequency of exposure to specific position
+indices has a crucial impact on the training context utilization. Capturing long-range dependencies is
+inherently more challenging (Zhu et al., 2023; Wu et al., 2024), and this challenge is exacerbated
+when the frequency of position indices allocated to gather distant information is exceedingly low, as
+observed in Figure 1. In other words, the difficulty in modeling long-term dependencies, coupled
+with the undertraining of the positions responsible for them, provides a compelling explanation for
+the discrepancy between the theoretical and practical context lengths in LLMs.
+Building on these findings, we investigate whether well-trained positions can be leveraged to capture
+information from distant inputs during inference. To address this, we propose a training-free approach
+called ShifTed Rotray position embeddING (S T R ING). This method eschews the use of positions at
+the tail of the frequency distribution during inference. Specifically, S T R ING shifts position indices
+from the main diagonal of the position matrix toward its bottom-left corner. This adjustment enables
+the model to represent long-range dependencies using frequently encountered position indices,
+effectively approximating the undertrained ones. S T R ING can be efficiently implemented using Flash
+Attention (Dao, 2023) by combining two key components: (1) sliding window attention (Beltagy
+et al., 2020; Ding et al., 2023; Xiao et al., 2023; 2024) around the diagonal, and (2) self-attention at
+the bottom-left corner using shifted position indices (Algorithm 1). This implementation incurs no
+additional computational costs and causes no obvious slowdowns during inference.
+By strategically overwriting position indices in the upper range of the training length, we achieve
+substantial performance enhancements across seven open-source LLMs with context lengths ranging
+from 2K to 128K on the Needle-in-a-Haystack (4-needle) test, resulting in an average score increase
+of 18 points. S T R ING requires no additional training, enabling seamless scaling up with powerful
+large-scale models such as Llama3.1 70B (Llama Team, 2024) and Qwen2 72B (Bai et al., 2023).
+This integration not only establishes new state-of-the-art performance for open-source LLMs on
+long-context benchmarks RULER (Hsieh et al., 2024) and InfiniteBench (Zhang et al., 2024d) but
+also enables Llama3.1 to outperform leading commercial models, including GPT-4-128K (OpenAI,
+2023), Claude-2 (Anthropic, 2023), and Kimi-chat (Moonshot AI, 2023), across a wide range of
+synthetic and practical tasks. The substantial improvements achieved by S T R ING provide strong
+evidence for our hypothesis: underrepresented position indices at the tail of the position frequency
+distribution, strongly constrain the long-context capabilities of current LLMs. We hope our findings
+will inspire new approaches to overcome these limitations and lead to more effective long-context
+processing in future LLM designs.
+
+2     L EFT-S KEWED P OSITION F REQUENCY D ISTRIBUTION
+2.1   P OSITION E MBEDDINGS IN LLM S
+
+Self-attention mechanisms (Vaswani et al., 2017; Radford et al., 2018; Dai et al., 2019) inherently
+lack positional information (Liu et al., 2021; Su et al., 2022; Sun et al., 2022). To introduce positional
+information, a common approach is to design a function p. For an input at position i, we inject
+positional information using the following method: hi = p(h, i) where h is the hidden representation
+
+
+                                                    2
+Why Does the Effective Context Length of LLMs Fall Short?
+
+
+
+
+                       40T                             Position frequency dist.                                                                        Position frequency dist. 150M                                                                  Position frequency dist.
+                                                       Data length dist.        150M                                  40T                              Data length dist.                                              40T                             Data length dist.        300M
+
+
+
+      Position Frequency                                                                             Position Frequency                                                                              Position Frequency
+                       30T
+
+
+                                                                                    Number of Data                                                                                  Number of Data                                                                                Number of Data
+                                                                                                                      30T                                                     100M                                    30T
+                                                                              100M                                                                                                                                                                                           200M
+                       20T                                                                                            20T                                                                                             20T
+                                                                              50M                                                                                             50M                                                                                            100M
+                       10T                                                                                            10T                                                                                             10T
+
+                           0T 0                                               0M                                          0T 0                                                0M                                          0T 0                                               0M
+                                  0.2K 0.5K 0.8K 1.0K 1.2K 1.5K 1.8K 2.0K                                                        0.3K 0.5K 0.8K 1.0K 1.3K 1.5K 1.8K 2.0K                                                         0.3K 0.5K 0.8K 1.0K 1.3K 1.5K 1.8K 2.0K
+
+
+
+                           (a) Natural data distribution                                                             (b) Uniform data distribution                                                   (c) Concatenated data distribution
+
+Figure 1: Position frequency distribution exhibits a pronounced left-skewed pattern across training
+data of varying lengths. Figure 1a illustrates the natural data length distribution of SlimPajama-627B
+where oversized data is truncated into multiple 2K sequences. Figure 1b presents the case with a
+uniform length distribution and the position frequency decline quadratically. Figure 1c demonstrates
+that when all data are concatenated into a 2K sequence, the position frequency decreases linearly
+with increasing position indices. The X-axis represents data length (shown in orange) and position
+indices (shown in blue). The left Y-axis indicates the frequency of each position, while the right
+Y-axis represents the number of data for each length.
+
+of the input token. Another approach involves relative positional encodings (Bao et al., 2020), such
+as T5-bias (Raffel et al., 2023) and ALiBi (Press et al., 2022), which injects relative positional
+information by incorporating the relative distance (i − j) when computing the attention score between
+the j-th token and the i-th token.
+To achieve better training stability and lower perplexity, mainstream large models like Qwen (Hui
+et al., 2024) and Llama (Llama Team, 2024) employ Rotary Position Embedding (RoPE) (Su et al.,
+2022) as their positional encoding method. RoPE directly injects positional information into the
+query and key vectors, enabling the inner product to encode the relative position information between
+the query and key. We adopt the notation p for the embedding function of RoPE. Considering the
+i-th query and the j-th key, we have: qi = p(q, i) and kj = p(k, j). When computing attention, the
+inner product q⊤ i kj contains only the relative positional information (i − j), which means for any
+pair (m, n) such that m − n = i − j, it holds that q⊤           ⊤
+                                                      m kn = qi kj .
+
+
+2.2                  R ELATIVE P OSITION M ATRIX AND P OSITION F REQUENCY
+
+Using relative positional encodings implies that, given training length L, the resulting relative position
+matrix P after computing Q⊤ K is defined by:
+                                          0
+                                                                    
+                                      1            0                
+                                      .           .       .         
+                                P = .
+                                         .          . .     . .     
+                                                                                                       (1)
+                                     L − 2        ···      1 0      
+                                       L − 1 L − 2 ··· 1 0
+where the Toeplitz matrix P captures the relative positional relationships between tokens, with each
+element P [m][n] = m − n encoding the relative distance between the m-th and n-th tokens in a
+sequence. Based on Eq. 1, we define the frequency of relative position i by f (i) = L − i, which is
+the number of occurrences of a relative position i. Throughout the remainder of this paper, the term
+“position” refers to relative position. The structure of matrix P is linearly skewed toward smaller
+positions, which inherently favors performance on shorter sequences. For example, when using a
+training context window of L = 2048 tokens, the relative position 2047 occurs only once in P .
+The frequency of relative positions in P also depends on the data length distribution of the pretraining
+corpus C. We can obtain the frequency of relative position i by the following equation:
+                                      X
+                              f (i) =     max(|s| − i, 0), 0 ≤ i < L                                  (2)
+                                                                                                                     s∈C
+
+We observe that the position frequency distribution is usually highly left-skewed, indicating that the
+model is frequently exposed to small positions, while larger positions account for only a small pro-
+portion. To illustrate this phenomenon, we examine the position distribution when using SlimPajama-
+627B (Cerebras, 2023) as the training corpus. The blue bars in Figure 1 illustrate the position
+
+
+                                                                                                                                                   3
+

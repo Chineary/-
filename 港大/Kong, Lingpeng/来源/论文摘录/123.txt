@@ -1,0 +1,183 @@
+                   Transforming Dependencies into Phrase Structures
+
+         Lingpeng Kong             Alexander M. Rush         Noah A. Smith
+    School of Computer Science    Facebook AI Research School of Computer Science
+    Carnegie Mellon University     New York, NY, USA   Carnegie Mellon University
+       Pittsburgh, PA, USA     srush@seas.harvard.edu     Pittsburgh, PA, USA
+    lingpenk@cs.cmu.edu                                 nasmith@cs.cmu.edu
+
+
+
+                       Abstract                               c-parsers, we consider an alternate pipeline (Sec-
+                                                              tion 3): d-parse first, then transform the depen-
+     We present a new algorithm for transforming              dency representation into a phrase-structure tree
+     dependency parse trees into phrase-structure             constrained to be consistent with the dependency
+     parse trees. We cast the problem as struc-               parse. This idea was explored by Xia and Palmer
+     tured prediction and learn a statistical model.
+                                                              (2001) and Xia et al. (2009) using hand-written
+     Our algorithm is faster than traditional phrase-
+     structure parsing and achieves 90.4% English
+                                                              rules. Instead, we present a data-driven algorithm
+     parsing accuracy and 82.4% Chinese parsing               using the structured prediction framework (Sec-
+     accuracy, near to the state of the art on both           tion 4). The approach can be understood as a
+     benchmarks.                                              specially-trained coarse-to-fine decoding algorithm
+                                                              where a d-parser provides “coarse” structure and the
+                                                              second stage refines it (Charniak and Johnson, 2005;
+1   Introduction                                              Petrov and Klein, 2007).
+                                                                 Our lexicalized phrase-structure parser, PAD, is
+Natural language parsers typically produce phrase-
+                                                              asymptotically faster than parsing with a lexical-
+structure (constituent) trees or dependency trees.
+                                                              ized context-free grammar: O(n2 ) plus d-parsing,
+These representations capture some of the same syn-
+                                                              vs. O(n5 ) worst case runtime in sentence length
+tactic phenomena, and the two can be produced
+                                                              n, with the same grammar constant. Experiments
+jointly (Klein and Manning, 2002; Hall and Nivre,
+                                                              show that our approach achieves linear observable
+2008; Carreras et al., 2008; Rush et al., 2010). Yet
+                                                              runtime, and accuracy similar to state-of-the-art
+it appears to be completely unpredictable which will
+                                                              phrase-structure parsers without reranking or semi-
+be preferred by a particular subcommunity or used
+                                                              supervised training (Section 7).
+in a particular application. Both continue to receive
+the attention of parsing researchers.                         2       Background
+   Further, it appears to be a historical accident
+that phrase-structure syntax was used in annotating           We begin with the conventional development by first
+the Penn Treebank, and that English dependency                introducing c-parsing and then defining d-parses
+annotations are largely derived through mechani-              through a mechanical conversion using head rules.
+cal, rule-based transformations (reviewed in Sec-             In the next section, we consider the reverse transfor-
+tion 2). Indeed, despite extensive work on direct-            mation.
+to-dependency parsing algorithms (which we call d-
+                                                              2.1      CFG Parsing
+parsing), the most accurate dependency parsers for
+English still involve phrase-structure parsing (which         The phrase-structure trees annotated in the Penn
+we call c-parsing) followed by rule-based extraction          Treebank are derivation trees from a context-free
+of dependencies (Kong and Smith, 2014).                       grammar. Define a binary1 context-free grammar
+   What if dependency annotations had come first?                 1
+                                                                  For notational simplicity, we defer discussion of non-
+Because d-parsers are generally much faster than              binary rules to Section 3.3.
+
+                                                        788
+
+ Human Language Technologies: The 2015 Annual Conference of the North American Chapter of the ACL, pages 788–798,
+            Denver, Colorado, May 31 – June 5, 2015. c 2015 Association for Computational Linguistics
+(CFG) as a 4-tuple (N , G, T , r) where N is a set                                                        S(3)
+of nonterminal symbols (e.g. NP, VP), T is a set
+                                                                                                 VP(3)               ...
+of terminal symbols, consisting of the words in the
+language, G is a set of binary rules of the form                                         NP(2)           VBD∗ (3)
+A → β1 β2 , and r ∈ N is a distinguished root non-
+terminal symbol.                                                                  DT(1)      NN∗ (2)      sold3
+   Given an input sentence x1 , . . . , xn of terminal
+symbols from T , define the set of c-parses for the                               The1     automaker2
+sentence as Y(x). This set consists of all binary or-
+dered trees with fringe x1 , . . . , xn , internal nodes la-
+beled from N , all tree productions A → β1 β2 con-                        The1         automaker2            sold3         ...
+sisting of members of G, and root label r.
+                                                                   Figure 1: Illustration of c-parse to d-parse conversion with head
+   For a c-parse y ∈ Y(x), we further associate a                  rules {VP → NP VBD∗ , NP → DT NN∗ , . . .}. The c-parse is an
+span hv⇐ , v⇒ i with each vertex in the tree. This                 ordered tree with fringe x1 , . . . , xn . Each vertex is annotated
+specifies the subsequence {xv⇐ , . . . , xv⇒ } of the              with a terminal or nonterminal symbol and a derived head index.
+sentence covered by this vertex.                                   The blue and red vertices have the words automaker2 and
+                                                                   sold3 as heads respectively. The vertex VP(3) implies that
+                                                                   automaker2 is a left-dependent of sold3 , and that 2 ∈ L(3)
+2.2   Dependency Parsing                                           in the d-parse.
+Dependency parses provide an alternative, and in
+some sense simpler, representation of sentence                       1. If the vertex is leaf xm , then head(v) = m.
+structure. These d-parses can be derived through
+mechanical transformation from context-free trees.                   2. If the next rule is A → β1∗ β2 then head(v) =
+There are several popular transformations in wide                       head(vL ) and head(vR ) ∈ R(head(v)), i.e.
+use; each provides a different representation of a                      the head of the right-child is a dependent of the
+sentence’s structure (Collins, 2003; De Marneffe                        head word.
+and Manning, 2008; Yamada and Matsumoto, 2003;
+Johansson and Nugues, 2007).                                         3. If the next rule is A → β1 β2∗ then head(v) =
+   We consider the class of transformations that are                    head(vR ) and head(vL ) ∈ L(head(v)), i.e.
+defined through local head rules. For a binary CFG,                     the head of the left-child is a dependent of the
+define a collection of head rules as a mapping from                     head word.
+each CFG rule to a head preference for its left or
+                                                                   Figure 1 shows an example conversion of a c-parse
+right child. We use the notation A → β1∗ β2 and
+                                                                   to d-parse using this procedure.
+A → β1 β2∗ to indicate a left- or right-headed rule,
+                                                                      By construction, these dependencies form a di-
+respectively.
+                                                                   rected tree with arcs (h, m) for all h ∈ {0, . . . , n}
+   The head rules can be used to map a c-parse to a                and m ∈ L(h) ∪ R(h). While this tree differs
+dependency tree (d-parse). In a d-parse, each word                 from the original c-parse, we can relate the two trees
+in the sentence is assigned as a dependent to a head               through their spans. Define the dependency tree
+word, h ∈ {0, . . . , n}, where 0 is a special symbol              span hh⇐ , h⇒ i as the contiguous sequence of words
+indicating the pseudo-root of the sentence. For each               reachable from word h in this tree.2 This span is
+h we define L(h) ⊂ {1, . . . , h − 1} as the set of left           equivalent to the maximal span hv⇐ , v⇒ i of any c-
+dependencies of h, and R(h) ⊂ {h + 1, . . . , n} as                parse vertex with head(v) = h. This property will
+the set of right dependencies.                                     be important for the parsing algorithm presented in
+   A d-parse can be constructed recursively from a                 the next section.
+c-parse and the head rules. For each c-parse vertex                   2
+                                                                        The conversion from a standard CFG tree to a d-parse pre-
+v with potential children vL and vR in bottom-up or-               serves this sequence property, known as projectivity. We leave
+der, we apply the following procedure to both assign               the question of non-projective d-parses and the related question
+heads to the c-parse and construct the d-parse:                    of traces and co-indexation in c-parses to future work.
+                                                               2
+                                                         789
+                     I1              saw2            the3            man4                          where s is a scoring function that factors over lexi-
+                                                                                                   calized tree productions.
+              X(2)                          X(2)                             X(2)                     This problem can be solved by extending the
+ X(1)         V           X(4)         N           X(2)               X(2)          X(4)           CKY algorithm to propagate head information. The
+                                                                                                   algorithm can be compactly defined by the produc-
+    N        saw2    D           N     I1    V            X(4)       N   V      D          N
+                                                                                                   tions in Figure 3 (left). For example, one type of
+    I1               the3 man4              saw2     D           N   I1 saw2 the3 man4             production is of the form
+                                                    the3 man4
+                                                                                                              (hi, ki, m, β1 ) (hk + 1, ji, h, β2 )
+Figure 2: [Adapted from (Collins et al., 1999).] A d-parse                                                                (hi, ji, h, A)
+(left) and several c-parses consistent with it (right). Our goal is
+to select the best parse from this set.                                                            for all rules A → β1 β2∗ ∈ G and spans i ≤ k < j.
+                                                                                                   This particular production indicates that rule A →
+                                                                                                   β1 β2∗ was applied at a vertex covering hi, ji to pro-
+3            Parsing Dependencies
+                                                                                                   duce two vertices covering hi, ki and hk + 1, ji, and
+Now we consider flipping this setup. There has been                                                that the new head is index h has dependent index m.
+significant progress in developing efficient direct-                                               We say this production “completes” word m since it
+to-dependency parsers. These d-parsers are trained                                                 can no longer be the head of a larger span.
+only on dependency annotations and do not require                                                     Running the algorithm consists of bottom-up dy-
+full phrase-structure trees.3 Some prefer this setup,                                              namic programming over these productions. How-
+since it allows easy selection of the specific depen-                                              ever, applying this version of the CKY algorithm
+dencies of interest in a downstream task (e.g., infor-                                             requires O(n5 |G|) time (linear in the number of
+mation extraction), and perhaps even training specif-                                              productions), which is not practical to run without
+ically for those dependencies. Other applications                                                  heavy pruning. Most lexicalized parsers therefore
+make use of phrase structures, so c-parsers enjoy                                                  make further assumptions on the scoring function
+wide use as well.                                                                                  which can lead to asymptotically faster algorithms
+   With these latter applications in mind, we con-                                                 (Eisner and Satta, 1999).
+sider the problem of converting a fixed d-parse                                                       Instead, we consider the same objective, but con-
+into a c-parse, with the intent of using off-the-shelf                                             strain the c-parses to be consistent with a given d-
+d-parsers for constructing phrase-structure parses.                                                parse, d. By “consistent,” we mean that the c-
+Since this problem is more challenging than its in-                                                parse will be converted by the head rules to this ex-
+verse, we use a structured prediction setup: we learn                                              act d-parse.4 Define the set of consistent c-parses
+a function to score possible c-parse conversions, and                                              as Y(x, d) and the constrained search problem as
+then generate the highest-scoring c-parse given a d-                                               arg maxy∈Y(x,d) s(y; x, d).
+parse. A toy example of the problem is shown in                                                       Figure 3 (right) shows the algorithm for this new
+Figure 2.                                                                                          problem. The algorithm has several nice proper-
+                                                                                                   ties. All rules now must select words h and m that
+3.1           Parsing Algorithm                                                                    are consistent with the dependency parse (i.e., there
+                                                                                                   is an arc (h, m)) so these variables are no longer
+Consider the classical problem of predicting the best
+                                                                                                   free. Furthermore, since we have the full d-parse,
+c-parse under a CFG with head rules, known as lex-
+                                                                                                   we can precompute the dependency span of each
+icalized context-free parsing. Assume that we are
+                                                                                                   word hm⇐ , m⇒ i. By our definition of consistency,
+given a binary CFG defining a set of valid c-parses
+                                                                                                   this gives us the c-parse span of m before it is com-
+Y(x). The parsing problem is to find the highest-
+                                                                                                   pleted, and fixes two more free variables. Finally the
+scoring parse in this set, i.e. arg maxy∈Y(x) s(y; x)
+                                                                                                   head item must have its alternative side index match
+         3                                                                                            4
+     For English these parsers are still often trained on                                               An alternative, soft version of consistency, might enforce
+trees converted from c-parses; however, for other languages,                                       that the c-parse is close to the d-parse. While this allows the al-
+dependency-only treebanks of directly-annotated d-parses are                                       gorithm to potentially correct d-parse mistakes, it is much more
+common.                                                                                            computationally expensive.
+                                                                                               3
+                                                                                           790
+

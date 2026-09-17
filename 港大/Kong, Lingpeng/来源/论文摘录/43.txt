@@ -1,0 +1,212 @@
+                                         Published as a conference paper at ICLR 2025
+
+
+
+
+                                         B EYOND AUTOREGRESSION : D ISCRETE D IFFUSION
+                                         FOR C OMPLEX R EASONING AND P LANNING
+
+                                          Jiacheng Ye1 , Jiahui Gao2 Shansan Gong1 , Lin Zheng1
+                                          Xin Jiang2 , Zhenguo Li2 , Lingpeng Kong1
+                                          1
+                                            The University of Hong Kong 2 Huawei Noah’s Ark Lab
+                                          carsonye@connect.hku.hk
+
+
+
+                                                                                    A BSTRACT
+
+
+
+
+arXiv:2410.14157v3 [cs.CL] 18 Feb 2025
+                                                  Autoregressive language models, despite their impressive capabilities, struggle
+                                                  with complex reasoning and long-term planning tasks. We introduce discrete dif-
+                                                  fusion models as a novel solution to these challenges. Through the lens of subgoal
+                                                  imbalance, we demonstrate how diffusion models effectively learn difficult sub-
+                                                  goals that elude autoregressive approaches. We propose Multi-Granularity Dif-
+                                                  fusion Modeling (MGDM), which prioritizes subgoals based on difficulty dur-
+                                                  ing learning. On complex tasks like Countdown, Sudoku, and Boolean Sat-
+                                                  isfiability Problems, MGDM significantly outperforms autoregressive models
+                                                  without using search techniques. For instance, MGDM achieves 91.5% and
+                                                  100% accuracy on Countdown and Sudoku, respectively, compared to 45.8% and
+                                                  20.7% for autoregressive models. Our work highlights the potential of diffusion-
+                                                  based approaches in advancing AI capabilities for sophisticated language un-
+                                                  derstanding and problem-solving tasks. All associated codes are available at
+                                                  https://github.com/HKUNLP/diffusion-vs-ar.
+
+
+                                         1   I NTRODUCTION
+                                         In recent years, autoregressive language models (LMs; Bengio et al. 2000) have dominated the
+                                         landscape of natural language processing and artificial intelligence. Empowered by scaling laws
+                                         (Kaplan et al., 2020), these models have demonstrated impressive performance across various ap-
+                                         plications (OpenAI, 2022; Achiam et al., 2023; Anthropic, 2023; Team et al., 2023, inter alia).
+                                         However, this apparent success masks significant limitations that are becoming increasingly evi-
+                                         dent. Autoregressive models inherently struggle with tasks requiring complex reasoning, long-term
+                                         planning, and maintaining global coherence (Bubeck et al., 2023; Valmeekam et al., 2023; 2024;
+                                         Dziri et al., 2024; Kambhampati et al., 2024). These shortcomings represent substantial challenges
+                                         in developing AI systems capable of robust problem-solving and adaptable cognition (Wu et al.,
+                                         2022; Zhao et al., 2023; Trinh et al., 2024; Yao et al., 2023; Shinn et al., 2024, inter alia). While
+                                         autoregressive approaches have driven considerable progress, their limitations suggest that they may
+                                         not be the optimal solution for all aspects of machine intelligence. As the field evolves, it becomes
+                                         increasingly important to explore alternative paradigms that can address these inherent drawbacks
+                                         and potentially offer new avenues for advancement in AI capabilities.
+                                         In response to these limitations, recent research has focused on addressing the inherent constraints
+                                         of autoregressive models. Various strategies have been explored, including the integration of search
+                                         algorithms at inference (Yao et al., 2024; Besta et al., 2024) and the incorporation of backtracking
+                                         supervision during training (Lehnert et al., 2024; Gandhi et al., 2024). However, these approaches
+                                         are not without their own drawbacks: the former often incurs significant computational costs, while
+                                         the latter frequently results in verbose inputs and suboptimal performance.
+                                         To address this challenge, we argue for a fundamentally different modeling approach: discrete diffu-
+                                         sion models. While most contemporary language models are autoregressive, diffusion-based models
+                                         have become predominant in image (Dhariwal & Nichol, 2021; Rombach et al., 2022; Peebles &
+                                         Xie, 2023) and video domains (Ho et al., 2022; Wu et al., 2023a; Brooks et al., 2024). Diffusion
+                                         models are also gaining traction in various other applications, such as protein desiging (Xu et al.,
+                                         2022; Hoogeboom et al., 2022b; Corso et al., 2023) and planning in reinforcement learning (Jan-
+
+
+                                                                                          1
+Published as a conference paper at ICLR 2025
+
+
+
+
+ner et al., 2022; Ajay et al., 2022; Chi et al., 2023). In this work, we reveal that discrete diffusion
+models demonstrate significantly superior performance compared to the autoregressive counterparts,
+particularly in tasks requiring complex planning and reasoning.
+To substantiate this argument, we first examine the problem through the lens of subgoal imbalance
+(§3.1). We present both theoretical and empirical evidence via a synthetic planning task (Figure 1)
+to illustrate why autoregressive models struggle with these types of problems, often achieving near-
+random performance. In contrast, we demonstrate how diffusion models effectively learn the sub-
+goals that challenge autoregressive models (§3.2). The key insight lies in the training objective of
+diffusion models, where difficult subgoals are decomposed into a diverse range of interrelated views
+within a multi-view learning framework (Xu et al., 2013). Each of these views is more manageable,
+resulting in an overall easier and more effective learning process.
+Building upon these insights, we propose a natural extension to current discrete diffusion models,
+which we term multi-granularity diffusion modeling (MGDM; §3.3). This approach prioritizes
+different subgoals based on their difficulty during the learning process, leading to more effective
+learning outcomes and faster convergence.
+In our experimental evaluation (§4), we focus on substantially more complex problem-solving tasks,
+such as Countdown (Gandhi et al., 2024) and Sudoku (Garns, 1979). These tasks demand extensive
+planning over a large number of combinations and pose challenges even for commercial Large Lan-
+guage Models (e.g., GPT-4 Achiam et al. 2023). Notably, without employing any search techniques,
+MGDM achieves 91.5% and 100% accuracy on Countdown and Sudoku respectively, while its au-
+toregressive counterpart only solves 45.8% and 20.7% of the problems. Additionally, we conduct
+experiments on the Boolean Satisfiability Problem (SAT), an NP-complete problem (Cook, 1971)
+that represents a wide range of constraint satisfaction problems. Our model exhibits superior per-
+formance in solving SAT problems with higher accuracy compared to the autoregressive alternative,
+particularly when dealing with an increased number of variables and constraints. Through this sys-
+tematic exploration, we aim to demonstrate the potential advantages of diffusion-based approaches
+in addressing sophisticated language understanding and generation challenges.
+
+2     BACKGROUND
+
+2.1   AUTO - REGRESSIVE M ODELING
+
+Let x := (x1 , . . . , xN ) denote a sequence drawn from a data distribution q(x). For decades, it has
+been common to factorize the joint probabilities of a sequence of tokens as the product of conditional
+probabilities (Jelinek, 1980; Bengio et al., 2000):
+                                                    N
+                                                    Y
+                               pθ (x) = pθ (x1 )          pθ (xn | x1:n−1 ),                       (1)
+                                                    n=2
+
+where θ parameterizes the model distribution and x1:n−1 := x1 , . . . , xn−1 . In order to optimize the
+generative model pθ (x) to fit the data distribution q(x), we optimize the negative log-likelihood:
+                                                              N
+                                                              X
+                   LAR = −Eq(x) log pθ (x) = −Eq(x)                  log pθ (xn | x1:n−1 ).        (2)
+                                                              n=1
+
+
+2.2   D ISCRETE D IFFUSION M ODELING
+
+Discrete diffusion models (Sohl-Dickstein et al., 2015; Hoogeboom et al., 2021; Austin et al., 2021)
+are a class of latent variable models characterized by a forward noising process and a learned reverse
+                                                           QT
+denoising process. The forward process q(x1:T |x0 ) = t=1 q(xt |xt−1 ) corrupts the original data
+x0 := x into a sequence of increasingly noisy latent variables x1:T := x1 , . . . , xT . The backward
+process learns to gradually denoise the latent variables to the data distribution given by:
+                                          X                 T
+                                                            Y
+                              pθ (x) =             p(xT )         pθ (xt−1 |xt ).                  (3)
+                                         x1:T ∼q            t=1
+
+
+                                                     2
+Published as a conference paper at ICLR 2025
+
+
+
+
+    Input: 4,7 | 5,8 | 7,0 | 3,1| ... | 0,2 / 3,9                       100                                               106
+                     shuffled edges           start,goal
+                                                                         75                 AR
+    Output: 3,1 | 1,7 | 7,5 | 5,8 | 8,9
+
+                                                             Accuracy                                         Data Size
+                                                                                            Reverse AR
+                                              6                          50                                               105
+                                                                                            Teacherless
+              Hard Subgoal            2
+                                                                         25                 DiÆusion
+                             0
+                                                                          0                                               104
+    3        1        7          5        8         9
+                                                                              0    1    2   3    4        5                     0    1    2   3    4    5
+                 4                                                                Planning Distance                                 Planning Distance
+
+        10                Planning Distance = 3
+                                                             Figure 2: (Left) Accuracy of different method given 50k training
+     Figure 1: The planning task.                            data. (Right) Minimum data size required to solve (i.e., accuracy
+                                                             above 90%) subgoal at each planning distance.
+
+Due to the intractable marginalization, we typically optimize a variational upper bound on the neg-
+ative log-likelihood:
+                                                   XT
+                                                                                                         
+   LDM = Eq(x0 ) DKL [q(xT |x0 )||p(xT )] +            E           DKL [q(xt−1 |xt , x0 )||pθ (xt−1 |xt )]
+                     |          {z             } t=2 | q(xt |x0 )            {z                           }
+                                LT                                         Lt−1
+
+                     −Eq(x1 |x0 ) [log pθ (x0 |x1 )] ,                                                     (4)
+                     |             {z              }
+                                                        L0
+
+where LT is a constant when one uses a fixed prior p(xT ). By defining both the forward and
+backward distribution as categorical distribution, e.g., q(xt |xt−1 ) = Cat(xt ; p = Q⊤   t xt−1 ) where
+Qt is a pre-defined K × K transition matrix and K is the size of categories, and pθ (xt−1 |xt ) =
+q(xt−1 |xt , f (xt ; θ)), the forward process posterior q(xt−1 |xt , x0 ) and each KL term can be calcu-
+lated analytically (Hoogeboom et al., 2021; Austin et al., 2021).
+
+3       S UBGOAL I MBALANCE AND M ULTI - GRANULARITY D IFFUSION M ODELS
+In this section, we employ a motivation example (§3.1) to elucidate the challenges faced by autore-
+gressive models in specific scenarios. Through this analysis, we introduce the concept of subgoal
+imbalance—wherein some subgoals are inherently more difficult than others—which offers insights
+into these difficulties. We then extend our discussion in §3.2 to examine how diffusion models
+can more effectively address and learn these hard subgoals, effectively overcoming the limitations
+observed in autoregressive approaches. We finally propose Multi-Granularity Diffusion Modeling
+(MGDM; §3.3) as a natural extension of discrete diffusion models to better address these challenges
+and improve performance on complex tasks requiring planning and reasoning.
+
+3.1       S UBGOAL I MBALANCE IN AUTOREGRESSIVE AND D IFFUSION M ODELING
+
+We designed a simple planning task to serve as our running example. Consider the example in
+Figure 1, where the input for the task consists of a set of shuffled edges from the graph shown below.
+At the end of the input sequence, the start and goal nodes are specified to indicate the path the model
+needs to find. The objective of this task is to identify the correct path in the graph and output its
+constituent edges. The complexity of this problem arises from distracting factors (highlighted in
+orange) that potentially mislead the path selection. For instance, at node 7, with the goal being node
+9, the model must plan over a distance of 3 nodes to determine that the correct next choice should be
+node 5 rather than 0. We define this span as the Planning Distance (PD), a parameter adjustable in
+our synthetic task data. Intuitively, as the PD increases, the model faces greater difficulty in learning
+to determine the correct subsequent node. We formalize this intuition as subgoal imbalance.
+
+Proposition 1 (Subgoal imbalance due to the unknown data distribution q(x)) Given the data
+x sampled from an unknown data distribution q(x), the difficulty of learning each subgoal xn can
+differ significantly based on how we parametrize the model distribution, and some subgoals may
+require substantially more data to learn or may even be infeasible to learn.
+
+
+                                                                                      3
+

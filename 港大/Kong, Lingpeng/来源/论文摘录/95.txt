@@ -1,0 +1,173 @@
+                 P RO G EN: Progressive Zero-shot Dataset Generation
+                               via In-context Feedback
+            Jiacheng Ye♠♢∗, Jiahui Gao♠ , Jiangtao Feng♢ , Zhiyong Wu♢ ,
+                            Tao Yu♠♡ , Lingpeng Kong♠♢
+                ♢
+                  Shanghai AI Laboratory ♡ University of Washington
+                            ♠
+                              The University of Hong Kong
+                  {carsonye, sumiler}@connect.hku.hk,
+    {fengjiangtao,wuzhiyong}@pjlab.org.cn, {tyu,lpk}@cs.hku.hk
+
+                      Abstract
+    Recently, dataset-generation-based zero-shot
+    learning has shown promising results by train-
+    ing a task-specific model with a dataset synthe-
+    sized from large pre-trained language models
+    (PLMs). The final task-specific model often
+    achieves compatible or even better performance
+    than PLMs under the zero-shot setting, with
+    orders of magnitude fewer parameters. How-
+    ever, synthetic datasets have their drawbacks.
+    They have long been suffering from low-quality
+    issues (e.g., low informativeness and redun-
+    dancy). This explains why the massive syn-              Figure 1: Comparison of vanilla zero-shot dataset gen-
+    thetic data does not lead to better performance         eration (Z ERO G EN) and progressive zero-shot dataset
+    – a scenario we would expect in the human-              generation (P RO G EN). In progressive zero-shot dataset
+    labeled data. To improve the quality of dataset         generation, we split the whole dataset generation pro-
+    synthesis, we propose a progressive zero-shot           cess into multiple phrases. In each phase, the generation
+    dataset generation framework, P RO G EN, which          is steered by feedback from the previously generated
+    leverages the feedback from the task-specific           dataset, so as to synthesize a dataset with higher quality.
+    model to guide the generation of new training
+    data via in-context examples. Extensive ex-
+    periments on five text classification datasets          Among them, Z ERO G EN (Ye et al., 2022) proposes
+    demonstrate the effectiveness of the proposed           to first convert the task descriptions into carefully
+    approach. We also show P RO G EN achieves on-           designed prompts (Petroni et al., 2019; Brown et al.,
+    par or superior performance with only 1% syn-
+                                                            2020), and then use these prompts to steer the
+    thetic dataset size compared to baseline meth-
+    ods without in-context feedback.
+                                                            PLMs to synthesize the training data for the final
+                                                            task model. This approach allows highly efficient
+1   Introduction                                            inference as the final task model only has orders of
+                                                            magnitude fewer parameters compared to PLMs,
+Dataset generation with pre-trained language mod-           yet achieves compatible or even better performance
+els (PLMs) has attracted enormous interest re-              than PLMs under the zero-shot setting.
+cently due to the superior generative capacity of              The major drawback of synthetic datasets, how-
+PLMs. Given task-specific supervision, recent               ever, is they often suffer from low-quality issues
+work (Anaby-Tavor et al., 2020; Puri et al., 2020;          (e.g., low informativeness, redundancy). Despite
+Kumar et al., 2020; Lee et al., 2021, inter alia)           we can generate as much data as computational re-
+manages to fine-tune the PLMs to synthesize high-           source allows, the massive generated data does not
+quality datasets for downstream applications. Nev-          automatically translate into better performances,
+ertheless, obtaining task supervision from human            unlike in the human-labeling scenario.
+experts can be expensive or even unrealistic. Re-              To address this problem, we propose a
+cent attempts (Schick and Schütze, 2021; Wang               progressive zero-shot dataset generation frame-
+et al., 2021; Meng et al., 2022, inter alia) turn           work (Figure 1b), called P RO G EN. In a nutshell,
+their eyes to the unsupervised dataset generation.          P RO G EN learns a model for a downstream task
+    ∗
+     Work done while interning at Shanghai AI Lab.          by performing two phrases alternatively – using
+                                                       3671
+               Findings of the Association for Computational Linguistics: EMNLP 2022, pages 3671–3683
+                        December 7-11, 2022 ©2022 Association for Computational Linguistics
+PLMs to create labeled examples leveraging the           Zero-shot Dataset Generation Take text clas-
+feedback from the current task-specific model, and       sification task as an example, vanilla zero-shot
+training a task-specific model given the generated       dataset generation methods (Meng et al., 2022; Ye
+labeled examples. To compute reliable signals as         et al., 2022) aims to generate a synthetic dataset
+feedback, we employ the influence function (Koh          D = {(x, y)} with the help of a PLM P. They first
+and Liang (2017); IF) to quantify contribution to        sample a class label y from a uniform distribution:
+the loss for each training point. In the context of
+zero-shot learning where no human-annotated data                      y ∼ U(y1 , y2 , . . . , yk ),      (1)
+is assumed, we integrate a noise-resistant objec-
+                                                         where k is the number of classes. They then wrap
+tive in the calculation of IF so that it can tackle
+                                                         y up into a label-descriptive prompt T (y) to steer
+the noise in the synthetic dataset. To incorporate
+                                                         the generation of x:
+feedback into PLMs, we sort the training samples
+based on their quantified influence score, and for-                       x ∼ P(·|T (y)).                (2)
+mulate those most influential ones as in-context
+examples (Brown et al., 2020) to steer the gener-        Since the parameters of P is frozen and the gen-
+ation. Overall, P RO G EN has the following advan-       eration x for each y is deterministic, different
+tages: 1) the quality estimation phrase requires no      sampling algorithms (e.g., Top-k sampling (Fan
+human annotations, thus works in a purely zero-          et al., 2018) and nucleus sampling (Holtzman et al.,
+shot learning setting; 2) unlike most controllable       2020)) can be adopted to increase the diversity
+generation methods that tune or require the access       of generated dataset. A synthetic dataset is con-
+to PLMs (Keskar et al., 2019; Dathathri et al., 2020;    structed after pairing the generated x with y.
+Liu et al., 2021, inter alia), the in-context feedback
+                                                         Dataset-generation-based Zero-shot Learning
+phrase does not need to modify parameters in the
+                                                         The vast linguistic (Jawahar et al., 2019; Goldberg,
+PLM and incurs minimal disturbance to its gener-
+                                                         2019; Tenney et al., 2019) and factual (Petroni
+ation procedure. Our main contributions are three
+                                                         et al., 2019; Jiang et al., 2020b) knowledge en-
+folds:
+                                                         coded in PLMs’ parameters is the key towards the
+    • We propose a progressive framework for zero-       success of conventional prompt-based zero-shot
+      shot dataset generation to generate higher-        learning (P ROMPTING) (Brown et al., 2020). How-
+      quality dataset (§3);                              ever, P ROMPTING fails to fully exert the capac-
+                                                         ity of PLMs and heavily relies on gigantic PLMs
+    • We propose noise-resistant influence function      during inference. This motivates another line of
+      to estimate the quality of each sample without     work (Meng et al., 2022; Ye et al., 2022) to ex-
+      any human annotations (§3.1), and a learning-      plore a more flexible and efficient way of con-
+      free controllable generation method via in-        ducting zero-shot learning based on dataset gen-
+      context feedback (§3.2);                           eration. Given the synthetic dataset generated as
+    • Across multiple text classification datasets,      above, a task-specific model is trained, allowing
+      we show our framework obtains better perfor-       any task-specific inductive bias and with an order-
+      mance over various prompt-based methods,           of-magnitude smaller number of parameters com-
+      and achieves on-par zero-shot performance          pared to PLMs. The performance of the final task-
+      with only 1% synthetic dataset size, when          specific model is mostly dominated by the quality
+      compared to methods without in-context feed-       of the synthetic dataset. A low-quality dataset de-
+      back (§4).                                         grades the final zero-shot performance.
+
+Our code can be found at https://github.                 3   P RO G EN
+com/HKUNLP/ProGen.                                       We now describe our framework for progressive
+                                                         zero-shot dataset generation via in-context feed-
+2    Background
+                                                         back (P RO G EN), as shown in Figure 2. We fol-
+In this section, we briefly review the baseline ap-      low Z ERO G EN (Ye et al., 2022) to build the back-
+proaches of zero-shot dataset generation and how         bone of our framework. Concretely, we first train
+the synthesized dataset can be used for zero-shot        a task-specific model (TAM) with partially gener-
+learning on downstream tasks.                            ated dataset. Then, assuming no access to human
+                                                     3672
+Figure 2: Framework of P RO G EN for progressive zero-shot dataset generation. To update the prompt, we first train
+a task-specific model (TAM) with the synthetic dataset, and then employ the noise-robust influence function to
+measure the quality of each data point. Finally, the most influential subset is selected, which acts as feedback via
+in-context learning. The whole framework works with a black-box PLM and requires no human annotations.
+
+
+annotations, we estimate the influence of each sam-            Formally, influence function measures the
+ple via the noise-robust influence function. Finally,       change in the model’s loss on the test data-point
+with those identified most influential samples, we          ztest = (x, y) if we up-weight the loss of a training
+explore the use of in-context learning to shift the         data-point z by ϵ:
+generation distribution towards that of influential                                                    
+                                                                                       dL ztest , θ̂ϵ,z
+samples, so that the system generates more related                               def
+                                                              Iup,loss (z, ztest ) =
+samples. The whole framework progressively con-                                               dϵ
+                                                                                                            ϵ=0
+structs the synthetic dataset and enhances the per-                                               ⊤ dθ̂               (3)
+                                                                                                         ϵ,z
+formance of the final task-specific model.                                       = ∇θ L ztest , θ̂
+                                                                                                       dϵ
+                                                                                                             ϵ=0
+                                                                                                   ⊤
+3.1 Annotation-free Quality Estimation                                           = −∇θ L ztest , θ̂       −1
+                                                                                                       Hθ̂ ∇θ L(z, θ̂),
+There are many factors in measuring the quality                           def                  P
+of a dataset, e.g., diversity, annotation correctness,      where θ̂ϵ,z = arg minθ∈Θ n1 ni=1 L (zi , θ) +
+spurious biases (Mishra et al., 2020; Wiegreffe and         ϵL(z, θ) is the parameter if z were upweighted by
+Marasovic, 2021). However, it is often very subjec-         some small ϵ and Hθ̂ is the Hessian. Our noise-
+tive, making it unrealistic to calculate them all auto-     robust validation-set level influence function is de-
+matically. Our solution to this is to infer the quality     fined as:
+of the individual samples in synthetic datasets us-                                                 ⊤
+                                                              Iup,loss (z, Dval ) = −∇θ L′ Dval , θ̂    Hθ̂−1 ∇θ L(z, θ̂),
+ing the performance of the final task-specific model                                                                    (4)
+trained on the dataset as the surrogate. Concretely,        where L′ is a noise-tolerant loss. In this work, we
+we propose to apply influence function (Koh and             adopt Reverse Cross-Entropy (RCE) loss (Wang
+Liang, 2017) on the task-specific model to give             et al., 2019), which has the following form:
+sample-level influence scores with regard to the
+loss of validation set. However, a clean valida-                          |D
+                                                                             X val |                     |Dval | C
+                                                                                                          X X c
+                                                              L′ Dval , θ̂ =         ℓθ̂ (ŷi , yi ) = −           ŷi log(yic ),
+tion set, which is crucial for producing reliable                                 i=1                        i=1 c=1
+influence scores, is inaccessible in the zero-shot                                                                             (5)
+learning setting. Thus, we use a synthetic valida-          where ŷi is the predicted class for sample i, C is
+tion set and harness the influence function with a          the number of classes.1 A smaller negative value of
+noise-robust objective to handle the potential noise            1
+                                                                  log(0) is approximated to a constant A in the case of
+in the synthetic validation set.                            yic = 0.
+
+                                                       3673
+

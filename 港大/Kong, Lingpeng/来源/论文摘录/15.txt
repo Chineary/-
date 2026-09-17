@@ -1,0 +1,241 @@
+                                         IEEE JOURNAL OF SELECTED TOPICS IN SIGNAL PROCESSING, VOL. X, NO. Y, AUGUST 2017                                                          1
+
+
+
+
+                                         END-TO-END NEURAL SEGMENTAL MODELS
+                                                FOR SPEECH RECOGNITION
+                                                     Hao Tang, Student Member, IEEE, Liang Lu, Member, IEEE, Lingpeng Kong, Kevin Gimpel,
+                                                    Karen Livescu, Member, IEEE, Chris Dyer, Noah A. Smith, and Steve Renals, Fellow, IEEE
+
+
+
+                                            Abstract—Segmental models are an alternative to frame-based              Many model types that have been proposed as alternatives
+                                         models for sequence prediction, where hypothesized path weights             to HMMs, such as conditional random fields (CRF) [4] and
+
+
+
+
+arXiv:1708.00531v2 [cs.CL] 15 Aug 2017
+                                         are based on entire segment scores rather than a single frame at            support vector machine (SVM)-based models [5], are still
+                                         a time. Neural segmental models are segmental models that use
+                                         neural network-based weight functions. Neural segmental models              frame-based because the search space remains the same.
+                                         have achieved competitive results for speech recognition, and                  The inherent limitation of frame-based models is that the
+                                         their end-to-end training has been explored in several studies.             weights can only depend on a fixed length of input at a
+                                         In this work, we review neural segmental models, which can                  given time point. In order to incorporate richer linguistic
+                                         be viewed as consisting of a neural network-based acoustic                  information, units other than frames, such as segments [6],
+                                         encoder and a finite-state transducer decoder. We study end-to-
+                                         end segmental models with different weight functions, including             have been proposed. A segment is a variable-length unit, such
+                                         ones based on frame-level neural classifiers and on segmental               as a phoneme [6], [7] or even a whole word [8], [9]. Models
+                                         recurrent neural networks. We study how reducing the search                 operating on segments, known as segmental models, can take
+                                         space size impacts performance under different weight functions.            into account the start time, end time, and the associated
+                                         We also compare several loss functions for end-to-end training.             label to compute the weights of segments. The ability to
+                                         Finally, we explore training approaches, including multi-stage
+                                         vs. end-to-end training and multitask training that combines                incorporate arbitrary information within a segment, such as
+                                         segmental and frame-level losses.                                           duration [10] and acoustic landmarks [11], makes segmental
+                                                                                                                     models appealing for speech recognition. In fact, segmental
+                                             Index Terms—segmental models, connectionist temporal class-
+                                         ification, end-to-end training, multitask training                          models were the state of the art for phoneme recognition on
+                                                                                                                     the TIMIT dataset [12] for many years [13].
+                                                                                                                        However, the flexibility of segmental models comes at a
+                                                                  I. I NTRODUCTION                                   price. The search space of segmental models includes all
+                                            Automatic speech recognition (ASR) has been treated as                   possible ways of segmenting the speech input and all possible
+                                         a graph search problem since its early development [1], and                 ways of labeling the segments, forming a significantly larger
+                                         the graph search approach has been popularized by the use of                search space than the one that frame-based models consider.
+                                         hidden Markov models (HMM) [2], [3]. Given a sequence of                    To bypass the large search space, early development of seg-
+                                         acoustic feature vectors, such as log mel filter bank features              mental models considered restricted search spaces produced by
+                                         or mel frequency cepstral coefficients (MFCC), recognition                  pruning based on heuristics [6] or based on a first-pass frame-
+                                         proceeds by computing a weight at every time point for                      based recognizer [13], [9]. Segmental models that operate on
+                                         every label, such as an HMM sub-phonetic state. The search                  the full search space—first-pass segmental models—have not
+                                         space is the set of all sub-phonetic state sequences that                   been explored until recently [14]. Since then, there has been
+                                         corresponds to the set of all word sequences. Weights for                   a variety of work exploring better segment representations for
+                                         transitioning from one word to another (the language model)                 first-pass segmental models, especially ones that depend on
+                                         are included at the states corresponding to boundaries between              neural networks [15], [16], [17], [18].
+                                         words. Recognizing speech becomes the task of finding the                      Better, but more computationally expensive, segment rep-
+                                         maximum-weight sequence of states, considering both the                     resentations are of little practical use unless the efficiency
+                                         weights from the acoustic features and the weights from the                 of the models is improved. Therefore, much of the work on
+                                         word transitions. Since this approach computes a weight for                 improving segment representations has been tied to specific ap-
+                                         every acoustic feature vector, or every frame, at every time                proaches for reducing the search space. For example, segment
+                                         point, it is commonly referred to as a frame-based approach.                representations based on multilayer perceptrons (MLP) are
+                                                                                                                     used in [15], where the search space is reduced by restricting
+                                            Hao Tang, Liang Lu, Kevin Gimpel, and Karen Livescu are with Toy-
+                                         ota Technological Institute at Chicago, Chicago, IL 60637 USA (email:       the form of the weight function; segment representations based
+                                         {haotang,llu,kgimpel,klivescu}@ttic.edu).                                   on convolutional neural networks and MLPs are explored
+                                            Lingpeng Kong is with Carnegie Mellon University, Pittsburgh, PA 15213   in [17], where the search space is reduced by pruning; segment
+                                         USA (email: lingpengk@cs.cmu.edu).
+                                            Chris Dyer is with Google DeepMind, London, UK and Carnegie Mellon       representations based on long short-term memory (LSTM)
+                                         University, Pittsburgh, PA 15213 USA (email: cdyer@google.com).             networks are used in [18], where the search space is reduced
+                                            Noah A. Smith is with University of Washington, Seattle, WA 98195 USA    by reducing the time resolution. In this work, we will consider
+                                         (email: nasmith@cs.washington.edu).
+                                            Steve Renals is with University of Edinburgh, Edinburgh, UK (email:      different segment representations and study how they behave
+                                         s.renals@ed.ac.uk)                                                          under different search spaces.
+IEEE JOURNAL OF SELECTED TOPICS IN SIGNAL PROCESSING, VOL. X, NO. Y, AUGUST 2017                                                              2
+
+
+
+   Segmental models have been proposed and rediscovered                                                          t
+under different names based on the definitions of the weight
+functions and the training losses. For example, hidden semi-                                        ih                         sh
+                                                                                        s       p           iy            ch
+Markov models are defined in the generative setting [19];
+semi-Markov CRFs [20] were introduced as segmental models
+trained with a log loss; segmental structured SVMs refer to                             z                     w((iy, s, t))
+segmental models trained with a hinge loss [21]. Segmental
+CRFs [9] were proposed as segmental models trained with
+                                                                                     .. .. .. .. .. .. .. .. .. ..
+                                                                                    hihihihihihihihihihi
+marginal log loss. In this work, we will separate the loss
+                                                                                      . . . . . . . . . .
+functions from the definition of segmental models and consider
+different combinations of segmental weight functions and                             x1 x2            xs             xt    xT
+losses.
+   When segmental models are trained with marginal log loss          Fig. 1. An example of a segmental model. A search space is built based on
+                                                                     the input frames. Each edge (segment) has a start time, an end time, and a
+(or another loss that marginalizes over segmentations), they         label, which the weight function can make use of. Once the weights of edges
+can be trained end to end without the need for ground truth          are computed, decoding becomes the problem of finding the maximum-weight
+segmentations [18]. This property is particularly useful when        path.
+obtaining ground-truth segmentations, such as alignments at
+the phonetic level, is expensive or time-consuming. Though
+training systems end to end reduces the amount of human              label sequence comes from a label set L, e.g., a phoneme
+intervention, the learned representations may not be inter-          set in the case of phoneme recognition. Given any T frames,
+pretable, making it harder to diagnose errors made by end-           a segmentation of length K is a sequence of time points
+to-end systems. In this work, we will show results comparing         ((0 = s1 , t1 ), . . . , (sK , tK = T )), where sk < tk and
+segmental models trained in multiple stages with intermediate        tk = sk+1 for k ∈ {1, . . . , K}. A segment (typically denoted
+supervision to ones trained end to end. In this context, we          e in later sections) is a tuple (`, s, t) where ` ∈ L is its label,
+explore two weight functions, one based on frame classi-             s is the start time, and t is the end time.
+fiers [15], [17], [16], and one based on segmental recurrent            A segmental model is a tuple (Θ, w) where Θ is a set
+neural networks [22], [18]. We will also compare end-to-end          of parameters, and w : X × E → R is a weight function
+frame-based and segmental models in terms of their search            parameterized by Θ and E is the set of all segment tuples
+spaces and loss functions. Finally, we will use multitask            (`, s, t). The set of parameters Θ includes all parameters for
+learning as a tool to constrain and to analyze the learned           both the feature encoder and the sequence decoder. A sequence
+representations.                                                     of segments forms a path. Specifically, a path of length K is
+                                                                     a sequence of segments (e1 , . . . , eK ), where ek ∈ E for k ∈
+                  II. S EGMENTAL M ODELS                             {1, . . . , K}. Let P be the set of all
+                                                                                                          Ppaths. For any path p, we
+                                                                     overload w such that w(x, p) = e∈p w(x, e). We will also
+   We consider the problem of sequence prediction, such as           abbreviate w(x, e) and w(x, p) as w(e) and w(p) respectively
+speech recognition, as a graph search problem. The graph,            when the context is clear. An example is shown in Figure 1.
+usually represented as a finite-state transducer (FST), is a            Given an input x ∈ X , segmental models aim to solve
+search space consisting of all of the ways of segmenting             sequence prediction by reducing it to finding the maximum-
+and labeling the input. A vertex in the graph corresponds            weight path
+to a point in time, and an edge in the graph corresponds to
+a segment, that is a time span in the acoustic input and a                                      argmax w(x, p).                             (1)
+                                                                                                    p∈P
+possible label. The graph is weighted, and the weight of an
+edge corresponds to how well the edge (segment) matches the          The set of paths P, commonly referred to as the search space,
+input. To compute the weight of an edge, we first transform          can be compactly represented as an FST.
+the input to an intermediate representation with a feature              Here we briefly review the definition of FSTs. A multigraph
+encoder. There are many choices for the type of encoder; here        (a graph that can have multiple edges between any pair of
+we mainly consider ones based on long short-term memory              vertices) G is a tuple (V, E, tail, head), where V is a set
+(LSTM) networks [23]. The intermediate representation is then        of vertices, E is a set of edges, tail : E → V is a
+used to compute weights, and we refer to the weighted graph          function that returns the vertex where an edge starts, and
+and the graph search algorithm as the sequence decoder. Below        head : E → V is a function that returns the vertex where an
+we will formally define these components.                            edge ends. We deliberately overload E, because every segment
+   Let X be the input space, the set of all sequences of             has a corresponding edge in the graph. An FST is a tuple
+acoustic feature vectors, e.g., log mel filter bank features         (G, Σ, Λ, I, F, i, o, w), where G is a multigraph, Σ is a set of
+or mel frequency cepstral coefficients (MFCCs). Specifically,        input symbols, Λ is a set of output symbols, I ⊆ V is a set
+for a sequence of T vectors x = (x1 , . . . , xT ) ∈ X , each        of initial vertices, F ⊆ V is a set of final vertices, i : E → Σ
+xt ∈ Rd , for t ∈ {1, . . . , T }, is a d-dimensional acoustic       is a function that defines the symbol an edge takes as input,
+feature vector, also referred to as a frame. Let Y be the output     o : E → Λ is a function that defines the symbol an edge
+space, the set of all label sequences, where each label in a         outputs, and w : E → R is a function that puts weights on
+IEEE JOURNAL OF SELECTED TOPICS IN SIGNAL PROCESSING, VOL. X, NO. Y, AUGUST 2017                                                                           3
+
+
+
+                                                                               acyclic graphs [25]. Since v0 , . . . , vT follows a topological
+                                                                               order, Algorithm 1 is guaranteed to return the maximum-
+                    ..
+                   hi
+                               ..
+                              hi
+                                        ..
+                                       hi
+                                                  ..
+                                                 hi
+                                                        ..
+                                                       hi                      weight path.
+                     .          .        .         .     .
+                   x1         x2       x3        x4    x5                      Algorithm 1 Finding the maximum-weight path
+                                                                                 d(v0 ) = 0
+Fig. 2. An example of a search space for a five-frame utterance with a label     for v = v0 , v1 , . . . , vT hdo       i
+set L of size three and maximum segment duration D of two frames, i.e.,
+T = 5, |L| = 3, and D = 2. The three edges between any two nodes are                 d(v) = maxe∈in(v) d(tail(e)) + w(e)
+                                                                                                                  h         i
+associated with the three labels.
+                                                                                     δ(v) = argmaxe∈in(v) d(tail(e)) + w(e)
+                                                                                 end for
+                                                                                 u = vT , p = ∅
+edges. We deliberately overload w as well, because the weight
+                                                                                 while u 6= v0 do
+of a segment will be the weight of the corresponding edge.
+                                                                                     p = δ(u) ∪ p
+   We also associate a time function τ : V → N that maps
+                                                                                     u = tail(δ(u))
+a vertex to a time point (frame index). For convenience, we
+                                                                                 end while
+define in(v) = {e ∈ E : head(e) = v} and out(v) = {e ∈ E :
+                                                                                 return p
+tail(e) = v}. We will also assume there is one unique start
+vertex and unique end vertex, i.e., |I| = |F | = 1, but this can
+be easily relaxed. More detailed discussion of FSTs and their                     Since for any vertex v, |in(v)| ≤ D|L|, the runtime of
+applications for speech recognition can be found in [24].                      Algorithm 1 is O(T D|L|) = O(|E|). In fact, Algorithm 1
+   To represent the set of paths P as an FST, we place a                       evaluates w(e) for every edge e ∈ E exactly once.
+vertex at every time point and connect vertices based on the                      A segmental model can be trained by finding a set of
+set of segments. Specifically, suppose we have T frames. The                   parameters Θ that minimizes a loss function L. The model
+set of segments E is an exhaustive enumeration of tuples                       definition is not tied to any loss function, allowing us to
+(`, s, t) for all ` ∈ L and 0 ≤ s < t ≤ T . In practice,                       study the behavior of segmental models under different loss
+a maximum duration D is typically imposed, i.e., for any                       functions.
+segment (`, s, t), t − s ≤ D, reducing the possible number
+of segments from O(T 2 |L|) to O(T D|L|). We create a set                                            III. W EIGHT F UNCTIONS
+of vertices V = {v0 , v1 , . . . , vT } such that τ (vt ) = t for
+                                                                                  Here we detail two types of neural weight functions based
+t ∈ {0, 1, . . . , T }. For every segment (`, s, t) ∈ E, we create
+                                                                               on prior work by ourselves and others. The term feature
+an edge e such that i(e) = o(e) = `, tail(e) = vs , and
+                                                                               function is often used in the literature to denote the function
+head(e) = vt . We set Σ = Λ = L, I = {v0 }, and F = {vT }
+                                                                               φ : X × E → Rm for some m, where the weight function
+to complete the construction of the FST given any T frames.
+                                                                               w(x, e) is of the form θ> φ(x, e) for some parameter vector
+An example of a search space is shown in Figure 2. One
+                                                                               θ ∈ Rm . When considering neural networks, the weight func-
+of the many benefits of representing the search space as an
+                                                                               tion need not be a dot product, but can be any differentiable
+FST is that higher-order segmental models can be constructed
+                                                                               real-valued function.
+by structurally composing the search space with higher-order
+                                                                                  The first type of weight function is similar to those of [15],
+language models [17].
+                                                                               [17], [16], consisting of outputs of frame-level neural network
+   Given the search space constructed above, inference, i.e.,
+                                                                               classifiers “summarized” in various ways over the span of a
+finding the maximum-weight path (1), can be done efficiently
+                                                                               segment; the specific formulation we use is that of [26]. The
+with dynamic programming. Let P(u, v) be the set of paths
+                                                                               second type of weight function is a segmental recurrent neural
+that starts at vertex u and ends at vertex v. By our previous
+                                                                               network, as in [18]. We study segmental models in the context
+definition, P = P(v0 , vT ). Define
+                                       X                                       of these particular weight functions due to their prior success.
+                       d(v) = max         w(e).                (2)             In both cases the acoustic encoder is based on long short-term
+                                   p∈P(v0 ,v)
+                                                e∈p                            memory networks (LSTMs) [23].
+                                                                                  Recall that the weight function w takes a sequence of
+In words, d(v) is the maximum path weight for all paths
+                                                                               acoustic features x = (x1 , . . . , xT ) and a segment (`, s, t) as
+between v0 and v, and the goal is to find d(vT ). By definition,
+                                                                               input. The weight function first passes the acoustic features
+we have
+                                                                             through multiple layers of LSTMs. Let h1 , . . . , hT̃ be the
+                                             X                                 sequence of output vectors1 of the final LSTM. The output of
+     d(v) = max 0 max              w(e) +        w(e0 ) (3)                  each layer can be subsampled before feeding to the next layer
+                e∈in(v) p ∈P(v0 ,tail(e))
+                                                       e0 ∈p0                  to reduce the time resolution. For example, if we subsample
+                          h         i
+             = max w(e) + d(tail(e)) .                                  (4)       1 Specifically, h = W hf +W hb , where hf and hb are the output vectors
+                e∈in(v)                                                                            t     f t      b t          t       t
+                                                                               of the forward and backward LSTMs for some weight matrices Wf and Wb .
+Algorithm 1 shows how to compute all of the entries in d                       The output vector for the forward LSTM is defined as hft = tanh(cft ) oft ,
+based on the above recursion and how to backtrack to find the                  where cft is the cell, and oft is the output gate at time t. The output vector
+path; it is the same as the shortest path algorithm for directed               hbt is defined similarly for the backward LSTM.
+

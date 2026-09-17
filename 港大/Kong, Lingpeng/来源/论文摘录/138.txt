@@ -1,0 +1,176 @@
+                                             Language Versatilists vs. Specialists: An Empirical
+                                                Revisiting on Multilingual Transfer Ability
+
+
+                                                                             Jiacheng Ye, Xijia Tao, Lingpeng Kong
+                                                                                  The University of Hong Kong
+                                                                                {jcye2,xjtao,lpk}@cs.hku.hk
+
+
+
+
+arXiv:2306.06688v1 [cs.CL] 11 Jun 2023
+                                                                                             Abstract
+
+                                                      Multilingual transfer ability, which reflects how well the models fine-tuned on
+                                                      one source language can be applied to other languages, has been well studied
+                                                      in multilingual pre-trained models (e.g., BLOOM [32]). However, such ability
+                                                      has not been investigated for English-centric models (e.g., LLaMA [35]). To
+                                                      fill this gap, we study the following research questions. First, does multilingual
+                                                      transfer ability exist in English-centric models and how does it compare with
+                                                      multilingual pretrained models? Second, does it only appears when English is
+                                                      the source language for the English-centric model? Third, how does it vary in
+                                                      different tasks? We take multilingual reasoning ability as our focus and conduct
+                                                      extensive experiments across four types of reasoning tasks. We find that the
+                                                      multilingual pretrained model does not always outperform an English-centric
+                                                      model. Furthermore, English appears to be a less suitable source language, and the
+                                                      choice of source language becomes less important when the English-centric model
+                                                      scales up. In addition, different types of tasks exhibit different multilingual transfer
+                                                      abilities. These findings demonstrate that English-centric models not only possess
+                                                      multilingual transfer ability but may even surpass the transferability of multilingual
+                                                      pretrained models if well-trained. By showing the strength and weaknesses, the
+                                                      experiments also provide valuable insights into enhancing multilingual reasoning
+                                                      abilities for the English-centric models.
+
+
+                                         1       Introduction
+                                         Multilingual pre-training has become a standard technique to harness the cross-lingual transfer ability
+                                         of a language model, through which it is possible to improve the performance on low-resource
+                                         languages by leveraging high-resource languages [9, 11, 13, 21, 32]. However, there have been
+                                         looming concerns regarding multilingual pre-training. For instance, Conneau et al. [11] uncovered
+                                         the curse of multilinguality, suggesting for a fixed model size, cross-lingual performance increases
+                                         with additional pretraining languages only up to a certain point, after which the performance begins
+                                         to decline. Additionally, Wang et al. [37] also reported a phenomenon called negative interference,
+                                         meaning the performance on both high-resource and low-resource languages degrade due to joint
+                                         multilingual learning.
+                                         English-centric models [2–5, 7, 35, 36, 44], on the other hand, have demonstrated strong performance
+                                         on downstream English tasks, but their cross-lingual abilities have not been systematically analyzed.1
+                                         While it may seem intuitive to assume that English-centric models are not well-suited in cross-
+                                         lingual transfer, this is not necessarily the case in practice. Research evidence suggests that
+                                         monolingual models are capable of learning certain abstractions that can generalize across languages,
+                                         as demonstrated by Artetxe et al. [1]. In addition, it should be noted that English-centric models are
+                                             1
+                                                 In this paper, we refer to a model pre-trained primarily on English corpus as English-centric model.
+
+
+                                         Preprint. Under review.
+not limited to English only, as they have been exposed to some other languages, albeit to a much
+lesser extent [5, 7, 14, 35].
+The investigation of multilingual models and English-centric models is especially meaningful in
+many practical settings. Suppose the goal is to develop a model with excellent multilingual reasoning
+skills such as arithmetic, commonsense, and logical reasoning. In that case, how should we approach
+this goal? Should we start from an English-centric model which has potentially superior English
+reasoning abilities and hope these can be transferred to other languages? Or should we start with the
+multilingual models which generally assumed to have better multilingual transferability, but may lag
+behind in English reasoning skills?
+In this paper, we investigate the following three research questions:
+
+          • How does the backbone (e.g., a multilingual pre-trained model or an English-centric model)
+            affect multilingual reasoning?
+          • How does the source language used for downstream task finetuning affect multilingual
+            reasoning on other target languages? For example, will English always be the most effective
+            source language for English-centric models?
+          • How does task type affect multilingual reasoning, e.g., will the reasoning ability be
+            transferred better across languages in some reasoning tasks?
+
+To answer these questions, we consider four tasks that require distinct types of reasoning,
+namely Natural Language Inference, Logical Reasoning, Commonsense Reasoning, and Arithmetic
+Reasoning, and three popular multilingual and English-centric models, i.e., BLOOM [32], Pythia [2]
+and LLaMA [35]. We conduct extensive experiments in these multilingual downstream tasks, and
+have the following key observations:
+
+          • The multilingual pre-trained model does not always outperform an English-centric model,
+            especially for languages seen or rarely seen for both models. For instance, LLaMA achieves
+            a maximum of 9.9% and a minimum of 0.54% more average accuracy gain than BLOOM
+            on Turkish and Greek, respectively, both are rarely seen for the two models (§3.2);
+          • Incorporating a small amount of multilingual data during the pre-training stage can have
+            a significant impact on English-centric models. For example, LLaMA trained on French
+            and Spanish data with a size of approximately 50 times less than BLOOM, but outperforms
+            BLOOM by up to 23% on these languages (§3.2);
+          • The choice of language utilized during fine-tuning becomes less important when the English-
+            centric model scales up (§3.3);
+          • Different types of tasks show different multilingual transfer abilities, e.g., logical reasoning
+            knowledge can be transferred better across languages than others. However, as the model
+            size increases, this gap tends to narrow (§3.4).
+
+The above findings offers new practical insights into both pre-training and fine-tuning stage of large
+language models. The experiment code is publicly available to promote reproducibility and facilitate
+further research.2
+
+2       Language Versatilists and Specialists
+In this section, we provide a brief overview of 1) multilingual pretraining, with a focus on 2) the
+curse of multilingual pretraining, and then 3) discuss the English-centric pretraining, with 4) a series
+of evidence to show the potential of English-centric model possessing multilingual transfer ability.
+Based on the information presented, we will conclude this section by posing three research questions
+for investigation.
+
+Multilingual pre-training Multilingual pre-training offers a straightforward way to create language
+versatilists [9, 13, 21, 32, 34, 42]. The main idea is to combine monolingual corpora in different
+languages, upsampling those with less data, and training a regular language model on the combined
+    2
+        https://github.com/HKUNLP/multilingual-transfer
+
+
+                                                      2
+data. After learning multiple languages that use diverse scripts and belong to various language families,
+the models are expected to possess cross-lingual transfer ability, i.e., the model can generalize to
+target languages [17, 27, 40, 45] when downstream labeled training data is only available in the
+source language, which is especially important for low-resource target languages [9].
+
+Curse of multilingual pre-training Conneau et al. [9] demonstrated that including more languages
+in a single model can improve performance for low-resource languages but hurt performance for
+high-resource languages. Furthermore, Wang et al. [37] shows that negative interference between
+languages also leads to degraded performance on low-resource languages. As such, prior work
+had to find a trade-off between supporting more languages and obtaining better performance on a
+certain set of languages, such as increasing model and vocabulary size [9, 37], and learning additional
+language-specific parameters through adapters [26].
+
+Table 1: Disk size (TB) of the pre-training data per language. 15 languages in the XNLI dataset are
+shown and sorted by data size in BLOOM.
+                   Language            Script               BLOOM LLaMA
+                   English (EN)        Latin                   0.485     ∼4.666
+                   Chinese (ZH)        Chinese ideograms       0.261         -
+                   French (FR)         Latin                   0.208     ∼0.004
+                   Spanish (ES)        Latin                   0.175     ∼0.004
+                   Arabic (AR)         Arabic                  0.075         -
+                   Vietnamese (VI) Latin                       0.043         -
+                   Hindi (HI)          Devanagari              0.025         -
+                   Urdu (UR)           Perso-Arabic            0.003         -
+                   Swahili (SW)        Latin                  <0.001         -
+                   Bulgarian (BG)      Cyrillic                  -       ∼0.004
+                   Russian (RU)        Cyrillic                  -       ∼0.004
+                   German (DE)         Latin                     -       ∼0.004
+                   Turkish (TR)        Latin                     -           -
+                   Greek (EL)          Greek                     -           -
+                   Thai (TH)           Brahmic                   -           -
+
+
+English-centric pre-training While only 13% of the world’s population speaks English, the vast
+majority of NLP research is done on English. Consequently, numerous models are pre-trained using
+a corpus that is primarily in English, while without explicitly excluding other languages during
+data collection [2–5, 7, 35, 36, 44]. For example, English accounts for approximately 97.4% in the
+Pile [14], an 825GB dataset used by many pre-trained models [2–4, 36], 93% in training data of GPT-
+3 [5], and around 99% in training data of LLaMA [35]. In comparison, the largest constitution, i.e.,
+English, only accounts for 30% in the ROOTS [18], which is the multilingual corpus for pretraining
+BLOOM [32]. Table 1 compares the data size of the pretraining corpus for BLOOM and LLaMA
+model across 15 languages from XNLI dataset [10].
+
+Harbingers of multilingual transfer ability in English-centric models Multiple lines of evidence
+suggest that English-centric models have the potential for multilingual transfer capability. On the one
+hand, large English-centric models perform comparably with multilingual models on multilingual
+question-answering tasks [7] and translating other languages into English [5, 7], though still lagging
+behind in translating into other languages. On the other hand, prior work suggests that the source of
+multilingual transfer ability may not be solely attributed to the multilingual pretraining process, as
+monolingual models also learn some abstractions that generalize across languages [1]. High-level
+knowledge-transferring phenomena have been observed in other modalities, such as from English to
+Python [15], from ‘non-linguistic data with grammatical structure’ to language [25, 29], and from
+language to vision [23]. Similarly, the presence of innate biological properties of the brain that
+constrain possible human languages was posited to explain why children learn languages so quickly
+despite the poverty of the stimulus [6, 20].
+
+Research Questions After rethinking the challenge of multilingual pretraining and the potential of
+English-centric training, to what extent multilingual transfer ability exists in English-centric models
+
+
+                                                   3
+

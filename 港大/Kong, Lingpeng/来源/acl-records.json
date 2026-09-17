@@ -1,0 +1,2775 @@
+[
+  {
+    "title": "SAVOIR: Learning Social Savoir-Faire via Shapley-based Reward Attribution",
+    "url": "https://aclanthology.org/2026.findings-acl.699/",
+    "pdf": "https://aclanthology.org/2026.findings-acl.699.pdf",
+    "authors": [
+      "Xiachong Feng",
+      "Yi Jiang",
+      "Xiaocheng Feng",
+      "Deyi Yin",
+      "Libo Qin",
+      "Yangfan Ye",
+      "Lei Huang",
+      "Weitao Ma",
+      "Yuxuan Gu",
+      "Chonghan Qin",
+      "Bing Qin",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Yi Jiang",
+        "url": "https://aclanthology.org/people/yi-jiang-2393/"
+      },
+      {
+        "name": "Xiaocheng Feng",
+        "url": "https://aclanthology.org/people/xiaocheng-feng/"
+      },
+      {
+        "name": "Deyi Yin",
+        "url": "https://aclanthology.org/people/deyi-yin/"
+      },
+      {
+        "name": "Libo Qin",
+        "url": "https://aclanthology.org/people/libo-qin/"
+      },
+      {
+        "name": "Yangfan Ye",
+        "url": "https://aclanthology.org/people/yangfan-ye/"
+      },
+      {
+        "name": "Lei Huang",
+        "url": "https://aclanthology.org/people/lei-huang/"
+      },
+      {
+        "name": "Weitao Ma",
+        "url": "https://aclanthology.org/people/weitao-ma/"
+      },
+      {
+        "name": "Yuxuan Gu",
+        "url": "https://aclanthology.org/people/yuxuan-gu/"
+      },
+      {
+        "name": "Chonghan Qin",
+        "url": "https://aclanthology.org/people/chonghan-qin/"
+      },
+      {
+        "name": "Bing Qin",
+        "url": "https://aclanthology.org/people/bing-qin/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2026",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2026",
+    "abstract": "Social intelligence, the ability to navigate complex interpersonal interactions, presents a fundamental challenge for language agents. Training such agents via reinforcement learning requires solving the credit assignment problem: determining how individual utterances contribute to multi-turn dialogue outcomes. Existing approaches directly employ language models to distribute episode-level rewards, yielding attributions that are retrospective and lack theoretical grounding. We propose SAVOIR (ShApley Value fOr SocIal RL), a novel principled framework grounded in cooperative game theory. Our approach combines two complementary principles: expected utility shifts evaluation from retrospective attribution to prospective valuation, capturing an utterance’s strategic potential for enabling favorable future trajectories; Shapley values ensure fair credit distribution with axiomatic guarantees of efficiency, symmetry, and marginality. Experiments on the SOTOPIA benchmark demonstrate that SAVOIR achieves new state-of-the-art performance across all evaluation settings, with our 7B model matching or exceeding proprietary models including GPT-4o and Claude-3.5-Sonnet. Notably, even large reasoning models consistently underperform, suggesting social intelligence requires qualitatively different capabilities than analytical reasoning."
+  },
+  {
+    "title": "Stratagem: Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play",
+    "url": "https://aclanthology.org/2026.acl-long.897/",
+    "pdf": "https://aclanthology.org/2026.acl-long.897.pdf",
+    "authors": [
+      "Xiachong Feng",
+      "Deyi Yin",
+      "Xiaocheng Feng",
+      "Yi Jiang",
+      "Libo Qin",
+      "Yangfan Ye",
+      "Lei Huang",
+      "Weitao Ma",
+      "Qiming Li",
+      "Yuxuan Gu",
+      "Bing Qin",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Deyi Yin",
+        "url": "https://aclanthology.org/people/deyi-yin/"
+      },
+      {
+        "name": "Xiaocheng Feng",
+        "url": "https://aclanthology.org/people/xiaocheng-feng/"
+      },
+      {
+        "name": "Yi Jiang",
+        "url": "https://aclanthology.org/people/yi-jiang-2393/"
+      },
+      {
+        "name": "Libo Qin",
+        "url": "https://aclanthology.org/people/libo-qin/"
+      },
+      {
+        "name": "Yangfan Ye",
+        "url": "https://aclanthology.org/people/yangfan-ye/"
+      },
+      {
+        "name": "Lei Huang",
+        "url": "https://aclanthology.org/people/lei-huang/"
+      },
+      {
+        "name": "Weitao Ma",
+        "url": "https://aclanthology.org/people/weitao-ma/"
+      },
+      {
+        "name": "Qiming Li",
+        "url": "https://aclanthology.org/people/qiming-li/"
+      },
+      {
+        "name": "Yuxuan Gu",
+        "url": "https://aclanthology.org/people/yuxuan-gu/"
+      },
+      {
+        "name": "Bing Qin",
+        "url": "https://aclanthology.org/people/bing-qin/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2026",
+    "venue": "Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Games offer a compelling paradigm for developing general reasoning capabilities in language models, as they naturally demand strategic planning, probabilistic inference, and adaptive decision-making. However, existing self-play approaches rely solely on terminal game outcomes, providing no mechanism to distinguish transferable reasoning patterns from game-specific heuristics. We present STRATAGEM, which addresses two fundamental barriers to reasoning transfer: domain specificity, where learned patterns remain anchored in game semantics, and contextual stasis, where static game contexts fail to cultivate progressive reasoning. STRATAGEM selectively reinforces trajectories exhibiting abstract, domain-agnostic reasoning through a Reasoning Transferability Coefficient, while incentivizing adaptive reasoning development via a Reasoning Evolution Reward. Experiments across mathematical reasoning, general reasoning, and code generation benchmarks demonstrate substantial improvements, with particularly strong gains on competition-level mathematics where multi-step reasoning is critical. Ablation studies and human evaluation confirm that both components contribute to transferable reasoning."
+  },
+  {
+    "title": "OS-Sentinel: Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows",
+    "url": "https://aclanthology.org/2026.acl-long.431/",
+    "pdf": "https://aclanthology.org/2026.acl-long.431.pdf",
+    "authors": [
+      "Qiushi Sun",
+      "Mukai Li",
+      "Zhoumianze Liu",
+      "Zhihui Xie",
+      "Fangzhi Xu",
+      "Zhangyue Yin",
+      "Kanzhi Cheng",
+      "Zehao Li",
+      "Zichen Ding",
+      "Qi Liu",
+      "Zhiyong Wu",
+      "Zhuosheng Zhang",
+      "Ben Kao",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Qiushi Sun",
+        "url": "https://aclanthology.org/people/qiushi-sun/"
+      },
+      {
+        "name": "Mukai Li",
+        "url": "https://aclanthology.org/people/mukai-li/unverified/"
+      },
+      {
+        "name": "Zhoumianze Liu",
+        "url": "https://aclanthology.org/people/zhoumianze-liu/"
+      },
+      {
+        "name": "Zhihui Xie",
+        "url": "https://aclanthology.org/people/zhihui-xie/unverified/"
+      },
+      {
+        "name": "Fangzhi Xu",
+        "url": "https://aclanthology.org/people/fangzhi-xu/"
+      },
+      {
+        "name": "Zhangyue Yin",
+        "url": "https://aclanthology.org/people/zhangyue-yin/"
+      },
+      {
+        "name": "Kanzhi Cheng",
+        "url": "https://aclanthology.org/people/kanzhi-cheng/"
+      },
+      {
+        "name": "Zehao Li",
+        "url": "https://aclanthology.org/people/zehao-li-835x/"
+      },
+      {
+        "name": "Zichen Ding",
+        "url": "https://aclanthology.org/people/zichen-ding/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Zhuosheng Zhang",
+        "url": "https://aclanthology.org/people/zhuosheng-zhang/"
+      },
+      {
+        "name": "Ben Kao",
+        "url": "https://aclanthology.org/people/ben-kao/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2026",
+    "venue": "Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Computer-using agents powered by Vision-Language Models (VLMs) have demonstrated human-like capabilities in operating digital environments like mobile platforms. While these agents hold great promise for advancing digital automation, their potential for unsafe operations, such as system compromise and privacy leakage, is raising significant concerns. Detecting these safety concerns across the vast and complex operational space of mobile environments presents a formidable challenge that remains critically underexplored. To establish a foundation for mobile agent safety research, we introduce MobileRisk-Live, a dynamic sandbox environment accompanied by a safety detection benchmark comprising realistic trajectories with fine-grained annotations. Built upon this, we propose OS-Sentinel, a novel hybrid safety detection framework that synergistically combines a Formal Verifier for detecting explicit system-level violations with a VLM-based Contextual Judge for assessing contextual risks and agent actions. Experiments show that achieves 10%–30% improvements over existing approaches across multiple metrics. Further analysis provides critical insights that foster the development of safer and more reliable autonomous mobile agents. Our code, environment, and data are available at https://qiushisun.github.io/OS-Sentinel-Home/."
+  },
+  {
+    "title": "ImplicitMemBench: Measuring Unconscious Behavioral Adaptation in Large Language Models",
+    "url": "https://aclanthology.org/2026.acl-long.1301/",
+    "pdf": "https://aclanthology.org/2026.acl-long.1301.pdf",
+    "authors": [
+      "Chonghan Qin",
+      "Xiachong Feng",
+      "Weitao Ma",
+      "Xiaocheng Feng",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Chonghan Qin",
+        "url": "https://aclanthology.org/people/chonghan-qin/"
+      },
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Weitao Ma",
+        "url": "https://aclanthology.org/people/weitao-ma/"
+      },
+      {
+        "name": "Xiaocheng Feng",
+        "url": "https://aclanthology.org/people/xiaocheng-feng/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2026",
+    "venue": "Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Existing memory benchmarks for LLM agents evaluate explicit recall of facts, yet overlook implicit memory where experience becomes automated behavior without conscious retrieval. This gap is critical: effective assistants must automatically apply learned procedures or avoid failed actions without explicit reminders. We introduce ImplicitMemBench, the first systematic benchmark evaluating implicit memory through three cognitively grounded constructs drawn from standard cognitive-science accounts of non-declarative memory: Procedural Memory (one-shot skill acquisition after interference), Priming (theme-driven bias via paired experimental/control instances), and Classical Conditioning (Conditioned Stimulus–Unconditioned Stimulus (CS–US) associations shaping first decisions). Our 300-item suite employs a unified Learning/Priming-Interfere-Test protocol with first-attempt scoring. Evaluation of 17 models reveals severe limitations: no model exceeds 66% overall, with top performers DeepSeek-R1 (65.3%), Qwen3-32B (64.1%), and GPT-5 (63.0%) far below human baselines. Analysis uncovers dramatic asymmetries (inhibition 17.6% vs. preference 75.0%) and universal bottlenecks requiring architectural innovations beyond parameter scaling. ImplicitMemBench reframes evaluation from “what agents recall” to “what they automatically enact”."
+  },
+  {
+    "title": "ImgTrojan: Jailbreaking Vision-Language Models with ONE Image",
+    "url": "https://aclanthology.org/2025.naacl-long.360/",
+    "pdf": "https://aclanthology.org/2025.naacl-long.360.pdf",
+    "authors": [
+      "Xijia Tao",
+      "Shuai Zhong",
+      "Lei Li",
+      "Qi Liu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xijia Tao",
+        "url": "https://aclanthology.org/people/xijia-tao/unverified/"
+      },
+      {
+        "name": "Shuai Zhong",
+        "url": "https://aclanthology.org/people/shuai-zhong/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li-5104/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)",
+    "abstract": "There has been an increasing interest in the alignment of large language models (LLMs) with human values. However, the safety issues of their integration with a vision module, or vision language models (VLMs), remain relatively underexplored. In this paper, we propose a novel jailbreaking attack against VLMs, aiming to bypass their safety barrier when a user inputs harmful instructions. A scenario where our poisoned (image, text) data pairs are included in the training data is assumed. By replacing the original textual captions with malicious jailbreak prompts, our method can perform jailbreak attacks with the poisoned images. Moreover, we analyze the effect of poison ratios and positions of trainable parameters on our attack’s success rate. For evaluation, we design two metrics to quantify the success rate and the stealthiness of our attack. Together with a list of curated harmful instructions, a benchmark for measuring attack efficacy is provided. We demonstrate the efficacy of our attack by comparing it with baseline methods."
+  },
+  {
+    "title": "FactTrack: Time-Aware World State Tracking in Story Outlines",
+    "url": "https://aclanthology.org/2025.naacl-long.144/",
+    "pdf": "https://aclanthology.org/2025.naacl-long.144.pdf",
+    "authors": [
+      "Zhiheng Lyu",
+      "Kevin Yang",
+      "Lingpeng Kong",
+      "Dan Klein"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zhiheng Lyu",
+        "url": "https://aclanthology.org/people/zhiheng-lyu/unverified/"
+      },
+      {
+        "name": "Kevin Yang",
+        "url": "https://aclanthology.org/people/kevin-yang/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Dan Klein",
+        "url": "https://aclanthology.org/people/dan-klein/unverified/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)",
+    "abstract": "While accurately detecting and correcting factual contradictions in language model outputs has become increasingly important as their capabilities improve, doing so is highly challenging. We propose a novel method, FactTrack, for tracking atomic facts and addressing factual contradictions. Crucially, FactTrack also maintains time-aware validity intervals for each fact, allowing for change over time. At a high level, FactTrack consists of a four-step pipeline to update a world state data structure for each new event: (1) decompose the event into directional atomic facts; (2) determine the validity interval of each atomic fact using the world state; (3) detect contradictions with existing facts in the world state; and finally (4) add new facts to the world state and update existing atomic facts. When we apply FactTrack to contradiction detection on structured story outlines, we find that FactTrack using LLaMA2-7B-Chat substantially outperforms a fair baseline using LLaMA2-7B-Chat, and achieves performance comparable to a GPT4 baseline. Moreover, when using GPT4, FactTrack significantly outperforms the GPT4 baseline."
+  },
+  {
+    "title": "How Well Do LLMs Handle Cantonese? Benchmarking Cantonese Capabilities of Large Language Models",
+    "url": "https://aclanthology.org/2025.findings-naacl.253/",
+    "pdf": "https://aclanthology.org/2025.findings-naacl.253.pdf",
+    "authors": [
+      "Jiyue Jiang",
+      "Pengan Chen",
+      "Liheng Chen",
+      "Sheng Wang",
+      "Qinghang Bao",
+      "Lingpeng Kong",
+      "Yu Li",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Pengan Chen",
+        "url": "https://aclanthology.org/people/pengan-chen/unverified/"
+      },
+      {
+        "name": "Liheng Chen",
+        "url": "https://aclanthology.org/people/liheng-chen/unverified/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Qinghang Bao",
+        "url": "https://aclanthology.org/people/qinghang-bao/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Yu Li",
+        "url": "https://aclanthology.org/people/yu-li-6722/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Findings of the Association for Computational Linguistics: NAACL 2025",
+    "abstract": "The rapid evolution of large language models (LLMs) has transformed the competitive landscape in natural language processing (NLP), particularly for English and other data-rich languages. However, underrepresented languages like Cantonese, spoken by over 85 million people, face significant development gaps, which is particularly concerning given the economic significance of the Guangdong-Hong Kong-Macau Greater Bay Area, and in substantial Cantonese-speaking populations in places like Singapore and North America. Despite its wide use, Cantonese has scant representation in NLP research, especially compared to other languages from similarly developed regions. To bridge these gaps, we outline current Cantonese NLP methods and introduce new benchmarks designed to evaluate LLM performance in factual generation, mathematical logic, complex reasoning, and general knowledge in Cantonese, which aim to advance open-source Cantonese LLM technology. We also propose future research directions and recommended models to enhance Cantonese LLM development."
+  },
+  {
+    "title": "Recipe2Plan: Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions",
+    "url": "https://aclanthology.org/2025.findings-emnlp.229/",
+    "pdf": "https://aclanthology.org/2025.findings-emnlp.229.pdf",
+    "authors": [
+      "Zirui Wu",
+      "Xiao Liu",
+      "Jiayi Li",
+      "Lingpeng Kong",
+      "Yansong Feng"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zirui Wu",
+        "url": "https://aclanthology.org/people/zirui-wu/unverified/"
+      },
+      {
+        "name": "Xiao Liu",
+        "url": "https://aclanthology.org/people/xiao-liu/unverified/"
+      },
+      {
+        "name": "Jiayi Li",
+        "url": "https://aclanthology.org/people/jiayi-li/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Yansong Feng",
+        "url": "https://aclanthology.org/people/yansong-feng/unverified/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Findings of the Association for Computational Linguistics: EMNLP 2025",
+    "abstract": "While Large Language Model-based agents have demonstrated substantial progress in task completion, existing evaluation benchmarks tend to overemphasize single-task performance, with insufficient attention given to the crucial aspects of multitask planning and execution efficiency required in real-world scenarios. To bridge this gap, we present Recipe2Plan, a novel benchmark framework based on real-world cooking scenarios. Unlike conventional benchmarks, Recipe2Plan challenges agents to optimize cooking time through parallel task execution while respecting temporal constraints i.e. specific actions need to be performed within a particular timeintervals following the preceding steps.Overly aggressive local parallelization may disrupt this constraint, potentially compromising the entire cooking process.This strict time constraint between actions raises a unique challenge for agents to balance between maximizing concurrent operations and adhering to critical timing constraints. Extensive experiments with state-of-the-art models reveal challenges in maintaining this balance between efficiency and feasibility. The results highlight the need for improved temporal awareness and global multitasking capabilities in large language models. We open-source our benchmark and code at https://github.com/WilliamZR/Recipe2Plan."
+  },
+  {
+    "title": "Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models",
+    "url": "https://aclanthology.org/2025.findings-emnlp.102/",
+    "pdf": "https://aclanthology.org/2025.findings-emnlp.102.pdf",
+    "authors": [
+      "Jiyue Jiang",
+      "Alfred Kar Yin Truong",
+      "Yanyu Chen",
+      "Qinghang Bao",
+      "Sheng Wang",
+      "Pengan Chen",
+      "Jiuming Wang",
+      "Lingpeng Kong",
+      "Yu Li",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Alfred Kar Yin Truong",
+        "url": "https://aclanthology.org/people/alfred-kar-yin-truong/"
+      },
+      {
+        "name": "Yanyu Chen",
+        "url": "https://aclanthology.org/people/yanyu-chen/"
+      },
+      {
+        "name": "Qinghang Bao",
+        "url": "https://aclanthology.org/people/qinghang-bao/unverified/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Pengan Chen",
+        "url": "https://aclanthology.org/people/pengan-chen/unverified/"
+      },
+      {
+        "name": "Jiuming Wang",
+        "url": "https://aclanthology.org/people/jiuming-wang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Yu Li",
+        "url": "https://aclanthology.org/people/yu-li-6722/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Findings of the Association for Computational Linguistics: EMNLP 2025",
+    "abstract": "High-quality data resources play a crucial role in learning large language models (LLMs), particularly for low-resource languages like Cantonese. Despite having more than 85 million native speakers, Cantonese is still considered a low-resource language in the field of natural language processing (NLP) due to factors such as the dominance of Mandarin, lack of cohesion within the Cantonese-speaking community, diversity in character encoding and input methods, and the tendency of overseas Cantonese speakers to prefer using English. In addition, rich colloquial vocabulary of Cantonese, English loanwords, and code-switching characteristics add to the complexity of corpus collection and processing. To address these challenges, we collect Cantonese texts from a variety of sources, including open source corpora, Hong Kong-specific forums, Wikipedia, and Common Crawl data. We conduct rigorous data processing through language filtering, quality filtering, content filtering, and de-duplication steps, successfully constructing a high-quality Cantonese corpus of over 2 billion tokens for training large language models. We further refined the model through supervised fine-tuning (SFT) on curated Cantonese tasks, enhancing its ability to handle specific applications. Upon completion of the training, the model achieves state-of-the-art (SOTA) performance on four Cantonese benchmarks. After training on our dataset, the model also exhibits improved performance on other mainstream language tasks."
+  },
+  {
+    "title": "PromptCoT: Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models",
+    "url": "https://aclanthology.org/2025.findings-acl.935/",
+    "pdf": "https://aclanthology.org/2025.findings-acl.935.pdf",
+    "authors": [
+      "Xueliang Zhao",
+      "Wei Wu",
+      "Jian Guan",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xueliang Zhao",
+        "url": "https://aclanthology.org/people/xueliang-zhao/unverified/"
+      },
+      {
+        "name": "Wei Wu",
+        "url": "https://aclanthology.org/people/wei-wu/"
+      },
+      {
+        "name": "Jian Guan",
+        "url": "https://aclanthology.org/people/jian-guan/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
+    "abstract": "The ability of large language models to solve complex mathematical problems has progressed significantly, particularly for tasks requiring advanced reasoning. However, the scarcity of sufficiently challenging problems, particularly at the Olympiad level, hinders further advancements. In this work, we introduce PromptCoT, a novel approach for automatically generating high-quality Olympiad-level math problems. The proposed method synthesizes complex problems based on mathematical concepts and the rationale behind problem construction, emulating the thought processes of experienced problem designers. We provide a theoretical analysis demonstrating that an optimal rationale should maximize both the likelihood of rationale generation given the associated concepts and the likelihood of problem generation conditioned on both the rationale and the concepts. Our method is evaluated on standard benchmarks including GSM8K, MATH-500, and AIME2024, where it consistently outperforms existing problem generation methods. Furthermore, we demonstrate that PromptCoT exhibits superior scalability, consistently maintaining high performance as the dataset size increases, outperforming the baselines."
+  },
+  {
+    "title": "Reasoning Does Not Necessarily Improve Role-Playing Ability",
+    "url": "https://aclanthology.org/2025.findings-acl.537/",
+    "pdf": "https://aclanthology.org/2025.findings-acl.537.pdf",
+    "authors": [
+      "Xiachong Feng",
+      "Longxu Dou",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Longxu Dou",
+        "url": "https://aclanthology.org/people/longxu-dou/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2025",
+    "abstract": "The application of role-playing large language models (LLMs) is rapidly expanding in both academic and commercial domains, driving an increasing demand for high-precision role-playing models. Simultaneously, the rapid advancement of reasoning techniques has continuously pushed the performance boundaries of LLMs. This intersection of practical role-playing demands and evolving reasoning capabilities raises an important research question: Can reasoning techniques enhance the role-playing capabilities of LLMs?” To address this, we conduct a comprehensive study using 6 role-playing benchmarks, 24 LLMs, and 3 distinct role-playing strategies, comparing the effectiveness of direct zero-shot role-playing, role-playing with Chain-of-Thought (CoT), and role-playing using reasoning-optimized LLMs. Our findings reveal that CoT may reduce role-playing performance, reasoning-optimized LLMs are unsuitable for role-playing, reasoning ability disrupts the role-playing scaling law, and large models still lack proficiency in advanced role-playing. Furthermore, based on extensive experimental results, we propose two promising future research directions: Role-aware Chain-of-Thought for improving role-playing LLMs and Reinforcement Learning for role-playing LLMs, aiming to enhance the adaptability, consistency, and effectiveness of role-playing LLMs for both research and real-world applications."
+  },
+  {
+    "title": "QSpec: Speculative Decoding with Complementary Quantization Schemes",
+    "url": "https://aclanthology.org/2025.emnlp-main.240/",
+    "pdf": "https://aclanthology.org/2025.emnlp-main.240.pdf",
+    "authors": [
+      "Juntao Zhao",
+      "Wenhao Lu",
+      "Sheng Wang",
+      "Lingpeng Kong",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Juntao Zhao",
+        "url": "https://aclanthology.org/people/juntao-zhao/"
+      },
+      {
+        "name": "Wenhao Lu",
+        "url": "https://aclanthology.org/people/wenhao-lu/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Quantization is widely adopted to accelerate inference and reduce memory consumption in large language models (LLMs). While activation-weight joint quantization enables efficient low-precision decoding, it suffers substantial performance degradation on multi-step reasoning tasks. We propose QSPEC, a novel quantization paradigm that decouples efficiency from quality by integrating two complementary schemes via speculative decoding: low-precision joint quantization for fast drafting and high-precision weight-only quantization for accurate verification. QSPEC reuses both weights and KV cache across stages, enabling near-zero-cost switching without retraining or auxiliary models. Compared to high-precision baselines, QSPEC achieves up to 1.64x speedup without quality degradation, and outperforms state-of-the-art speculative decoding methods by up to 1.55x in batched settings. Furthermore, QSPEC supports plug-and-play deployment and generalizes well across model scales, quantization methods, and workloads. These properties make QSPEC a practical and scalable solution for high-fidelity quantized LLM serving under memory-constrained scenarios."
+  },
+  {
+    "title": "UNComp: Can Matrix Entropy Uncover Sparsity? — A Compressor Design from an Uncertainty-Aware Perspective",
+    "url": "https://aclanthology.org/2025.emnlp-main.209/",
+    "pdf": "https://aclanthology.org/2025.emnlp-main.209.pdf",
+    "authors": [
+      "Jing Xiong",
+      "Jianghan Shen",
+      "Fanghua Ye",
+      "Chaofan Tao",
+      "Zhongwei Wan",
+      "Jianqiao Lu",
+      "Xun Wu",
+      "Chuanyang Zheng",
+      "Zhijiang Guo",
+      "Min Yang",
+      "Lingpeng Kong",
+      "Ngai Wong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jing Xiong",
+        "url": "https://aclanthology.org/people/jing-xiong/"
+      },
+      {
+        "name": "Jianghan Shen",
+        "url": "https://aclanthology.org/people/jianghan-shen/unverified/"
+      },
+      {
+        "name": "Fanghua Ye",
+        "url": "https://aclanthology.org/people/fanghua-ye/unverified/"
+      },
+      {
+        "name": "Chaofan Tao",
+        "url": "https://aclanthology.org/people/chaofan-tao/"
+      },
+      {
+        "name": "Zhongwei Wan",
+        "url": "https://aclanthology.org/people/zhongwei-wan/unverified/"
+      },
+      {
+        "name": "Jianqiao Lu",
+        "url": "https://aclanthology.org/people/jianqiao-lu/"
+      },
+      {
+        "name": "Xun Wu",
+        "url": "https://aclanthology.org/people/xun-wu-0641/"
+      },
+      {
+        "name": "Chuanyang Zheng",
+        "url": "https://aclanthology.org/people/chuanyang-zheng/"
+      },
+      {
+        "name": "Zhijiang Guo",
+        "url": "https://aclanthology.org/people/zhijiang-guo/"
+      },
+      {
+        "name": "Min Yang",
+        "url": "https://aclanthology.org/people/min-yang-2728/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Ngai Wong",
+        "url": "https://aclanthology.org/people/ngai-wong/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Deploying large language models (LLMs) for long-context inference remains challenging due to their substantial memory and computational demands. While techniques such as Key-Value (KV) cache compression are designed to reduce memory usage, they often neglect the structured sparsity inherent in the relationship between hidden states and their corresponding KV cache. In this work, we explore the role of uncertainty as a potential indicator of sparsity within LLMs. We propose UNComp, an uncertainty-aware framework that leverages truncated matrix entropy to identify areas of low information content, thereby revealing sparsity patterns that can be used for adaptive compression. Unlike traditional methods that apply uniform compression, UNComp dynamically adjusts its approach to compression, guided by uncertainty measures that reflect the importance of various model components. Our analysis shows that sparsity patterns, when derived from uncertainty estimates, can be exploited to reveal special long-range dependencies, such as retrieval heads and retrieval layers. This perspective not only enhances our understanding of how compression can be optimized but also provides new insights into the inherent sparsity of LLMs during long-context inference. By focusing on uncertainty to analyze the sparsity pattern in detail, UNComp reduces the KV cache size to 4.74% of the original, achieves a 6% prefill speedup, and improves throughput by 6.4× — not only delivering strong lossless compression performance, but also validating the effectiveness of the underlying theoretical tool. Our codes are submitted with the paper."
+  },
+  {
+    "title": "Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition",
+    "url": "https://aclanthology.org/2025.emnlp-main.1751/",
+    "pdf": "https://aclanthology.org/2025.emnlp-main.1751.pdf",
+    "authors": [
+      "Chenxin An",
+      "Zhihui Xie",
+      "Xiaonan Li",
+      "Ming Zhong",
+      "Shansan Gong",
+      "Lei Li",
+      "Jun Zhang",
+      "Jingjing Xu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Chenxin An",
+        "url": "https://aclanthology.org/people/chenxin-an/unverified/"
+      },
+      {
+        "name": "Zhihui Xie",
+        "url": "https://aclanthology.org/people/zhihui-xie/unverified/"
+      },
+      {
+        "name": "Xiaonan Li",
+        "url": "https://aclanthology.org/people/xiaonan-li/unverified/"
+      },
+      {
+        "name": "Ming Zhong",
+        "url": "https://aclanthology.org/people/ming-zhong/"
+      },
+      {
+        "name": "Shansan Gong",
+        "url": "https://aclanthology.org/people/shansan-gong/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li-5104/"
+      },
+      {
+        "name": "Jun Zhang",
+        "url": "https://aclanthology.org/people/jun-zhang/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Reasoning models have demonstrated remarkable performance on complex tasks by generating long reasoning traces prior to producing final answers. However, previous research on long-context scaling in language models has generally focused on managing lengthy input prompts instead of producing long outputs. To leverage the strong long context understanding abilities of current models, we introduce Understanding-to-Reasoning Transition (URT) fine-tuning, a sequence-level curriculum learning framework that gradually shifts a model’s focus from interpreting long chain-of-thoughts to generating them. By incorporating partial reasoning steps in the input context, URT naturally exposes the model to diverse prompt lengths during training, preserving its performance on long-context comprehension while developing advanced reasoning capabilities. Experiments on rigorous reasoning benchmarks, including AIME24 and GPQA Diamond, reveal that our approach surpasses standard fine-tuning by over 10%, while maintaining robust performance on the understanding tasks in RULER."
+  },
+  {
+    "title": "ProReason: Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom",
+    "url": "https://aclanthology.org/2025.emnlp-main.1614/",
+    "pdf": "https://aclanthology.org/2025.emnlp-main.1614.pdf",
+    "authors": [
+      "Jingqi Zhou",
+      "Sheng Wang",
+      "Jingwei Dong",
+      "Kai Liu",
+      "Lei Li",
+      "Jiahui Gao",
+      "Jiyue Jiang",
+      "Lingpeng Kong",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jingqi Zhou",
+        "url": "https://aclanthology.org/people/jingqi-zhou/unverified/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Jingwei Dong",
+        "url": "https://aclanthology.org/people/jingwei-dong/unverified/"
+      },
+      {
+        "name": "Kai Liu",
+        "url": "https://aclanthology.org/people/kai-liu/unverified/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li-5104/"
+      },
+      {
+        "name": "Jiahui Gao",
+        "url": "https://aclanthology.org/people/jiahui-gao/"
+      },
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Large vision-language models (LVLMs) have witnessed significant progress on visual understanding tasks. However, they often prioritize language knowledge over image information on visual reasoning tasks, incurring performance degradation. To tackle this issue, we first identify the drawbacks of existing solutions (i.e., limited multi-modal reasoning capacities, and insufficient and irrelevant visual descriptions). We then decompose visual reasoning process into two stages: proactive visual perception (i.e., eyesight) and textual reasoning (i.e., wisdom), and introduce a novel visual reasoning framework named ProReason. This framework features decoupled vision-reasoning capabilities and multi-run proactive perception. Briefly, given a multi-modal question, ProReason iterates proactive information collection and reasoning until the answer can be concluded with necessary and sufficient visual descriptions. Notably, the disassociation of capabilities allows seamless integration of existing large language models (LLMs) to compensate for the reasoning deficits of LVLMs. Our extensive experiments demonstrate that ProReason outperforms existing multi-step reasoning frameworks on various benchmarks for both open-source and closed-source models, with the average performance gain reaching 13.2%. Besides, the integration of LLMs allows ProReason to produce high-quality visual reasoning data, which empowers ProReason-distilled models (i.e., ProReason-VL and ProReason-Q3) to achieve superior performance in downstream tasks. Our insights into existing solutions and the decoupled perspective for feasible integration of LLMs illuminate future research on visual reasoning techniques, especially LLM-assisted ones. The code is available at https://github.com/lian-tian-mo-zun/Pro_Reason."
+  },
+  {
+    "title": "Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks",
+    "url": "https://aclanthology.org/2025.coling-main.688/",
+    "pdf": "https://aclanthology.org/2025.coling-main.688.pdf",
+    "authors": [
+      "Qintong Li",
+      "Leyang Cui",
+      "Lingpeng Kong",
+      "Wei Bi"
+    ],
+    "authorLinks": [
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Leyang Cui",
+        "url": "https://aclanthology.org/people/leyang-cui/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 31st International Conference on Computational Linguistics",
+    "abstract": "Previous work adopts large language models (LLMs) as evaluators to evaluate natural language process (NLP) tasks. However, certain shortcomings, e.g., fairness, scope, and accuracy, persist for current LLM evaluators. To analyze whether LLMs can serve as reliable alternatives to humans, we examine the fine-grained alignment between LLM evaluators and human annotators, particularly in understanding the target evaluation tasks and conducting evaluations that meet diverse criteria. This paper explores both conventional tasks (e.g., story generation) and alignment tasks (e.g., math reasoning), each with different evaluation criteria. Our analysis shows that 1) LLM evaluators can generate unnecessary criteria or omit crucial criteria, resulting in a slight deviation from the experts. 2) LLM evaluators excel in general criteria, such as fluency, but face challenges with complex criteria, such as numerical reasoning. We also find that LLM-pre-drafting before human evaluation can help reduce the impact of human subjectivity and minimize annotation outliers in pure human evaluation, leading to more objective evaluation. All resources are available at https://github.com/qtli/CoEval."
+  },
+  {
+    "title": "Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning",
+    "url": "https://aclanthology.org/2025.acl-long.1199/",
+    "pdf": "https://aclanthology.org/2025.acl-long.1199.pdf",
+    "authors": [
+      "Lei Huang",
+      "Xiaocheng Feng",
+      "Weitao Ma",
+      "Yuchun Fan",
+      "Xiachong Feng",
+      "Yuxuan Gu",
+      "Yangfan Ye",
+      "Liang Zhao",
+      "Weihong Zhong",
+      "Baoxin Wang",
+      "Dayong Wu",
+      "Guoping Hu",
+      "Lingpeng Kong",
+      "Tong Xiao",
+      "Ting Liu",
+      "Bing Qin"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lei Huang",
+        "url": "https://aclanthology.org/people/lei-huang/"
+      },
+      {
+        "name": "Xiaocheng Feng",
+        "url": "https://aclanthology.org/people/xiaocheng-feng/"
+      },
+      {
+        "name": "Weitao Ma",
+        "url": "https://aclanthology.org/people/weitao-ma/"
+      },
+      {
+        "name": "Yuchun Fan",
+        "url": "https://aclanthology.org/people/yuchun-fan/"
+      },
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Yuxuan Gu",
+        "url": "https://aclanthology.org/people/yuxuan-gu/"
+      },
+      {
+        "name": "Yangfan Ye",
+        "url": "https://aclanthology.org/people/yangfan-ye/"
+      },
+      {
+        "name": "Liang Zhao",
+        "url": "https://aclanthology.org/people/liang-zhao/"
+      },
+      {
+        "name": "Weihong Zhong",
+        "url": "https://aclanthology.org/people/weihong-zhong/"
+      },
+      {
+        "name": "Baoxin Wang",
+        "url": "https://aclanthology.org/people/baoxin-wang/unverified/"
+      },
+      {
+        "name": "Dayong Wu",
+        "url": "https://aclanthology.org/people/dayong-wu/unverified/"
+      },
+      {
+        "name": "Guoping Hu",
+        "url": "https://aclanthology.org/people/guoping-hu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Tong Xiao",
+        "url": "https://aclanthology.org/people/tong-xiao/"
+      },
+      {
+        "name": "Ting Liu",
+        "url": "https://aclanthology.org/people/ting-liu-2600/"
+      },
+      {
+        "name": "Bing Qin",
+        "url": "https://aclanthology.org/people/bing-qin/"
+      }
+    ],
+    "year": "2025",
+    "venue": "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Large language models (LLMs) are known to suffer from severe hallucination issues. One of the main causes lies in the knowledge misalignment between the pre-training stage and the supervised fine-tuning stage. The unfamiliar knowledge encountered during fine-tuning may encourage LLMs to generate facts that are not grounded in parametric knowledge. To address this, we propose Seal, a novel training objective with an abstention mechanism, in which the model learns to selectively reject tokens that misalign with the desired knowledge distribution via a special [REJ] token. This allows the model the option of acknowledging the insufficiency of knowledge rather than blindly assigning high probability to all ground-truth answers. We further propose a regularized decoding objective that penalizes uncertain predictions during inference by using the [REJ] probability learned during training. Extensive experiments on six short-form and long-form QA datasets with three LLMs of different sizes demonstrate that our method effectively alleviates hallucinations caused by knowledge misalignment. Further analysis highlights the adaptations of our method in answer refusal scenarios and its ability to effectively maintain the model’s instruction-following capabilities."
+  },
+  {
+    "title": "Multilingual Machine Translation with Large Language Models: Empirical Results and Analysis",
+    "url": "https://aclanthology.org/2024.findings-naacl.176/",
+    "pdf": "https://aclanthology.org/2024.findings-naacl.176.pdf",
+    "authors": [
+      "Wenhao Zhu",
+      "Hongyi Liu",
+      "Qingxiu Dong",
+      "Jingjing Xu",
+      "Shujian Huang",
+      "Lingpeng Kong",
+      "Jiajun Chen",
+      "Lei Li"
+    ],
+    "authorLinks": [
+      {
+        "name": "Wenhao Zhu",
+        "url": "https://aclanthology.org/people/wenhao-zhu/unverified/"
+      },
+      {
+        "name": "Hongyi Liu",
+        "url": "https://aclanthology.org/people/hongyi-liu/"
+      },
+      {
+        "name": "Qingxiu Dong",
+        "url": "https://aclanthology.org/people/qingxiu-dong/unverified/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      },
+      {
+        "name": "Shujian Huang",
+        "url": "https://aclanthology.org/people/shujian-huang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Jiajun Chen",
+        "url": "https://aclanthology.org/people/jiajun-chen/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Findings of the Association for Computational Linguistics: NAACL 2024",
+    "abstract": "Large language models (LLMs) have demonstrated remarkable potential in handling multilingual machine translation (MMT). In this paper, we systematically investigate the advantages and challenges of LLMs for MMT by answering two questions: 1) How well do LLMs perform in translating massive languages? 2) Which factors affect LLMs’ performance in translation? We thoroughly evaluate eight popular LLMs, including ChatGPT and GPT-4. Our empirical results show that translation capabilities of LLMs are continually involving. GPT-4 has beat the strong supervised baseline NLLB in 40.91% of translation directions but still faces a large gap towards the commercial translation system like Google Translate, especially on low-resource languages. Through further analysis, we discover that LLMs exhibit new working patterns when used for MMT. First, LLM can acquire translation ability in a resource-efficient way and generate moderate translation even on zero-resource languages. Second, instruction semantics can surprisingly be ignored when given in-context exemplars. Third, cross-lingual exemplars can provide better task guidance for low-resource translation than exemplars in the same language pairs. Code will be released at: https://github.com/NJUNLP/MMT-LLM."
+  },
+  {
+    "title": "BBA: Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models",
+    "url": "https://aclanthology.org/2024.findings-acl.433/",
+    "pdf": "https://aclanthology.org/2024.findings-acl.433.pdf",
+    "authors": [
+      "Xueliang Zhao",
+      "Xinting Huang",
+      "Tingchen Fu",
+      "Qintong Li",
+      "Shansan Gong",
+      "Lemao Liu",
+      "Wei Bi",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xueliang Zhao",
+        "url": "https://aclanthology.org/people/xueliang-zhao/unverified/"
+      },
+      {
+        "name": "Xinting Huang",
+        "url": "https://aclanthology.org/people/xinting-huang/unverified/"
+      },
+      {
+        "name": "Tingchen Fu",
+        "url": "https://aclanthology.org/people/tingchen-fu/unverified/"
+      },
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Shansan Gong",
+        "url": "https://aclanthology.org/people/shansan-gong/"
+      },
+      {
+        "name": "Lemao Liu",
+        "url": "https://aclanthology.org/people/lemao-liu/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2024",
+    "abstract": "Multimodal reasoning stands as a pivotal capability for large vision-language models (LVLMs). The integration with Domain-Specific Languages (DSL), offering precise visual representations, equips these models with the opportunity to execute more accurate reasoning in complex and professional domains. However, the vanilla Chain-of-Thought (CoT) prompting method faces challenges in effectively leveraging the unique strengths of visual and DSL representations, primarily due to their differing reasoning mechanisms. Additionally, it often falls short in addressing critical steps in multi-step reasoning tasks. To mitigate these challenges, we introduce the Bi-Modal Behavioral Alignment (BBA) prompting method, designed to maximize the potential of DSL in augmenting complex multi-modal reasoning tasks. This method initiates by guiding LVLMs to create separate reasoning chains for visual and DSL representations. Subsequently, it aligns these chains by addressing any inconsistencies, thus achieving a cohesive integration of behaviors from different modalities. Our experiments demonstrate that BBA substantially improves the performance of GPT-4V(ision) on geometry problem solving (28.34% → 34.22%), chess positional advantage prediction (42.08% → 46.99%) and molecular property prediction (77.47% → 83.52%)."
+  },
+  {
+    "title": "Achilles-Bench: A Challenging Benchmark for Low-Resource Evaluation",
+    "url": "https://aclanthology.org/2024.findings-acl.123/",
+    "pdf": "https://aclanthology.org/2024.findings-acl.123.pdf",
+    "authors": [
+      "Yudong Wang",
+      "Chang Ma",
+      "Qingxiu Dong",
+      "Zhifang Sui",
+      "Lingpeng Kong",
+      "Jingjing Xu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Yudong Wang",
+        "url": "https://aclanthology.org/people/yudong-wang-peking/"
+      },
+      {
+        "name": "Chang Ma",
+        "url": "https://aclanthology.org/people/chang-ma/unverified/"
+      },
+      {
+        "name": "Qingxiu Dong",
+        "url": "https://aclanthology.org/people/qingxiu-dong/unverified/"
+      },
+      {
+        "name": "Zhifang Sui",
+        "url": "https://aclanthology.org/people/zhifang-sui/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2024",
+    "abstract": "With promising yet saturated results in high-resource settings, low-resource datasets have gradually become crucial benchmarks (e.g., BigBench Hard, superGLUE) for evaluating the learning ability of advanced neural networks. In this work, we find that there exists a set of “hard examples” in low-resource settings that challenge neural networks but are not well evaluated, which causes over-estimated performance. We first give a theoretical analysis on which factors bring the difficulty of low-resource learning. It then motivates us to propose a challenging benchmark Achilles-Bench to better evaluate the learning ability, which covers 11 datasets, including 8 natural language process (NLP) datasets and 3 computer vision (CV) datasets. Experiments on a wide range of models show that neural networks, even pre-trained language models, have sharp performance drops on our benchmark, demonstrating the effectiveness of evaluating the weaknesses of neural networks. On NLP tasks, we surprisingly find that despite better results on traditional low-resource benchmarks, pre-trained networks, does not show performance improvements on our benchmarks. there is still a large robustness gap between existing models and human-level performance, highlighting the need for robust low-resource learning models."
+  },
+  {
+    "title": "LoRA Meets Dropout under a Unified Framework",
+    "url": "https://aclanthology.org/2024.findings-acl.119/",
+    "pdf": "https://aclanthology.org/2024.findings-acl.119.pdf",
+    "authors": [
+      "Sheng Wang",
+      "Liheng Chen",
+      "Jiyue Jiang",
+      "Boyang Xue",
+      "Lingpeng Kong",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Liheng Chen",
+        "url": "https://aclanthology.org/people/liheng-chen/unverified/"
+      },
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Boyang Xue",
+        "url": "https://aclanthology.org/people/boyang-xue/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2024",
+    "abstract": "With the remarkable capabilities, large language models (LLMs) have emergedas essential elements in numerous NLP applications, while parameter-efficientfinetuning, especially LoRA, has gained popularity as a lightweight approachfor model customization. Meanwhile, various dropout methods, initially designedfor full finetuning with all the parameters updated, alleviates overfittingassociated with excessive parameter redundancy. Hence, a possible contradictionarises from negligible trainable parameters of LoRA and the effectiveness ofprevious dropout methods, which has been largely overlooked. To fill this gap,we first confirm that parameter-efficient LoRA is also overfitting-prone. Wethen revisit transformer-specific dropout methods, and establish theirequivalence and distinctions mathematically and empirically. Building upon thiscomparative analysis, we introduce a unified framework for a comprehensiveinvestigation, which instantiates these methods based on dropping position,structural pattern and compensation measure. Through this framework, we revealthe new preferences and performance comparisons of them when involved withlimited trainable parameters. This framework also allows us to amalgamate themost favorable aspects into a novel dropout method named HiddenKey. Extensiveexperiments verify the remarkable superiority and sufficiency of HiddenKeyacross multiple models and tasks, which highlights it as the preferred approachfor high-performance and parameter-efficient finetuning of LLMs."
+  },
+  {
+    "title": "VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment",
+    "url": "https://aclanthology.org/2024.emnlp-main.358/",
+    "pdf": "https://aclanthology.org/2024.emnlp-main.358.pdf",
+    "authors": [
+      "Lei Li",
+      "Zhihui Xie",
+      "Mukai Li",
+      "Shunian Chen",
+      "Peiyi Wang",
+      "Liang Chen",
+      "Yazheng Yang",
+      "Benyou Wang",
+      "Lingpeng Kong",
+      "Qi Liu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li-5104/"
+      },
+      {
+        "name": "Zhihui Xie",
+        "url": "https://aclanthology.org/people/zhihui-xie/unverified/"
+      },
+      {
+        "name": "Mukai Li",
+        "url": "https://aclanthology.org/people/mukai-li/unverified/"
+      },
+      {
+        "name": "Shunian Chen",
+        "url": "https://aclanthology.org/people/shunian-chen/"
+      },
+      {
+        "name": "Peiyi Wang",
+        "url": "https://aclanthology.org/people/peiyi-wang/"
+      },
+      {
+        "name": "Liang Chen",
+        "url": "https://aclanthology.org/people/liang-chen/"
+      },
+      {
+        "name": "Yazheng Yang",
+        "url": "https://aclanthology.org/people/yazheng-yang/"
+      },
+      {
+        "name": "Benyou Wang",
+        "url": "https://aclanthology.org/people/benyou-wang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "As large vision-language models (LVLMs) evolve rapidly, the demand for high-quality and diverse data to align these models becomes increasingly crucial. However, the creation of such data with human supervision proves costly and time-intensive. In this paper, we investigate the efficacy of AI feedback to scale supervision for aligning LVLMs. We introduce VLFeedback, the first large-scale vision-language feedback dataset, comprising over 82K multi-modal instructions and comprehensive rationales generated by off-the-shelf models without human annotations. To evaluate the effectiveness of AI feedback for vision-language alignment, we train Silkie, an LVLM fine-tuned via direct preference optimization on VLFeedback. Silkie showcases exceptional performance regarding helpfulness, visual faithfulness, and safety metrics. It outperforms its base model by 6.9% and 9.5% in perception and cognition tasks, reduces hallucination issues on MMHal-Bench, and exhibits enhanced resilience against red-teaming attacks. Furthermore, our analysis underscores the advantage of AI feedback, particularly in fostering preference diversity to deliver more comprehensive improvements. Our dataset, training code and models are available at https://vlf-silkie.github.io."
+  },
+  {
+    "title": "Retrieved Sequence Augmentation for Protein Representation Learning",
+    "url": "https://aclanthology.org/2024.emnlp-main.104/",
+    "pdf": "https://aclanthology.org/2024.emnlp-main.104.pdf",
+    "authors": [
+      "Chang Ma",
+      "Haiteng Zhao",
+      "Lin Zheng",
+      "Jiayi Xin",
+      "Qintong Li",
+      "Lijun Wu",
+      "Zhihong Deng",
+      "Yang Young Lu",
+      "Qi Liu",
+      "Sheng Wang",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Chang Ma",
+        "url": "https://aclanthology.org/people/chang-ma/unverified/"
+      },
+      {
+        "name": "Haiteng Zhao",
+        "url": "https://aclanthology.org/people/haiteng-zhao/unverified/"
+      },
+      {
+        "name": "Lin Zheng",
+        "url": "https://aclanthology.org/people/lin-zheng/unverified/"
+      },
+      {
+        "name": "Jiayi Xin",
+        "url": "https://aclanthology.org/people/jiayi-xin/"
+      },
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Lijun Wu",
+        "url": "https://aclanthology.org/people/lijun-wu/"
+      },
+      {
+        "name": "Zhihong Deng",
+        "url": "https://aclanthology.org/people/zhi-hong-deng/"
+      },
+      {
+        "name": "Yang Young Lu",
+        "url": "https://aclanthology.org/people/yang-young-lu/unverified/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Protein Language Models traditionally depend on Multiple Sequence Alignments (MSA) to incorporate evolutionary knowledge. However, MSA-based approaches suffer from substantial computational overhead and generally underperform in generalizing to de novo proteins. This study reevaluates the role of MSA, proposing it as a retrieval augmentation method and questioning the necessity of sequence alignment. We show that a simple alternative, Retrieved Sequence Augmentation (RSA), can enhance protein representation learning without the need for alignment and cumbersome preprocessing. RSA surpasses MSA Transformer by an average of 5% in both structural and property prediction tasks while being 373 times faster. Additionally, RSA demonstrates enhanced transferability for predicting de novo proteins. This methodology addresses a critical need for efficiency in protein prediction and can be rapidly employed to identify homologous sequences, improve representation learning, and enhance the capacity of Large Language Models to interpret protein structures."
+  },
+  {
+    "title": "L-Eval: Instituting Standardized Evaluation for Long Context Language Models",
+    "url": "https://aclanthology.org/2024.acl-long.776/",
+    "pdf": "https://aclanthology.org/2024.acl-long.776.pdf",
+    "authors": [
+      "Chenxin An",
+      "Shansan Gong",
+      "Ming Zhong",
+      "Xingjian Zhao",
+      "Mukai Li",
+      "Jun Zhang",
+      "Lingpeng Kong",
+      "Xipeng Qiu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Chenxin An",
+        "url": "https://aclanthology.org/people/chenxin-an/unverified/"
+      },
+      {
+        "name": "Shansan Gong",
+        "url": "https://aclanthology.org/people/shansan-gong/"
+      },
+      {
+        "name": "Ming Zhong",
+        "url": "https://aclanthology.org/people/ming-zhong/"
+      },
+      {
+        "name": "Xingjian Zhao",
+        "url": "https://aclanthology.org/people/xingjian-zhao/unverified/"
+      },
+      {
+        "name": "Mukai Li",
+        "url": "https://aclanthology.org/people/mukai-li/unverified/"
+      },
+      {
+        "name": "Jun Zhang",
+        "url": "https://aclanthology.org/people/jun-zhang/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Xipeng Qiu",
+        "url": "https://aclanthology.org/people/xipeng-qiu/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Recently, there has been growing interest in long-context scaling of large language models (LLMs). To facilitate research in this field, we propose L-Eval to institute a more standardized evaluation for Long-Context Language Models (LCLMs) addressing two key aspects: dataset construction and evaluation metrics. On the one hand, we build a new evaluation suite containing 20 sub-tasks, 508 long documents, and more than 2,000 human-labeled query-response pairs including diverse task types, domains, and input length (3k~200k tokens). On the other hand, we investigate the effectiveness of evaluation metrics for LCLMs and we show that Length-instruction-enhanced (LIE) evaluation and LLM judges can better correlate with human judgments. We conducted a comprehensive study of 4 popular commercial LLMs and 12 open-source counterparts using the L-Eval benchmark. Our empirical findings offer useful insights into the study of LCLMs and lay the groundwork for the development of a more principled evaluation of these models."
+  },
+  {
+    "title": "Multimodal ArXiv: A Dataset for Improving Scientific Comprehension of Large Vision-Language Models",
+    "url": "https://aclanthology.org/2024.acl-long.775/",
+    "pdf": "https://aclanthology.org/2024.acl-long.775.pdf",
+    "authors": [
+      "Lei Li",
+      "Yuqi Wang",
+      "Runxin Xu",
+      "Peiyi Wang",
+      "Xiachong Feng",
+      "Lingpeng Kong",
+      "Qi Liu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li/unverified/"
+      },
+      {
+        "name": "Yuqi Wang",
+        "url": "https://aclanthology.org/people/yuqi-wang/unverified/"
+      },
+      {
+        "name": "Runxin Xu",
+        "url": "https://aclanthology.org/people/runxin-xu/unverified/"
+      },
+      {
+        "name": "Peiyi Wang",
+        "url": "https://aclanthology.org/people/peiyi-wang/"
+      },
+      {
+        "name": "Xiachong Feng",
+        "url": "https://aclanthology.org/people/xiachong-feng/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Large vision-language models (LVLMs) excel across diverse tasks involving concrete images from natural scenes. However, their ability to interpret abstract figures, such as geometry shapes and scientific plots, remains limited due to a scarcity of training datasets in scientific domains.To fill this gap, we introduce Multimodal ArXiv, consisting of ArXivCap and ArXivQA, for enhancing LVLMs scientific comprehension.ArXivCap is a figure-caption dataset comprising 6.4M images and 3.9M captions, sourced from 572K ArXiv papers spanning various scientific domains.Drawing from ArXivCap, we introduce ArXivQA, a question-answering dataset generated by prompting GPT-4V based on scientific figures. ArXivQA greatly enhances open-sourced LVLMs’ mathematical reasoning capabilities, achieving a 10.4% absolute accuracy gain on a multimodal mathematical reasoning benchmark.Furthermore, employing ArXivCap, we devise four vision-to-text tasks for benchmarking LVLMs.Evaluation results with state-of-the-art LVLMs underscore their struggle with the nuanced semantics of academic figures, while domain-specific training yields substantial performance gains.Our error analysis uncovers misinterpretations of visual context, recognition errors, and the production of overly simplified captions by current LVLMs, shedding light on future improvements."
+  },
+  {
+    "title": "Large Language Models are not Fair Evaluators",
+    "url": "https://aclanthology.org/2024.acl-long.511/",
+    "pdf": "https://aclanthology.org/2024.acl-long.511.pdf",
+    "authors": [
+      "Peiyi Wang",
+      "Lei Li",
+      "Liang Chen",
+      "Zefan Cai",
+      "Dawei Zhu",
+      "Binghuai Lin",
+      "Yunbo Cao",
+      "Lingpeng Kong",
+      "Qi Liu",
+      "Tianyu Liu",
+      "Zhifang Sui"
+    ],
+    "authorLinks": [
+      {
+        "name": "Peiyi Wang",
+        "url": "https://aclanthology.org/people/peiyi-wang/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li/unverified/"
+      },
+      {
+        "name": "Liang Chen",
+        "url": "https://aclanthology.org/people/liang-chen/"
+      },
+      {
+        "name": "Zefan Cai",
+        "url": "https://aclanthology.org/people/zefan-cai/"
+      },
+      {
+        "name": "Dawei Zhu",
+        "url": "https://aclanthology.org/people/dawei-zhu/unverified/"
+      },
+      {
+        "name": "Binghuai Lin",
+        "url": "https://aclanthology.org/people/binghuai-lin/unverified/"
+      },
+      {
+        "name": "Yunbo Cao",
+        "url": "https://aclanthology.org/people/yunbo-cao/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/unverified/"
+      },
+      {
+        "name": "Tianyu Liu",
+        "url": "https://aclanthology.org/people/tianyu-liu/unverified/"
+      },
+      {
+        "name": "Zhifang Sui",
+        "url": "https://aclanthology.org/people/zhifang-sui/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "In this paper, we uncover a positional bias in the evaluation paradigm of adopting large language models (LLMs), e.g., GPT-4, as a referee to score and compare the quality of responses generated by candidate models. We find that the quality ranking of candidate responses can be easily hacked by simply altering their order of appearance in the context. This manipulation allows us to skew the evaluation result, making one model appear considerably superior to the other, e.g., Vicuna-13B could beat ChatGPT on 66 over 80 tested queries with ChatGPT as an evaluator. We propose a simple yet effective calibration framework to address our discovered positional bias.To evaluate the effectiveness of our framework, we manually annotate the “win/tie/lose” outcomes of responses from ChatGPT and Vicuna-13B in the Vicuna Benchmark’s question prompt. Extensive experiments demonstrate that our approach successfully alleviates evaluation bias, resulting in closer alignment with human judgments."
+  },
+  {
+    "title": "SEGO: Sequential Subgoal Optimization for Mathematical Problem-Solving",
+    "url": "https://aclanthology.org/2024.acl-long.407/",
+    "pdf": "https://aclanthology.org/2024.acl-long.407.pdf",
+    "authors": [
+      "Xueliang Zhao",
+      "Xinting Huang",
+      "Wei Bi",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xueliang Zhao",
+        "url": "https://aclanthology.org/people/xueliang-zhao/unverified/"
+      },
+      {
+        "name": "Xinting Huang",
+        "url": "https://aclanthology.org/people/xinting-huang/unverified/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Large Language Models (LLMs) have driven substantial progress in artificial intelligence in recent years, exhibiting impressive capabilities across a wide range of tasks, including mathematical problem-solving. Inspired by the success of subgoal-based methods, we propose a novel framework called SEquential subGoal Optimization (SEGO) to enhance LLMs’ ability to solve mathematical problems. By establishing a connection between the subgoal breakdown process and the probability of solving problems, SEGO aims to identify better subgoals with theoretical guarantees. Addressing the challenge of identifying suitable subgoals in a large solution space, our framework generates problem-specific subgoals and adjusts them according to carefully designed criteria. Incorporating these optimized subgoals into the policy model training leads to significant improvements in problem-solving performance. We validate SEGO’s efficacy through experiments on two benchmarks, GSM8K and MATH, where our approach outperforms existing methods, highlighting the potential of SEGO in AI-driven mathematical problem-solving."
+  },
+  {
+    "title": "GSM-Plus: A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers",
+    "url": "https://aclanthology.org/2024.acl-long.163/",
+    "pdf": "https://aclanthology.org/2024.acl-long.163.pdf",
+    "authors": [
+      "Qintong Li",
+      "Leyang Cui",
+      "Xueliang Zhao",
+      "Lingpeng Kong",
+      "Wei Bi"
+    ],
+    "authorLinks": [
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Leyang Cui",
+        "url": "https://aclanthology.org/people/leyang-cui/unverified/"
+      },
+      {
+        "name": "Xueliang Zhao",
+        "url": "https://aclanthology.org/people/xueliang-zhao/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Large language models (LLMs) have achieved impressive performance across various mathematical reasoning benchmarks. However, there are increasing debates regarding whether these models truly understand and apply mathematical knowledge or merely rely on shortcuts for mathematical reasoning. One essential and frequently occurring evidence is that when the math questions are slightly changed, LLMs can behave incorrectly. This motivates us to evaluate the robustness of LLMs’ math reasoning capability by testing a wide range of question variations. We introduce the adversarial grade school math (GSM-Plus) dataset, an extension of GSM8K augmented with various mathematical perturbations. Our experiments on 25 LLMs and 4 prompting techniques show that while LLMs exhibit different levels of math reasoning abilities, their performances are far from robust. In particular, even for problems that have been solved in GSM8K, LLMs can make mistakes when new statements are added or the question targets are altered. We also explore whether more robust performance can be achieved by composing existing prompting methods, in which we try an iterative method that generates and verifies each intermediate thought based on its reasoning goal and calculation result."
+  },
+  {
+    "title": "PRoLoRA: Partial Rotation Empowers More Parameter-Efficient LoRA",
+    "url": "https://aclanthology.org/2024.acl-long.156/",
+    "pdf": "https://aclanthology.org/2024.acl-long.156.pdf",
+    "authors": [
+      "Sheng Wang",
+      "Boyang Xue",
+      "Jiacheng Ye",
+      "Jiyue Jiang",
+      "Liheng Chen",
+      "Lingpeng Kong",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Boyang Xue",
+        "url": "https://aclanthology.org/people/boyang-xue/"
+      },
+      {
+        "name": "Jiacheng Ye",
+        "url": "https://aclanthology.org/people/jiacheng-ye/unverified/"
+      },
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Liheng Chen",
+        "url": "https://aclanthology.org/people/liheng-chen/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/unverified/"
+      }
+    ],
+    "year": "2024",
+    "venue": "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "With the rapid scaling of large language models (LLMs), serving numerouslow-rank adaptations (LoRAs) concurrently has become increasingly impractical,leading to unaffordable costs and necessitating more parameter-efficientfinetuning methods. In this work, we introduce Partially Rotation-enhanced Low-Rank Adaptation (PRoLoRA), an intra-layer sharing mechanism comprising fouressential components: broadcast reduction, rotation enhancement,partially-sharing refinement, and rectified initialization strategy. As asuperset of LoRA, PRoLoRA retains its advantages, and effectively circumventthe drawbacks of peer parameter-sharing methods with superior model capacity,practical feasibility, and broad applicability. Empirical experimentsdemonstrate the remarkably higher parameter efficiency of PRoLoRA in bothspecific parameter budget and performance target scenarios, and its scalabilityto larger LLMs. Notably, with one time less trainable parameters, PRoLoRA stilloutperforms LoRA on multiple instruction tuning datasets. Subsequently, anablation study is conducted to validate the necessity of individual componentsand highlight the superiority of PRoLoRA over three potential variants.Hopefully, the conspicuously higher parameter efficiency can establish PRoLoRAas a resource-friendly alternative to LoRA."
+  },
+  {
+    "title": "DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models",
+    "url": "https://aclanthology.org/2023.findings-emnlp.660/",
+    "pdf": "https://aclanthology.org/2023.findings-emnlp.660.pdf",
+    "authors": [
+      "Shansan Gong",
+      "Mukai Li",
+      "Jiangtao Feng",
+      "Zhiyong Wu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Shansan Gong",
+        "url": "https://aclanthology.org/people/shansan-gong/"
+      },
+      {
+        "name": "Mukai Li",
+        "url": "https://aclanthology.org/people/mukai-li/unverified/"
+      },
+      {
+        "name": "Jiangtao Feng",
+        "url": "https://aclanthology.org/people/jiangtao-feng/unverified/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Findings of the Association for Computational Linguistics: EMNLP 2023",
+    "abstract": "Diffusion models have gained prominence in generating high-quality sequences of text. Nevertheless, current approaches predominantly represent discrete text within a continuous diffusion space, which incurs substantial computational overhead during training and results in slower sampling speeds. In this paper, we introduce a soft absorbing state that facilitates the diffusion model in learning to reconstruct discrete mutations based on the underlying Gaussian space, thereby enhancing its capacity to recover conditional signals. During the sampling phase, we employ state-of-the-art ODE solvers within the continuous space to expedite the sampling process. Comprehensive experimental evaluations reveal that our proposed method effectively accelerates the training convergence by 4x and generates samples of similar quality 800x faster, rendering it significantly closer to practical application."
+  },
+  {
+    "title": "Explanation Regeneration via Information Bottleneck",
+    "url": "https://aclanthology.org/2023.findings-acl.765/",
+    "pdf": "https://aclanthology.org/2023.findings-acl.765.pdf",
+    "authors": [
+      "Qintong Li",
+      "Zhiyong Wu",
+      "Lingpeng Kong",
+      "Wei Bi"
+    ],
+    "authorLinks": [
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2023",
+    "abstract": "Explaining the black-box predictions of NLP models naturally and accurately is an important open problem in natural language generation. These free-text explanations are expected to contain sufficient and carefully-selected evidence to form supportive arguments for predictions. Thanks to the superior generative capacity of large pretrained language models (PLM), recent work built on prompt engineering enables explanations generated without specific training. However, explanations generated through single-pass prompting often lack sufficiency and conciseness, due to the prompt complexity and hallucination issues. To discard the dross and take the essence of current PLM’s results, we propose to produce sufficient and concise explanations via the information bottleneck (EIB) theory. EIB regenerates explanations by polishing the single-pass output of PLM but retaining the information that supports the contents being explained by balancing two information bottleneck objectives. Experiments on two different tasks verify the effectiveness of EIB through automatic evaluation and thoroughly-conducted human evaluation."
+  },
+  {
+    "title": "Lego-MT: Learning Detachable Models for Massively Multilingual Machine Translation",
+    "url": "https://aclanthology.org/2023.findings-acl.731/",
+    "pdf": "https://aclanthology.org/2023.findings-acl.731.pdf",
+    "authors": [
+      "Fei Yuan",
+      "Yinquan Lu",
+      "Wenhao Zhu",
+      "Lingpeng Kong",
+      "Lei Li",
+      "Yu Qiao",
+      "Jingjing Xu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Fei Yuan",
+        "url": "https://aclanthology.org/people/fei-yuan/unverified/"
+      },
+      {
+        "name": "Yinquan Lu",
+        "url": "https://aclanthology.org/people/yinquan-lu/unverified/"
+      },
+      {
+        "name": "Wenhao Zhu",
+        "url": "https://aclanthology.org/people/wenhao-zhu/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li/"
+      },
+      {
+        "name": "Yu Qiao",
+        "url": "https://aclanthology.org/people/yu-qiao/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2023",
+    "abstract": "Multilingual neural machine translation (MNMT) aims to build a unified model for many language directions. Existing monolithic models for MNMT encounter two challenges: parameter interference among languages and inefficient inference for large models. In this paper, we revisit the classic multi-way structures and develop a detachable model by assigning each language (or group of languages) to an individual branch that supports plug-and-play training and inference. To address the needs of learning representations for all languages in a unified space, we propose a novel efficient training recipe, upon which we build an effective detachable model, Lego-MT.For a fair comparison, we collect data from OPUS and build a translation benchmark covering 433 languages and 1.3B parallel data. Experiments show that Lego-MT with 1.2B parameters brings an average gain of 3.2 spBLEU. It even outperforms M2M-100 with 12B parameters. The proposed training recipe brings a 28.2× speedup over the conventional multi-way training method.code and data repo: https://github.com/CONE-MT/Lego-MT.git."
+  },
+  {
+    "title": "SORTIE: Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation",
+    "url": "https://aclanthology.org/2023.findings-acl.715/",
+    "pdf": "https://aclanthology.org/2023.findings-acl.715.pdf",
+    "authors": [
+      "Xueliang Zhao",
+      "Tingchen Fu",
+      "Lemao Liu",
+      "Lingpeng Kong",
+      "Shuming Shi",
+      "Rui Yan"
+    ],
+    "authorLinks": [
+      {
+        "name": "Xueliang Zhao",
+        "url": "https://aclanthology.org/people/xueliang-zhao/unverified/"
+      },
+      {
+        "name": "Tingchen Fu",
+        "url": "https://aclanthology.org/people/tingchen-fu/unverified/"
+      },
+      {
+        "name": "Lemao Liu",
+        "url": "https://aclanthology.org/people/lemao-liu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Shuming Shi",
+        "url": "https://aclanthology.org/people/shuming-shi/"
+      },
+      {
+        "name": "Rui Yan",
+        "url": "https://aclanthology.org/people/rui-yan/unverified/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2023",
+    "abstract": "Logical data-to-text generation is a representative task in measuring the capabilities of both language generation and complex reasoning. Despite the introduction of reasoning skills in generation, existing works still rely on neural language models to output the final table description. However, due to the inefficacy of neural language models in complex reasoning, these methods inevitably have difficulty working out key entities in the description and might produce unfaithful descriptions. To alleviate these issues, we propose a dependency-aware symbolic reasoning framework that reasons out each entity in the table description with our designed table-compatible programming language. To figure out the dependency relationship among entities, we devise an entity scheduling mechanism to determine the order of programme synthesis such that the reasoning of an entity only relies on other “resolved” entities. Experiments on three datasets and three backbones show that ours outperforms previous methods not only in surface-level fidelity but also in logical fidelity. Notably, the proposed framework enhances GPT-2, BART and T5 with an absolute improvement of 5.7%~11.5% on SP-Acc."
+  },
+  {
+    "title": "DetGPT: Detect What You Need via Reasoning",
+    "url": "https://aclanthology.org/2023.emnlp-main.876/",
+    "pdf": "https://aclanthology.org/2023.emnlp-main.876.pdf",
+    "authors": [
+      "Renjie Pi",
+      "Jiahui Gao",
+      "Shizhe Diao",
+      "Rui Pan",
+      "Hanze Dong",
+      "Jipeng Zhang",
+      "Lewei Yao",
+      "Jianhua Han",
+      "Hang Xu",
+      "Lingpeng Kong",
+      "Tong Zhang"
+    ],
+    "authorLinks": [
+      {
+        "name": "Renjie Pi",
+        "url": "https://aclanthology.org/people/renjie-pi/"
+      },
+      {
+        "name": "Jiahui Gao",
+        "url": "https://aclanthology.org/people/jiahui-gao/"
+      },
+      {
+        "name": "Shizhe Diao",
+        "url": "https://aclanthology.org/people/shizhe-diao/"
+      },
+      {
+        "name": "Rui Pan",
+        "url": "https://aclanthology.org/people/rui-pan/"
+      },
+      {
+        "name": "Hanze Dong",
+        "url": "https://aclanthology.org/people/hanze-dong/unverified/"
+      },
+      {
+        "name": "Jipeng Zhang",
+        "url": "https://aclanthology.org/people/jipeng-zhang/"
+      },
+      {
+        "name": "Lewei Yao",
+        "url": "https://aclanthology.org/people/lewei-yao/"
+      },
+      {
+        "name": "Jianhua Han",
+        "url": "https://aclanthology.org/people/jianhua-han/unverified/"
+      },
+      {
+        "name": "Hang Xu",
+        "url": "https://aclanthology.org/people/hang-xu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Tong Zhang",
+        "url": "https://aclanthology.org/people/tong-zhang/unverified/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "In recent years, the field of computer vision has seen significant advancements thanks to the development of large language models (LLMs). These models have enabled more effective and sophisticated interactions between humans and machines, paving the way for novel techniques that blur the lines between human and machine intelligence. In this paper, we introduce a new paradigm for object detection that we call reasoning-based object detection. Unlike conventional object detection methods that rely on specific object names, our approach enables users to interact with the system using natural language instructions, allowing for a higher level of interactivity. Our proposed method, called DetGPT, leverages state-of-the-art multi-modal models and open-vocabulary object detectors to perform reasoning within the context of the user’s instructions and the visual scene. This enables DetGPT to automatically locate the object of interest based on the user’s expressed desires, even if the object is not explicitly mentioned. For instance, if a user expresses a desire for a cold beverage, DetGPT can analyze the image, identify a fridge, and use its knowledge of typical fridge contents to locate the beverage. This flexibility makes our system applicable across a wide range of fields, from robotics and automation to autonomous driving. Overall, our proposed paradigm and DetGPT demonstrate the potential for more sophisticated and intuitive interactions between humans and machines. We hope that our proposed paradigm and approach will provide inspiration to the community and open the door to more interactive and versatile object detection systems."
+  },
+  {
+    "title": "Can Language Models Understand Physical Concepts?",
+    "url": "https://aclanthology.org/2023.emnlp-main.726/",
+    "pdf": "https://aclanthology.org/2023.emnlp-main.726.pdf",
+    "authors": [
+      "Lei Li",
+      "Jingjing Xu",
+      "Qingxiu Dong",
+      "Ce Zheng",
+      "Xu Sun",
+      "Lingpeng Kong",
+      "Qi Liu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lei Li",
+        "url": "https://aclanthology.org/people/lei-li/unverified/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      },
+      {
+        "name": "Qingxiu Dong",
+        "url": "https://aclanthology.org/people/qingxiu-dong/unverified/"
+      },
+      {
+        "name": "Ce Zheng",
+        "url": "https://aclanthology.org/people/ce-zheng/unverified/"
+      },
+      {
+        "name": "Xu Sun",
+        "url": "https://aclanthology.org/people/xu-sun/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Qi Liu",
+        "url": "https://aclanthology.org/people/qi-liu/unverified/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Language models (LMs) gradually become general-purpose interfaces in the interactive and embodied world, where the understanding of physical concepts is an essential prerequisite. However, it is unclear whether LMs can understand physical concepts in the human world. To investigate this, we design a benchmark VEC that covers the tasks of (i) Visual concepts, such as the shape and material of objects, and (ii) Embodied Concepts, learned from the interaction with the world such as the temperature of objects. Our zero (few)-shot prompting results show that the understanding of certain visual concepts emerges as scaling up LMs, but there are still basic concepts to which the scaling law does not apply. For example, OPT-175B performs close to humans with a zero-shot accuracy of 85% on the material concept, yet behaves like random guessing on the mass concept. Instead, vision-augmented LMs such as CLIP and BLIP achieve a human-level understanding of embodied concepts. Analysis indicates that the rich semantics in visual representation can serve as a valuable source of embodied knowledge. Inspired by this, we propose a distillation method to transfer embodied knowledge from VLMs to LMs, achieving performance gain comparable with that by scaling up parameters of LMs 134×. Our dataset is available at https://github.com/TobiasLee/VEC."
+  },
+  {
+    "title": "Generating Data for Symbolic Language with Large Language Models",
+    "url": "https://aclanthology.org/2023.emnlp-main.523/",
+    "pdf": "https://aclanthology.org/2023.emnlp-main.523.pdf",
+    "authors": [
+      "Jiacheng Ye",
+      "Chengzu Li",
+      "Lingpeng Kong",
+      "Tao Yu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiacheng Ye",
+        "url": "https://aclanthology.org/people/jiacheng-ye/unverified/"
+      },
+      {
+        "name": "Chengzu Li",
+        "url": "https://aclanthology.org/people/chengzu-li/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Tao Yu",
+        "url": "https://aclanthology.org/people/tao-yu/unverified/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "While large language models (LLMs) bring not only performance but also complexity, recent work has started to turn LLMs into data generators rather than task inferencers, where another affordable task model is trained for efficient deployment and inference. However, such an approach has primarily been applied to natural language tasks, and has not yet been explored for symbolic language tasks with complex structured outputs (e.g., semantic parsing and code generation). In this paper, we propose SymGen which utilizes LLMs for generating various annotation-expensive symbolic language data. SymGen consists of an informative prompt to steer generation and an agreement-based verifier to improve data correctness. We conduct extensive experiments on six symbolic language tasks across various settings. Compared with the LLMs, we demonstrate the 1%-sized task model can achieve comparable or better performance, largely cutting inference and deployment costs. We also show that generated data with only a few human demonstrations can be as effective as over 10 times the amount of human-annotated data when training the task model, saving a considerable amount of annotation effort. SymGen takes a step toward data generation for annotation-expensive complex tasks, and we release the code at URL."
+  },
+  {
+    "title": "INK: Injecting kNN Knowledge in Nearest Neighbor Machine Translation",
+    "url": "https://aclanthology.org/2023.acl-long.888/",
+    "pdf": "https://aclanthology.org/2023.acl-long.888.pdf",
+    "authors": [
+      "Wenhao Zhu",
+      "Jingjing Xu",
+      "Shujian Huang",
+      "Lingpeng Kong",
+      "Jiajun Chen"
+    ],
+    "authorLinks": [
+      {
+        "name": "Wenhao Zhu",
+        "url": "https://aclanthology.org/people/wenhao-zhu/unverified/"
+      },
+      {
+        "name": "Jingjing Xu",
+        "url": "https://aclanthology.org/people/jingjing-xu/unverified/"
+      },
+      {
+        "name": "Shujian Huang",
+        "url": "https://aclanthology.org/people/shujian-huang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Jiajun Chen",
+        "url": "https://aclanthology.org/people/jiajun-chen/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Neural machine translation has achieved promising results on many translation tasks. However, previous studies have shown that neural models induce a non-smooth representation space, which harms its generalization results. Recently, kNN-MT has provided an effective paradigm to smooth the prediction based on neighbor representations during inference. Despite promising results, kNN-MT usually requires large inference overhead. We propose an effective training framework INK to directly smooth the representation space via adjusting representations of kNN neighbors with a small number of new parameters. The new parameters are then used to refresh the whole representation datastore to get new kNN knowledge asynchronously. This loop keeps running until convergence. Experiments on four benchmark datasets show that INK achieves average gains of 1.99 COMET and 1.0 BLEU, outperforming the state-of-the-art kNN-MT system with 0.02x memory space and 1.9x inference speedup."
+  },
+  {
+    "title": "Self-Adaptive In-Context Learning: An Information Compression Perspective for In-Context Example Selection and Ordering",
+    "url": "https://aclanthology.org/2023.acl-long.79/",
+    "pdf": "https://aclanthology.org/2023.acl-long.79.pdf",
+    "authors": [
+      "Zhiyong Wu",
+      "Yaoxiang Wang",
+      "Jiacheng Ye",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Yaoxiang Wang",
+        "url": "https://aclanthology.org/people/yaoxiang-wang/"
+      },
+      {
+        "name": "Jiacheng Ye",
+        "url": "https://aclanthology.org/people/jiacheng-ye/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Despite the surprising few-shot performance of in-context learning (ICL), it is still a common practice to randomly sample examples to serve as context. This paper advocates a new principle for ICL: self-adaptive in-context learning. The self-adaption mechanism is introduced to help each sample find an in-context example organization (i.e., selection and permutation) that can derive the correct prediction, thus maximizing performance. To validate the effectiveness of self-adaptive ICL, we propose a general select-then-rank framework and instantiate it with new selection and ranking algorithms. Upon extensive evaluation on eight different NLP datasets, our self-adaptive ICL method achieves a 40% relative improvement over the common practice setting. Further analysis reveals the enormous potential of self-adaptive ICL that it might be able to close the gap between ICL and finetuning given more advanced algorithms. Our code will be released to facilitate future research."
+  },
+  {
+    "title": "A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment",
+    "url": "https://aclanthology.org/2023.acl-long.593/",
+    "pdf": "https://aclanthology.org/2023.acl-long.593.pdf",
+    "authors": [
+      "Jiyue Jiang",
+      "Sheng Wang",
+      "Qintong Li",
+      "Lingpeng Kong",
+      "Chuan Wu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiyue Jiang",
+        "url": "https://aclanthology.org/people/jiyue-jiang/"
+      },
+      {
+        "name": "Sheng Wang",
+        "url": "https://aclanthology.org/people/sheng-wang/"
+      },
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chuan Wu",
+        "url": "https://aclanthology.org/people/chuan-wu/"
+      }
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "When communicating with elders with cognitive impairment, cognitive stimulation (CS) help to maintain the cognitive health of elders. Data sparsity is the main challenge in building CS-based dialogue systems, particularly in the Chinese language. To fill this gap, we construct a Chinese CS conversation (CSConv) dataset, which contains about 2.6K groups of dialogues with therapy principles and emotional support strategy labels. Making chit chat while providing emotional support is overlooked by the majority of existing cognitive dialogue systems. In this paper, we propose a multi-source knowledge fusion method for CS dialogue (CSD), to generate open-ended responses guided by the therapy principle and emotional support strategy. We first use a progressive mask method based on external knowledge to learn encoders as effective classifiers, which is the prerequisite to predict the therapy principle and emotional support strategy of the target response. Then a decoder interacts with the perceived therapy principle and emotional support strategy to generate responses. Extensive experiments conducted on the CSConv dataset demonstrate the effectiveness of the proposed method, while there is still a large space for improvement compared to human performance."
+  },
+  {
+    "title": "Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling",
+    "url": "https://aclanthology.org/2022.naacl-main.325/",
+    "pdf": "https://aclanthology.org/2022.naacl-main.325.pdf",
+    "authors": [
+      "Jakob Prange",
+      "Nathan Schneider",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jakob Prange",
+        "url": "https://aclanthology.org/people/jakob-prange/"
+      },
+      {
+        "name": "Nathan Schneider",
+        "url": "https://aclanthology.org/people/nathan-schneider/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+    "abstract": "We examine the extent to which, in principle, different syntactic and semantic graph representations can complement and improve neural language modeling. Specifically, by conditioning on a subgraph encapsulating the locally relevant sentence history, can a model make better next-word predictions than a pretrained sequential language model alone? With an ensemble setup consisting of GPT-2 and ground-truth graphs from one of 7 different formalisms, we find that the graph information indeed improves perplexity and other metrics. Moreover, this architecture provides a new way to compare different frameworks of linguistic representation. In our oracle graph setup, training and evaluating on English WSJ, semantic constituency structures prove most useful to language modeling performance—outpacing syntactic constituency structures as well as syntactic and semantic dependency structures."
+  },
+  {
+    "title": "ProGen: Progressive Zero-shot Dataset Generation via In-context Feedback",
+    "url": "https://aclanthology.org/2022.findings-emnlp.269/",
+    "pdf": "https://aclanthology.org/2022.findings-emnlp.269.pdf",
+    "authors": [
+      "Jiacheng Ye",
+      "Jiahui Gao",
+      "Zhiyong Wu",
+      "Jiangtao Feng",
+      "Tao Yu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiacheng Ye",
+        "url": "https://aclanthology.org/people/jiacheng-ye/unverified/"
+      },
+      {
+        "name": "Jiahui Gao",
+        "url": "https://aclanthology.org/people/jiahui-gao/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Jiangtao Feng",
+        "url": "https://aclanthology.org/people/jiangtao-feng/unverified/"
+      },
+      {
+        "name": "Tao Yu",
+        "url": "https://aclanthology.org/people/tao-yu/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Findings of the Association for Computational Linguistics: EMNLP 2022",
+    "abstract": "Recently, dataset-generation-based zero-shot learning has shown promising results by training a task-specific model with a dataset synthesized from large pre-trained language models (PLMs). The final task-specific model often achieves compatible or even better performance than PLMs under the zero-shot setting, with orders of magnitude fewer parameters.However, synthetic datasets have their drawbacks. They have long being suffering from the low-quality issue (e.g., low informativeness, redundancy). This explains why the massive synthetic data does not lead to better performance – a scenario we would expect in the human-labeled data. To improve the quality in dataset synthesis, we propose a progressive zero-shot dataset generation framework, ProGen, which leverages the feedback from the task-specific model to guide the generation of new training data via in-context examples.Extensive experiments on five text classification datasets demonstrate the effectiveness of the proposed approach. We also show ProGen achieves on-par or superior performance with only 1% synthetic dataset size, when comparing to baseline methods without in-context feedback."
+  },
+  {
+    "title": "Event Transition Planning for Open-ended Text Generation",
+    "url": "https://aclanthology.org/2022.findings-acl.269/",
+    "pdf": "https://aclanthology.org/2022.findings-acl.269.pdf",
+    "authors": [
+      "Qintong Li",
+      "Piji Li",
+      "Wei Bi",
+      "Zhaochun Ren",
+      "Yuxuan Lai",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Piji Li",
+        "url": "https://aclanthology.org/people/piji-li/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      },
+      {
+        "name": "Zhaochun Ren",
+        "url": "https://aclanthology.org/people/zhaochun-ren/"
+      },
+      {
+        "name": "Yuxuan Lai",
+        "url": "https://aclanthology.org/people/yuxuan-lai/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Findings of the Association for Computational Linguistics: ACL 2022",
+    "abstract": "Open-ended text generation tasks, such as dialogue generation and story completion, require models to generate a coherent continuation given limited preceding context. The open-ended nature of these tasks brings new challenges to the neural auto-regressive text generators nowadays. Despite these neural models are good at producing human-like text, it is difficult for them to arrange causalities and relations between given facts and possible ensuing events. To bridge this gap, we propose a novel two-stage method which explicitly arranges the ensuing events in open-ended text generation. Our approach can be understood as a specially-trained coarse-to-fine algorithm, where an event transition planner provides a “coarse” plot skeleton and a text generator in the second stage refines the skeleton. Experiments on two open-ended text generation tasks demonstrate that our proposed method effectively improves the quality of the generated text, especially in coherence and diversity. We will release the codes to the community for further exploration."
+  },
+  {
+    "title": "ZeroGen: Efficient Zero-shot Learning via Dataset Generation",
+    "url": "https://aclanthology.org/2022.emnlp-main.801/",
+    "pdf": "https://aclanthology.org/2022.emnlp-main.801.pdf",
+    "authors": [
+      "Jiacheng Ye",
+      "Jiahui Gao",
+      "Qintong Li",
+      "Hang Xu",
+      "Jiangtao Feng",
+      "Zhiyong Wu",
+      "Tao Yu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Jiacheng Ye",
+        "url": "https://aclanthology.org/people/jiacheng-ye/unverified/"
+      },
+      {
+        "name": "Jiahui Gao",
+        "url": "https://aclanthology.org/people/jiahui-gao/"
+      },
+      {
+        "name": "Qintong Li",
+        "url": "https://aclanthology.org/people/qintong-li/unverified/"
+      },
+      {
+        "name": "Hang Xu",
+        "url": "https://aclanthology.org/people/hang-xu/"
+      },
+      {
+        "name": "Jiangtao Feng",
+        "url": "https://aclanthology.org/people/jiangtao-feng/unverified/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Tao Yu",
+        "url": "https://aclanthology.org/people/tao-yu/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "There is a growing interest in dataset generation recently due to the superior generative capacity of large pre-trained language models (PLMs). In this paper, we study a flexible and efficient zero-short learning method, ZeroGen.Given a zero-shot task, we first generate a dataset from scratch using PLMs in an unsupervised manner. Then, we train a tiny task model (e.g., LSTM) under the supervision of the synthesized dataset. This approach allows highly efficient inference as the final task model only has orders of magnitude fewer parameters comparing to PLMs (e.g., GPT2-XL).Apart from being annotation-free and efficient, we argue that ZeroGen can also provide useful insights from the perspective of data-free model-agnostic knowledge distillation, and unreferenced text generation evaluation. Experiments and analysis on different NLP tasks, namely, text classification, question answering, and natural language inference, show the effectiveness of ZeroGen."
+  },
+  {
+    "title": "An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks",
+    "url": "https://aclanthology.org/2022.emnlp-main.684/",
+    "pdf": "https://aclanthology.org/2022.emnlp-main.684.pdf",
+    "authors": [
+      "Changlong Yu",
+      "Tianyi Xiao",
+      "Lingpeng Kong",
+      "Yangqiu Song",
+      "Wilfred Ng"
+    ],
+    "authorLinks": [
+      {
+        "name": "Changlong Yu",
+        "url": "https://aclanthology.org/people/changlong-yu/unverified/"
+      },
+      {
+        "name": "Tianyi Xiao",
+        "url": "https://aclanthology.org/people/tianyi-xiao/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Yangqiu Song",
+        "url": "https://aclanthology.org/people/yangqiu-song/"
+      },
+      {
+        "name": "Wilfred Ng",
+        "url": "https://aclanthology.org/people/wilfred-ng/unverified/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Though linguistic knowledge emerges during large-scale language model pretraining, recent work attempt to explicitly incorporate human-defined linguistic priors into task-specific fine-tuning. Infusing language models with syntactic or semantic knowledge from parsers has shown improvements on many language understanding tasks. To further investigate the effectiveness of structural linguistic priors, we conduct empirical study of replacing parsed graphs or trees with trivial ones (rarely carrying linguistic knowledge e.g., balanced tree) for tasks in the GLUE benchmark. Encoding with trivial graphs achieves competitive or even better performance in fully-supervised and few-shot settings. It reveals that the gains might not be significantly attributed to explicit linguistic priors but rather to more feature interactions brought by fusion layers. Hence we call for attention to using trivial graphs as necessary baselines to design advanced knowledge fusion methods in the future."
+  },
+  {
+    "title": "The Devil in Linear Transformer",
+    "url": "https://aclanthology.org/2022.emnlp-main.473/",
+    "pdf": "https://aclanthology.org/2022.emnlp-main.473.pdf",
+    "authors": [
+      "Zhen Qin",
+      "Xiaodong Han",
+      "Weixuan Sun",
+      "Dongxu Li",
+      "Lingpeng Kong",
+      "Nick Barnes",
+      "Yiran Zhong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zhen Qin",
+        "url": "https://aclanthology.org/people/zhen-qin/unverified/"
+      },
+      {
+        "name": "Xiaodong Han",
+        "url": "https://aclanthology.org/people/xiaodong-han/unverified/"
+      },
+      {
+        "name": "Weixuan Sun",
+        "url": "https://aclanthology.org/people/weixuan-sun/unverified/"
+      },
+      {
+        "name": "Dongxu Li",
+        "url": "https://aclanthology.org/people/dongxu-li/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Nick Barnes",
+        "url": "https://aclanthology.org/people/nick-barnes/unverified/"
+      },
+      {
+        "name": "Yiran Zhong",
+        "url": "https://aclanthology.org/people/yiran-zhong/unverified/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Linear transformers aim to reduce the quadratic space-time complexity of vanilla transformers. However, they usually suffer from degraded performances on various tasks and corpus. In this paper, we examine existing kernel-based linear transformers and identify two key issues that lead to such performance gaps: 1) unbounded gradients in the attention computation adversely impact the convergence of linear transformer models; 2) attention dilution which trivially distributes attention scores over long sequences while neglecting neighbouring structures. To address these issues, we first identify that the scaling of attention matrices is the devil in unbounded gradients, which turns out unnecessary in linear attention as we show theoretically and empirically. To this end, we propose a new linear attention that replaces the scaling operation with a normalization to stabilize gradients. For the issue of attention dilution, we leverage a diagonal attention to confine attention to only neighbouring tokens in early layers. Benefiting from the stable gradients and improved attention, our new linear transformer model, transNormer, demonstrates superior performance on text classification and language modeling tasks, as well as on the challenging Long-Range Arena benchmark, surpassing vanilla transformer and existing linear variants by a clear margin while being significantly more space-time efficient. The code is available at https://github.com/OpenNLPLab/Transnormer ."
+  },
+  {
+    "title": "UnifiedSKG: Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models",
+    "url": "https://aclanthology.org/2022.emnlp-main.39/",
+    "pdf": "https://aclanthology.org/2022.emnlp-main.39.pdf",
+    "authors": [
+      "Tianbao Xie",
+      "Chen Henry Wu",
+      "Peng Shi",
+      "Ruiqi Zhong",
+      "Torsten Scholak",
+      "Michihiro Yasunaga",
+      "Chien-Sheng Wu",
+      "Ming Zhong",
+      "Pengcheng Yin",
+      "Sida I. Wang",
+      "Victor Zhong",
+      "Bailin Wang",
+      "Chengzu Li",
+      "Connor Boyle",
+      "Ansong Ni",
+      "Ziyu Yao",
+      "Dragomir Radev",
+      "Caiming Xiong",
+      "Lingpeng Kong",
+      "Rui Zhang",
+      "Noah A. Smith",
+      "Luke Zettlemoyer",
+      "Tao Yu"
+    ],
+    "authorLinks": [
+      {
+        "name": "Tianbao Xie",
+        "url": "https://aclanthology.org/people/tianbao-xie/unverified/"
+      },
+      {
+        "name": "Chen Henry Wu",
+        "url": "https://aclanthology.org/people/chen-henry-wu/unverified/"
+      },
+      {
+        "name": "Peng Shi",
+        "url": "https://aclanthology.org/people/peng-shi/unverified/"
+      },
+      {
+        "name": "Ruiqi Zhong",
+        "url": "https://aclanthology.org/people/ruiqi-zhong/unverified/"
+      },
+      {
+        "name": "Torsten Scholak",
+        "url": "https://aclanthology.org/people/torsten-scholak/unverified/"
+      },
+      {
+        "name": "Michihiro Yasunaga",
+        "url": "https://aclanthology.org/people/michihiro-yasunaga/unverified/"
+      },
+      {
+        "name": "Chien-Sheng Wu",
+        "url": "https://aclanthology.org/people/chien-sheng-wu/"
+      },
+      {
+        "name": "Ming Zhong",
+        "url": "https://aclanthology.org/people/ming-zhong/"
+      },
+      {
+        "name": "Pengcheng Yin",
+        "url": "https://aclanthology.org/people/pengcheng-yin/unverified/"
+      },
+      {
+        "name": "Sida I. Wang",
+        "url": "https://aclanthology.org/people/sida-i-wang/"
+      },
+      {
+        "name": "Victor Zhong",
+        "url": "https://aclanthology.org/people/victor-zhong/unverified/"
+      },
+      {
+        "name": "Bailin Wang",
+        "url": "https://aclanthology.org/people/bailin-wang/unverified/"
+      },
+      {
+        "name": "Chengzu Li",
+        "url": "https://aclanthology.org/people/chengzu-li/"
+      },
+      {
+        "name": "Connor Boyle",
+        "url": "https://aclanthology.org/people/connor-boyle/unverified/"
+      },
+      {
+        "name": "Ansong Ni",
+        "url": "https://aclanthology.org/people/ansong-ni/unverified/"
+      },
+      {
+        "name": "Ziyu Yao",
+        "url": "https://aclanthology.org/people/ziyu-yao/"
+      },
+      {
+        "name": "Dragomir Radev",
+        "url": "https://aclanthology.org/people/dragomir-radev/"
+      },
+      {
+        "name": "Caiming Xiong",
+        "url": "https://aclanthology.org/people/caiming-xiong/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Rui Zhang",
+        "url": "https://aclanthology.org/people/rui-zhang/unverified/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      },
+      {
+        "name": "Luke Zettlemoyer",
+        "url": "https://aclanthology.org/people/luke-zettlemoyer/"
+      },
+      {
+        "name": "Tao Yu",
+        "url": "https://aclanthology.org/people/tao-yu/unverified/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": "Structured knowledge grounding (SKG) leverages structured knowledge to complete user requests, such as semantic parsing over databases and question answering over knowledge bases. Since the inputs and outputs of SKG tasks are heterogeneous, they have been studied separately by different communities, which limits systematic and compatible research on SKG. In this paper, we overcome this limitation by proposing the UnifiedSKG framework, which unifies 21 SKG tasks into a text-to-text format, aiming to promote systematic SKG research, instead of being exclusive to a single task, domain, or dataset. We use UnifiedSKG to benchmark T5 with different sizes and show that T5, with simple modifications when necessary, achieves state-of-the-art performance on almost all of the 21 tasks. We further demonstrate that multi-task prefix-tuning improves the performance on most tasks, largely improving the overall performance. UnifiedSKG also facilitates the investigation of zero-shot and few-shot learning, and we show that T0, GPT-3, and Codex struggle in zero-shot and few-shot learning for SKG. We also use UnifiedSKG to conduct a series of controlled experiments on structured knowledge encoding variants across SKG tasks. UnifiedSKG is easily extensible to more tasks, and it is open-sourced at https://github.com/hkunlp/unifiedskg."
+  },
+  {
+    "title": "Lexical Knowledge Internalization for Neural Dialog Generation",
+    "url": "https://aclanthology.org/2022.acl-long.547/",
+    "pdf": "https://aclanthology.org/2022.acl-long.547.pdf",
+    "authors": [
+      "Zhiyong Wu",
+      "Wei Bi",
+      "Xiang Li",
+      "Lingpeng Kong",
+      "Ben Kao"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      },
+      {
+        "name": "Xiang Li",
+        "url": "https://aclanthology.org/people/xiang-li/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Ben Kao",
+        "url": "https://aclanthology.org/people/ben-kao/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "We propose knowledge internalization (KI), which aims to complement the lexical knowledge into neural dialog models. Instead of further conditioning the knowledge-grounded dialog (KGD) models on externally retrieved knowledge, we seek to integrate knowledge about each input token internally into the model’s parameters. To tackle the challenge due to the large scale of lexical knowledge, we adopt the contrastive learning approach and create an effective token-level lexical knowledge retriever that requires only weak supervision mined from Wikipedia. We demonstrate the effectiveness and general applicability of our approach on various datasets and diversified model structures."
+  },
+  {
+    "title": "ABC: Attention with Bounded-memory Control",
+    "url": "https://aclanthology.org/2022.acl-long.515/",
+    "pdf": "https://aclanthology.org/2022.acl-long.515.pdf",
+    "authors": [
+      "Hao Peng",
+      "Jungo Kasai",
+      "Nikolaos Pappas",
+      "Dani Yogatama",
+      "Zhaofeng Wu",
+      "Lingpeng Kong",
+      "Roy Schwartz",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Hao Peng",
+        "url": "https://aclanthology.org/people/hao-peng/unverified/"
+      },
+      {
+        "name": "Jungo Kasai",
+        "url": "https://aclanthology.org/people/jungo-kasai/unverified/"
+      },
+      {
+        "name": "Nikolaos Pappas",
+        "url": "https://aclanthology.org/people/nikolaos-pappas/"
+      },
+      {
+        "name": "Dani Yogatama",
+        "url": "https://aclanthology.org/people/dani-yogatama/unverified/"
+      },
+      {
+        "name": "Zhaofeng Wu",
+        "url": "https://aclanthology.org/people/zhaofeng-wu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Roy Schwartz",
+        "url": "https://aclanthology.org/people/roy-schwartz/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    "abstract": "Transformer architectures have achieved state- of-the-art results on a variety of natural language processing (NLP) tasks. However, their attention mechanism comes with a quadratic complexity in sequence lengths, making the computational overhead prohibitive, especially for long sequences. Attention context can be seen as a random-access memory with each token taking a slot. Under this perspective, the memory size grows linearly with the sequence length, and so does the overhead of reading from it. One way to improve the efficiency is to bound the memory size. We show that disparate approaches can be subsumed into one abstraction, attention with bounded-memory control (ABC), and they vary in their organization of the memory. ABC reveals new, unexplored possibilities. First, it connects several efficient attention variants that would otherwise seem apart. Second, this abstraction gives new insights—an established approach (Wang et al., 2020b) previously thought to not be applicable in causal attention, actually is. Last, we present a new instance of ABC, which draws inspiration from existing ABC approaches, but replaces their heuristic memory-organizing functions with a learned, contextualized one. Our experiments on language modeling, machine translation, and masked language model finetuning show that our approach outperforms previous efficient attention models; compared to the strong transformer baselines, it significantly improves the inference time and space efficiency with no or negligible accuracy loss."
+  },
+  {
+    "title": "Adaptive Semiparametric Language Models",
+    "url": "https://aclanthology.org/2021.tacl-1.22/",
+    "pdf": "https://aclanthology.org/2021.tacl-1.22.pdf",
+    "authors": [
+      "Dani Yogatama",
+      "Cyprien de Masson d’Autume",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Dani Yogatama",
+        "url": "https://aclanthology.org/people/dani-yogatama/unverified/"
+      },
+      {
+        "name": "Cyprien de Masson d’Autume",
+        "url": "https://aclanthology.org/people/cyprien-de-masson-d-autume/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2021",
+    "venue": "Transactions of the Association for Computational Linguistics, Volume 9",
+    "abstract": "We present a language model that combines a large parametric neural network (i.e., a transformer) with a non-parametric episodic memory component in an integrated architecture. Our model uses extended short-term context by caching local hidden states—similar to transformer-XL—and global long-term memory by retrieving a set of nearest neighbor tokens at each timestep. We design a gating function to adaptively combine multiple information sources to make a prediction. This mechanism allows the model to use either local context, short-term memory, or long-term memory (or any combination of them) on an ad hoc basis depending on the context. Experiments on word-based and character-based language modeling datasets demonstrate the efficacy of our proposed method compared to strong baselines."
+  },
+  {
+    "title": "Good for Misconceived Reasons: An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation",
+    "url": "https://aclanthology.org/2021.acl-long.480/",
+    "pdf": "https://aclanthology.org/2021.acl-long.480.pdf",
+    "authors": [
+      "Zhiyong Wu",
+      "Lingpeng Kong",
+      "Wei Bi",
+      "Xiang Li",
+      "Ben Kao"
+    ],
+    "authorLinks": [
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Wei Bi",
+        "url": "https://aclanthology.org/people/victoria-w/"
+      },
+      {
+        "name": "Xiang Li",
+        "url": "https://aclanthology.org/people/xiang-li/unverified/"
+      },
+      {
+        "name": "Ben Kao",
+        "url": "https://aclanthology.org/people/ben-kao/"
+      }
+    ],
+    "year": "2021",
+    "venue": "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)",
+    "abstract": "A neural multimodal machine translation (MMT) system is one that aims to perform better translation by extending conventional text-only translation models with multimodal information. Many recent studies report improvements when equipping their models with the multimodal module, despite the controversy of whether such improvements indeed come from the multimodal part. We revisit the contribution of multimodal information in MMT by devising two interpretable MMT models. To our surprise, although our models replicate similar gains as recently developed multimodal-integrated systems achieved, our models learn to ignore the multimodal information. Upon further investigation, we discover that the improvements achieved by the multimodal models over text-only counterparts are in fact results of the regularization effect. We report empirical findings that highlight the importance of MMT models’ interpretability, and discuss how our findings will benefit future research."
+  },
+  {
+    "title": "Cascaded Head-colliding Attention",
+    "url": "https://aclanthology.org/2021.acl-long.45/",
+    "pdf": "https://aclanthology.org/2021.acl-long.45.pdf",
+    "authors": [
+      "Lin Zheng",
+      "Zhiyong Wu",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lin Zheng",
+        "url": "https://aclanthology.org/people/lin-zheng/unverified/"
+      },
+      {
+        "name": "Zhiyong Wu",
+        "url": "https://aclanthology.org/people/zhiyong-wu/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "year": "2021",
+    "venue": "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)",
+    "abstract": "Transformers have advanced the field of natural language processing (NLP) on a variety of important tasks. At the cornerstone of the Transformer architecture is the multi-head attention (MHA) mechanism which models pairwise interactions between the elements of the sequence. Despite its massive success, the current framework ignores interactions among different heads, leading to the problem that many of the heads are redundant in practice, which greatly wastes the capacity of the model. To improve parameter efficiency, we re-formulate the MHA as a latent variable model from a probabilistic perspective. We present cascaded head-colliding attention (CODA) which explicitly models the interactions between attention heads through a hierarchical variational distribution. We conduct extensive experiments and demonstrate that CODA outperforms the transformer baseline, by 0.6 perplexity on Wikitext-103 in language modeling, and by 0.6 BLEU on WMT14 EN-DE in machine translation, due to its improvements on the parameter efficiency."
+  },
+  {
+    "title": "Syntactic Structure Distillation Pretraining for Bidirectional Encoders",
+    "url": "https://aclanthology.org/2020.tacl-1.50/",
+    "pdf": "https://aclanthology.org/2020.tacl-1.50.pdf",
+    "authors": [
+      "Adhiguna Kuncoro",
+      "Lingpeng Kong",
+      "Daniel Fried",
+      "Dani Yogatama",
+      "Laura Rimell",
+      "Chris Dyer",
+      "Phil Blunsom"
+    ],
+    "authorLinks": [
+      {
+        "name": "Adhiguna Kuncoro",
+        "url": "https://aclanthology.org/people/adhiguna-kuncoro/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Daniel Fried",
+        "url": "https://aclanthology.org/people/daniel-fried/"
+      },
+      {
+        "name": "Dani Yogatama",
+        "url": "https://aclanthology.org/people/dani-yogatama/unverified/"
+      },
+      {
+        "name": "Laura Rimell",
+        "url": "https://aclanthology.org/people/laura-rimell/unverified/"
+      },
+      {
+        "name": "Chris Dyer",
+        "url": "https://aclanthology.org/people/chris-dyer/"
+      },
+      {
+        "name": "Phil Blunsom",
+        "url": "https://aclanthology.org/people/phil-blunsom/"
+      }
+    ],
+    "year": "2020",
+    "venue": "Transactions of the Association for Computational Linguistics, Volume 8",
+    "abstract": "Textual representation learners trained on large amounts of data have achieved notable success on downstream tasks; intriguingly, they have also performed well on challenging tests of syntactic competence. Hence, it remains an open question whether scalable learners like BERT can become fully proficient in the syntax of natural language by virtue of data scale alone, or whether they still benefit from more explicit syntactic biases. To answer this question, we introduce a knowledge distillation strategy for injecting syntactic biases into BERT pretraining, by distilling the syntactically informative predictions of a hierarchical—albeit harder to scale—syntactic language model. Since BERT models masked words in bidirectional context, we propose to distill the approximate marginal distribution over words in context from the syntactic LM. Our approach reduces relative error by 2–21% on a diverse set of structured prediction tasks, although we obtain mixed results on the GLUE benchmark. Our findings demonstrate the benefits of syntactic biases, even for representation learners that exploit large amounts of data, and contribute to a better understanding of where syntactic biases are helpful in benchmarks of natural language understanding."
+  },
+  {
+    "title": "Better Document-Level Machine Translation with Bayes’ Rule",
+    "url": "https://aclanthology.org/2020.tacl-1.23/",
+    "pdf": "https://aclanthology.org/2020.tacl-1.23.pdf",
+    "authors": [
+      "Lei Yu",
+      "Laurent Sartran",
+      "Wojciech Stokowiec",
+      "Wang Ling",
+      "Lingpeng Kong",
+      "Phil Blunsom",
+      "Chris Dyer"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lei Yu",
+        "url": "https://aclanthology.org/people/lei-yu/unverified/"
+      },
+      {
+        "name": "Laurent Sartran",
+        "url": "https://aclanthology.org/people/laurent-sartran/"
+      },
+      {
+        "name": "Wojciech Stokowiec",
+        "url": "https://aclanthology.org/people/wojciech-stokowiec/unverified/"
+      },
+      {
+        "name": "Wang Ling",
+        "url": "https://aclanthology.org/people/wang-ling/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Phil Blunsom",
+        "url": "https://aclanthology.org/people/phil-blunsom/"
+      },
+      {
+        "name": "Chris Dyer",
+        "url": "https://aclanthology.org/people/chris-dyer/"
+      }
+    ],
+    "year": "2020",
+    "venue": "Transactions of the Association for Computational Linguistics, Volume 8",
+    "abstract": "We show that Bayes’ rule provides an effective mechanism for creating document translation models that can be learned from only parallel sentences and monolingual documents a compelling benefit because parallel documents are not always available. In our formulation, the posterior probability of a candidate translation is the product of the unconditional (prior) probability of the candidate output document and the “reverse translation probability” of translating the candidate output back into the source language. Our proposed model uses a powerful autoregressive language model as the prior on target language documents, but it assumes that each sentence is translated independently from the target to the source language. Crucially, at test time, when a source document is observed, the document language model prior induces dependencies between the translations of the source sentences in the posterior. The model’s independence assumption not only enables efficient use of available data, but it additionally admits a practical left-to-right beam-search algorithm for carrying out inference. Experiments show that our model benefits from using cross-sentence context in the language model, and it outperforms existing document translation approaches."
+  },
+  {
+    "title": "What Do Recurrent Neural Network Grammars Learn About Syntax?",
+    "url": "https://aclanthology.org/E17-1117/",
+    "pdf": "https://aclanthology.org/E17-1117.pdf",
+    "authors": [
+      "Adhiguna Kuncoro",
+      "Miguel Ballesteros",
+      "Lingpeng Kong",
+      "Chris Dyer",
+      "Graham Neubig",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Adhiguna Kuncoro",
+        "url": "https://aclanthology.org/people/adhiguna-kuncoro/unverified/"
+      },
+      {
+        "name": "Miguel Ballesteros",
+        "url": "https://aclanthology.org/people/miguel-ballesteros/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chris Dyer",
+        "url": "https://aclanthology.org/people/chris-dyer/"
+      },
+      {
+        "name": "Graham Neubig",
+        "url": "https://aclanthology.org/people/graham-neubig/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "venue": "Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 1, Long Papers",
+    "abstract": "Recurrent neural network grammars (RNNG) are a recently proposed probablistic generative modeling family for natural language. They show state-of-the-art language modeling and parsing performance. We investigate what information they learn, from a linguistic perspective, through various ablations to the model and the data, and by augmenting the model with an attention mechanism (GA-RNNG) to enable closer inspection. We find that explicit modeling of composition is crucial for achieving the best performance. Through the attention mechanism, we find that headedness plays a central role in phrasal representation (with the model’s latent attention largely agreeing with predictions made by hand-crafted head rules, albeit with some important differences). By training grammars without nonterminal labels, we find that phrasal representations depend minimally on nonterminals, providing support for the endocentricity hypothesis."
+  },
+  {
+    "title": "Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser",
+    "url": "https://aclanthology.org/D16-1180/",
+    "pdf": "https://aclanthology.org/D16-1180.pdf",
+    "authors": [
+      "Adhiguna Kuncoro",
+      "Miguel Ballesteros",
+      "Lingpeng Kong",
+      "Chris Dyer",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Adhiguna Kuncoro",
+        "url": "https://aclanthology.org/people/adhiguna-kuncoro/unverified/"
+      },
+      {
+        "name": "Miguel Ballesteros",
+        "url": "https://aclanthology.org/people/miguel-ballesteros/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Chris Dyer",
+        "url": "https://aclanthology.org/people/chris-dyer/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "venue": "Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": ""
+  },
+  {
+    "title": "ACBiMA: Advanced Chinese Bi-Character Word Morphological Analyzer",
+    "url": "https://aclanthology.org/W15-3105/",
+    "pdf": "https://aclanthology.org/W15-3105.pdf",
+    "authors": [
+      "Ting-Hao Huang",
+      "Yun-Nung Chen",
+      "Lingpeng Kong"
+    ],
+    "authorLinks": [
+      {
+        "name": "Ting-Hao Huang",
+        "url": "https://aclanthology.org/people/ting-hao-huang/"
+      },
+      {
+        "name": "Yun-Nung Chen",
+        "url": "https://aclanthology.org/people/yun-nung-chen/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      }
+    ],
+    "venue": "Proceedings of the Eighth SIGHAN Workshop on Chinese Language Processing",
+    "abstract": ""
+  },
+  {
+    "title": "Transforming Dependencies into Phrase Structures",
+    "url": "https://aclanthology.org/N15-1080/",
+    "pdf": "https://aclanthology.org/N15-1080.pdf",
+    "authors": [
+      "Lingpeng Kong",
+      "Alexander M. Rush",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Alexander M. Rush",
+        "url": "https://aclanthology.org/people/alexander-m-rush/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "venue": "Proceedings of the 2015 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+    "abstract": ""
+  },
+  {
+    "title": "Bayesian Optimization of Text Representations",
+    "url": "https://aclanthology.org/D15-1251/",
+    "pdf": "https://aclanthology.org/D15-1251.pdf",
+    "authors": [
+      "Dani Yogatama",
+      "Lingpeng Kong",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Dani Yogatama",
+        "url": "https://aclanthology.org/people/dani-yogatama/unverified/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "venue": "Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing",
+    "abstract": ""
+  },
+  {
+    "title": "Dependency Parsing for Weibo: An Efficient Probabilistic Logic Programming Approach",
+    "url": "https://aclanthology.org/D14-1122/",
+    "pdf": "https://aclanthology.org/D14-1122.pdf",
+    "authors": [
+      "William Yang Wang",
+      "Lingpeng Kong",
+      "Kathryn Mazaitis",
+      "William W. Cohen"
+    ],
+    "authorLinks": [
+      {
+        "name": "William Yang Wang",
+        "url": "https://aclanthology.org/people/william-yang-wang/"
+      },
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Kathryn Mazaitis",
+        "url": "https://aclanthology.org/people/kathryn-mazaitis/unverified/"
+      },
+      {
+        "name": "William W. Cohen",
+        "url": "https://aclanthology.org/people/william-cohen/"
+      }
+    ],
+    "venue": "Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    "abstract": ""
+  },
+  {
+    "title": "A Dependency Parser for Tweets",
+    "url": "https://aclanthology.org/D14-1108/",
+    "pdf": "https://aclanthology.org/D14-1108.pdf",
+    "authors": [
+      "Lingpeng Kong",
+      "Nathan Schneider",
+      "Swabha Swayamdipta",
+      "Archna Bhatia",
+      "Chris Dyer",
+      "Noah A. Smith"
+    ],
+    "authorLinks": [
+      {
+        "name": "Lingpeng Kong",
+        "url": "https://aclanthology.org/people/lingpeng-kong/"
+      },
+      {
+        "name": "Nathan Schneider",
+        "url": "https://aclanthology.org/people/nathan-schneider/"
+      },
+      {
+        "name": "Swabha Swayamdipta",
+        "url": "https://aclanthology.org/people/swabha-swayamdipta/"
+      },
+      {
+        "name": "Archna Bhatia",
+        "url": "https://aclanthology.org/people/archna-bhatia/unverified/"
+      },
+      {
+        "name": "Chris Dyer",
+        "url": "https://aclanthology.org/people/chris-dyer/"
+      },
+      {
+        "name": "Noah A. Smith",
+        "url": "https://aclanthology.org/people/noah-a-smith/"
+      }
+    ],
+    "venue": "Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    "abstract": ""
+  }
+]

@@ -1,0 +1,187 @@
+                                         INK: Injecting kNN Knowledge in Nearest Neighbor Machine Translation
+
+                                                Wenhao Zhu1 , Jingjing Xu2 , Shujian Huang1 , Lingpeng Kong3 , Jiajun Chen1
+                                                 1
+                                                   National Key Laboratory for Novel Software Technology, Nanjing University
+                                                           2
+                                                             Shanghai AI Laboratory 3 The University of Hong Kong
+                                                                  zhuwh@smail.nju.edu.cn, jingjingxu@pku.edu.cn
+                                                               huangsj@nju.edu.cn, lpk@cs.hku.hk, chenjj@nju.edu.cn
+
+
+
+                                                              Abstract
+
+                                             Neural machine translation has achieved
+                                             promising results on many translation tasks.
+
+
+
+
+arXiv:2306.06381v1 [cs.CL] 10 Jun 2023
+                                             However, previous studies have shown that neu-
+                                             ral models induce a non-smooth representation
+                                             space, which harms its generalization results.
+                                             Recently, kNN-MT has provided an effective
+                                             paradigm to smooth the prediction based on
+                                             neighbor representations during inference. De-      Figure 1: The overview of our training loop. We refine
+                                             spite promising results, kNN-MT usually re-         the representation space of an NMT model according
+                                             quires large inference overhead. We propose         to the extracted kNN knowledge. The new parameters
+                                             an effective training framework INK to directly     are then used to refresh the datastore to update kNN
+                                             smooth the representation space via adjusting       knowledge asynchronously.
+                                             representations of kNN neighbors with a small
+                                             number of new parameters. The new parame-
+                                             ters are then used to refresh the whole repre-      “holes” could be formed. When it is used to trans-
+                                             sentation datastore to get new kNN knowledge        late examples from an unseen domain, the perfor-
+                                             asynchronously. This loop keeps running un-         mance drops sharply (Wang et al., 2022a,b)
+                                             til convergence. Experiments on four bench-
+                                                                                                    Recently, k-Nearest-Neighbor Machine Trans-
+                                             mark datasets show that INK achieves average
+                                             gains of 1.99 COMET and 1.0 BLEU, outper-
+                                                                                                 lation (kNN-MT) (Khandelwal et al., 2021) pro-
+                                             forming the state-of-the-art kNN-MT system          vides an effective solution to smooth predictions
+                                             with 0.02× memory space and 1.9× inference          by equipping an NMT model with a key-value data-
+                                             speedup1 .                                          store. For each entry, the value is the target token
+                                                                                                 and key is the contextualized representation at the
+                                         1   Introduction                                        target position. It requires a training set to record
+                                                                                                 tokens and representations. By aggregating near-
+                                         Neural machine translation (NMT) have achieved          est neighbors during inference, the NMT model
+                                         promising results in recent years (Vaswani et al.,      can achieve decent translation results (Khandel-
+                                         2017; Ng et al., 2019; Qian et al., 2021b). The         wal et al., 2021; Zheng et al., 2021; Jiang et al.,
+                                         target of NMT is to learn a generalized representa-     2022). Despite the success, kNN-MT also brings
+                                         tion space to adapt to diverse scenarios. However,      new issues with the increasing scale of training
+                                         recent studies have shown that neural networks,         data. Retrieving neighbors from a large datas-
+                                         such as BERT and GPT, induce non-smooth rep-            tore (Wang et al., 2022a) at each decoding step
+                                         resentation space, limiting the generalization abil-    is time-consuming (Martins et al., 2022a; Meng
+                                         ities (Gao et al., 2018; Ethayarajh, 2019; Li et al.,   et al., 2022). Furthermore, once the datastore is
+                                         2020). In NMT, we also observe a similar phe-           constructed, representations can not be easily up-
+                                         nomenon in the learned representation space where       dated, limiting the performance ceiling of kNN-
+                                         low-frequency tokens disperse sparsely, even for a      MT.
+                                         strong NMT model (More details are described in            Given above strengths and weaknesses of kNN-
+                                         Section Experiments). Due to the sparsity, many         MT, we propose to directly smooth the representa-
+                                            1
+                                              Code will be released at https://github.com/       tion space with a small number of parameters. In
+                                         OwenNJU/INK                                             this paper, we propose a training framework INK,
+to iteratively refine the representation space with    and Zipser, 1989). At time step t, we record the
+the help of extracted kNN knowledge (Fig. 1).          contextualized representation2 ht as key and the
+Specifically, we adjust the representation distribu-   corresponding target token yt as value. We then
+tion by aligning three kinds of representations with   put the key-value pair into the datastore. In this
+Kullback-Leibler (KL) divergence to train a small      way, the full datastore D can be created through a
+number of adaptation parameters. First, we align       single forward pass over the training dataset C:
+the contextualized representation and its target em-
+                                                                   D = {(ht , yt ) | ∀yt ∈ Y, (X, Y ) ∈ C}                 (1)
+bedding to keep semantic meanings. Second, we
+align the contextualized representations of a target
+                                                       where each datastore entry explicitly memorizes
+token and align the extracted kNN contextualized
+                                                       the mapping relationship between the representa-
+representations to address the sparsely dispersing
+                                                       tion ht and its target token yt .
+problem. After a training epoch, we refresh the
+datastore asynchronously with refined models to        Translate with memorized representations
+update kNN representations. During inference, we       During inference, the contextualized representa-
+only load the off-the-shelf NMT model and tune         tion of the test translation context (X, Y<t ) will be
+adaptation parameters.                                 used to query the datastore for nearest neighbor
+   We conduct experiments on four benchmark            representations and their corresponding target to-
+datasets. Experiment results show that our frame-      kens Nk = {(ĥ, ŷ)}k1 . Then, the retrieved entries
+work brings average gains of 1.99 COMET and 1.0        are converted to a distribution over the vocabulary:
+BLEU. Compared with the state-of-the-art kNN-
+                                                                                                              −d(ht ,ĥ)
+MT method (i.e. Robust kNN-MT; Jiang et al.                                                      1(y = ŷ)e
+                                                                                      X
+                                                               pknn (y|X, Y<t ) ∝                                T         (2)
+2022), INK achieves better translation performance                                  (ĥ,ŷ)∈Nk
+
+with 0.02× memory space and 1.9× inference
+speed. Our contributions can be summarized be-         where ht denotes h(X, Y<t ) for short, d measures
+low:                                                   Euclidean distance and T is the temperature.
+
+    • We propose a training framework to smooth        2.2      Adapter
+      the representation space according to kNN        Previous research shows that adapter can be an ef-
+      knowledge.                                       ficient plug-and-play module for adapting an NMT
+                                                       model (Bapna and Firat, 2019). In common, the
+    • We devise an inject-and-refine training loop
+                                                       adapter layer is inserted after each encoder and de-
+      in our framework. Experiments show that re-
+                                                       coder layer of M. The architecture of the adapter
+      freshing the datastore asynchronously matters.
+                                                       layer is simple, which includes a feed-forward layer
+    • Our INK system achieves promising improve-       and a normalization layer. Given the output vec-
+      ments and beats the state-of-the-art kNN-MT      tor z ∈ Rd of a specific encoder/decoder layer,
+      system.                                          the computation result of the adapter layer can be
+                                                       written as:
+2     Background
+                                                                         ze = W2T [W1T · f (z)] + z                        (3)
+This section briefly introduces the working process
+                                                                                                                            ′
+of kNN-MT and the architecture of adapter (Bapna       where f denotes layer-normalization, W1 ∈ Rd×d ,
+                                                                  ′
+and Firat, 2019). For the latter, we will use it to    W2 ∈ Rd ×d are two projection matrices. d′ is the
+improve the representation space in our framework.     inner dimension of these two projections. Bias term
+                                                       and activation function is omitted in the equation
+2.1    kNN-MT
+                                                       for clarity. ze is the output of the adapter layer.
+Given an off-the-shelf NMT model M and train-
+ing set C, kNN-MT memorizes training examples          3       Approach: INK
+explicitly with a key-value datastore D and use D
+                                                       This section introduces our training framework
+to assist the NMT model during inference.
+                                                       INK. The key idea of the proposed approach is
+Memorize representations into datastore                    2
+                                                           By default, the last decoder layer’s output is used as
+Specifically, we feed training example (X, Y ) in      the contextualized representation of the translation context
+C into M in a teacher-forcing manner (Williams         (X, Y<t ).
+Figure 2: (a) Overview of our proposed training framework. (b) Illustration of how the three learning objectives
+encourage the refinement of the representation space. “repr.” and “emb.” denotes the contextualized representation
+and token embedding respectively. First, we align the contextualized representation and its target embedding to
+keep semantic meanings. We then align the contextualized representations of a target token and align the extract
+kNN representations to address the issues of sparsely dispersing.
+
+
+to use kNN knowledge to smooth the representa-             3.2 Align Contextualized Representations and
+tion space. The training process is built on a cycled          kNN Token Embeddings
+loop: extracting kNN knowledge to adjust represen-         Previous research in kNN-MT has shown that the
+tations via a small adapter. The updated parameters        nearest neighbors in the representation space can
+are then used to refresh and refine the datastore to       produce better estimation via aggregating kNN
+get new kNN knowledge. We define three kinds of            neighbors (Khandelwal et al., 2021; Zheng et al.,
+alignment loss to adjust representations, which are        2021; Yang et al., 2022). Apart from the refer-
+described in Section 3.1, Section 3.2, and Section         ence target token, the retrieval results provide some
+3.3. An illustration of the proposed framework is          other reasonable translation candidates. Taking the
+shown in Figure 2.                                         translation case in Figure 2 as an example, retrieval
+                                                           results provide three candidate words, where both
+3.1   Align Contextualized Representations and             “happens” and “occurs” are possible translations.
+      Token Embeddings                                     Compared with the basic one-hot supervision sig-
+The basic way to optimize the adapter to minimize          nal, the diverse kNN knowledge in the datastore
+the KL divergence between the NMT system’s pre-            can be beneficial for building a representation space
+diction probability pnmt and the one-hot golden dis-       with more expressive abilities.
+tribution pgold :                                              Therefore, we extract kNN knowledge by using
+                                                           the contextualized representation ht to query the
+      Lat = DKL [ pgold (y|X, Y<t ) ∥ pnmt (y|X, Y<t ) ]   datastore for nearest neighbors Nk = {(ĥ, ŷ)}k1
+                      (w,v)∈E 1(v = yt )κ(ht , w)
+                   P
+                                                           (illustrated in Fig. 2). For more stable training, we
+          = − log
+                                                           reformulate the computation process of kNN distri-
+                         P
+                            (w,v)∈E κ(ht , w)
+                                                           bution as kernel density estimation (KDE) (Parzen,
+where E is the embedding matrix. w and v denote            1962).
+the token embedding and its corresponding token
+                                                           Formulation The general idea of KDE is to esti-
+respectively. ht denotes the contextualized repre-
+                                                           mate the probability density of a point by referring
+sentation h(X, Y<t ). yt denotes the target token.
+               T                                           to its neighborhood, which shares the same spirit
+κ(ht , w) = eht w . Following the widely-accepted
+                                                           with kNN-MT. The computation of kNN distribu-
+alignment-and-uniformity theory (Wang and Isola,
+                                                           tion can be written as:
+2020), this learning objective aligns the contextual-
+                                                                                                1(y = ŷ)κ(ht , ĥ)
+                                                                                   P
+ized representation ht with the tokens embedding                                   (ĥ,ŷ)∈Nk
+                                                              pknn (y|X, Y<t ) =                                      (4)
+of its corresponding target token.
+                                                                                       P
+                                                                                        (ĥ,ŷ)∈Nk κ(ht , ĥ)
+

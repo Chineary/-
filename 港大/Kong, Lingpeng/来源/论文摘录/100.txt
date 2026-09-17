@@ -1,0 +1,204 @@
+                                                      C O NT: Contrastive Neural Text Generation
+
+
+                                            Chenxin An1,2∗, Jiangtao Feng2 , Kai Lv1 , Lingpeng Kong2,3 , Xipeng Qiu1 , Xuanjing Huang1,4
+                                                                1
+                                                                  Fudan University, 2 Shark-NLP Shanghai AI Laboratory
+                                                                             3
+                                                                               The University of Hong Kong
+                                                     4
+                                                       Shanghai Collaborative Innovation Center of Intelligent Visual Computing
+                                                                {cxan20, klv21, xpqiu, xjhuang}@fudan.edu.cn
+                                                                   fengjiangtao@pjlab.org.cn, lpk@cs.hku.hk
+
+
+
+
+arXiv:2205.14690v4 [cs.CL] 3 Feb 2023
+                                                                                          Abstract
+                                                      Recently, contrastive learning attracts increasing interests in neural text generation
+                                                      as a new solution to alleviate the exposure bias problem. It introduces a sequence-
+                                                      level training signal which is crucial to generation tasks that always rely on auto-
+                                                      regressive decoding. However, previous methods using contrastive learning in
+                                                      neural text generation usually lead to inferior performance. In this paper, we analyse
+                                                      the underlying reasons and propose a new Contrastive Neural Text generation
+                                                      framework, C O NT. C O NT addresses bottlenecks that prevent contrastive learning
+                                                      from being widely adopted in generation tasks from three aspects – the construction
+                                                      of contrastive examples, the choice of the contrastive loss, and the strategy in
+                                                      decoding. We validate C O NT on five generation tasks with ten benchmarks,
+                                                      including machine translation, summarization, code comment generation, data-
+                                                      to-text generation and commonsense generation. Experimental results show that
+                                                      C O NT clearly outperforms the conventional training framework on all the ten
+                                                      benchmarks with a convincing margin. Especially, C O NT surpasses previous the
+                                                      most competitive contrastive learning method for text generation, by 1.50 BLEU
+                                                      on machine translation and 1.77 ROUGE-1 on summarization, respectively. It
+                                                      achieves new state-of-the-art on summarization, code comment generation (without
+                                                      external data) and data-to-text generation. 2
+
+
+                                        1        Introduction
+                                        Contrastive learning has achieved great success in representation learning [6, 44, 45]. It also attracts
+                                        enormous interests in neural text generation recently. By creating positive and negative examples in
+                                        response to unseen (or erroneous) inputs [23], contrastive learning offers a new solution to alleviate
+                                        the exposure bias problem [3, 35] – an autoregressive model trained only using the ground truths
+                                        exhibits inferior generalization performance. Apart from that, contrastive learning also introduces a
+                                        sequence-level loss in addition to the conventional token-level language model loss with maximum
+                                        likelihood estimation (MLE). This is crucial to most conditional text generation tasks (e.g., machine
+                                        translation and summarization) which are evaluated on sequence-level metrics (e.g., BLEU [32]).
+                                        However, it is non-trivial to get contrastive learning working on neural text generation. If we simply
+                                        use from-batch positive-negative samples following simCLR [6], and adopt the InfoNCE loss [13, 45]
+                                        which ignores the difference between negative samples (§2.2; Naive CL), the improvement over
+                                        non-contrastive baselines on generation tasks is rather marginal. Previous work attempts to build
+                                        better contrastive samples by disturbing the ground truth [10, 23, 30] in the discrete space or the
+                                        continuous embedding space, but when it comes to text generation tasks, their performance gains are
+                                        still far from satisfactory.
+                                             ∗
+                                                 This work was done during Chenxin An’s internship at Shanghai AI Laboratory
+                                             2
+                                                 The code is available at https://github.com/Shark-NLP/CoNT
+
+
+                                        36th Conference on Neural Information Processing Systems (NeurIPS 2022).
+                                                                                                            Ground truth
+                                      Ground truth                                                 <bos> leave that up to us
+                               <bos> leave that up to us
+
+
+
+
+                                                                                                                                       self-generated samples
+                                                                                                       <bos> leave that quiet to us
+                                                                  Encoder-Decoder
+
+
+
+      from-batch samples
+                                  <bos> um , my brand ?
+                                                                                                   <bos> leave that quiet down
+
+                                <bos> this is frightening                                              <bos> let's take that quietly
+
+                              <bos> they sell certificates       überlassen sie das ruhig uns              from-batch samples
+
+                           Decoder input of naive method                Encoder input                  Decoder input of our method
+
+Figure 1: A case study from IWSLT’14 De-En translation task. The naive setting uses from-batch
+samples following SimCLR [6]. Compared with the naive method, C O NT both incorporates self-
+generated samples and from-batch samples. The border color indicates the acutual distance between
+the ground truth and the contrastive example.
+
+
+In this work, we propose a new contrastive neural text generation framework, C O NT. C O NT does
+three different things from previous frameworks that make suboptimal use of contrastive learning.
+First, C O NT samples contrastive examples from its own predictions (e.g., through beam search
+algorithm). This training procedure exposes the model to its mistakes in the inference stage and
+effectively alleviate the exposure bias problem. We show a comparison between negative samples
+in C O NT and in Naive CL in Figure 1. Second, we use a N-pairs contrastive loss which gives a
+fine-grained treatment to the contrastive examples based on their sequence-level scores (e.g., BLEU).
+It allows the model to fully leverage the supervision from the ground truth example (and its own
+generated examples) to learn a better sequence-level distance function between the source and the
+target representation. Third, we directly incorporate the learned sequence similarity score from the
+distance function into the inference stage. This helps the model to find a better global configuration,
+than merely follows the language model likelihood objective in decoding.
+We validate C O NT on various important conditional language generation tasks (§4.2), including
+machine translation, summarization, code comment generation, data-to-text generation, and common-
+sense generation. Extensive experiments demonstrate that C O NT greatly improve the conventional
+MLE baselines and significantly outperforms all previous contrastive generation models. C O NT
+establishes new state-of-the-art results on summarization, code comment generation (without external
+data), and data-to-text generation. Particularly, on data-to-text generation and commonsense gen-
+eration, C O NT achieves on-par performance with the powerful large pre-trained models: T5-large,
+T5-3B [36] with only the base version of T5 while maintaining the efficiency of lightweight models.
+
+2     Background
+2.1       Neural Conditional Text Generation
+
+A neural sequence-to-sequence model [43] M = (f, g) generates the target sequence conditioning
+on a source sequence, where f and g denote the encoder and decoder, respectively. It is typically
+trained using the language model objective with the maximum likelihood estimation (MLE). Given
+a source sequence x = {xi }M                                     N
+                            i=0 and its target sequence y = {yi }i=0 , we minimize the following
+negative log likelihood (NLL) loss:
+                                                                        N
+                                                                        X
+                                                             LNLL = −         log pθ (yt |x, y <t ).                                                            (1)
+                                                                        t=1
+
+At training stage, it predict the next word based on previous ground truth input y <t ∈ y, but at
+inference stage, tokens of y <t are predicted by itself, this introduces the exposure bias.
+
+2.2       Naive Contrastive Learning for Text Generation
+
+Contrastive text generation introduces a contrastive term in addition to the original NLL loss. In
+Naive CL, we simply follows SimCLR [6] and use from-batch negative samples B in the InfoNCE
+loss [13, 45]:
+
+
+                                                                               2
+                                                                             from-batch samples
+
+                Decoder                     zy       zy                zB      Training obj           Decoding obj
+
+                                                                                                            sim=0.37
+                                                                                                     zy'
+         <bos> leave that up to us                                                                                zx
+                                                                                 pair-wise
+                                                     zy''              zy'    contrastive loss       zy''   sim=0.23
+                Encoder                     zx
+                                                       <bos> leave that quiet to us, p =0.48      score= 0.48 + 0.37
+
+
+        überlassen sie das ruhig uns                   <bos> let's take that quietly, p =0.53     score= 0.53 + 0.23
+                                       beam search
+                                                        zy'     zy''
+Figure 2: An overview of C O NT. zx , zy is the representation of source sequence x and its target
+sequence y. y 0 and y 00 with their representations zy0 , zy00 are returned by beam search algorithm.
+The feature representations come from pooling the output of the encoder (source sequence) or decoder
+(target sequence). Our training objective is obtained by comparing by all contrastive samples in pair.
+The decoding objective not only considers the likelihood of each sequence, but also the sequence
+similarity score modeled in training.
+
+
+
+                                                              exp(cos(zx , zy )/τ )
+                                   LNCE = − log P                                       ,                              (2)
+                                                                 exp(cos(zx , zy0 )/τ )
+                                                            y 0 ∈B
+
+where zx , zy , zy0 ∈ Rd denote the vector representation of input x, ground truth y and negative
+sample y 0 ∈ B, respectively. τ is the temperature and cos(·, ·) defines the cosine similarity. Intuitively,
+the contrastive loss LNCE seeks to learn a similarity function that drives the distance between the
+source sequence representation zx and its ground-truth target sequence representation zy closer.
+
+3     Method
+In this section, we present our new contrastive neural text generation framework, C O NT . C O NT ad-
+vances the Naive CL (§2.2) in three aspects. First, C O NT uses negative examples from its own
+predictions (§3.1) to construct the set B. Second, C O NT replaces the InfoNCE loss (Eq.2) with a
+N-pairs contrastive loss (Eq.3) which leverages a finer-grained supervision given by the the sequence-
+level scores of all pairs (§3.2). Third, C O NT incorporates the learned similarity function into its
+inference score directly (§3.3). An overview of our approach can be found in Figure 2.
+
+3.1   Contrastive Examples from Predictions
+
+Instead of only using contrastive examples from the same batch [6], we propose to add new contrastive
+examples from the model’s own predictions. Kalkstein et al. [18] point that using diverse contrastive
+samples helps the generalization ability of the model. Therefore, we use the diverse beam search
+algorithm [49] to create contrastive examples from the top-K list of the model’s lastest predictions and
+then append them to the from-batch samples to form the contrastive examples. A warm-up stage where
+the model is only supervised by LNLL is recommended as it guarantees the quality of the examples
+from the model’s prediction. These self-generated contrastive examples alleviate the model’s exposure
+bias. Besides, with the model’s performance improving gradually, this approach creates high-quality
+hard negative examples that is known to be important in contrastive learning [16, 37].
+
+3.2   N-Pairs Contrastive Loss
+
+One major drawback of the InfoNCE loss is that it has the same treatment for all negative samples. In
+text generation, this means that the relative difference between the ground truth and the contrastive
+examples is ignored, while this can be easily quantified using a sequence level score (e.g. BLEU) and
+the quality of these contrastive examples varies. To mitigate this problem, we propose to employ a
+pair-wise margin loss. We first rank all the contrastive examples based on an oracle function o(·, y),
+which computes a sequence-level score with the ground truth y. Given a input sequence x, the
+ground truth y, and a set of K contrastive samples B = {y 1 , y 2 , · · · , y K }, we can create a series
+
+
+                                                                 3
+

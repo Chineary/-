@@ -1,0 +1,191 @@
+                                                 SNCSE: Contrastive Learning for Unsupervised Sentence Embedding
+                                                                    with Soft Negative Samples
+                                                Hao Wang†,‡ , Yangguang Li‡ , Zhen Huang† , Yong Dou† , Lingpeng Kong§ , Jing Shao‡
+                                                                    †
+                                                                       National University of Defense Technology
+                                                                                     ‡
+                                                                                       SenseTime
+                                                                            §
+                                                                              The University of Hong Kong
+                                                                      {wanghao2, liyangguang}@sensetime.com
+
+
+
+
+arXiv:2201.05979v3 [cs.CL] 2 Mar 2022
+                                                                Abstract                              downstream fine-tuning. However, it seems that they may
+                                                                                                      fail to product appropriate sentence embedding to reflect the
+                                            Unsupervised sentence embedding aims to obtain            semantic [Reimers and Gurevych, 2019; Li et al., 2020;
+                                            the most appropriate embedding for a sentence to          Yan et al., 2021]. Recently, contrastive learning has been at-
+                                            reflect its semantic. Contrastive learning has been       tracting developing attention for unsupervised sentence em-
+                                            attracting developing attention. For a sentence, cur-     bedding [Yan et al., 2021; Gao et al., 2021; Wu et al., 2021].
+                                            rent models utilize diverse data augmentation meth-       Contrastive learning firstly comes from computer vision field
+                                            ods to generate positive samples, while consider          [He et al., 2020; Chen et al., 2020a; Chen et al., 2020b]. The
+                                            other independent sentences as negative samples.          main idea is to utilize diverse data augmentation methods to
+                                            Then they adopt InfoNCE loss to pull the embed-           generate positive pairs, while take two independent samples
+                                            dings of positive pairs gathered, and push those          as negative pairs, and then adopt InfoNCE loss [Oord et al.,
+                                            of negative pairs scattered. Although these mod-          2018] to pull the embeddings of positive pairs gathered, and
+                                            els have made great progress on sentence embed-           push those of negative pairs scattered.
+                                            ding, we argue that they may suffer from feature
+                                            suppression. The models fail to distinguish and
+                                            decouple textual similarity and semantic similar-
+                                            ity. And they may overestimate the semantic sim-
+                                            ilarity of any pairs with similar textual regardless
+                                            of the actual semantic difference between them.
+                                            This is because positive pairs in unsupervised con-
+                                            trastive learning come with similar and even the
+                                            same textual through data augmentation. To alle-
+                                            viate feature suppression, we propose contrastive
+                                            learning for unsupervised sentence embedding with
+                                            soft negative samples (SNCSE). Soft negative sam-                      (a) Spatial positions of different samples.
+                                            ples share highly similar textual but have surely and
+                                            apparently different semantic with the original sam-
+                                            ples. Specifically, we take the negation of origi-
+                                            nal sentences as soft negative samples, and propose
+                                            Bidirectional Margin Loss (BML) to introduce
+                                            them into traditional contrastive learning frame-
+                                            work, which merely involves positive and nega-                        (b) Textual sentences of different samples.
+                                            tive samples. Our experimental results show that
+                                            SNCSE can obtain state-of-the-art performance on          Figure 1: Spatial positions and textual sentences of different sam-
+                                            semantic textual similarity (STS) task with aver-         ples.Previous unsupervised models aim to pull positive pairs gath-
+                                            age Spearman’s correlation coefficient of 78.97%          ered, and push negative pairs scattered. The positive sample may
+                                            on BERTbase and 79.23% on RoBERTabase . Be-               share the same textual with the original one with different em-
+                                            sides, we adopt rank-based error analysis method          bedding through cutoff [Yan et al., 2021] or dropout [Gao et al.,
+                                            to detect the weakness of SNCSE for future study.         2021], while the negative one is totally another independent sen-
+                                                                                                      tence. SNCSE tries to take the negation of original sentences as soft
+                                                                                                      negative samples, and introduces them into traditional contrastive
+                                        1   Introduction                                              learning framework through BML loss.
+                                        Pretrained language models, e.g. BERT [Devlin et al., 2019]
+                                        and RoBERTa [Liu et al., 2019], have shown excellent per-       Unsupervised sentence embedding takes similar strategy.
+                                        formance on several natural language processing tasks with    As shown in Figure 1, positive pairs may share the same tex-
+Figure 2: SNCSE framework. InfoNCE loss is utilized to distinguish positive samples from negative samples, while bidirectional margin loss
+is utilized to distinguish positive samples from soft negative samples. SNCSE does not contrast soft negative samples and negative samples
+due to the unsure relationship between these two.
+
+
+tual but have different embeddings through cutoff [Yan et al.,         results indicate that SNCSE has learned to distinguish a sen-
+2021] or dropout [Gao et al., 2021], while negative pairs will         tence and its negation for the alleviation of feature suppres-
+come from two independent sentences which share less tex-              sion. Besides, we adopt rank-based error analysis method to
+tual. In this condition, we argue that this will lead to feature       detect the weakness of SNCSE for future study. Our code and
+suppression, which has been discussed deeply in vision field           models1 have been released for the development of the field.
+[Robinson et al., 2021; Chen et al., 2021]. That is, the models
+fail to distinguish and decouple textual similarity and seman-         2       SNCSE Framework
+tic similarity. As a result, they may overestimate the seman-          As shown in Figure 2, in SNCSE framework, InfoNCE loss
+tic similarity of any pairs with similar textual regardless of         is utilized to distinguish positive samples from negative sam-
+the actual semantic difference between them. And the mod-              ples, while bidirectional margin loss is utilized to distinguish
+els may underestimate the semantic similarity of pairs with            positive samples from soft negative samples. SNCSE does
+less words in common. (Please refer to Section 5 for several           not contrast soft negative samples and negative samples, since
+instances and detailed analysis.) To alleviate feature suppres-        it is difficult to clarify the relationship between them.
+sion, we take following issues into consideration:                         In SNCSE, we take the negation of the original sentences
+   • whether there exist some easily available samples, which          as soft negative samples. Specifically, the negated sentences
+have highly similar textual but surely and apparently differ-          are generated through a rule-based method. Specifically, we
+ent semantic with the original samples                                 utilize Spacy tools2 to parse the sentence to obtain the depen-
+   • how to introduce these samples into the traditional con-          dency syntax tree of the sentence, and the pos tag as well as
+trastive learning framework to enhance unsupervised sen-               the stem of each token. Then according to this information,
+tence embedding, where the traditional framework only in-              we convert the sentences to its negation with correct syntax
+volves pure positive and negative samples                              and clear semantic. We mainly focus on explicit negation
+   We call these samples soft negative sample. Here neg-               with negation words, which converts the original sample to
+ative means they have different semantics with the original            “Tom and Jerry did not become good friends”. However, we
+samples, while soft means they have high textual similarity            do not consider implicit negation based on antonym, which
+with the original samples and cannot be merely considered              may convert the original sample to “Tom and Jerry became
+as pure negative samples like other independent sentences.             bad friends”.
+Moreover, we propose contrastive learning for unsupervised                 Formally, in SNCSE, for a sentence, let X, X + , X # re-
+sentence embedding with soft negative samples (SNCSE).                 spectively denote the original sample, positive sample and
+The framework takes the negation of original sentences as              soft negative sample. Here, X and X + share the same tex-
+soft negative samples, and proposes bidirectional margin loss          tual. Inspired by recent studies on prompt learning [Ding et
+(BML) to model the semantic difference between positive                al., 2021; Yao et al., 2021; Liu et al., 2021], the three samples
+samples and soft negative samples, which both have highly              are encoded with pretrained language models, e.g. BERT and
+similar textual with the original samples. In this way, SNCSE          RoBERTa, within different prompts3 :
+can learn to distinguish and decouple textual similarity and
+                                                                                  T he sentence : ” X ” means [M ASK].
+semantic similarity, and thus alleviate feature suppression.
+   We conduct our experiments on semantic textual similarity                    T he sentence of ” X + ” means [M ASK].               (1)
+(STS) task. Our experimental results show that our SNCSE                        T he sentence of ” X    #
+                                                                                                            ” means [M ASK].
+framework can achieve state-of-the-art performance on the
+task with diverse pretrained encoders, where average Spear-                1
+                                                                             https://github.com/Sense-GVT/SNCSE
+man’s correlation coefficient are respectively 78.97% for                  2
+                                                                             https://spacy.io/
+BERTbase , 80.19% for BERTlarge , 79.23% for RoBERTabase                   3
+                                                                             We are also inspired by PromptBERT, which has been under
+and 81.77% for RoBERTalarge . Moreover, our ablation study             review but withdrawn on OpenReview.net.
+  We take the hidden state of the special [MASK] token                   similarity (STS) task. STS task aims to measure the se-
+h[M ASK] as the embedding h of the corresponding sample.                 mantic similarity of sentence pairs, and is one of the most
+During training, like SimCSE [Gao et al., 2021], we add an               widely used benchmark datasets for evaluation of unsuper-
+MLP layer with nonlinear activation function on h[M ASK] to              vised sentence embedding. The task include 7 subtasks in
+obtain h:                                                                total, which are respectively STS 12-16, STS-B, and SICK-R
+               h = T anh(M LP (h[M ASK] ))              (2)              [Agirre et al., 2012; Agirre et al., 2013; Agirre et al., 2014;
+                                                                         Agirre et al., 2015; Agirre et al., 2016; Cer et al., 2017;
+   InfoNCE loss is utilized to distinguish positive samples              Marelli et al., 2014]. Each subtask contains several sentence
+from negative samples:                                                   pairs, and the semantic similarity of a sentence pair is labeled
+                                                    +                    as a number between 0.0 and 5.0, where higher score means
+                            ecos sim(hi ,hi )/τ
+         LInf oN CE = −log N                                       (3)   higher semantic similarity. The detailed information of these
+                           P cos sim(hi ,h+ )/τ                          subtasks are summarized in Table 1. During evaluation, we
+                              e              j
+
+                                  j=1                                    calculate cosine similarity of each pair, and focus on the test
+                                                                         sets. For a pair, golden semantic similarity ranges from 0.0 to
+where cos sim means cosine similarity, τ means temperature               5.0, while cosine similarity ranges from -1.0 to 1.0. To deal
+factor, while N means batch size.                                        with the range difference, rank-based Spearman’s correlation
+   Then we calculate the cosine similarity difference ∆ be-              coefficient is adopted.
+tween positive pairs and soft negative pairs:
+                                                                                 Task     STS12       STS13        STS14        STS15
+         ∆ = cos sim(hi , h#                   +
+                           i ) − cos sim(hi , hi )                 (4)           train       0           0            0            0
+and propose bidirectional margin loss (BML) to model the                          dev        0           0            0            0
+semantic similarity difference:                                                   test     3108        1500         3750         3000
+                                                                                 Task     STS16       STS-B       SICK-R
+        LBM L = ReLU (∆ + α) + ReLU (−∆ − β)                       (5)           train       0         5749         4500
+                                                                                  dev        0         1500          500
+BML loss aims to constraint ∆ within this interval:                               test     1186        1379         4927
+                        ∆ ∈ [−β, −α]                               (6)
+                                                                                      Table 1: Statistic information of STS task.
+where α and β respectively means the bottom and upper se-
+mantic similarity difference between positive pairs and soft                Specifically, for a subtask with n sentence pairs, we first
+negative pairs.                                                          sort the golden similarity to obtain the golden rank RG for
+   Finally, the total loss is the weighted summary of InfoNCE            each sentence pair. And we also calculate and sort estimated
+loss and bidirectional margin loss:                                      cosine similarity to obtain estimated rank RE for each pairs.
+                                                                         Then, rank-based Spearman’s correlation coefficient ρ for the
+            LSN CSE = LInf oN CE + λLBM L                          (7)   subtask is defined as:
+                                                                                                        n
+                                                                                                              i     i 2
+                                                                                                      P
+where the weight λ reflects the importance of soft negative                                                (RE   − RG )
+samples, and also adjusts the form difference of these two                                  ρ=1−      i=1
+                                                                                                                                   (10)
+                                                                                                          1    3
+loss functions.                                                                                           6 (n − n)
+   For comparison, we also consider to ignore soft negative              Here ρ ranges from -1.0 to 1.0, where higher value means
+samples, and merely take the negations as pure positive sam-             more advanced sentence embedding and semantic compre-
+ples, or pure negative samples. The corresponding positive               hension ability of the model. We calculate Spearman’s cor-
+loss PL and negative loss NL are respectively:                           relation coefficient ρ for each subtask independently and take
+                              +                                #         the average of ρ on all subtasks as main evaluation metric.
+             ecos sim(hi ,hi )/τ        ecos sim(hi ,hi )/τ                 Moreover, we conduct rank-based error analysis to detect
+LP L = −log N                    − log N
+            P cos sim(hi ,h+ )/τ       P cos sim(hi ,h# )/τ              the weakness of our SNCSE. For each sentence pair, we
+               e              j           e              j
+                                                                         roughly4 take the rank difference between RG and RE :
+             j=1                                  j=1
+                                                                                                      i       i 2
+                                                                   (8)                             (RE    − RG   )                 (11)
+                                                                         as the semantic estimation error of the pair. Then we focus
+                                              +                          on sentences pairs with the most severe semantic estimation
+                               ecos sim(hi ,hi )/τ                       error for further analysis.
+ LN L = −log                            N
+                                                                  (9)
+                               #                            +
+                 cos sim(h   ,h  )/τ
+                                        P      cos sim(h  ,h  )/τ
+               e           i   i     +       e          i   j            3.2    Experiment Setup
+                                        j=1
+                                                                         Our framework is implemented through Pytorch 1.8.0 and
+                                                                         hugging face transformers5 . All our experiments are con-
+3     Experiments                                                        ducted on a computation node with Nvidia A100 GPUs. For
+3.1    Evaluation Metric                                                     4
+                                                                               Here the rank difference of a pair is related to not only the pair
+Following previous works [Yan et al., 2021; Gao et al., 2021;            itself, but also other pairs of the same subtask.
+                                                                             5
+Wu et al., 2021], we evaluate SNCSE on semantic textual                        https://huggingface.co
+

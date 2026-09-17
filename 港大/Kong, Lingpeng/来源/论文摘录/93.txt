@@ -1,0 +1,216 @@
+                                         Published as a conference paper at ICLR 2023
+
+
+
+
+                                         D IFFU S EQ : S EQUENCE TO S EQUENCE
+                                         T EXT G ENERATION WITH D IFFUSION M ODELS
+                                          Shansan Gong1 , Mukai Li1 , Jiangtao Feng1 , Zhiyong Wu1 , Lingpeng Kong2
+                                          1
+                                            Shark-NLP, Shanghai AI Laboratory 2 The University of Hong Kong
+                                          {gongshansan,limukai,fengjiangtao,wuzhiyong}@pjlab.org.cn
+                                          lpk@cs.hku.hk
+
+
+
+                                                                                       A BSTRACT
+
+
+
+
+arXiv:2210.08933v3 [cs.CL] 14 Feb 2023
+                                                     Recently, diffusion models have emerged as a new paradigm for generative mod-
+                                                     els. Despite the success in domains using continuous signals such as vision and
+                                                     audio, adapting diffusion models to natural language is under-explored due to
+                                                     the discrete nature of texts, especially for conditional generation. We tackle this
+                                                     challenge by proposing D IFFU S EQ: a diffusion model designed for sequence-
+                                                     to-sequence (S EQ 2S EQ) text generation tasks. Upon extensive evaluation over
+                                                     a wide range of S EQ 2S EQ tasks, we find D IFFU S EQ achieving comparable or
+                                                     even better performance than six established baselines, including a state-of-the-
+                                                     art model that is based on pre-trained language models. Apart from quality, an
+                                                     intriguing property of D IFFU S EQ is its high diversity during generation, which
+                                                     is desired in many S EQ 2S EQ tasks. We further include a theoretical analysis re-
+                                                     vealing the connection between D IFFU S EQ and autoregressive/non-autoregressive
+                                                     models. Bringing together theoretical analysis and empirical evidence, we demon-
+                                                     strate the great potential of diffusion models in complex conditional language gen-
+                                                     eration tasks. 1
+
+
+                                         1       I NTRODUCTION
+                                         Among existing generative models, GAN (Goodfellow et al., 2014) suffers from the instability
+                                         issue (Salimans et al., 2016), subjecting to mode collapse (Metz et al., 2017); VAE (Kingma &
+                                         Welling, 2014) has to rely on surrogate objectives to approximate maximum likelihood training and
+                                         Flow-based models (Dinh et al., 2017) has to use specialized architectures to construct reversible
+                                         transform. Diffusion models (Ho et al., 2020; Nichol & Dhariwal, 2021) have circumvented sev-
+                                         eral of these limitations and emerged as a new paradigm for generative models, theoretically un-
+                                         derpinned by non-equilibrium thermodynamics (Sohl-Dickstein et al., 2015) and score-matching
+                                         network (Song & Ermon, 2019). To date, the major breakthroughs are in domains using continuous
+                                         signals, such as vision (Saharia et al., 2022a;b; Ramesh et al., 2022) and audio (Kong et al., 2020).
+                                         However, extending continuous diffusion models to natural language remains an open challenge due
+                                         to the inherently discrete nature of texts.
+                                         On the basis of unconditional generation in continuous space which is illustrated in Figure 1(a), ex-
+                                         isting efforts (Hoogeboom et al., 2021; Austin et al., 2021) start customizing diffusion models to text
+                                         in discrete space on unconditional language modeling (i.e., free text generation). Diffusion-LM (Li
+                                         et al., 2022), as in Figure 1(b), models texts in continuous space and proposes to use an extra-trained
+                                         classifier as guidance (i.e., the condition signal x) to impose subtle changes (usually complex, fine-
+                                         grained constraints) on generated sentences. Nonetheless, these models do not naturally generalize
+                                         to conditional language modeling (i.e., the model assigns probabilities p(w|x) to sequences of words
+                                         w given x). In the more general sequence-to-sequence (S EQ 2S EQ) setting where the condition x is
+                                         also a sequence of words, applying Diffusion-LM can be difficult. The reason is that classifiers are
+                                         attributes-oriented, and we can not train hundreds-of-thousands classifiers to model the semantic
+                                         meaning between conditions and generated sentences.
+                                         S EQ 2S EQ is an essential setting in NLP that covers a wide range of important tasks such as open-
+                                         ended sentence generation, dialogue, paraphrasing, and text style transfer. In this paper, we propose
+                                             1
+                                                 Code is available at https://github.com/Shark-NLP/DiffuSeq
+
+
+                                                                                             1
+Published as a conference paper at ICLR 2023
+
+
+
+
+      t=T              t=T/2             t=0                 t=T                   t=T/2                  t=0
+
+
+
+
+                                                (a) (b)
+                                                (c)
+                                                             forward process 𝑞(⋅)           reverse process 𝑝𝜃 (⋅)
+                                                          conditional signals  hidden space of texts    guidance
+
+                                                      (a) Unconditional Gaussian diffusion process in continuous space
+                                                      (b) Classifier-guided diffusion process (Diffusion-LM)
+                                                      (c) Classifier-free diffusion guided by points in space (DiffuSeq)
+      t=T              t=T/2             t=0
+
+
+Figure 1: The demonstration of unconditional, classifier-guided, and classifier-free diffusion models.
+
+
+D IFFU S EQ, depicted in Figure 1(c), a classifier-free diffusion model that supports S EQ 2S EQ text
+generation tasks. By modeling the conditional probability of the target sentence w given context x
+using one single model, one advantage of D IFFU S EQ is that this paradigm allows a complete model
+to fit data distribution and utilize conditional guidance, rather than depending on a separate classifier.
+Different from canonical generation approaches in an autoregressive (AR) left-to-right manner (Rad-
+ford et al., 2019), D IFFU S EQ generates text tokens parallelly in the non-autoregressive (NAR) way.
+To corroborate the effectiveness of our D IFFU S EQ, we conduct experiments on four S EQ 2S EQ tasks.
+Compared to AR and NAR models, which suffer from the “degeneration” problem (Holtzman et al.,
+2019) and rely on decoding strategies, D IFFU S EQ can achieve considerable sentence-level diversity
+without sacrificing the quality (see § 4.2).
+To sum up, we make a series of technical and conceptual contributions: (a) we are the first to
+deploy the diffusion model on S EQ 2S EQ text generation, and our proposed D IFFU S EQ as a condi-
+tional language model is trained end-to-end in a classifier-free manner; (b) we establish a theoretical
+connection among AR, NAR and D IFFU S EQ models, and justify D IFFU S EQ as an extension of
+iterative-NAR models; (c) with strong empirical evidence, we demonstrate the great potential of
+diffusion models in complex conditional language generation tasks.
+
+2    P RELIMINARY AND P ROBLEM S TATEMENT
+Preliminary. A diffusion model typically contains forward and reverse processes. Given a data
+point sampled from a real-world data distribution z0 ∼ q(z), the forward process gradually cor-
+rupts z0 into a standard Gaussian noise zT ∼ N (0,√I). For each forward step t ∈ [1, 2, ..., T ], the
+perturbation is controlled by q(zt |zt−1 ) = N (zt ; 1 − βt zt−1 , βt I), with βt ∈ (0, 1) as differ-
+ent variance scales. Once the forward process is completed, the reverse denoising process tries to
+gradually reconstruct the original data z0 via sampling from zT by learning a diffusion model fθ .
+
+Problem Statement. Many recent efforts have been devoted to adapting diffusion models to dis-
+crete texts (See § 5). However, they all focus on unconditional sequence modeling. In this paper,
+we target the sequence-to-sequence text generation tasks. In particular, given a m-length source
+                           x
+sequence wx = {w1x , ..., wm }, we aim to learn a diffusion model that can produce a n-length target
+             y      y      y
+sequence w = {w1 , ..., wn } conditioning on the source sequence.
+
+3    D IFFU S EQ
+We propose D IFFU S EQ to extend vanilla diffusion models to learn conditional text generation (as
+shown in Figure 2), concerning the model architecture and the training objective.
+
+Forward Process with Partial Noising. In the beginning of forward process, we follow Diffusion-
+LM (Li et al., 2022) to design an embedding function E MB(w) to map the discrete text w into a
+continuous space. In particular, given a pair of sequence wx and wy , D IFFU S EQ learns a unified
+
+
+                                                      2
+Published as a conference paper at ICLR 2023
+
+
+
+
+  Reverse process            Forward process              Gaussian Noise                 Rounding
+
+                                                                                                                     How long was
+                                         𝑝𝜃 (z𝑡−1 |z𝑡 )                                 𝑝𝜃 (w|z0 )           w𝑥      the trip?
+                      …                                              …
+                                                                                                             w𝑦         It was a year.
+                                         𝑞(z𝑡 |z𝑡−1 )                                   𝑞𝜙 (z0 |w)
+           z𝑇                       z𝑡                    z𝑡−1                 z0                                 E.g. Open-Domain Dialogue
+                                                                                    Embedding map
+
+  Partial Gaussian Noise                                                Word Embeddings               Text        Sequence to Sequence
+
+
+Figure 2: The diffusion process of our conditional diffusion language model D IFFU S EQ. Given the
+source wx and the target wy , we pair-wisely transform them into continuous space z0 . The partial
+Gaussian noise is iteratively added on the target space of zt .
+
+
+feature space of wx and wy by embedding transformation and concatenation as E MB(wx⊕y ) =
+[E MB(w1x ), ..., E MB(wm
+                        x
+                          ), E MB(w1y ), ..., E MB(wny )] ∈ R(m+n)×d . The transformation allows us to
+adapt discrete textual input into the standard forward process, by extending the original forward
+chain to a new Markov transition qφ (z0 |wx⊕y ) = N (E MB(wx⊕y ), β0 I).
+We denote zt = xt ⊕ yt to simplify the wordings, where xt and yt represent parts of zt that belong
+to wx and wy , respectively. For each forward step q(zt |zt−1 ), we gradually inject noise into last
+step’s hidden state zt−1 to obtain zt . Unlike conventional diffusion models that corrupt the whole
+zt (both xt and yt ) without distinction, we only impose noising on yt . This modification (termed
+partial noising) allows us to adapt diffusion models for conditional language modeling.
+
+Reverse Process with Conditional Denoising. The ultimate goal of the reverse process is to
+                                                                       QT
+recover the original z0 by denoising zt : pθ (z0:T ) := p(zT ) t=1 pθ (zt−1 |zt ). We model the
+learning process pθ (zt−1 |zt ) = N (zt−1 ; µθ (zt , t), σθ (zt , t)) using the proposed diffusion model
+D IFFU S EQ: fθ (zt , t), where the µθ (·) and σθ (·) is the parameterization of the predicted mean and
+standard deviation of q(zt−1 |zt ) in forward process, derived using Bayes’ rule. The detailed deriva-
+tions are in Appendix A. With the partial nosing strategy adopted in the forward process, we can
+impose the input as the condition when denoising as shown in Figure 1. The proposed conditional
+denoising is classifier-free by nature: we do not require extra-trained classifiers to control the de-
+noising process.
+Specifically, we use a transformer architecture to model fθ , which spontaneously models the se-
+mantic relation between xt and yt . We compute the variational lower bound (LVLB ) following the
+original diffusion process. Lround corresponds to rounding operation in Figure 2.
+                                                          "        T
+                                                      q(zT |z0 ) X        q(zt−1 |z0 , zt )
+                             LVLB = Eq(z1:T |z0 ) log            +    log
+                                                       pθ (zT )            pθ (zt−1 |zt )
+                                                  |     {z      } t=2 |        {z         }
+                                                                   LT                                Lt−1
+                                                                                                #                                             (1)
+                                           qφ (z0 |wx⊕y )
+                                     + log                 − log pθ (wx⊕y |z0 ) .
+                                             pθ (z0 |z1 )
+                                       |       {z         } |        {z      }
+                                                   L0                          Lround
+We further simplify the training objective as follows (details in Appendix A):
+                    " T                                                                              #
+                      X
+                                              2           x⊕y                  2            x⊕y
+ min LVLB = min           ||z0 − fθ (zt , t)|| + ||E MB(w     ) − fθ (z1 , 1)|| − log pθ (w     |z0 )
+    θ                    θ
+                               t=2
+                             " T                                                                   #
+                              X
+                → min                      ˜            2          y    ˜            2           2
+                                    ||y0 − fθ (zt , t)|| + ||E MB(w ) − fθ (z1 , 1)|| + R(||z0 || ) ,                                         (2)
+                     θ
+                              t=2
+
+here we use f˜θ (zt , t) to denote the fractions of recovered z0 corresponding to y0 . Note that al-
+though in the first term, we only compute the loss w.r.t y0 , due to the attention mechanism in the
+transformer, the reconstruction of y0 also takes x0 into account, thus the gradients from the first term
+
+
+                                                                        3
+

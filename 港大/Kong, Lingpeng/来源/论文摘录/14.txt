@@ -1,0 +1,189 @@
+        Better Document-Level Machine Translation with Bayes’ Rule
+
+                      Lei Yu1 , Laurent Sartran1 , Wojciech Stokowiec1 ,
+                   Wang Ling1 , Lingpeng Kong1 , Phil Blunsom1,2 , Chris Dyer1
+
+                                            1
+                         DeepMind, 2 University of Oxford
+       {leiyu, lsartran, wstokowiec, lingwang, lingpenk, pblunsom,
+                             cdyer}@google.com
+
+
+                       Abstract                                            et al., 2018), and how to use them for conditional
+                                                                           generation applications remains an open question.
+   We show that Bayes’ rule provides an effective
+   mechanism for creating document translation                                Our hypothesis in this work is that Bayes’ rule
+   models that can be learned from only paral-                             provides an effective way to leverage powerful
+   lel sentences and monolingual documents—a                               unconditional document language models to im-
+   compelling benefit because parallel documents                           prove a conditional task: machine translation.
+   are not always available. In our formulation,                           The application of Bayes’ rule to transform the
+   the posterior probability of a candidate transla-
+                                                                           translation modeling problem p(y | x), where y is
+   tion is the product of the unconditional (prior)
+   probability of the candidate output document                            the target language, and x is the source language,
+   and the ‘‘reverse translation probability’’ of                          has a long tradition and was the dominant para-
+   translating the candidate output back into the                          digm in speech and language processing for many
+   source language. Our proposed model uses a                              years (Brown et al., 1993), where it is often called a
+   powerful autoregressive language model as                               ‘‘noisy channel’’ decomposition, by analogy to an
+   the prior on target language documents, but it                          information theoretic conception of Bayes’ rule.
+   assumes that each sentence is translated inde-
+   pendently from the target to the source lan-                               Whereas several recent papers have demon-
+   guage. Crucially, at test time, when a source                           strated that the noisy channel decomposition has
+   document is observed, the document language                             benefits when translating sentences one-by-one
+   model prior induces dependencies between                                (Yu et al., 2017; Yee et al., 2019; Ng et al., 2019),
+   the translations of the source sentences in the                         in this paper we show that this decomposition is
+   posterior. The model’s independence assump-                             particularly suited to tackling the problem of trans-
+   tion not only enables efficient use of available
+                                                                           lating complete documents. Although using cross-
+   data, but it additionally admits a practical
+   left-to-right beam-search algorithm for carry-
+                                                                           sentence context and maintaining cross-document
+   ing out inference. Experiments show that our                            consistency has long been recognized as essen-
+   model benefits from using cross-sentence con-                           tial to the translation problem (Tiedemann and
+   text in the language model, and it outperforms                          Scherrer, 2017; Bawden et al., 2018, inter alia),
+   existing document translation approaches.                               operationalizing this in models has been challeng-
+                                                                           ing for several reasons. Most prosaically, parallel
+                                                                           documents are not generally available (whereas
+1 Introduction                                                             parallel sentences are much more numerous),
+There have been many recent demonstrations that                            making direct estimation of document translation
+neural language models based on transformers                               probabilities challenging. More subtly, documents
+(Vaswani et al., 2017; Dai et al., 2019) are capa-                         are considerably more diverse than sentences, and
+ble of learning to generate remarkably coherent                            models must be carefully biased so as not to pick
+documents with few (Zellers et al., 2019) or no                            up spurious correlations.
+(Radford et al., 2019) conditioning variables.                                Our Bayes’ rule decomposition (§2) permits
+Despite this apparent generation ability, in prac-                         several innovations that enable us to solve these
+tical applications, unconditional language models                          problems. Rather than directly modeling the
+are most often used to provide representations                             conditional distribution, we rewrite it as p(y |
+for natural language understanding applications                            x) ∝ p(y) × p(x | y ). This changes the learn-
+(Devlin et al., 2019; Yang et al., 2019; Peters                            ing problem from estimating a single complex
+                                                                     346
+
+         Transactions of the Association for Computational Linguistics, vol. 8, pp. 346–360, 2020. https://doi.org/10.1162/tacl a 00319
+                     Action Editor: David Chiang. Submission batch: 12/2019; Revision batch: 2/2020; Published 6/2020.
+                           c 2020 Association for Computational Linguistics. Distributed under a CC-BY 4.0 license.
+conditional distribution to learning two different        ing long sequences like documents, our condi-
+distributions: a language model p(y ), which              tional sentence independence assumptions allow
+provides unconditional estimates of the output            us to use any sequence-to-sequence model as the
+(in this paper, documents); and p(x | y ), which          channel model, making it a better option for
+provides the probability of translating a candidate       document-level translation.
+output y into the (observed) source document x.              To explore the performance of our proposed
+   As we will discuss subsequently, although the          model, we focus on Chinese–English translation,
+problems of estimating p(y | x) and p(x | y )             following a series of papers on document trans-
+are formally similar, independence assumptions            lation (Zhang et al., 2018; Werlen et al., 2018;
+made in p(x | y ) are less statistically costly than      Tu et al., 2018; Xiong et al., 2019). Although
+they might otherwise be since, at test time, we           in general it is unreasonable to expect that inde-
+will be conditioning on x and reasoning about a           pendent translations of sentences would lead to
+posterior distribution over y , which will be jointly     coherent translations of documents, the task of
+dependent on all (conditionally independent) parts        translating Chinese into English poses some
+of x. This statistical fact—which is the same             particularly acute challenges. As Chinese makes
+trick that gives naı̈ve Bayes classifiers their           fewer inflectional distinctions than English does,
+expressiveness and ease of estimation—permits             and the relevant clues for predicting, for example,
+us to assume independence between sentence                what tense an English verb should be in, or
+translations in the reverse translation model, and        whether an English noun should have singular
+therefore to use parallel sentences (rather than          or plural morphology, may be spread throughout a
+parallel documents) to train it. In the posterior, we     document, it is crucial that extra-sentential context
+thus have an implicit estimate of a document-level        is used.
+translation system, even though we made no use               Our experiments (§4) explore: (1) different
+of parallel documents when estimating the prior           approaches to reranking, (2) different indepen-
+or likelihood models. This is particularly useful         dence assumptions when modeling documents
+because parallel sentences are much more readily          (i.e., whether sentences are generated indepen-
+available than parallel documents. A second               dently or not), (3) different amounts of language
+benefit of our approach is that the unconditional         modeling data, and (4) different proposal models.
+language model can be estimated from nonparallel          Briefly summarized, we find that document-
+data, which exists in vast quantities.                    context language models significantly improve the
+   Although the noisy channel model is ideal for          translation quality obtained with our system, both
+exploiting the data resources that naturally exist        in terms of BLEU scores, and in terms of a human
+in the world (large corpora of parallel but inde-         evaluation. Targeted error analysis demonstrates
+pendent sentences, and large corpora of mono-             the document prior is capable of enforcing con-
+lingual documents), we are faced with a much              sistency of tense and number and lexical choice
+harder decoding problem (§3). To address this             across documents.
+problem, we propose a new beam-search algo-
+rithm, exploiting the fact that our document lan-
+                                                          2 Model Description
+guage model operates left-to-right, and our reverse
+translation model treats sentences independently.         We define x = (x1 , x2 , . . . , xI ) as the source
+The search is guided by a proposal distribution that      document with I sentences, and similarly, y =
+provides candidate continuations of a document            (y1 , y 2 , . . . , y J ) as the target document with J
+prefix, and these are reranked according to the           sentences. During the (human) translation process,
+posterior distribution. In particular, we compare         translators may split or recombine sentences, but
+two proposal models: one based on estimates of            we will assume that I = J .1 Let xi = (xi1 , xi2 ,
+independent sentence translations (Vaswani et al.,        . . . , xiM ) represent the ith sentence in the docu-
+2017) and one that conditions on the source doc-          ment, consisting of M words; likewise y i =
+ument context (Zhang et al., 2018). Although              (y1i , y2i , . . . , yN
+                                                                                i
+                                                                                  ) denote the ith sentence in the
+closely related, our algorithm is much simpler and        target document, containing N words.
+faster than that proposed in Yu et al. (2017). Rather        1
+                                                               Size mismatches are addressed by merging sentences
+than using a specially designed channel model             using sentence alignment algorithms (Gale and Church,
+(Yu et al., 2016) which is limited in process-            1993).
+
+
+                                                    347
+  The translation of a document x is determined
+by finding the document ŷ , where p(ŷ | x) is
+optimal.
+
+              ŷ = arg max p(y | x).                        (1)
+                               y
+
+
+   Instead of modeling the probability p(y | x)
+directly, we factorize it using Bayes’ rule:
+
+                       p( x | y ) × p( y )
+    ŷ = arg max
+                 y            p(x)
+                                                            (2)
+      = arg max p(x | y ) ×                p( y )       .
+             y  | {z }                     |{z}
+                      channel model    language model
+
+We further assume that sentences are indepen-
+dently translated, and that the sentences are gener-
+ated by a left-to-right factorization according to
+the chain rule. Therefore, we have
+                 |x|                                                    Figure 1: Graphical model showing the factorization
+                 Y                                                      of our noisy channel model where y i indicates the ith
+ ŷ ≈ arg max              p(xi | y i ) × p(yi | y <i ), (3)
+             y                                                          target language sentence and xi indicates the ith source
+                     i=1
+                                                                        language sentence. In the prior (top) the target sentences
+                                                                        (the y i ’s) only influence the corresponding source
+where y <i = (y 1 , . . . , y i−1 ) denotes a docu-
+                                                                        sentence and therefore can be learned and modeled
+ment prefix consisting of the first i − 1 target                        independently, but at test time (bottom), when the
+sentences. Thus conceived, this is a generative                         target is not observed, each y i depends on every xi .
+model of parallel documents that makes a partic-
+ular independence assumption; we illustrate the
+corresponding graphical model on the top of                             statistical impact of making a conditional inde-
+Figure 1.                                                               pendence assumption is quite different. This
+                                                                        is fortunate, as it makes it straightforward to
+2.1 Impact of the Conditional Independence                              use parallel sentences, rather than assuming we
+    Assumption                                                          have parallel documents, which are less often
+                                                                        available (Voita et al., 2019b; Zhang et al., 2018;
+At first glance, the conditional independence
+                                                                        Maruf et al., 2019, inter alia). Finally, because
+assumption we have made might seem to be
+                                                                        we only need to learn to model the likelihood
+the very independence assumption that bedevils                          of sentence translations (rather than document
+conventional sentence-based approaches to docu-                         translations), the challenges of guiding the learners
+ment translation—translations of sentence i ap-                         to make robust generalizations in direct document
+pear to be uninfluenced by the translation of any                       translation models (Voita et al., 2019b; Zhang
+sentence j 6= i. However, although this is the case                     et al., 2018; Maruf et al., 2019, inter alia) are
+during training, this is not the case at test time.                     neatly avoided.
+Then, we will be conditioning on the xi ’s (the
+source language sentences), and reasoning about
+                                                                        2.2 Learning
+the posterior distribution over the ‘‘underlying’’
+y i ’s. By conditioning on the child variables, condi-                  We can parameterize the channel probability p(xi
+tional dependencies between all y i ’s and between                      | y i ) using any sequence-to-sequence model and
+each y i and all xi ’s are created (Shachter, 1998).                    parameterize the language model p(y i | y <i )
+The (in)dependencies that are present in the                            using any language model. It is straightforward to
+posterior distribution are shown in the bottom                          learn our model: We simply optimize the channel
+of Figure 1.                                                            model and the language model separately on
+    Thus, although modeling p(y | x) or p(x | y )                       parallel data and monolingual data, respectively.
+would appear to be superficially similar, the                           We remark that it is a significant practical
+
+                                                                  348
+

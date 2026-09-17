@@ -1,0 +1,231 @@
+                                                                   DoPE: Denoising Rotary Position Embedding
+
+                                                                   Jing Xiong1 * , Liyang Fan3* , Hui Shen2 , Zunhai Su1 ,
+                                                                     Min Yang3† , Lingpeng Kong1 , and Ngai Wong1
+                                                            1
+                                                              The University of Hong Kong 2 University of Michigan, Ann Arbor
+                                                       3
+                                                         Shenzhen Institute of Advanced Technology, Chinese Academy of Sciences
+                                                    Contact: junexiong@connect.hku.hk      Project: https://The-physical-picture-of-LLMs.github.io
+
+
+
+
+                                                                   Abstract                            implicitly captures positional relationships. Inter-
+                                                                                                       estingly, this implicit encoding can lead to mas-
+                                                Positional encoding is essential for large lan-
+                                                                                                       sive activations (Sun et al., 2024; Jin et al., 2025),
+
+
+
+
+arXiv:2511.09146v2 [cs.CL] 6 Jan 2026
+                                                guage models (LLMs) to represent sequence
+                                                order, yet recent studies show that Rotary Po-         a behavior closely tied to the attention sink phe-
+                                                sition Embedding (RoPE) can induce massive             nomenon (Xiao et al., 2024). Yet how explicit po-
+                                                activation. We investigate the source of these         sitional encodings, especially RoPE, interact with
+                                                instabilities via a spectral analysis of RoPE, and     this implicit positional bias and shape massive acti-
+                                                show that its low-frequency components con-            vations remains poorly understood (Jin et al., 2025;
+                                                centrate structured energy, producing low-rank,        Wu et al., 2025).
+                                                over-aligned attention patterns. We theoreti-
+                                                                                                          Following these observations, recent studies
+                                                cally reveal that this low-frequency alignment
+                                                manifests as activation noise, degrading stabil-       have questioned the necessity of explicit positional
+                                                ity during long-context extrapolation. To miti-        encoding, proposing alternatives such as learn-
+                                                gate this effect, we introduce Denoising Rotary        able feature maps applied directly to the attention
+                                                Position Embedding (D O PE), a training-free           map (Zheng et al., 2024, 2025) or even removing
+                                                method that identifies and suppresses noisy at-        positional encoding entirely (NoPE) (Haviv et al.,
+                                                tention heads using truncated matrix entropy,          2022; Wang et al., 2024; Ji et al., 2025). These re-
+                                                then reparameterizes their attention maps with         sults challenge the necessity of explicit positional
+                                                an isotropic Gaussian distribution. Across a
+                                                                                                       encoding and suggest that causal attention may
+                                                range of settings, D O PE improves length ex-
+                                                trapolation performance without fine-tuning, in-       implicitly provide strong length extrapolation ca-
+                                                creases robustness to perturbations, and boosts        pability when paired with an appropriate feature
+                                                both needle-in-a-haystack and many-shot in-            map. However, the attention-sink puzzle remains:
+                                                context learning tasks. These results suggest          how the features induce the attention sink, and their
+                                                that selective positional encoding is key to ro-       underlying mechanism is still unclear. In this work,
+                                                bust extrapolation.                                    we investigate how RoPE injects massive activa-
+                                        1       Introduction                                           tions across heads and introduces structured noise
+                                                                                                       into the attention map, which manifests as the at-
+                                        Positional encoding is a core component of large               tention sink phenomenon.
+                                        language models (LLMs): it is added to query and                  We formalize this view by treating the attention
+                                        key vectors to represent token order and shape                 map as a noisy feature map through the lens of
+                                        interactions among tokens. Among many ap-                      truncated matrix entropy (Xiong et al., 2024). This
+                                        proaches (Press et al., 2021; Chen et al., 2023b;              perspective lets us detect heads dominated by mas-
+                                        Su et al., 2024; Peng et al., 2023; Wang et al.,               sive activations and analyze how RoPE contributes
+                                        2021), Rotary Position Embedding (RoPE) (Su                    to their emergence. We then suppress positional
+                                        et al., 2024) is widely used because it encodes rel-           encoding selectively based on truncated matrix en-
+                                        ative positions within dot-product attention and               tropy and reparameterize the corresponding feature
+                                        often extrapolates well to longer contexts. While              maps using an isotropic Gaussian distribution, im-
+                                        RoPE provides an explicit mechanism for encoding               proving stability in length extrapolation. Specifi-
+                                        token order, recent work has shown that causal at-             cally, our main contributions are as follows:
+                                        tention itself (Gu et al., 2024; Köcher et al., 2025)              • We propose D O PE, a training-free denoising
+                                            * Equal contribution                                             scheme for RoPE that selectively suppresses
+                                            †
+                                                Corresponding author                                         positional encoding and theoretically reveal
+      how positional encoding shapes massive acti-        2022). Nevertheless, multiple studies (Haviv et al.,
+      vation and attention sink                           2022; Zuo et al., 2024; Köcher et al., 2025; Wu
+    • We introduce truncated matrix entropy to iden-      et al., 2024) suggest that causal attention can im-
+      tify heads dominated by massive activations         plicitly capture token order information. The No
+      and reparameterize their attention maps with        Positional Encoding (NoPE) approach (Kazemne-
+      an isotropic Gaussian distribution.                 jad et al., 2023) argues that the causal mask it-
+    • We show that RoPE’s low-frequency align-            self provides sufficient relative position cues, en-
+      ment induces attention heads with long-range        abling position-aware behavior without explicit po-
+      dependency capability, while extrapolative          sitional embeddings. Zuo et al. (2024) further show
+      heads are intrinsically low-rank and benefit        that such information can emerge through embed-
+      from preserved positional encoding.                 ding similarity, while Wang et al. (2024) argue that
+                                                          these implicit cues may be insufficient for robust
+2     Related Work                                        length generalization. This paper therefore exam-
+                                                          ines when positional information should be applied
+We review length extrapolation methods based on
+                                                          selectively to improve extrapolation.
+RoPE variants, as well as approaches that extrapo-
+late without explicit positional encodings.               3     Denoising Rotary Position Embedding
+2.1    Length Extrapolation with RoPE
+                                                          In this section, we first review RoPE and NoPE. We
+RoPE (Su et al., 2024) is widely adopted be-              then analyze how RoPE induces attention sink un-
+cause it encodes relative positions directly in dot-      der the cone constraint, which motivates our use of
+product space and often exhibits strong extrapola-        a hybrid architecture combining NoPE and RoPE.
+tion. RoPE and its variants are integrated into open-     Finally, we describe how to identify and remove
+source LLM families, including LLaMA (Touvron             the corresponding frequency components to miti-
+et al., 2023; Dubey et al., 2024), Qwen (Team,            gate anomalies in attention maps. This process is
+2024; Yang et al., 2025), Mistral (Jiang et al., 2023),   referred to as denoising.
+and Gemma (Team et al., 2024, 2025).
+   However, when input sequences exceed the train-        3.1    Preliminary
+ing length (Peng et al., 2023; Chen et al., 2023a;        In this section, we briefly review the RoPE and
+Ding et al., 2024), performance can degrade sub-          NoPE method separately.
+stantially. This limitation is not unique to RoPE;
+similar behavior is observed with other relative          RoPE. Let the per-head width be dh . Split a
+positional encodings such as ALiBi (Press et al.,         head into dh /2 complex components by pairing
+2021) and Kerple (Chi et al., 2022).                      dimensions (2f, 2f +1). The frequency band index
+   Notably, several of these extensions modify            f ∈ {0, . . . , dh /2−1} enumerates the dh /2 two-
+RoPE at inference time without any training, e.g.,        dimensional subspaces, each corresponding to a
+by rescaling or interpolating the rotary frequencies.     distinct rotation frequency. For an integer position
+                                                                                            d /2−1
+Prior work extends positional encodings in several        i and a frequency schedule {θf }fh=0 (with base
+ways, including interpolation-based (Li et al., 2023;     b>1), define the per-band rotation phase θi,f and
+Chen et al., 2023c) and NTK-based methods (Chen           the corresponding 2 × 2 rotation matrix
+et al., 2023a; Peng et al., 2023; bloc97, 2023b,a;                                                  
+emoZilla, 2023), which adjust positional scaling or                             cos θi,f − sin θi,f
+                                                                   R(θi,f ) =                          .    (1)
+the frequency spectrum to enlarge the effective con-                             sin θi,f   cos θi,f
+text. Another line of research (Chen et al., 2023a;
+                                                            The full rotation operator is then the block-
+Ding et al., 2024) adopts continuous formulations
+                                                          diagonal matrix
+of positional encodings, modeling them as differ-
+ential processes to support length extrapolation.             R(θi ) = diag(R(θi,0 ), . . . , R(θi,dh /2−1 )).   (2)
+2.2    Length Extrapolation without Explicit
+                                                          A common choice of frequency schedule is θf =
+       Positional Encoding
+                                                          b−2f /dh . For any positions i, j, RoPE rotates
+Positional encodings are often viewed as impor-           queries and keys as
+tant for sequence awareness and model expressiv-
+ity (Shaw et al., 2018; Yun et al., 2019; Luo et al.,            QR
+                                                                  i = R(θi )Qi ,          KR
+                                                                                           j = R(θj )Kj .        (3)
+                                                                                    RoPE        Denoised Head                Denoised NTK
+
+                            Head Selection                                      K for Head 2
+                                                                                                     Mask NTK at
+                                                                                                                             K for Head 2                                                Denoising
+                                                                                                 Low Frequency Indices
+                                                         …                     Q for Head 2                                  Q for Head 2    𝑐𝑜𝑠 𝜃0              sin 𝜃0            Mask dimension of frequencies i       1           0
+
+                                                                                                                                …
+        Q for Head 1   Q for Head 2       Q for Head 3       Q for Head n
+                                                                                    …
+                                                                                                                             K for Head 3
+                                                                                                                                                                                                    2𝜋
+                             Applied Dynamic NTK                               K for Head 3                                                                                             𝜃=
+                                                                                                                                                  𝑐𝑜𝑠 𝜃𝑖                  sin 𝜃𝑖             training_length         𝑐𝑜𝑠 𝜃𝑖       sin 𝜃𝑖
+                             Position Embedding
+                                                                               Q for Head 3                                  Q for Head 3
+                                                                                                                                                                                 10           𝜃𝑖 < 𝜃
+                                                                                                                                                            𝑔 𝜃𝑖 = ቊ                                                  𝑔 𝜃𝑖    ~
+                                                                                                                                                                            cos 𝜃𝑖 sin 𝜃𝑖     𝜃𝑖 ≥ 𝜃
+                                                                     Head 2
+ Q for Head 1                    Head 1                    Low
+                                                         Entropy
+                                                                     …              RoPE       Extrapolated Head                  NTK
+
+                Truncated                                                      K for Head 2                                  K for Head 2       Unmasked Band                                Masked Band
+                                               Entropy               Head 3                                                                      cos 𝜃𝑖 sin 𝜃𝑖                                   10
+ Q for Head 2                    Head 2                                                                Keep NTK at
+                  ERank                         Rank                                              All Frequency Indices
+                                                                               Q for Head 2                                  Q for Head 2
+ Q for Head 3                    Head 3
+                                                                                   …                                              …          high-frequency                           low-frequency
+    …                            …                        High       …
+                                                                      Head 1
+                                                                                                                                                                                               freq < θ
+                                                                               K for Head 3                                  K for Head 3             freq ≥ θ
+ Q for Head n                    Head n                  Entropy
+                                                                      Head n                                                                                         DoPE-by-Parts                                    DoPE-by-Gaussian
+                                                                               Q for Head 3                                  Q for Head 3
+
+
+
+
+Figure 1: Visualization of DoPE. The blue dashed part illustrates how we select positional encodings for masking.
+
+
+For Qi,f , Kj,f ∈ Rdh denote the two-dimensional                                                                The rotation matrix R(θf ) is used to rotate the
+components of Qi and Kj obtained by pairing di-                                                                 band-wise matrix Kf by an angle θf .
+mensions (2f, 2f +1),                                                                                             Following the cone condition of Deshpande et al.
+                                                                                                                (2014), we define that within a low-frequency band,
+                                dh /2−1
+                                      X                                                                         the RoPE rotations stay within a narrow angular
+⟨QR    R
+  i , Kj ⟩ =                                        ⟨R(θi,f )Qi,f , R(θj,f )Kj,f ⟩                              cone. There exists a unit vector u and a half-angle
+                                      f =0                                                                             π
+                                                                                                                γK < such that
+                                dh /2−1
+                                      X                                                                                2
+                         =                          ⟨Qi,f , R(θj,f − θi,f )Kj,f ⟩,
+                                                                                                                          ⟨u, R(θf )KR         R
+                                                                                                                                     j,f ⟩ ≥ ∥Kj,f ∥cos γK , ∀f ∈ {1, . . . , dh /2},                                                      (6)
+                                      f =0
+                                                                                                (4)
+                                                                                                                where operator ∥·∥ denotes the Euclidean norm and
+so the attention logits depends on the relative posi-                                                           symbol ⟨·, ·⟩ represents the dot product. Intuitively,
+tional offset (j−i) while preserving the efficiency                                                             this means that the phase rotations do not wrap
+of the dot product.                                                                                             around the circle within the visible context, so all
+                                                                                                                projected queries and keys roughly align in the
+NoPE. In the NoPE method, positional encoding                                                                   same direction.
+is entirely removed from the attention computation.
+Queries and keys are learned solely from token                                                                  Lemma 3.1 (Spectral Amplification). Under the
+content without any explicit positional bias. Al-                                                               above cone condition, the band-wise Gram matrix
+though this avoids the attention sinks introduced by                                                            of a sequence with length N
+RoPE, it undoubtedly requires training the model                                                                                                                   N
+from scratch, which is computationally prohibitive.
+                                                                                                                                                                   X
+                                                                                                                                                                                          R ⊤
+                                                                                                                                            Σj,f =                                 KR
+                                                                                                                                                                                    i,f (Kj,f )                                            (7)
+Moreover, when and how RoPE should be trans-                                                                                                                       i=1
+formed into NoPE to prevent attention sinks re-
+mains theoretically unclear.                                                                                    captures how the frequency band f aligns around
+                                                                                                                key position j. Its top eigenvalue is bounded as
+3.2         Spectral Amplification of RoPE Bands
+In this section, we present our theoretical contri-
+                                                                                                                                             2
+butions. We analyze how the massive activations                                                                           λmax (Σj,f ) ≥ N βmin ∥KR      2   2
+                                                                                                                                                    j,f ∥ cos γK ,
+of low-frequency RoPE bands arise through their                                                                                                        √
+                                                                                                                            σ1 (KR               R
+                                                                                                                                  j,f ) ≥ βmin ∥Kj,f ∥ N cos γK , (8)
+band-wise Gram matrices, providing a theoreti-
+cal framework for understanding this underlying                                                                 where λmax (·) is the largest eigenvalue, and σ1 (·)
+“physical picture.”                                                                                             is the dominant singular value.
+Cone Constraint.                                   Consider projected keys
+                                                                                                                Massive Activation. This lemma characterizes
+   KR                                                               βf ≥ βmin > 0,                              that some stable directions are reinforced. As the
+    f = βf R(θf ) Kf ,                                                                          (5)
+                                                                                                                network depth increases, it leads to the accumu-
+where R(θf ) ∈ R2×2 is a rotation matrix by phase                                                               lation of large ℓ2 norms and resulting in massive
+θf and βmin denote the minimum scaling factors                                                                  activation. An analogous result holds for QR
+                                                                                                                                                           f , with
+associated with the query and key frequency bands.                                                              parameters (αmin , γQ ).
+

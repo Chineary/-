@@ -1,0 +1,174 @@
+                                                        DyNet: The Dynamic Neural Network Toolkit
+                                                  Graham Neubig∗†, Chris Dyer‡, Yoav Goldberg§, Austin Matthews∗,
+                                            Waleed Ammar¶, Antonios Anastasopoulos‖, Miguel Ballesteros∗∗, David Chiang‖,
+                                                   Daniel Clothiaux∗, Trevor Cohn††, Kevin Duh‡‡, Manaal Faruqui§§,
+                                           Cynthia Gan¶¶
+                                                       , Dan Garrette§§
+                                                                      , Yangfeng Ji∗∗∗
+                                                                                     , Lingpeng Kong∗, Adhiguna Kuncoro∗,
+
+
+
+
+arXiv:1701.03980v1 [stat.ML] 15 Jan 2017
+                                                   Gaurav Kumar, Chaitanya Malaviya∗, Paul Michel∗, Yusuke Oda†,
+                                                                 ‡‡
+
+                                             Matthew Richardson†††
+                                                                 , Naomi Saphra‡‡‡
+                                                                                 , Swabha Swayamdipta∗, Pengcheng Yin∗
+
+
+
+                                                                                         Abstract
+                                                    We describe DyNet, a toolkit for implementing neural network models based on dy-
+                                                namic declaration of network structure. In the static declaration strategy that is used in
+                                                toolkits like Theano, CNTK, and TensorFlow, the user first defines a computation graph
+                                                (a symbolic representation of the computation), and then examples are fed into an engine
+                                                that executes this computation and computes its derivatives. In DyNet’s dynamic dec-
+                                                laration strategy, computation graph construction is mostly transparent, being implicitly
+                                                constructed by executing procedural code that computes the network outputs, and the
+                                                user is free to use different network structures for each input. Dynamic declaration thus
+                                                facilitates the implementation of more complicated network architectures, and DyNet is
+                                                specifically designed to allow users to implement their models in a way that is idiomatic
+                                                in their preferred programming language (C++ or Python). One challenge with dynamic
+                                                declaration is that because the symbolic computation graph is defined anew for every
+                                                training example, its construction must have low overhead. To achieve this, DyNet has
+                                                an optimized C++ backend and lightweight graph representation. Experiments show that
+                                                DyNet’s speeds are faster than or comparable with static declaration toolkits, and signifi-
+                                                cantly faster than Chainer, another dynamic declaration toolkit. DyNet is released open-
+                                                source under the Apache 2.0 license, and available at http://github.com/clab/dynet.
+                                            ∗
+                                                Carnegie Mellon University, Pittsburgh, PA, USA
+                                            †
+                                                Nara Institute of Science and Technology, Ikoma, Japan
+                                              ‡
+                                                DeepMind, London, UK
+                                              §
+                                                Bar Ilan University, Ramat Gan, Israel
+                                              ¶
+                                                Allen Institute for Artificial Intelligence, Seattle, WA, USA
+                                              ‖
+                                                University of Notre Dame, Notre Dame, IN, USA
+                                            ∗∗
+                                                IBM T.J. Watson Research Center, Yorktown Heights, NY, USA
+                                             ††
+                                                University of Melbourne, Melbourne, Australia
+                                             ‡‡
+                                                Johns Hopkins University, Baltimore, MD, USA
+                                             §§
+                                                Google, New York, NY, USA
+                                            ¶¶
+                                                Google, Mountain View, CA, USA
+                                           ∗∗∗
+                                                University of Washington, Seattle, USA
+                                           †††
+                                                Microsoft Research, Redmond, WA, USA
+                                           ‡‡‡
+                                                University of Edinburgh, Edinburgh, UK
+
+
+
+
+                                                                                              1
+1    Introduction
+Deep neural networks are now an indispensable tool in the machine learning practitioner’s
+toolbox, powering applications from image understanding [39], speech recognition and syn-
+thesis [29, 65], game playing [45, 54], language modeling and analysis [6, 14], and more.
+To a first approximation, deep learning replaces the application-specific feature engineering
+(coupled with well-understood models) that is characteristic of classical “shallow” learning
+paradigms with application-specific model engineering (usually coupled with less sophisticated
+features of the inputs). The deep learning paradigm therefore entails ongoing development
+of new model variants. While developing effective models requires insight and analysis, it
+also requires implementing new models and assessing their performance on real tasks. Thus,
+rapid prototyping and easy maintenance of efficient and correct model code is of paramount
+importance in deep learning.
+     Deep learning models operate in two modes: they either compute a prediction (or distri-
+bution over predictions) given an input, or, at training time when supervision is available,
+they compute the derivatives of a prediction error “loss” with respect to model parameters
+which are used to minimize subsequent errors on similar inputs using some variant of gradi-
+ent descent. Since implementing a model requires both implementing the code that executes
+the model predictions as well as the code that carries out gradient computation and learn-
+ing, model development is a nontrivial engineering challenge. The difficulty of this challenge
+can be reduced by using tools that simplify implementation of neural network computations.
+These tools, including Theano [7], TensorFlow [1], Torch [13], CNTK [64], MxNet [10], and
+Chainer [62] provide neural network function primitives (e.g., linear algebra operations, non-
+linear transformations, etc.), parameter initialization and optimization routines, and usually
+the ability to express composite computations of a task-specific prediction and error that are
+then differentiated automatically to obtain the gradients needed to drive learning algorithms.
+This last automatic differentiation (autodiff) component is arguably their most important
+labor-saving feature since changes to the function that computes the loss for a training input
+will require a corresponding change in the computation of its derivative. If an engineer main-
+tains these code paths independently, it is easy for them to get out of sync. Furthermore, since
+the differentiation of composite expressions is algorithmically straightforward [63, 31], there
+is little downside to using autodiff algorithms in place of hand-written code for computing
+derivatives.
+     In short, these tools have made deep learning successful because they have effectively solved
+a crucial software engineering problem. The question remains though: since engineering is
+a key component of deep learning practice, what engineering problems are existing tools
+failing to solve? Do they let programmers express themselves naturally? Do they facilitate
+debugging? Do they facilitate the maintenance of large-scale projects?
+     In this paper, we suggest that the programming model that underlies several popular
+toolkits—namely a separation of declaration and execution of the network architecture (which
+we refer to as static declaration)—is necessarily associated with some serious software engi-
+neering risks, particularly when dealing with dynamically structured network architectures
+(e.g., sequences of variable lengths and tree-structured recursive neural networks). As an al-
+ternative, we propose as reviving an alternative programming model found in autodiff libraries
+that unifies declaration and execution.
+     As a proof of concept of our recommended programming model, we describe “DyNet: The
+
+
+                                                2
+Dynamic Neural Network Toolkit,” a toolkit based on a unified declaration and execution
+programming model which we call dynamic declaration.1
+    In a series of case-studies in a single-machine environment,2 we show that DyNet obtains
+execution efficiency that is comparable to static declaration toolkits for standard model ar-
+chitectures. For models that use dynamic architectures (e.g., where every training instance
+has a different model architecture), implementation is significantly simplified.
+
+
+2     Static Declaration vs. Dynamic Declaration
+In this section, we describe in more concrete terms the two paradigms of static declara-
+tion (§2.1) and dynamic declaration (§2.2) .
+
+2.1    Static Declaration
+Programs written in the static declaration paradigm (which is used by TensorFlow, Theano,
+and CNTK, among others) follow a two step process:
+
+Definition of a computational architecture: The user writes a program that defines the
+     “shape” of the computation they wish to perform. This computation is generally rep-
+     resented as a computation graph, which is a symbolic representation of a complex com-
+     putation that can both be executed and differentiated using autodiff algorithms. For
+     example, a user might define computation that performs image recognition such as:
+     “Take a 64x64 image represented as a matrix of brightness values, perform two layers of
+     convolutions, predict the class of the image out of 100 classes, and optionally calculate
+     the loss with respect to the correct label.”
+
+Execution of the computation: The user then repeatedly populates the 64x64 matrix
+    with data and the library executes the previously declared computation graph. The
+    predictions can then be used at test time, or at training time the loss can be calcu-
+    lated and back-propagated through the graph to compute the gradients required for
+    parameter updates.
+
+Static declaration has a number of advantages, the most significant of which is that after the
+computation graph is defined, it can be optimized in a number of ways so that the subsequent
+repeated executions of computation can be performed as quickly as possible, speeding training
+and test over large datasets. Second, the static computation graph can be used to schedule
+computation across a pool of computational devices [1]. Third, the static declaration paradigm
+benefits the toolkit designer: less efficient algorithms for graph construction and optimization
+can be used since this one-time cost will be amortized across many training instances at run
+time. These advantages are the reason why many popular libraries take this static declaration
+approach.
+    1
+      Available open-source under the Apache license at https://github.com/clab/dynet and documented at
+https://dynet.readthedocs.io.
+    2
+      Static declaration facilitates algorithmic distribution of computation across multiple devices, but our
+focus is in this paper is on the engineering challenges associated with rapid model prototyping. We discuss
+static declaration’s benefits with respect to scalability below, and we will return to the outlook for automatic
+distribution of dynamic computation across multiple devices in the conclusion.
+
+
+
+                                                       3
+

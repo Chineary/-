@@ -1,0 +1,193 @@
+Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser
+
+                Adhiguna Kuncoro♠ Miguel Ballesteros♦ Lingpeng Kong♠
+                               Chris Dyer♠♣ Noah A. Smith♥
+         ♠
+           School of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
+                    ♦
+                      NLP Group, Pompeu Fabra University, Barcelona, Spain
+                               ♣
+                                 Google DeepMind, London, UK
+         ♥
+           Computer Science & Engineering, University of Washington, Seattle, WA, USA
+                            {akuncoro,cdyer,lingpenk}@cs.cmu.edu
+                   miguel.ballesteros@upf.edu, nasmith@cs.washington.edu
+
+
+
+                       Abstract                                and Lavie, 2006) that seeks consensus among 20
+                                                               randomly-initialized stack LSTM parsers (Dyer et
+     We introduce two first-order graph-based de-              al., 2015), achieving nearly the best-reported per-
+     pendency parsers achieving a new state of the             formance on the standard Penn Treebank Stanford
+     art. The first is a consensus parser built from           dependencies task (94.51 UAS, 92.70 LAS).
+     an ensemble of independently trained greedy
+     LSTM transition-based parsers with different                 We give a probabilistic interpretation to the en-
+     random initializations. We cast this approach             semble parser (with a minor modification), viewing
+     as minimum Bayes risk decoding (under the                 it as an instance of minimum Bayes risk inference.
+     Hamming cost) and argue that weaker con-                  We propose that disagreements among the ensem-
+     sensus within the ensemble is a useful signal             ble’s members may be taken as a signal that an at-
+     of difficulty or ambiguity. The second parser
+                                                               tachment decision is difficult or ambiguous.
+     is a “distillation” of the ensemble into a sin-
+     gle model. We train the distillation parser                  Ensemble parsing is not a practical solution, how-
+     using a structured hinge loss objective with              ever, since an ensemble of N parsers requires N
+     a novel cost that incorporates ensemble un-               times as much computation, plus the runtime of find-
+     certainty estimates for each possible attach-             ing consensus. We address this issue in §5 by distill-
+     ment, thereby avoiding the intractable cross-
+                                                               ing the ensemble into a single FOG parser with dis-
+     entropy computations required by applying
+     standard distillation objectives to problems
+                                                               criminative training by defining a new cost function,
+     with structured outputs. The first-order distil-          inspired by the notion of “soft targets” (Hinton et al.,
+     lation parser matches or surpasses the state of           2015). The essential idea is to derive the cost of each
+     the art on English, Chinese, and German.                  possible attachment from the ensemble’s division of
+                                                               votes, and use this cost in discriminative learning.
+                                                               The application of distilliation to structured predic-
+1   Introduction                                               tion is, to our knowledge, new, as is the idea of em-
+Neural network dependency parsers achieve state of             pirically estimating cost functions.
+the art performance (Dyer et al., 2015; Weiss et                  The distilled model performs almost as well as
+al., 2015; Andor et al., 2016), but training them in-          the ensemble consensus and much better than (i)
+volves gradient descent on non-convex objectives,              a strong LSTM FOG parser trained using the con-
+which is unstable with respect to initial parameter            ventional Hamming cost function, (ii) recently pub-
+values. For some tasks, an ensemble of neural net-             lished strong LSTM FOG parsers (Kiperwasser and
+works from different random initializations has been           Goldberg, 2016; Wang and Chang, 2016), and (iii)
+found to improve performance over individual mod-              many higher-order graph-based parsers (Koo and
+els (Sutskever et al., 2014; Vinyals et al., 2015, in-         Collins, 2010; Martins et al., 2013; Le and Zuidema,
+ter alia). In §3, we apply this idea to build a first-         2014). It represents a new state of the art for graph-
+order graph-based (FOG) ensemble parser (Sagae                 based dependency parsing for English, Chinese, and
+
+                                                        1744
+
+     Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing, pages 1744–1753,
+                Austin, Texas, November 1-5, 2016. c 2016 Association for Computational Linguistics
+German. The code to reproduce our results is pub-              Let hy (m) denote the parent of xm in y (using a
+licly available.1                                            special null symbol when m is the root of the tree),
+                                                             and hy0 (m) denotes the parent of xm in the pre-
+2       Notation and Definitions                             dicted tree y 0 . Given two dependency parses of the
+                                                             same sentence, y and y 0 , the Hamming cost is
+Let x = hx1 , . . . , xn i denote an n-length sentence.
+A dependency parse for x, denoted y, is a set of                                  n 
+                                                                                  X   0 if hy (m) = hy0 (m)
+tuples (h, m, `), where h is the index of a head, m            CH (y, y 0 ) =
+                                                                                      1 otherwise
+the index of a modifier, and ` a dependency label                                 m=1
+(or relation type). Most dependency parsers are con-
+                                                             This cost underlies the standard dependency pars-
+strained to return y that form a directed tree.
+                                                             ing evaluation scores (unlabeled and labeled attach-
+   A first-order graph-based (FOG; also known as
+                                                             ment scores, henceforth UAS and LAS). More gen-
+“arc-factored”) dependency parser exactly solves
+                                                             erally, a cost function C maps pairs of parses for the
+                                  X                          same sentence to non-negative values interpreted as
+          ŷ(x) = arg max               s(h, m, x),   (1)
+                    y∈T (x)                                  the cost of mistaking one for the other, and a first-
+                              (h,m)∈y
+                              |         {z       }           order cost function (FOC) is one that decomposes
+                                      S(y,x)                 by attachments, like the Hamming cost.
+                                                                 Given a cost function C and a probabilistic model
+where T (x) is the set of directed trees over x, and         that defines p(y | x), minimum Bayes risk (MBR)
+s is a local scoring function that considers only a          decoding is defined by
+single dependency arc at a time. (We suppress de-
+                                                                                        X
+pendency labels; there are various ways to incorpo-          ŷ MBR (x) = arg min             p(y 0 | x) · C(y, y 0 )
+rate them, discussed later.) To define s, McDonald                                y∈T (x)
+                                                                                            y 0 ∈T (x)
+et al. (2005a) used hand-engineered features of the
+                                                                       = arg min Ep(Y |x) [C(y, Y )].                    (2)
+surrounding and in-between context of xh and xm ;                                 y∈T (x)
+more recently, Kiperwasser and Goldberg (2016)
+used a bidirectional LSTM followed by a single hid-          Under the Hamming cost, MBR parsing equates al-
+den layer with non-linearity.                                gorithmically to FOG parsing with s(h, m, x) =
+   The exact solution to Eq. 1 can be found using            p((h, m) ∈ Y | x), the posterior marginal of the
+a minimum (directed) spanning tree algorithm (Mc-            attachment under p. This is shown by linearity of
+Donald et al., 2005b) or, under a projectivity con-          expectation; see also Titov and Henderson (2006).
+straint, a dynamic programming algorithm (Eisner,               Apart from MBR decoding, cost functions are
+1996), in O(n2 ) or O(n3 ) runtime, respectively. We         also used for discriminative training of a parser. For
+refer to parsing with a minimum spanning tree algo-          example, suppose we seek to estimate the param-
+rithm as MST parsing.                                        eters θ of scoring function Sθ . One approach is
+   An alternative that runs in linear time is                to minimize the structured hinge loss of a training
+transition-based parsing, which recasts parsing as           dataset D with respect to θ:
+a sequence of actions that manipulate auxiliary data                 X
+structures to incrementally build a parse tree (Nivre,         min         [ − Sθ (y, x)
+                                                                θ
+2003). Such parsers can return a solution in a faster               (x,y)∈D
+                                                                                                                         
+O(n) asymptotic runtime. Unlike FOG parsers,                                  +     max         Sθ (y 0 , x) + C(y 0 , y) ]
+                                                                                   y 0 ∈T (x)
+transition-based parsers allow the use of scoring
+                                                                                                                         (3)
+functions with history-based features, so that attach-
+ment decisions can interact more freely; the best per-       Intuitively, this amounts to finding parameters that
+forming parser at the time of this writing employ            separate the model score of the correct parse from
+neural networks (Andor et al., 2016).                        any wrong parse by a distance proportional to the
+    1
+   https://github.com/adhigunasurya/                         cost of the wrong parse. With regularization, this is
+distillation_parser.git                                      equivalent to the structured support vector machine
+
+                                                      1745
+                                                                                        19
+(Taskar et al., 2005; Tsochantaridis et al., 2005),
+and if Sθ is (sub)differentiable, many algorithms
+are available. Variants have been used extensively                                             1
+
+in training graph-based parsers (McDonald et al.,
+                                                                       John saw the woman with a telescope
+2005b; Martins et al., 2009), which typically make
+use of Hamming cost, so that the inner max can be                  Figure 1: Our ensemble’s votes (20 models) on an am-
+solved efficiently using FOG parsing with a slightly               biguous PP attachment of with. The ensemble is nearly
+                                                                   but not perfectly unanimous in selecting saw as the head.
+revised local scoring function:
+                                                                                Model               UAS       LAS      UEM
+  0                             0 if (h, m) ∈ y
+ s (h, m, x) = s(h, m, x) +                                             Andor et al. (2016)          94.61     92.79        -
+                                1 otherwise
+                                                                        N = 1 (stack LSTM)           93.10     90.90    47.60
+                                                 (4)
+                                                                        ensemble, N = 5, MST         93.91     91.94    50.12
+Plugging this into Eq. 1 is known as cost-
+                                                                        ensemble, N = 10, MST        94.34     92.47    52.07
+augmented parsing.                                                      ensemble, N = 15, MST        94.40     92.57    51.86
+                                                                        ensemble, N = 20, MST        94.51     92.70    52.44
+3    Consensus and Minimum Bayes Risk
+                                                                   Table 1: PTB-SD task: ensembles improve over a strong
+Despite the recent success of neural network depen-
+                                                                   greedy baseline. UEM indicates unlabeled exact match.
+dency parsers, most prior works exclusively report
+single-model performance. Ensembling neural net-
+work models trained from different random start-                   Experiment. We consider this approach on the
+ing points is a standard technique in a variety of                 Stanford dependencies version 3.3.0 (De Marneffe
+problems, such as machine translation (Sutskever                   and Manning, 2008) Penn Treebank task. As noted,
+et al., 2014) and constituency parsing (Vinyals et                 the base parsers instantiate the greedy stack LSTM
+al., 2015). We aim to investigate the benefit of en-               parser (Dyer et al., 2015).3
+sembling independently trained neural network de-                    Table 1 shows that ensembles, even with small
+pendency parsers by applying the parser ensembling                 N , strongly outperform a single stack LSTM parser.
+method of Sagae and Lavie (2006) to a collection of                Our ensembles of greedy, locally normalized parsers
+N strong neural network base parsers.                              perform comparably to the best previously reported,
+   Here, each base parser is an instance of the                    due to Andor et al. (2016), which uses a beam (width
+greedy, transition-based parser of Dyer et al. (2015),             32) for training and decoding.
+known as the stack LSTM parser, trained from a
+different random initial estimate. Given a sen-                    4     What is Ensemble Uncertainty?
+tence x, the consensus FOG parser (Eq. 1) defines
+score s(h, m, x) as the number of base parsers that                While previous works have already demonstrated
+include the attachment (h, m), which we denote                     the merit of ensembling in dependency parsing
+votes(h, m).2 An example of this scoring function                  (Sagae and Lavie, 2006; Surdeanu and Manning,
+with an ensemble of 20 models is shown in Figure 1                 2010), usually with diverse base parsers, we con-
+We assign to dependency (h, m) the label most fre-                 sider whether the posterior marginals estimated by
+quently selected by the base parsers that attach m to              p̂((h, m) ∈ Y | x) = votes(h, m)/N can be in-
+h.                                                                 terpreted. We conjecture that disagreement among
+   Next, note that if we let s(h, m, x) =                          base parsers about where to attach xm (i.e., uncer-
+votes(h, m)/N , this has no effect on the parser (we               tainty in the posterior) is a sign of difficulty or am-
+have only scaled by a constant factor). We can there-                  3
+                                                                         We use the standard data split (02–21 for training, 22
+fore view s as a posterior marginal, and the ensemble              for development, 23 for test), automatically predicted part-
+parser as an MBR parser (Eq. 2).                                   of-speech tags, same pretrained word embedding as Dyer et
+                                                                   al. (2015), and recommended hyperparameters; https://
+    2
+      An alternative to building an ensemble of stack LSTM         github.com/clab/lstm-parser, each with a different
+parsers in this way would be to average the softmax decisions      random initialization; this differs from past work on ensembles,
+at each timestep (transition), similar to Vinyals et al. (2015).   which often uses different base model architectures.
+
+
+                                                            1746
+

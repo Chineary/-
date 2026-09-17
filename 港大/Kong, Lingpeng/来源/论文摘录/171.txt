@@ -1,0 +1,205 @@
+                        S AVOIR: Learning Social Savoir-Faire via Shapley-based
+                                         Reward Attribution
+
+            Xiachong Feng1 * , Yi Jiang2 * , Xiaocheng Feng2† , Deyi Yin2 , Libo Qin3 , Yangfan Ye2 ,
+          Lei Huang2 , Weitao Ma2 , Yuxuan Gu2 , Chonghan Qin1 , Bing Qin2 , Lingpeng Kong1†
+1
+  The University of Hong Kong 2 Harbin Institute of Technology 3 Harbin Institute of Technology, Shenzhen
+                        fengxc@hku.hk, xcfeng@ir.hit.edu.cn, lpk@cs.hku.hk
+
+
+
+                                 Abstract                               suasion, their ability to exhibit socially intelligent
+                                                                        behavior has attracted substantial research atten-
+               Social intelligence, the ability to navigate com-
+               plex interpersonal interactions, presents a fun-
+                                                                        tion (Zhou et al., 2024; Park et al., 2023; Yang
+               damental challenge for language agents. Train-           et al., 2024). Yet despite this growing interest,
+               ing such agents via reinforcement learning re-           improving the social intelligence of AI systems
+               quires solving the credit assignment problem:            remains challenging: social interactions are in-
+               determining how individual utterances con-               herently multi-turn, involve competing objectives
+               tribute to multi-turn dialogue outcomes. Exist-          between participants, and require nuanced under-
+               ing approaches directly employ language mod-             standing of how individual utterances contribute to
+               els to distribute episode-level rewards, yield-
+                                                                        long-term outcomes (Mathur et al., 2024; Li et al.,
+               ing attributions that are retrospective and lack
+               theoretical grounding. We propose S AVOIR                2024b).
+               (ShApley Value fOr SocIal RL), a novel                      Recent work has begun addressing these chal-
+               principled framework grounded in coopera-                lenges through reinforcement learning (RL) ap-
+               tive game theory. Our approach combines                  proaches. Wang et al. (2024) propose SOTOPIA-
+               two complementary principles: expected util-             π, which combines behavior cloning with self-
+               ity shifts evaluation from retrospective attribu-        reinforcement on ﬁltered interaction data. More
+               tion to prospective valuation, capturing an ut-
+                                                                        recently, Yu et al. (2025) introduce Sotopia-
+               terance’s strategic potential for enabling favor-
+               able future trajectories; Shapley values ensure
+                                                                        RL, which reﬁnes episode-level feedback into
+               fair credit distribution with axiomatic guaran-          utterance-level rewards by directly prompting an
+               tees of efﬁciency, symmetry, and marginal-               LLM for credit assignment. While Sotopia-RL
+               ity. Experiments on the SOTOPIA benchmark                demonstrates improved performance, its approach
+               demonstrate that S AVOIR achieves new state-             exhibits two fundamental limitations. First, the
+               of-the-art performance across all evaluation             credit assignment mechanism lacks theoretical
+               settings, with our 7B model matching or ex-              grounding; the LLM distributes rewards heuris-
+               ceeding proprietary models including GPT-4o
+                                                                        tically without principled guarantees of fairness
+               and Claude-3.5-Sonnet. Notably, even large
+               reasoning models consistently underperform,              or accuracy. Second, and more critically, the re-
+               suggesting social intelligence requires qualita-         ward model performs retrospective attribution: it
+               tively different capabilities than analytical rea-       assigns credit based on what an utterance con-
+               soning.1                                                 tributed to the observed outcome, rather than eval-
+                                                                        uating its strategic value for enabling favorable fu-
+       1       Introduction                                             ture trajectories. This distinction matters because
+       Social intelligence, the capacity to navigate com-               socially intelligent behavior often involves utter-
+       plex interpersonal interactions and achieve social               ances whose immediate contribution appears min-
+       goals, is fundamental to human cognition and                     imal but whose strategic positioning unlocks sub-
+       increasingly critical for artiﬁcial agents (Gweon                sequent success.
+       et al., 2023; Lee et al., 2024). As large language                  To address these limitations, we propose
+       models (LLMs) become integrated into applica-                    S AVOIR (ShApley Value fOr SocIal RL), a the-
+       tions requiring negotiation, collaboration, and per-             oretically grounded framework that reconceptual-
+           * Equal contribution.                                        izes credit assignment through two complemen-
+           †
+               Corresponding author.                                    tary principles from game theory. First, we adopt
+           1
+               Code: a SAVOIR                                           expected utility to shift the evaluation focus from
+                                                                    14276
+                           Findings of the Association for Computational Linguistics: ACL 2026, pages 14276–14290
+                                        July 2-7, 2026 ©2026 Association for Computational Linguistics
+retrospective attribution to prospective valuation.           Stage 1
+                                                            Data Collection
+                                                                                                   Stage 2
+                                                                                               Reward Modeling
+                                                                                                                                   Stage 3
+                                                                                                                                 Policy Training
+
+
+Rather than asking “what did this utterance con-               GPT
+                                                             Self-Play
+                                                                                      Reward
+                                                                                     Attribution
+                                                                                                                 SFT data
+                                                                                                                                   SFT
+                                                                                                                                  Warm-up
+tribute to the ﬁnal outcome?”, we ask “what is the                            τ, G
+
+
+expected value of future interactions given this ut-           Social                 Multi-Dim      rt          Reward     Rθ   Online RL
+                                                           Episodes {τi }            Aggregation                 Model            (GRPO)
+terance?” By computing expected outcomes over
+all possible partner responses and subsequent dia-
+                                                        Figure 1: Overview of the social agent training pipeline.
+logue trajectories, we capture an utterance’s strate-
+                                                        Stage 1: Collect social interaction episodes through
+gic potential, its capacity to establish favorable      LLM self-play. Stage 2: Design utterance-level, multi-
+conditions for future success. Second, we em-           dimensional rewards through attribution and aggrega-
+ploy Shapley values from cooperative game the-          tion. Stage 3: Train the policy via supervised ﬁne-
+ory to distribute this strategic value fairly across    tuning followed by online reinforcement learning with
+utterances. The Shapley value provides the unique       the learned reward model.
+attribution method satisfying efﬁciency, symme-
+try, and marginality axioms (Lundberg and Lee,
+                                                           evaluation, ablation studies, and case studies
+2017), ensuring that utterances receive credit pro-
+                                                           that validate the effectiveness of our principled
+portional to their true marginal contribution across
+                                                           credit assignment approach.
+all possible orderings. Together, these princi-
+ples transform credit assignment from a heuristic       2 Preliminaries
+into a principled computation: expected utility de-
+ﬁnes what we measure (forward-looking strategic         This section provides the foundational concepts
+value), while Shapley values determine how we           for our work. We ﬁrst present the training pipeline
+distribute it (fair, axiomatic attribution).            for social agents (§2.1), then formalize the social
+    We evaluate S AVOIR comprehensively on the          interaction task (§2.2), and ﬁnally describe the
+SOTOPIA benchmark (Zhou et al., 2024), com-             evaluation framework (§2.3).
+paring against proprietary LLMs, large reason-
+ing models, and state-of-the-art social intelligence    2.1 Training Pipeline Overview
+methods. Experiments demonstrate that S AVOIR           Figure 1 illustrates the standard training pipeline
+achieves new state-of-the-art performance across        for social agents. The process consists of three
+all evaluation settings: on SOTOPIA-Hard with           stages: (1) data collection, where LLM agents
+GPT-4o as partner, the most challenging setting,        engage in self-play to generate social interaction
+S AVOIR obtains a Goal score of 7.18, improving         episodes; (2) reward modeling, where episode-
+over the strongest baseline by 7.5%. Notably, our       level outcomes are attributed to individual utter-
+7B model matches or exceeds proprietary LLMs            ances and aggregated across multiple evaluation
+including GPT-4o and Claude-3.5-Sonnet, while           dimensions; and (3) policy training, where the
+large reasoning models (OpenAI-o1, Gemini-2.5-          agent is ﬁrst warmed up through supervised ﬁne-
+Pro, DeepSeek-R1) consistently underperform de-         tuning and then optimized via online reinforce-
+spite their strong analytical capabilities, suggest-    ment learning using the trained reward model.
+ing that social intelligence requires qualitatively
+different skills. Human evaluation with expert an-      2.2 Task Formulation
+notators further validates that S AVOIR produces        Social interaction can be formalized as a partially
+more strategic responses and that its reward model      observable Markov decision process (POMDP),
+better captures nuanced credit assignment.              deﬁned by the tuple ⟨S, A, O, T , Z, R⟩, where S
+    Our contributions are threefold:                    denotes the state space, A the action space, O the
+• We propose S AVOIR, a theoretically grounded          observation space, T : S × A → S the transi-
+   framework for social RL that combines expected       tion function, Z : S → O the observation func-
+   utility for prospective valuation with Shapley       tion, and R : S × A → R the reward function.
+   values for fair credit attribution.                  A social episode with T turns is represented as
+• We demonstrate state-of-the-art performance on        τ = (o0 , a0 , o1 , a1 , . . . , oT ), where ot ∈ O is the
+   SOTOPIA benchmarks, with a 7B model match-           dialogue history observed at turn t and at ∈ A is
+   ing proprietary LLMs and revealing that reason-      the utterance generated by the agent. Given a pri-
+   ing models underperform on social tasks.             vate goal g, the agent samples actions according to
+• We provide extensive analysis including human         its policy πθ (· | ot , g).
+                                                   14277
+                                                                        Expected Utility                    Credit Assignment
+                                                               3
+ 1                                2                                History             Value
+                                                                                                     4
+      Social Dialogue                 Coalition Sampling            H(S)               v(S)
+                                                                                                         Regression    Normalize
+     τ , N = {a1 , . . . , an }              C ⊆ 2N                Rollout            Weight
+                                                                                                             ϕ         ϕ̂i ∈ [0, 10]
+                                                                   πA , π B            wS
+                                        KernelSHAP weighting
+
+
+
+
+Figure 2: Overview of the S AVOIR framework. Step 1: Input social dialogue τ with agent utterances N =
+{a1 , . . . , an }. Step 2: Sample coalitions C using KernelSHAP weighting. Step 3: For each coalition S, reconstruct
+history H(S), perform rollouts to compute value v(S), and derive SHAP weight wS . Step 4: Solve weighted
+regression to obtain Shapley values ϕ, then normalize to [0, 10].
+
+
+Reward Modeling. The central challenge lies                                   3 Method
+in designing effective reward signals. Given an
+episode τ and goal g, an LLM-based evaluator pro-                             Building upon the preliminaries, we present
+vides an episode-level score G = f (τ, g) ∈ R.                                S AVOIR (ShApley Value fOr SocIal RL), a princi-
+However, episode-level rewards offer only coarse                              pled framework for computing utterance-level re-
+supervision. To obtain ﬁne-grained signals, we at-                            wards in social interactions. Just as savoir-faire,
+tribute the outcome to individual utterances: rt =                            the French term for social grace, captures the art
+G · A(at , τ ), where A(at , τ ) ∈ [0, 1] represents                          of knowing how to act appropriately in social situ-
+the contribution of utterance at to the episode out-                          ations, S AVOIR teaches language agents this skill
+come, estimated by an LLM with access to the                                  through game-theoretic reward attribution. Our ap-
+full dialogue context. Furthermore, social inter-                             proach leverages two fundamental concepts: ex-
+actions are inherently multi-dimensional. Beyond                              pected utility for evaluating strategic potential and
+goal completion, utterances may contribute to re-                             Shapley value for fair credit assignment. We ﬁrst
+lationship building, knowledge exchange, or other                             provide an overview of our framework (§3.1), then
+social objectives. We∑ aggregate rewards across D                             detail the expected utility formulation (§3.2), the
+dimensions: rt = D D1                                                         Shapley value-based credit assignment (§3.3), and
+                         d=1 wd · r̃t,d , where r̃t,d is
+the normalized reward for dimension d and wd is                               the efﬁcient computation via KernelSHAP (§3.4).
+its corresponding weight.                                                     Finally, we describe the reward model training pro-
+                                                                              cedure (§3.5).
+
+                                                                              3.1 Framework Overview
+2.3 SOTOPIA Evaluation Suite
+                                                                              The core challenge in reward modeling for so-
+SOTOPIA (Zhou et al., 2024) provides an open-                                 cial interactions lies in attributing episode-level
+ended environment for evaluating social intelli-                              outcomes to individual utterances. Existing ap-
+gence. Agents role-play through social scenar-                                proaches either use coarse episode-level rewards
+ios, including negotiation, persuasion, collabora-                            or rely on heuristic credit assignment, both of
+tion, and accommodation, each with private goals                              which fail to capture the strategic nature of so-
+hidden from the interaction partner. The envi-                                cial dialogue. We address this challenge by formu-
+ronment evaluates agent performance along seven                               lating reward computation as a cooperative game
+dimensions: Goal Completion (G OAL), the pri-                                 where each utterance is a player contributing to the
+mary metric measuring task success; Believability                             collective outcome.
+(B EL), consistency with the assigned persona; Re-                               Figure 2 illustrates the S AVOIR framework.
+lationship (R EL), maintenance of positive rapport;                           Given a dialogue τ containing n utterances from
+Knowledge (K NO), appropriate information ex-                                 the target agent, denoted as N = {a1 , . . . , an },
+change; Secret (S EC), protection of private infor-                           our goal is to compute a reward ϕi for each ut-
+mation; Social Rules (S OC), adherence to social                              terance ai that reﬂects its strategic contribution.
+norms; and Financial (F IN), material outcomes                                The framework operates in three stages: (1) sam-
+when applicable. This multi-dimensional evalua-                               pling coalitions of utterances, (2) evaluating the
+tion enables comprehensive assessment of social                               expected utility of each coalition through rollouts,
+intelligence, capturing both outcome-oriented suc-                            and (3) computing Shapley values to distribute
+cess and process-oriented interaction quality.                                credit.
+                                                                      14278
+

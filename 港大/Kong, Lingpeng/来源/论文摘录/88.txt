@@ -1,0 +1,179 @@
+                                           CAB: Comprehensive Attention Benchmarking on Long Sequence Modeling
+
+
+                                                           Jun Zhang * 1 Shuyang Jiang * 1 2 Jiangtao Feng 1 Lin Zheng 3 Lingpeng Kong 3
+
+
+                                                                  Abstract                                      1. Introduction
+                                                                                                                Transformer has achieved great breakthroughs in natural
+                                              Transformer has achieved remarkable success in                    language processing (Devlin et al., 2019; Radford et al.,
+
+
+
+
+arXiv:2210.07661v4 [cs.LG] 13 Jan 2025
+                                              language, image, and speech processing. Re-                       2019; Brown et al., 2020), computer vision (Dosovitskiy
+                                              cently, various efficient attention architectures                 et al., 2020; Liu et al., 2021b), speech processing (Schneider
+                                              have been proposed to improve transformer’s ef-                   et al., 2019; Ren et al., 2021), and biology (Jumper et al.,
+                                              ficiency while largely preserving its efficacy, es-               2021; Brandes et al., 2022). A major drawback of the trans-
+                                              pecially in modeling long sequences. A widely-                    former architecture is its quadratic complexity in both time
+                                              used benchmark to test these efficient methods’                   and memory. The problem has been more evident with the
+                                              capability on long-range modeling is the Long                     ever-increasing need in applying transformers for longer
+                                              Range Arena (LRA). However, LRA only focuses                      sequence modeling in different domains.
+                                              on the standard bidirectional (or noncausal) self
+                                              attention, and completely ignores cross attentions                Recent research on efficient attention mechanisms seeks to
+                                              and unidirectional (or causal) attentions, which                  respond to this problem by improving attention efficiency
+                                              are equally important to downstream applications.                 while preserving efficacy (Wang et al., 2020; Kitaev et al.,
+                                              In this paper, we propose Comprehensive Atten-                    2019; Zaheer et al., 2020; Choromanski et al., 2020; Zheng
+                                              tion Benchmark (CAB) under a fine-grained at-                     et al., 2022). The commonly adopted test bed for bench-
+                                              tention taxonomy with four distinguishable at-                    marking efficient transformers in the context of process-
+                                              tention patterns, namely, noncausal self, causal                  ing long sequences, is the Long Range Arena (Tay et al.,
+                                              self, noncausal cross, and causal cross attentions.               2020b; LRA), consisting of both synthetic probing tasks and
+                                              CAB collects seven real-world tasks from differ-                  real-world tasks. However, all of these tasks focus on the
+                                              ent research areas to evaluate efficient attentions               self attention setting, ignoring cross attention and causal
+                                              under the four attention patterns. Among these                    attention, which are equally important and often more chal-
+                                              tasks, CAB validates efficient attentions in eight                lenging. In other words, the transformer model is only
+                                              backbone networks to show their generalization                    used as a sequence encoder in LRA, while in real applica-
+                                              across neural architectures. We conduct exhaus-                   tions, cross attention is essential for conditionality modeling
+                                              tive experiments to benchmark the performances                    tasks such as sequence-to-sequence (Bahdanau et al., 2015),
+                                              of nine widely-used efficient attention architec-                 data-to-text (Dušek et al., 2020) and knowledge-enhanced
+                                              tures designed with different philosophies on CAB.                models (Liu et al., 2021a), and causal attention is critical for
+                                              Extensive experimental results also shed light on                 causality modeling tasks such as text generation (Vaswani
+                                              the fundamental problems of efficient attentions,                 et al., 2017; Zhang et al., 2020), language modeling (Rad-
+                                              such as efficiency length against vanilla attention,              ford et al., 2019; Brown et al., 2020) and speech synthe-
+                                              performance consistency across attention patterns,                sis (Li et al., 2019a). Another potential drawback of LRA
+                                              the benefit of attention mechanisms, and inter-                   as discovered by researchers recently, is that with proper
+                                              polation/extrapolation on long-context language                   tuning, the performance gap between different transformer
+                                              modeling.                                                         variants in these tasks can be insignificant (Xiong et al.,
+                                                                                                                2022; Ivgi et al., 2022; Shaham et al., 2022), impairing its
+                                                                                                                effectiveness as a standard benchmark.
+                                            *
+                                              Equal contribution 1 Shanghai AI Laboratory 2 Shanghai Jiao       To address these problems, we propose a comprehensive
+                                         Tong University 3 The University of Hong Kong. Correspondence          attention benchmark (CAB) for long sequence modeling.
+                                         to: Jiangtao Feng <jiangtaofeng0906@gmail.com>, Lingpeng
+                                         Kong <lpk@cs.hku.hk>.                                                  Above all, we present a fine-grained attention taxonomy,
+                                                                                                                considering attentive functionality on conditionality and
+                                         Proceedings of the 40 th International Conference on Machine           causality modeling. We present four patterns of attentions,
+                                         Learning, Honolulu, Hawaii, USA. PMLR 202, 2023. Copyright             namely, noncausal self, causal self, noncausal cross, and
+                                         2023 by the author(s).
+
+                                                                                                            1
+                          CAB: Comprehensive Attention Benchmarking on Long Sequence Modeling
+
+causal cross, representing the distinguishable attentive func-          tion:
+tionality to sequence modeling (§2). With that in mind,                                                     √ 
+we then collect seven real-world tasks from diverse fields                      Attn(Q, K, V) = softmax QK⊤ / d V                  (1)
+of computer vision, natural language processing, speech
+processing, and time series forecasting (§3). Among these               in which we omit the multihead notation without loss of gen-
+tasks, CAB includes rich backbone architectures to evaluate             erality. Vanilla attention in Eq. 1 advocates a token-to-token
+the attention mechanisms, testing their performances and                alignment matrix QK⊤ , which results in quadratic com-
+generalization abilities. Given four attention patterns de-             plexity O(nm) of computational time and memory usage.
+fined by the attention taxonomy, we advocate a pattern-wise             It is observed that Attn(·) in Eq. 1 acts as an integration
+comparison between attention mechanisms, evaluating their               model, projecting query features Q by integrating key-value
+attentive functionality respectively.                                   features without changing Q’s shape. Beyond the vanilla
+We conduct exhaustive experiments on CAB, assessing nine                token-to-token attention mechanism, we extend Eq. 1 to a
+widely-used efficient attentions designed with different                more general form of attention family as:
+philosophies (§4). The experimental results reveal sev-
+eral insights into designing efficient attention architectures.                  Attn(Q, K, V) = f (Q; K, V) : Rn×d → Rn×d
+First, we show that existing efficient transformers claim-               where Attni (Q, K, V) = fi (qi ; Q, K, V), i = 1 . . . n
+ing comparable or even superior performances to vanilla                                                                          (2)
+attention, often achieve less competitive results in the causal
+cross scenario, indicating efficient attentions’ modeling ca-           where Q is treated as the main variable and K, V are con-
+pability cannot always generalize across different attention            ditional ones. Comparing with Eq. 1, Eq. 2 covers efficient
+patterns. Second, by quantifying the efficiency of atten-               attention methods without explicitly modeling the token-
+tions in long sequence contexts using efficiency length (i.e.,          to-token alignment. In usage, attentions are modified to
+the minimum length for a sub-quadratic efficient model                  fit generative models with underlying structures, such as
+to surpass vanilla attention in efficiency), we disclose the            conditional models and causal models, to achieve specific
+underlying inefficiency problem of existing efficient at-               attentive functionality.
+tention methods in modeling relatively short sequences.
+Third, we investigate interpolation and extrapolation on                In this section, we put forward a fine-grained attention tax-
+a long-context language model, and find that it is promising            onomy, considering the conditionality and causality of at-
+for efficient attention, such as local attention and Long-              tentions. We show their challenges and potential impact
+Short Transformer, to scale to long-context language model-             on real-world applications in modeling conditionality and
+ing. We hope CAB and elaborated experimental efforts can                causality. Under the taxonomy, we present four attention
+shed light on the fundamental problems of efficient atten-              patterns with different attentive functionality as shown in
+tions, and inspire the design of advanced attention mech-               Figure 1.
+anisms. CAB and all the related codes will be released at
+https://github.com/Shark-NLP/CAB.                                       Self Attention & Cross Attention Self attention (Lin
+                                                                        et al., 2017; Vaswani et al., 2017; Dosovitskiy et al., 2020)
+                                                                        learns contextual features within a sequence whereas cross
+2. Attention Taxonomy                                                   attention (Bahdanau et al., 2015) learns to integrate features
+Attention methods are designed to capture token-to-token                across sequences. Both self attention and cross attention are
+dependency within and across sequences. Let Y =                         highly effective in sequence learning, but designing cross
+{y1 , y2 , . . . , yn } and Y ∈ Rn×d be a target sequence and its       attention is more challenging for efficient attentions without
+feature matrix, and X = {x1 , x2 , . . . , xm } and X ∈ Rm×d            explicit token-to-token alignment. On the aspect of com-
+be a source sequence and its feature matrix, where n and m              putation, Q ∈ Rn×d and K, V ∈ Rm×d are of different
+are target and source sequence lengths respectively, and d              shapes and are impossible to perform elementwise opera-
+denotes dimensionality. Note that X could be the same as                tions along length dimension, such as cross-covariance used
+Y in the case of self attention. The target and source fea-             in XCiT (Ali et al., 2021). Besides, different from self atten-
+ture matrices are transformed to Query-Key-Value feature                tion, cross attention lacks implicit alignment between Q and
+matrices as Q = YWQ , K = XWK , V = XWV with                            K, V, such as neighborhood information. Cross attention
+learnt parametric matrices WQ , WK , WV . Vanilla trans-                learns to integrate conditional features K, V into the main
+former (Vaswani et al., 2017) learns to integrate key-value             features Q, and has been successfully applied to real-world
+feature matrices K ∈ Rm×d , V ∈ Rm×d into a query one                   applications, such as machine translation (Bahdanau et al.,
+Q = {q1 , q2 , . . . , qn } ∈ Rn×d with token-to-token atten-           2015; Vaswani et al., 2017), data-to-text generation (Dušek
+                                                                        et al., 2020; Shen et al., 2020) and knowledge enhanced
+                                                                        model (Jin et al., 2020; Liu et al., 2021a).
+
+                                                                    2
+                            CAB: Comprehensive Attention Benchmarking on Long Sequence Modeling
+
+
+
+
+              (a)                                 (b)                                   (c)                              (d)
+
+Figure 1. Computation diagrams for (a) noncausal self, (b) causal self, (c) noncausal cross, (d) causal cross attentions. Shaded blocks
+represent future tokens that are invisible to the current state. Blocks with red rims represent the current state token.
+
+
+Noncausal Attention & Causal Attention While model-                        models with attention mechanisms. For instance, Trans-
+ing a sequence, noncausal models have a holistic view of the               former (Vaswani et al., 2017) adopt NS attention in en-
+whole sequence whereas causal ones only access to previous                 coder, and CS/CC ones in decoder; recently prevailing Non-
+tokens up to now.1 This restriction forbids efficient attention            Autoregressive Transformer (Gu et al., 2018) models adopt
+like Nyströmformer (Xiong et al., 2021), which must be con-               NS attention in the encoder, and NS/NC attention in the
+ditioned on the whole target sequence to achieve linearity,                decoder. Previous efficient attention benchmark LRA only
+to be applied in causal models. Furthermore, when train-                   tests attentions with the NS pattern but without the others,
+ing a causal model, efficient attentions such as RFA (Peng                 leading to an insufficient evaluation of attentive functional-
+et al., 2021) and ABC (Peng et al., 2022a) have to provide                 ity. In the subsequent sections, we will introduce a compre-
+different sets of features from Y for each query token. This               hensive attention benchmark CAB that evaluates attentions
+mechanism in these attentions, therefore, leads to multiplied              comprehensively on the four patterns.
+memory consumption compared to their noncausal coun-
+terparts. We provide a detailed analysis of the increasing                 3. Comprehensive Attention Benchmark
+computation costs in Appendix B. In real-world applications,
+causal attentions bring up strong generation capability and                We propose Comprehensive Attention Benchmark (CAB)
+is widely adopted in text generation (Bahdanau et al., 2015;               that collects seven tasks covering four research fields, includ-
+Vaswani et al., 2017; Zhang et al., 2020), text-to-speech                  ing computer vision, natural language processing, speech
+synthesis (Li et al., 2019a) and language modeling (Radford                processing, and time series forecasting. We introduce these
+et al., 2019; Brown et al., 2020; Raffel et al., 2020; Chen                tasks with their datasets, data lengths, evaluation metrics,
+et al., 2021b).                                                            and backbone neural networks. Then we present a compo-
+                                                                           sitional index (CI) to combine individual task performance
+Attention Patterns As discussed above, conditionality                      into a compositional one for direct performance comparison
+and causality are two orthogonal aspects of modeling se-                   across tasks and models.
+quences. Thus we obtain four attention patterns via Carte-
+sian product as {noncausal, causal} × {self, cross}: non-                  3.1. Long Sequence Modeling Tasks
+causal self (NS), causal self (CS), noncausal cross (NC), and
+                                                                           We collect seven real-world long-sequence modeling tasks
+causal cross (CC). Following the general form of attentions
+                                                                           in CAB with data lengths from 300 to 16,000 and include
+in Eq. 2, we formulate the four attention patterns as below:
+                                                                           eight widely-used models as backbones in CAB to assess
+  NSi (Q, K, V) ≜ fi (q i ; Q, K, V), s.t. Y = X                (3)        typical efficient attention mechanisms. Table 1 summarizes
+                                                                           the tasks’ statistics, evaluation metrics, backbone neural
+  CSi (Q, K, V) ≜ fi (q i ; Q≤i , K≤i , V≤i ), s.t. Y = X                  networks and the required attention patterns (§2) are also
+                                                         (4)               checked.
+  NCi (Q, K, V) ≜ fi (q i ; Q, K, V)                            (5)
+  CCi (Q, K, V) ≜ fi (q i ; Q≤i , K, V)                         (6)        Text-to-Speech Synthesis (TTS) This task requires mod-
+                                                                           els to convert input text sequences, descriptions, or narra-
+Figure 1 illustrates the computation diagrams of these four                tions produced by a single speaker, to synthesized audio
+patterns. These attention patterns construct typical sequence              clips sharing the same timbre as the provided speaker. The
+   1
+                                                                           CAB incorporates the LJSpeech dataset (Ito, 2017) whose au-
+      When generating a sequence Y = {y1 , y2 , . . . , yn } autore-       dio clips are sampled with 22,050 Hz. Under this set of rela-
+gressively, neural models (Vaswani et al., 2017; Li et al., 2019a;
+Brown et al., 2020) usually adopt a causal graph G(V, E) with              tively high sample rates, the average sequence length of pro-
+vertices V = {yi ∈ Y } and edges E = {yi → yj |i ∈                         cessed audio clips is 559. We use non-autoregressive Fast-
+[1, . . . , n], j ∈ [1, . . . , n], i ≤ j}.                                Speech 2 (Ren et al., 2021) and autoregressive Transformer-
+
+                                                                       3
+

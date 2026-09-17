@@ -1,0 +1,191 @@
+                                                         T OOL S ELF : U NIFYING TASK E XECUTION AND
+                                                   S ELF -R ECONFIGURATION VIA T OOL -D RIVEN E MERGENT
+                                                                           A DAPTATION
+
+
+                                                                   Jingqi Zhou1 , Sheng Wang1 , DeZhao Deng1 , Junwen Lu1 , Junwei Su1 ,
+                                                       Qintong Li , Jiahui Gao1 , Hao Wu1 , Jiyue Jiang2 , Lingpeng Kong1 , Dunhong Jin1 , Chuan Wu1
+                                                                  1
+                                                                                       1
+
+
+
+
+arXiv:2602.07883v4 [cs.AI] 15 Jun 2026
+                                                                                         The University of Hong Kong
+                                                                                   2
+                                                                                     The Chinese University of Hong Kong
+                                                                  {u3011211, u3009618, u3638316, u3664724}@connect.hku.hk
+                                                                 {junweisu, qtli, sumiler}@connect.hku.hk, wuhao55@hku.hk
+                                                                    jiangjy@link.cuhk.edu.hk, {lpk, dhjin, cwu}@cs.hku.hk
+
+
+
+
+                                                                                                A BSTRACT
+                                                     LLM-powered agentic systems excel at complex long-horizon tasks, but remain constrained by static
+                                                     configurations fixed before execution. Such rigidity forces a trade-off between domain-specific
+                                                     performance and cross-task generalization: strong priors and compact tool spaces aid specialization
+                                                     but weaken transfer, while task-agnostic workflows and broad action spaces expand coverage but
+                                                     dilute guidance. Existing pre-execution optimization, planner-worker orchestration, and configuration
+                                                     patching fall short of resolving this tension, as they decouple adaptation from execution, causing
+                                                     information loss, fragmented optimization, and ambiguous credit assignment. We propose T OOL -
+                                                     S ELF, a tool-driven runtime self-reconfiguration paradigm that abstracts configuration updates as
+                                                     a standardized tool interface and unifies execution and adaptation within one policy’s action space.
+                                                     The execution agent can dynamically update sub-goals, strategies, toolboxes, context, and context-
+                                                     management modes based on task progress and feedback. We further introduce Configuration-Aware
+                                                     Two-stage Training (CAT), which combines rejection sampling fine-tuning with trajectory-level KTO
+                                                     reinforcement learning to internalize self-reconfiguration. Across diverse benchmarks, zero-shot
+                                                     T OOL S ELF rivals task-specialized agents; after CAT training, T OOL S ELF gains 28.8 points over the
+                                                     static-configuration baseline on average, illuminating a path toward emergent adaptivity that obviates
+                                                     manually injected guidance.1
+
+                                         1       Introduction
+                                         Agentic systems refer to large language model–based systems that go beyond passive text generation to autonomously
+                                         plan, reason, and act in interactive environments through multi-step decision making [Kolt, 2025]. By tightly coupling
+                                         internal reasoning with external actions, such as tool invocation, environment interaction, and intermediate state
+                                         updates, agentic systems enable models to tackle complex long-horizon tasks that cannot be solved through single-shot
+                                         inference [Yao et al., 2022]. This paradigm has become increasingly important as real-world applications, including
+                                         deep research [Wu et al., 2025a], software engineering [Yang et al., 2024], and system control [Wang et al., 2024, Qin
+                                         et al., 2025], demand sustained goal pursuit, adaptive planning, and iterative integration of information over time.
+                                         Central to the behavior of an agentic system is its configuration, which defines the internal control variables governing
+                                         how the agent reasons, acts, and interacts with its environment during execution. Configuration typically includes the
+                                         agent’s execution strategy (e.g., persona or reasoning style) [Chen et al., 2023], the available action toolbox [Lu et al.,
+                                         2025], and cross-step context and its management [Zhou et al., 2025]. These elements implicitly shape the agent’s
+                                         action space, information flow, and decision-making dynamics, and therefore play a decisive role in long-horizon
+                                         performance [Guo et al., 2024]. However, most existing agentic systems adopt a static configuration fixed before
+                                             1
+                                                 The code is available at https://github.com/lian-tian-mo-zun/ToolSelf.
+                                                                                ToolSelf
+                                                                                       Unified Action Space          Reconfiguration Tool     Global History Pool
+              Stage    Configuration
+
+                                       Configuration-Generation Specification                         Execution Summary
+                                                                                            Update Request                                    Global Tool Pool
+
+
+
+                                              Exclusion Agent                               Reconfigure,Act           Termination Tool
+          Task                                                                                                                              Final Result
+                                                                                            or Terminate
+
+
+
+                                                                                                                 Action
+     Runtime Self-Reconfiguration
+                                            Stage            Observation
+
+
+                                                                                                                          Environment
+
+
+
+
+Figure 1: Overview of T OOL S ELF: Instead of using a static external configuration, T OOL S ELF treats configuration as a
+dynamic, tool-updatable variable. At stage i, the execution agent πi operates under Ci = (qi , σi , Ti , Ki , mi ), which
+defines the current sub-goal, execution strategy, stage-specific toolbox, task knowledge, and context mode. If the
+configuration misaligns with task progress, πi summarizes the stage and invokes the tool Treconfig , which provides a
+specification guiding πi to generate the next configuration, Ci+1 . Ultimately, the core innovation of T OOL S ELF lies
+in unifying dynamic runtime adaptation and task execution within a single, end-to-end optimizable policy, utilizing a
+standardized execution-reconfiguration loop to foster emergent adaptability instead of relying on manually injected
+guidance.
+
+
+execution and unchanged throughout the task. This rigidity induces a fundamental tension between domain-specific
+performance and generality [Xia et al., 2024]. Achieving high performance typically requires encoding domain priors
+into the configuration to strengthen task guidance [Yang et al., 2024, Antoniades et al., 2024, Li et al., 2025a,b, Zhang
+et al., 2025]; yet this ties the agent to specific tasks and weakens transferability. Conversely, a general-purpose agent
+must rely on task-agnostic workflows, prompts, context strategies, and broad toolsets [Yao et al., 2022, Wang et al.,
+2025]; although this broadens task coverage, it also expands the action space, dilutes task priors, and ultimately degrades
+long-horizon performance [Xia et al., 2024].
+
+Limitation of Existing Approaches. Prior work (Appendix A.2) has mainly pursued three directions. Pre-execution
+optimization optimizes agents offline before execution to automatically derive task-specialized configurations, but the
+resulting configurations remain static and cannot adapt at runtime [Zhang et al., 2024, Shang et al., 2024, Tang et al.,
+2025]. Planner-worker orchestration uses a centralized planner to coordinate specialized workers for heterogeneous
+tasks, improving generality while retaining domain performance; however, planner-mediated communication makes task
+states vulnerable to information loss and errors under repeated relay and compression [Hu et al., 2025, Fourney et al.,
+2024]. Configuration patching uses external strategies to adapt individual configuration dimensions of a general agent,
+such as pruning toolsets [Betser et al., 2026], managing context [Wu et al., 2025b, Zhou et al., 2025], or strengthening
+prompt guidance [Zhu et al., 2025, Sun et al., 2023]; yet such adaptation remains fragmented and rarely yields consistent
+system-level gains. Moreover, these methods generally decouple task adaptation from execution policy: external
+optimizers, planners, or auxiliary modules adjust the configuration, while the execution agent advances the task. This
+separation prevents adaptation policies from perceiving execution details, often yielding configurations misaligned with
+task demands, and obscures credit assignment between adaptation and execution, thereby hindering joint optimization.
+
+Challenges and Design Requirements. The limitations of these methods highlight the key challenge in enabling
+truly adaptive agents: how to tightly integrate task adaptation and execution at runtime, and represent configuration
+updates through a standardized and minimal interface, thereby replacing externally driven strategies or fragmented
+optimizations over individual configuration dimensions. Such a unified mechanism can reduce the information loss
+caused by cross-strategy relay and compression, while placing configuration decisions and execution behavior on the
+same trajectory, thereby supporting end-to-end joint optimization.
+
+Our Approach. To this end, we propose T OOL S ELF (Tool-driven Self-reconfiguration), a novel paradigm that
+abstracts configuration updates as a standardized tool interface and unifies task execution and self-reconfiguration
+within the single action space of one policy, thereby enabling the joint optimization and emergence of both capabilities.
+As illustrated in Figure 1, unlike conventional architectures that decouple task adaptation from execution, T OOL S ELF
+equips the execution agent with a reconfiguration tool. Conditioned on task progression and environmental feedback, the
+agent can invoke this tool to directly update its configuration, autonomously and comprehensively adjusting several core
+configuration dimensions, including sub-goals, execution strategy, toolbox, and context together with its management
+
+
+                                                                                   2
+scheme. This enables runtime adaptation to the specialized requirements of diverse tasks and various execution stages
+while preserving cross-task generalization.
+Moreover, because task execution and configuration adaptation are unified within the same policy and action space,
+T OOL S ELF naturally supports end-to-end joint optimization. To this end, we propose the Configuration-Aware Two-
+stage Training (CAT) framework: Stage I employs rejection sampling fine-tuning (RFT) [Li et al., 2025a] for cold-start
+initialization using successful trajectories generated by teacher models; Stage II uses KTO-based reinforcement
+learning [Ethayarajh et al., 2024] to further optimize reconfiguration decisions. Since self-reconfiguration is a cross-
+stage meta-capability whose quality only manifests through downstream task performance, we adopt trajectory-level
+credit assignment by propagating task success or failure to all reconfiguration decisions in the trajectory; KTO’s binary
+feedback is naturally aligned with this setting.
+Extensive experiments across deep research, general AI assistance, and software engineering benchmarks demonstrate
+that T OOL S ELF, even under zero-shot evaluation, already rivals task-specialized agents while exhibiting strong cross-
+task generalization (Sec. 3.2); after CAT training, T OOL S ELF gains 28.8 points over the static-configuration baseline on
+average (Sec. 3.3). Ablation studies and case analyses further validate the effectiveness of each core design (Sec. 3.4,
+Appendix A.4), showing that T OOL S ELF not only overcomes the performance degradation induced by cross-policy
+information exchange, but also elicits advanced capabilities such as long-horizon planning, self-refinement, and
+self-correction, thereby illuminating a promising path toward agentic systems with learnable adaptivity. The main
+contributions are summarized as follows:
+
+       • We propose T OOL S ELF, a paradigm that abstracts configuration updates as a standardized tool interface and
+         unifies task execution and self-reconfiguration within the single action space of one policy, thereby enabling
+         the joint optimization and emergence of both capabilities.
+       • We introduce Configuration-Aware Two-stage Training (CAT), an end-to-end framework that first cold-starts
+         T OOL S ELF with RFT and then refines cross-stage self-reconfiguration via KTO-based reinforcement learning
+         with trajectory-level binary feedback.
+       • Across deep research, general AI assistance, and software engineering benchmarks, zero-shot T OOL S ELF
+         rivals task-specialized agents without sacrificing cross-task generalization. After CAT training, T OOL S ELF
+         gains 28.8 points over the static-configuration baseline on average and elicits advanced capabilities spanning
+         long-horizon planning, self-refinement, and self-correction, illuminating a path toward emergent adaptivity
+         that obviates manually injected guidance.
+
+2     Method
+T OOL S ELF enables runtime self-reconfiguration in a single agent by abstracting configuration updates as a stan-
+dardized tool interface, thereby unifying task execution and configuration adaptation within the single action space of
+one policy. Formally, this paradigm is characterized by four properties that distinguish it from existing approaches: (1)
+Runtime Specialization, where the agent dynamically updates its configuration during execution rather than relying on
+a static configuration derived before execution; (2) Integrated Adaptation and Execution, where a single policy is
+responsible for both task progress and configuration adaptation, instead of delegating adaptation to a pre-execution
+optimizer, centralized planner, or external auxiliary module; (3) Standardized and Comprehensive Updating, where
+the major configuration dimensions are updated through one unified interface rather than through fragmented patches
+to isolated dimensions; and (4) Joint Optimization, where configuration decisions and task execution reside on the
+same trajectory and are therefore amenable to end-to-end optimization under unified downstream feedback. The
+system operates through an execution-reconfiguration loop: the execution agent advances the task under the current
+configuration and invokes the reconfiguration tool when adaptation is needed; the tool returns a configuration-generation
+specification that guides the same policy to synthesize an updated configuration and continue execution.
+
+2.1   Preliminaries: Pre-Fixed Configuration Paradigm
+
+Formally, the behavior policy of a ReAct-style [Yao et al., 2022] single agent can be described by the following
+conditional distribution:
+                                           π(τt , at | θ, Q, Cstatic , st−1 )                                 (1)
+Here, θ denotes the LLM parameters, Q is the target task, and Cstatic ≜ (σ, T, K, m) is the static configuration, consisting
+of the execution strategy σ, toolbox T , background knowledge K, and context-management mode m. The agent’s raw
+interaction history is
+                                       st−1 = (τ0 , a0 , o0 , . . . , τt−1 , at−1 , ot−1 ),
+
+
+                                                             3
+

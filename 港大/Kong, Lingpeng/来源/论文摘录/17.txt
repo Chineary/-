@@ -1,0 +1,186 @@
+                                        Published as a conference paper at ICLR 2026
+
+
+
+
+                                             S WING A RENA : A DVERSARIAL P ROGRAMMING
+                                        A RENA FOR L ONG - CONTEXT G IT H UB I SSUE S OLVING
+
+                                               Wendong Xu1∗, Jing Xiong1∗ , Chenyang Zhao2,10∗ , Qiujiang Chen10 , Haoran Wang3 ,
+                                                Hui Shen4 , Zhongwei Wan5 , Jianbo Dai6 , Taiqiang Wu1 , He Xiao1 , Chaofan Tao1 ,
+                                            Z. Morley Mao4 , Ying Sheng10 , Zhijiang Guo9 , Hongxia Yang8 , Bei Yu7 , Lingpeng Kong1 ,
+                                                                         Quanquan Gu2 , Ngai Wong1
+                                        1
+                                           The University of Hong Kong 2 University of California, Los Angeles 3 Tsinghua University
+                                            4
+                                            University of Michigan, Ann Arbor 5 The Ohio State University 6 University of Edinburgh
+                                        7
+                                          The Chinese University of Hong Kong 8 The Hong Kong Polytechnic University 9 Hong Kong
+
+
+
+
+arXiv:2505.23932v3 [cs.CL] 8 Mar 2026
+                                                       University of Science and Technology (Guangzhou) 10 LMSYS Org
+                                                                               Project Page     § Code         Dataset
+
+
+
+                                                                                           A BSTRACT
+
+                                                        We present S WING A RENA, an adversarial evaluation framework for Large Lan-
+                                                        guage Models (LLMs) that approximates real-world software development work-
+                                                        flows. Unlike traditional static benchmarks, S WING A RENA models the collabo-
+                                                        rative process of software iteration by pairing LLMs as submitters, who generate
+                                                        patches, and reviewers, who create test cases and verify the patches through con-
+                                                        tinuous integration (CI) pipelines. To support these interactive evaluations, we
+                                                        introduce a retrieval-augmented code generation (RACG) module that handles long-
+                                                        context challenges by providing relevant code snippets from large codebases across
+                                                        multiple programming languages (C++, Python, Rust, and Go). Our adversarial
+                                                        evaluation can surface limitations that are often overlooked by traditional evaluation
+                                                        settings. Our experiments, using over 400 high-quality real-world GitHub issues
+                                                        selected from a pool of 2,300 issues, indicate differing behavioral tendencies across
+                                                        models in patch generation versus validation. S WING A RENA offers a scalable
+                                                        and extensible approach to evaluating LLMs in CI-driven software development
+                                                        settings.
+
+
+                                        1           I NTRODUCTION
+
+                                        Large Language Models (LLMs) have become potent accelerators of software development (Chen
+                                        et al., 2021; Li et al., 2023; Lozhkov et al., 2024), capable of synthesizing high-quality code snippets,
+                                        automatically detecting and repairing defects, and providing interactive guidance throughout the
+                                        development cycle. To assess these three capabilities—code-generation fidelity, automated debugging,
+                                        and conversational assistance—a benchmark must evaluate each dimension individually and in concert.
+                                        Existing suites including HumanEval (Chen et al., 2021) and MBPP (Austin et al., 2021) focus on
+                                        the functional correctness of concise, self-contained snippets, offering a valuable first glance at
+                                        model proficiency. Nevertheless, their narrow scope fails to capture the richer, iterative workflows
+                                        that typify modern software engineering. Recent efforts including SWE-Bench (Jimenez et al.,
+                                        2023) move toward greater realism by grounding tasks in genuine GitHub issues and repositories.
+                                        Nevertheless, they typically rely on static or partially simulated contexts like single unit tests, omitting
+                                        the critical role of the full Continuous Integration (CI) pipeline and its automated safeguards that
+                                        define professional development. Moreover, these benchmarks tend to assume a one-shot coding
+                                        paradigm, whereas industrial software engineering is inherently iterative: debugging, testing, and
+                                        incremental refinement are the norm, not the exception.
+
+                                                ∗
+                                                    These authors contributed equally.
+
+
+                                                                                                  1
+Published as a conference paper at ICLR 2026
+
+
+
+
+In real-world software development, coding tasks involve collaborative, iterative workflows with
+complex project requirements and automated systems. For example, a common scenario involves a
+contributor submitting a pull request (PR) to a large open-source project, where a CI pipeline—often
+implemented with GitHub Actions—automatically builds up validation environments, runs unit
+tests, enforces style guides, executes linters1 , and validates compatibility with the existing codebase.
+Any failure triggers an iterative dialogue between contributor and reviewers, where comments are
+exchanged and resolved, patches are applied, and checks are rerun until all pass, allowing the PR to be
+approved and merged into the upstream codebase. This submitter–reviewer loop epitomizes modern
+collaborative workflows, yet a robust evaluation framework for such interactions in LLMs is still
+lacking, leaving a critical aspect of real-world practice largely unaddressed by current benchmarks.
+To meet the demands of this real-world process, conventional benchmarks (Zan et al., 2024; 2025;
+Rashid et al., 2025; Aleithan et al., 2024) often fall short by focusing only on basic questions like
+"Does the code pass a unit test?"—a threshold that is far beneath the expectations of professional
+software development. A meaningful evaluation must instead ask, "Can the model submit code that
+is valid, compliant, and able to pass a full CI pipeline and peer review?"
+Current evaluation practices suffer from three critical blind spots. First, static benchmarks use
+fixed, predictable challenges that fail to capture the dynamic, adversarial nature of real software
+development where patches face adaptive scrutiny. Second, they evaluate single-agent performance
+in isolation, missing collaborative interactions and role-switching dynamics essential to modern
+software engineering workflows. Third, they focus narrowly on functional correctness while ignoring
+comprehensive quality gates that determine real-world success.
+LLMs must overcome one of the core challenges in software engineering: effectively analyzing
+and interpreting over long contexts in code repositories. Realistic CI tasks involve sprawling code-
+bases where essential information is scattered across thousands of lines and multiple files. To
+enable fair evaluation across diverse model architectures and context window sizes, we implement a
+Retrieval-Augmented Code Generation (RACG) system that provides standardized context access
+using established retrieval components. This helps ensure models receive comparable context—useful
+for isolating the effects of our adversarial evaluation protocol from retrieval artifacts.
+Thus, we introduce S WING A RENA, an adversarial evaluation framework that operationalizes full CI
+workflows as dynamic testing arenas for LLMs. Our contributions are:
+• A standardized adversarial CI evaluation protocol that pairs a submitter and a reviewer, executed on
+  repository-native workflows (PK-style dual-role evaluation with role switching and clear scoring).
+• A multi-language long-context retrieval pipeline (RACG) combining syntax-aware chunking, dense
+  reranking, and token-budget–aware packing across C++, Python, Rust, and Go, positioned as a
+  strong baseline to support SwingArena rather than a standalone algorithmic contribution.
+• A curated, CI-grounded dataset of 2,300 real GitHub issues with solutions (4 languages), including
+  400 evaluation instances (100 per language) and a 100-sample ablation split, with scripts to
+  reproduce retrieval and CI execution.
+We evaluate S WING A RENA across multiple state-of-the-art proprietary and open-source models,
+including GPT-4o, Claude-3.5, Gemini-2.0, DeepSeek-V3, and several open-source alternatives,
+demonstrating the framework’s broad applicability and revealing distinct behavioral patterns across
+different model architectures. Our experiments reveal that while some models excel at aggressive
+patch generation, others prioritize correctness and CI stability, highlighting the nuanced trade-offs
+that emerge in realistic software engineering scenarios.
+We adopt an adversarial CI protocol rather than static tests to cover repository-native gates (style,
+security, coverage) and the interaction between patching and testing that fixed suites under-report.
+This design enables us to measure end-to-end success on real pipelines and to quantify stability,
+reviewer effects, and RACG’s contribution under context limits across models and languages.
+
+
+
+
+   1
+     A linter is a tool that automatically analyzes code for grammar errors, style issues, and potential bugs to
+ensure consistency and quality.
+
+
+                                                       2
+Published as a conference paper at ICLR 2026
+
+
+
+
+Figure 1: Overview of S WING A RENA data construction pipeline, including repository collection,
+pull request extraction, task instance creation, quality filtering, and multiple CI-based validation.
+
+2     R ELATED W ORK
+
+2.1   B ENCHMARKS FOR E VALUATING R EAL -W ORLD S OFTWARE E NGINEERING
+
+Real-world software engineering is complex, requiring nuanced reasoning over large, evolving
+codebases. While LLM-based agents have made significant progress (Yang et al., 2024; Zhang
+et al., 2024; Xia et al., 2024), evaluating the quality of generated code remains challenging (Wang
+et al., 2025a). SWE-Bench (Jimenez et al., 2023) takes an important step toward realism by using
+GitHub issues, pull requests, and unit tests grounded in real repositories. However, it is limited to
+Python, focuses only on unit test success, and includes noisy or weakly aligned test cases. Recent
+multi-language extensions (Zan et al., 2024; 2025; Rashid et al., 2025; Aleithan et al., 2024) often
+require manual Docker setup, hindering automation and preventing the use of stricter CI-based arenas
+to evaluate LLMs under realistic development workflows. How to integrate real-world workflows of
+multi-language code development, submission, and review into evaluation remains an open problem.
+
+
+2.2   C ODE E VALUATION
+
+Evaluating the effectiveness of code-generation agents remains a challenge (Wang et al., 2025c). Prior
+work explores diverse assessment strategies (Evtikhiev et al., 2023; Yetistiren et al., 2022; Siddiq et al.,
+2024), but most focus on function-level correctness (Mündler et al., 2024; Zhuge et al., 2024; Liu
+et al., 2024b; Dunsin, 2025) and overlook repo-level effects. We push evaluation to the software-wide
+scale by embedding generated patches into a CI pipeline, allowing us to observe their impact on build
+stability, regression risk, and interactions across the codebase. Current benchmarks (Jain et al., 2024;
+Wang et al., 2025b) still lack the ability to stress-test models in this way, as they do not incorporate
+an adversarial agent that detects corner cases and synthesizes new unit tests.
+
+
+2.3   R ETRIEVAL -AUGMENTED G ENERATION
+
+The context window limitations of LLMs present a major bottleneck for handling large-scale code-
+bases. Retrieval-augmented generation (RAG) techniques (Jimenez et al., 2023; Xie et al., 2025;
+Yang et al., 2024) have emerged as a practical solution. While advanced code retrieval methods
+explore structured representations like code graphs or abstract syntax trees for more semantic under-
+standing, many current approaches still rely on lexical methods like BM25 (Robertson et al., 2009)
+for document and function name retrieval, without incorporating static code analysis or fine-grained
+code structure understanding. This often hampers performance on tasks that require identifying
+relevant functional code blocks from complex repositories (Feng et al., 2020; Parvez et al., 2021;
+Zhang et al., 2023; Xia et al., 2024). For S WING A RENA, we opted for a robust and language-agnostic
+RAG pipeline to serve as a strong, reproducible baseline, acknowledging that more sophisticated,
+language-specific retrieval strategies represent a promising direction for future work.
+
+
+                                                     3
+

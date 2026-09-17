@@ -1,0 +1,202 @@
+    P ROMPT C OT: Synthesizing Olympiad-level Problems for Mathematical
+                   Reasoning in Large Language Models
+
+                  Xueliang Zhao♠⋆ * Wei Wu⋆† Jian Guan⋆ Lingpeng Kong♠†
+                            ♠
+                              The University of Hong Kong ⋆ Ant Group
+                                     {xlzhao,lpk}@cs.hku.hk
+                            {wuwei19850318, jianguanthu}@gmail.com
+
+
+
+                          Abstract                               reasoning. Particularly in mathematics, strong rea-
+                                                                 soning models such as OpenAI o1 (Jaech et al.,
+        The ability of large language models to                  2024) and DeepSeek r1 (Guo et al., 2025) have sig-
+        solve complex mathematical problems has pro-
+                                                                 nificantly pushed the boundaries of AI from master-
+        gressed significantly, particularly for tasks re-
+        quiring advanced reasoning. However, the
+                                                                 ing grade school problems (Yang et al., 2024b) to
+        scarcity of sufficiently challenging problems,           excelling at Olympiad-level challenges (Guo et al.,
+        particularly at the Olympiad level, hinders fur-         2025). The remarkable achievements have inspired
+        ther advancements. In this work, we introduce            the community to explore dedicating more com-
+        P ROMPT C OT, a novel approach for automati-             putational resources to the inference stage. Con-
+        cally generating high-quality Olympiad-level             sequently, the scaling paradigm of LLMs is shift-
+        math problems. The proposed method synthe-               ing from training time to test time (Snell et al.,
+        sizes complex problems based on mathematical
+                                                                 2024). While powerful reasoning LLMs, such as
+        concepts and the rationale behind problem con-
+        struction, emulating the thought processes of            DeepSeek r1, have been open-sourced, the details
+        experienced problem designers. We provide a              of math problem acquisition remain obscured in
+        theoretical analysis demonstrating that an op-           the published literature (e.g., the technical report
+        timal rationale should maximize both the like-           of DeepSeek r1), and such data is still kept private.
+        lihood of rationale generation given the asso-           Consequently, studies aiming to reproduce o1-like
+        ciated concepts and the likelihood of problem            or r1-like performance have to rely on open-source
+        generation conditioned on both the rationale
+                                                                 math datasets (Li et al., 2024b), which are often
+        and the concepts. Our method is evaluated
+        on standard benchmarks including GSM8K,
+                                                                 constrained by scale and difficulty. This leaves an
+        MATH-500, and AIME2024, where it consis-                 open research question (RQ): how can we obtain
+        tently outperforms existing problem generation           high-quality, sufficiently challenging math prob-
+        methods. Furthermore, we demonstrate that                lems at scale? We emphasize that RQ is crucial
+        P ROMPT C OT exhibits superior data scalability,         for test-time scaling research, as it serves as a pre-
+        consistently maintaining high performance as             requisite for effectively initiating the supervised
+        the dataset size increases, outperforming the            fine-tuning (SFT) or reinforcement learning (RL)
+        baselines.
+                                                                 process.
+                                                                    We investigate the automated generation of
+1       Introduction                                             Olympiad-level math problems as a principled ap-
+                                                                 proach to addressing RQ. Prior to our work, several
+         “In mathematics the art of proposing a                  projects have curated math datasets, typically in-
+         question must be held of higher value                   volving problem synthesis procedures. Existing
+         than solving it.”                                       synthesis methods can be categorized into three
+                                                                 frameworks: (1) direct generation through prompt-
+                                     —— Georg Cantor
+                                                                 ing powerful LLMs (Huang et al., 2024; Tang et al.,
+                                                                 2024; Li et al., 2024b; Toshniwal et al., 2024), (2)
+  Recent advancements in large language models                   mining from pretraining corpora (Yue et al., 2023;
+(LLMs) have greatly enhanced their capability for                Li et al., 2024d), and (3) problem evolution, ei-
+solving complex problems through planning and                    ther through simple-to-simple rephrasing (Yu et al.,
+    *    This work was done during an internship at Ant Group.   2023) or difficulty-based progression (Xu et al.,
+    †
+         Corresponding authors.                                  2023; Luo et al., 2023). While these efforts progres-
+                                                            18167
+                    Findings of the Association for Computational Linguistics: ACL 2025, pages 18167–18188
+                           July 27 - August 1, 2025 ©2025 Association for Computational Linguistics
+                                            Qwen2.5-Math-72B-Instruct   DeepSeek-R1-Distill-Qwen-7B   Micro Avg. Accuracy on MATH-500 and AIME2024
+Dataset
+                                                  Accuracy (↓)           Avg. Reasoning Tokens (↑)    Fine-tuned Qwen2.5-Math-7B ∆ (↑)
+AIME2024                                              30.0                         4,159                          -                -
+P ROMPT C OT (ours)                                   48.9                         6,502                        80.8             +1.2
+OpenMathInstruct (Toshniwal et al., 2024)             63.3                         1,578                        75.8             -3.8
+NuminaMath (Li et al., 2024b)                         60.9                         3,039                        76.6             -3.0
+Evol-Instruct (Luo et al., 2023)                      65.9                         1,346                        74.0             -5.6
+KPDDS (Huang et al., 2024)                            73.2                         1,225                        72.3             -7.3
+
+
+Table 1: Difficulty and efficacy evaluation for different mathematical datasets. Accuracy: Performance of Qwen2.5-
+Math-72B-Instruct on the problems in different datasets. Note that we directly apply the model to solve the problems
+without any tuning, so the metric reflects difficulty of the problems for Qwen2.5-Math-72B-Instruct (↓: lower
+accuracy indicates higher difficulty). Avg. Reasoning Tokens: Average number of tokens in reasoning processes
+generated by DeepSeek-R1-Distill-Qwen-7B when processing the problems in different datasets (↑: larger numbers
+means DeepSeek-R1-Distill-Qwen-7B needs more tokens to complete reasoning, suggesting greater problem
+difficulty). Micro Avg. Accuracy on MATH-500 and AIME2024: Performance of Qwen2.5-Math-7B after
+fine-tuning on different datasets. Accuracy is computed as a weighted average over MATH-500 and AIME 2024.
+Note that fine-tuning is conducted using both the problems and their corresponding solutions. Further details are
+provided in Section 3. ∆: Difference in performance between Qwen2.5-Math-7B and Qwen2.5-Math-7B-Instruct
+(↑: larger margins suggests bigger contributions from the corresponding datasets). Note that no tuning is performed
+on Qwen2.5-Math-7B-Instruct, so its Micro Avg. Accuracy remains fixed at 79.6.
+
+
+sively contribute to LLM reasoning, the problems                               (e.g., chain-of-thoughts (Wei et al., 2022a)) have
+provided by these methods now are not challenging                              proven particularly effective. Through theoretical
+enough for state-of-the-art models, making them                                analysis, we show that an optimal rationale
+less effective in further advancements. Table 1 pro-                           should simultaneously maximize the likelihood
+vides a detailed analysis of problem difficulty in                             of rationale generation given the concepts and
+typical published works and open-source datasets,                              the likelihood of problem generation conditioned
+along with their efficacy in enhancing state-of-the-                           on both the rationale and the concepts. Based
+art LLMs. From this, we observe clear gaps in                                  on this analysis, we implement P ROMPT C OT
+terms of difficulty between the problems in exist-                             by first querying an LLM to generate rationales
+ing work and those in AIME, as well as the limited                             for prepared Olympiad-level math problems and
+utility of these problems in further improving LLM                             their associated concepts, and then fine-tuning an
+performance.                                                                   LLM as a problem generation model using a set of
+                                                                               concept-rationale-problem triples.
+   The primary challenge in synthesizing
+Olympiad-level math problems lies in their scarcity                               We conduct extensive experiments on mul-
+in existing corpora. As a result, the complex                                  tiple benchmarks focused on mathematical
+reasoning patterns required for such problems                                  reasoning, including GSM8K (Cobbe et al.,
+are undertrained, making it difficult for LLMs                                 2021), MATH-500 (Lightman et al., 2023), and
+to assign sufficient probability to them during                                AIME2024 (AIME-2024). Evaluation results
+inference. More broadly, what we aim to explore                                demonstrate that, compared to a range of exist-
+is by nature a low-resource generation problem,                                ing generation methods and datasets, P ROMPT C OT
+which is prevalent across various applications                                 leads to more significant improvements on state-of-
+yet inherently contrasts with the fundamental                                  the-art LLMs after distillation in both short-CoT
+working mechanisms of LLMs. We focus on the                                    and long-CoT settings, achieving 0.4%-4.8% abso-
+mathematical domain, but our method can be easily                              lute gains on MATH-500 and 6.7%-20% absolute
+adapted to other domains. Specifically, we propose                             gains on AIME2024. An extended experiment fur-
+P ROMPT C OT, a novel problem generation method                                ther shows that P ROMPT C OT exhibits remarkable
+that synthesizes a complex math problem based                                  advantages over the baseline method as the number
+on given math concepts (e.g., “Prime Numbers”,                                 of problems gradually increases, highlighting its
+c.f. Figure 1) and a rationale that emulates a                                 superior data scalability.
+veteran teacher’s thought process when designing                                  Our contributions are three-fold: (1) We pro-
+math problems for students. The idea is inspired                               pose synthesizing Olympiad-level math problems
+by the success of LLMs in “solving” difficult                                  to enhance LLM reasoning. While previous re-
+problems, where detailed reasoning procedures                                  search (Snell et al., 2024) has identified problem
+                                                                        18168
+                            Likelihood of being derived                                                           Foundational                   Olympiad-level
+                                                           Likelihood of deriving olympiads                                       Rationale ②
+                                                                                                                   Concepts                         Problem
+                           𝑝(𝑧|𝑐)                       𝑝(𝑥|𝑧, 𝑐)
+
+                                                                                                                                         Update
+
+                                    ①       ②    ③ Rationales           ①   ②   ③ Rationales
+
+                                                                                                                Arbitrary Set
+                                                    Potential Rationales (𝒛)                                                                       Rationale Problem
+                                                                                                                of Concepts
+                          Foundational
+                          Concepts (𝒄)                    Rationale ①                       Olympiad-level
+                                                                                            Problem (𝒙)                   Problem Generation Model
+             1.   Properties of Exponents
+             2.   Modular Arithmetic                                                                                     Update
+                                                          Rationale ②              Find the least odd prime                                      Sample
+             3.   Prime Numbers
+             4.   Congruence Theorems                                              factor of 20198 + 1
+
+                                                          Rationale ③                                                                Quality
+                                                                                                                                    Evaluation
+
+                                                Rationale Generation (§ 2.2)                                          Problem Generation Model (§ 2.3)
+
+
+
+Figure 1: Overview of the proposed method. Left: Given an Olympiad problem and its foundational concepts
+(extracted using an LLM), the goal is to identify rationales that act as “amplifiers” to enhance the likelihood of
+generating the Olympiad problem (i.e., p(x | z, c)) while ensuring that these rationales can be easily derived
+from the foundational concepts (i.e., p(z | c)). Right: Once an appropriate rationale is found, we use the
+⟨foundational concepts, rationale, Olympiad problem⟩ triple to train a model capable of predicting both the rationale
+and the Olympiad problem from any given set of concepts. The model can be further optimized through rejection
+sampling, where the quality of generated outputs is evaluated and used for subsequent model training.
+
+
+difficulty as a key factor in improving LLMs’ rea-                                              ated problems (§2.3).
+soning capabilities, to the best of our knowledge,
+we are the first to formally pose difficult problem                                             2.1           Concept Extraction
+generation as a research question (i.e., RQ); (2)                                               We collect a large set of seed prompts from
+We propose P ROMPT C OT as a principled approach                                                the AoPS 1 platform which contains challenging
+to generating Olympiad-level math problems. To                                                  Olympiad-level math problems. Problems overlap-
+the best of our knowledge, we are the first to ap-                                              ping with common test benchmarks are filtered out
+ply the chain-of-thought paradigm to the task of                                                to prevent data leakage. For each seed prompt,
+problem generation; and (3) We conduct extensive                                                domain-specific concepts are extracted using a
+experiments to evaluate the efficacy of P ROMPT-                                                large language model. The model is provided with
+C OT. Notably, P ROMPT C OT is the only method                                                  a query instruction (see Appendix A for details)
+that enables Qwen2.5-Math base models to surpass                                                that directs it to identify the salient concepts associ-
+their Instruct versions. Furthermore, a 7B model                                                ated with the problem. While tailored to mathemat-
+distilled using the problems generated by P ROMPT-                                              ics in our study, these concepts serve as a concise
+C OT is able to achieve performance comparable to                                               abstraction of the underlying reasoning in problem
+state-of-the-art 32B models on mathematical rea-                                                design and can be readily adapted to other domains
+soning tasks.                                                                                   by replacing the seed prompts with those relevant
+                                                                                                to the target domain.
+2   Method
+                                                                                                2.2           Rationale Generation
+Figure 1 provides an overview of P ROMPT C OT. In
+summary, our method comprises three key steps:                                                  For effective problem generation, the underlying
+(1) Concept Extraction: Foundational concepts                                                   rationale should (i) be naturally derived from a
+are extracted from seed prompts collected from                                                  set of foundational concepts and (ii) increase the
+Olympiad math sources (§2.1); (2) Rationale Gen-                                                likelihood of producing a high-quality problem. To
+eration: A rationale is inferred for each problem                                               capture this idea, let us denote the set of extracted
+based on its associated concepts by maximizing                                                  K concepts by
+both the probability of the rationale given the con-
+cepts and the probability of the problem given                                                                           c = {c1 , c2 , . . . , cK }.
+both the rationale and the concepts (§2.2); and (3)
+Problem Generation Model Training: Concept-                                                     We introduce a latent variable z that represents the
+rationale-problem triples are used to fine-tune an                                              rationale connecting these concepts to the original
+LLM as a problem generation model, followed by                                                  problem x. The generation process is then formu-
+a rejection sampling fine-tuning stage for further                                              lated as
+self-improvement, ensuring the quality of gener-                                                      1
+                                                                                                          https://artofproblemsolving.com/
+
+                                                                                       18169
+

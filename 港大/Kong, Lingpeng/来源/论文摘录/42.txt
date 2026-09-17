@@ -1,0 +1,222 @@
+                                         Preprint
+
+
+
+
+                                         N ON - MYOPIC G ENERATION OF L ANGUAGE M ODELS
+                                         FOR R EASONING AND P LANNING
+
+                                          Chang Ma♠ Haiteng Zhao♡          Junlei Zhang♢∆ Junxian He∗♣ Lingpeng Kong∗♠
+                                          ♠
+                                            The University of Hong Kong ♡ Peking University ♢ Zhejiang University
+                                          ∆
+                                            Westlake University ♣ The Hong Kong University of Science and Technology
+                                          {cma, lpk}@cs.hku.hk, junxianh@cse.ust.hk
+
+
+
+                                                                                       A BSTRACT
+
+
+
+
+arXiv:2410.17195v3 [cs.AI] 28 Oct 2024
+                                                      Large Language Models (LLMs) have demonstrated remarkable abilities in rea-
+                                                      soning and planning by breaking down complex problems into sequential steps.
+                                                      Despite their success in various domains, such as mathematical problem-solving
+                                                      and coding, LLMs face challenges in ensuring reliable and optimal planning due
+                                                      to the inherent myopic nature of autoregressive decoding. This paper revisits
+                                                      LLM reasoning from an optimal control perspective, proposing a novel method,
+                                                      Predictive-Decoding, that leverages Model Predictive Control to enhance plan-
+                                                      ning accuracy. By reweighting LLM distributions based on foresight trajecto-
+                                                      ries, Predictive-Decoding aims to mitigate early errors and promote non-myopic
+                                                      planning. Our experiments show significant improvements across a wide range
+                                                      of tasks in math, coding, and agent-based scenarios. Furthermore, Predictive-
+                                                      Decoding demonstrates computational efficiency, outperforming search baselines
+                                                      while utilizing inference compute more effectively. This study provides insights
+                                                      into optimizing LLM planning capabilities. Code is available at this repo.
+
+
+                                         1       I NTRODUCTION
+                                         Large Language Models (LLMs) are extensively pretrained on large corpus to predict the next tokens.
+                                         Models like GPT-4 (Achiam et al., 2023) have demonstrated a capacity for step-by-step reasoning
+                                         and planning, breaking down complex problems into sequential steps that progressively lead to
+                                         solutions (Wei et al., 2022). This sequential planning capability has led to significant advancements
+                                         in mathematical problem-solving (Cobbe et al., 2021) and programming tasks (Chen et al., 2021).
+                                         It has also enabled essential applications such as tool use (Qin et al., 2023) and the development of
+                                         LLM agents (Yao et al., 2022). Consider a scenario where an agent is tasked with cooking a meal:
+                                         given an instruction like “Put salt on steak” and an initial observation such as “There is a shelf in front
+                                         of you,” the LLM assigns the highest probability to the most appropriate action. After executing this
+                                         action, the LLM generates subsequent actions, each building upon the previous steps. This process
+                                         creates a sequential chain of actions that advances toward task completion, guided by continuous
+                                         interaction with environmental observations:
+                                                      p( “Go to the shelf.” ∣ “There is a shelf in front of you.”)
+                                                      p( “Pick up the saltbottle.” ∣ “Go to the shelf. A saltbottle is on the shelf.”),
+                                         where “A saltbottle is on the shelf ” is the new observation after going to the shelf. This iterative
+                                         process continues until the specified goal state is achieved. However, this autoregressive decoding
+                                         process could easily lead to irreversible errors, as LLMs tend to follow the most natural local follow-
+                                         ups. For instance, given a different observation “A spice bottle is on the shelf ”, the LLM is likely
+                                         to generate actions “Pick up the spice bottle” followed by “Shake the bottle over the steak”. Such
+                                         a sequence of actions totally conflicts with the intended instruction “Put salt on the steak”. This
+                                         contrasts with reinforcement learning paradigms, which use reward-based training to teach models to
+                                         anticipate long-term action consequences and learn optimal decision policies (Silver et al., 2014).
+                                         The short-sightedness of LLMs raises critical questions about their planning capabilities: (i) Can
+                                         an LLM proactively avoid erroneous steps without necessitating their occurrence? (ii) What is the
+                                         degree of optimality achievable in LLM-based planning strategies?
+                                             ∗
+                                                 Equal advising.
+
+
+                                                                                             1
+Preprint
+
+
+
+
+ Reasoning Challenge: Carla is downloading a 200 GB file. Normally she can download 2 GB/minute, but 40% of the way through the download,
+ Windows forces a restart to install updates, which takes 20 minutes. Then Carla has to restart the download from the beginning. How long does it
+                                                              take to download the file?
+
+                   Step 1: Before restart, Carla      Step 2: Then after the restart,        Step 3: After restart, she needs to     Error has already
+                  downloaded for 200 *40%/2 =        Carla has 200 * 60% = 120GB              download the remaining for              been made. Too                LLM
+                           40 minutes.                        to download.                         120/2 = 60 minutes.                      late!                Probability
+
+                  LLM Prob: 0.99, Human: Correct     LLM Prob: 0.89, Human: Wrong             LLM Prob: 0.45, Human: Wrong
+
+Myopic Reasoner                                                                                                                                             Global Correctness
+                                    Step 2: Then after the restart, Carla has 200 *         Step 3: She needs to download the
+                      Step 1                                                                                                       LLM Prob: 0.45
+                                             60% = 120GB to download.                           remaining for 60 minutes.
+
+                                    Step 2: Then after the restart, Carla has 200 *         Step 3: She needs to download the
+                                                                                                                                   LLM Prob: 0.45
+                                             60% = 120GB to download.                           remaining for 60 minutes.
+
+
+                                   Step 2: Then after the restart, Carla has 200 GB           Step 3: She needs to download
+                                                                                                                                   LLM Prob: 0.91
+                                                                                                                                                    LLM Rescaled Probability
+                                                    to download.                               from start for 100 minutes.
+Predictive Decoding
+
+
+Figure 1: The illustrative overview of Predictive-Decoding on one GSM8K example. LLM au-
+toregressive planning often suffers from near sight. Predictive-Decoding rescales LLM generation
+distribution based on evaluation of foresight, enabling non-myopic planning.
+
+
+To investigate the causes and extent of myopia (short-sightedness) in LLM planning, we refer to
+optimal control theory (Qin & Badgwell, 1997). Optimal planning is framed as a combinatorial opti-
+mization problem aimed at maximizing goal achievement through T steps of actions (a1 , a2 , . . . , aT ).
+Model Predictive Control (MPC; Camacho et al., 2007) outlines the optimality condition for LLM-
+like planners – sequential planning must be non-myopic, which requires the anticipation of future
+outcomes in addition to considering past actions, represented as p(at ∣ History, Future). Conversely,
+focusing solely on p(at ∣ History) can lead to irreversible mistakes and potential planning failures.
+Recent studies (Shih et al., 2023; Bachmann & Nagarajan, 2024) have observed myopia in language
+models pretrained with next-token prediction. Our research further reveals that even in advanced
+LLMs like Llama-3 (Dubey et al., 2024), more than half of the reasoning processes on popular
+math tasks demonstrate a lack of global awareness, with myopia being particularly pronounced in
+incorrect instances (§3.1). Additionally, LLMs initially do not seem sensitive to mistakes; however,
+errors accumulate during multi-step planning and become increasingly noticeable over several steps
+(§3.2). These findings emphasize the importance of thinking with foresight.
+To address this, we propose Predictive-Decoding, a training-free approach to improve LLM planning
+with non-myopic generation. Predictive-Decoding re-weights LLM distribution based on the closed-
+form solution in Model Predictive Control (Eq. 2), such that sampling from the re-weighted solution
+is approximately solving planning with global-optimality. For each step at , Predictive-Decoding
+samples multiple foresight trajectories (at , at+1 , . . . , at+T0 ) and rescales the original generation
+distribution based on the evaluations of foresight trajectories. Best action at is sampled from this
+distribution. The process repeats until a solution is generated at timestep T . An overview is illustrated
+in Figure 1. Extensive experiments on math, coding, and agent tasks show notable improvements in
+planning and reasoning accuracy. For example, without using any additional supervision, we achieve a
+7.2% improvement on GSM8K (Cobbe et al., 2021) and a 25.3% improvement on AlfWorld (Shridhar
+et al., 2021) accuracy over ReAct (Yao et al., 2022). Predictive-Decoding’s conditioning on future
+foresight promotes non-myopic planning and reduces early errors. It requires no special prompt
+design and preserves generation diversity.
+Furthermore, Predictive-Decoding utilizes inference compute more effectively than other planning
+approaches. Previous methods have implemented various techniques to enhance planning global-
+awareness, such as weighted voting of diverse generations (Wang et al., 2022) and searching algo-
+rithms (Yao et al., 2024; Xie et al., 2024; Hao et al., 2023; Zhou et al., 2023). While these methods
+can improve performance, they often require significantly higher computational resources, resulting
+in sub-optimal computation-performance trade-offs, as noted in recent studies (Snell et al., 2024; Wu
+et al., 2024b). In contrast, Predictive-Decoding adopts a “no-regrets” approach that optimizes se-
+quentially and simplifies the solution space, avoiding the exponential growth associated with iterative
+planning methods. This efficiency is reflected in our inference scaling law results with a fixed LLM
+and reward model, where Predictive-Decoding achieves Pareto superiority over all state-of-the-art
+(SOTA) baselines (§5.4). Specifically, on the GSM8K benchmark, Predictive-Decoding outperforms
+MCTS (Hao et al., 2023) by 2.4% and Guided Decoding (Xie et al., 2024) by 1.4% , while utilizing
+only about 50% of the FLOPS, demonstrating its effectiveness and efficiency.
+
+
+                                                                                        2
+Preprint
+
+
+
+
+Table 1: Non-iterative planning is efficient and suitable for closed-loop settings. Iterative planning,
+though better for global optimal decisions, is slow and impractical for realistic agent tasks. Predictive-
+Decoding combines the best of both. Advantages include: G lobal-Optimality of solution, S caling to
+long-range planning, E fficiency, and C losed-Loop Interaction.
+
+ Decision Making             Paradigm Illustration                               Representative Methods             Type     Advantage
+                                                Solution 1               Self-Consistency (Wang et al., 2022)       Sample
+                                            …                             Tree-of-Thought (Yao et al., 2024)        Search
+ Iterative Planning                             Solution N               Guided-Decoding (Xie et al., 2024)         Search   G
+                                                                       Monte Carlo Tree Search (Hao et al., 2023)   Search
+                                                Best Solution
+                                                                             Reflexion (Shinn et al., 2024)         Prompt
+                                                                          Chain-of-Thought (Wei et al., 2022)       Sample
+                                                                                                                             S E C
+ Sequential Planning                               Best Solution               ReAct (Yao et al., 2022)             Sample
+                                                                                Predictive-Decoding (Ours)          Sample   G S E C
+
+
+2    P ROBLEM F ORMULATION : AN OPTIMAL CONTROL VIEW
+
+One of the fundamental problems in decision-making is whether we can solve a long-term goal step
+by step (Qin & Badgwell, 1997). Traditionally, reinforcement learning approaches have relied on
+multiple iterations of training (Silver et al., 2014) and searching (Silver et al., 2017) to achieve optimal
+results. However, recent advancements demonstrate that LLMs possess the capability for sequential
+planning (Wei et al., 2022). Sequential planning can achieve optimal outcomes if non-myopic, while
+also offering other benefits, as shown in Table 1. In this section, we first outline the context of the
+problem and reconsider LLM planning from the perspective of trajectory optimization.
+
+
+Planning as Trajectory Optimization We consider Partially Observable Markov Decision Pro-
+cesses (POMDPs) defined by tuple ⟨g, S, A, T , R⟩, with goal g, state space S, valid actions space A,
+transition function T ∶ S × A → S, and R ∶ r(s, a∣g) ↦ R+ is the reward function that measures how
+well each step aligns with the goal (with the goal dependency omitted for simplicity). Global-Optimal
+Planning aims to find an action sequence that maximizes cumulative reward over a set number of
+steps. We model this as a Trajectory Optimization process: find a sequence of actions a0∶T that
+maximizes an objective J (Return) factorized over per-timestep rewards r (st , at ) over a planning
+horizon with T steps:
+                                                                            T
+                                        maxJ (s0 , a0∶T ) = ∑ r (st , at ) ,
+                                        a0∶T
+                                                                           t=0                                                       (1)
+                                 subject to st+1 = T (st , at ), ∀t ∈ [0, T − 1]
+
+Conversely, a Myopic Planner maximizes the return on a shorter horizon. For instance, a planner
+that maximizes the immediate reward at current step, i.e at = maxat r(st , at ), is myopic, while
+non-myopic planning works towards global-optimality.
+Previous approaches to trajectory optimization follow a straightforward intuition: using large language
+models (LLMs) to generate diverse trajectories through sampling or search, and then selecting the
+best one (Wang et al., 2022; Yao et al., 2024; Hao et al., 2023; Xie et al., 2024; Shinn et al., 2024).
+However, a significant drawback is the exponential growth of the solution space. Each action step
+offers ∣A∣ possibilities, leading to ∣A∣T potential solutions after T steps. This exponential scaling
+complicates the optimization process, and despite attempts to prune trajectories and accelerate search
+(Zhuang et al., 2023; Wang et al., 2024), most iterative planning methods are either time-consuming
+or perform poorly with limited iterations (Chen et al., 2024b). Additionally, iterative methods are
+often unsuitable for closed-loop scenarios, where agents interact with their environment in real-time,
+as each decision alters the environment and is irreversible.
+
+
+Sequential Planning with Model Predictive Control Model Predictive Control (Qin & Badgwell,
+1997) introduces a different paradigm for planning: instead of optimizing an entire action sequence
+a′0∶T at once, this method selects the best action at each timestep a′0 , . . . , a′t , fixing each as it progresses
+and then optimizing the subsequent steps. This transforms Eq. 1 into a series of optimization problems,
+each with linear size solution space ∣A∣. The colors denote: the current action to decide at , history,
+
+
+                                                                   3
+

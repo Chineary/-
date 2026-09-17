@@ -1,0 +1,165 @@
+         Z ERO G EN: Efficient Zero-shot Learning via Dataset Generation
+        Jiacheng Ye♠♢∗ † , Jiahui Gao♠†, Qintong Li♠ , Hang Xu♣ , Jiangtao Feng♢ ,
+                     Zhiyong Wu♢ , Tao Yu♠♡ , Lingpeng Kong♠♢
+    ♢
+      Shanghai AI Laboratory ♣ Huawei Noah’s Ark Lab ♡ University of Washington
+                              ♠
+                                The University of Hong Kong
+          {yejiacheng,fengjiangtao,wuzhiyong}@pjlab.org.cn,
+{sumiler,qtli}@connect.hku.hk,xbjxh@live.com,{tyu,lpk}@cs.hku.hk
+
+
+                        Abstract                              Then, we train a tiny task model (TAM), which
+                                                              has orders of magnitude fewer parameters than
+    There is a growing interest in dataset generation
+                                                              PLMs, under the supervision of the synthesized
+    recently due to the superior generative capacity
+    of large pre-trained language models (PLMs).              training data. Machine generated text is the only
+    In this paper, we study a flexible and efficient          medium that connects the PLMs to the final task
+    zero-short learning method, Z ERO G EN. Given             models, and no human annotations are required
+    a zero-shot task, we first generate a dataset             in the entire process. The TAM can be of any
+    from scratch using PLMs in an unsupervised                choice (e.g., loglinear or neural), allowing efficient
+    manner. Then, we train a tiny task model                  inference1 and deployment. Besides, TAM can be
+    (e.g., LSTM) under the supervision of the
+                                                              flexibly designed with any task-specific strategies
+    synthesized dataset. This approach allows
+    highly efficient inference as the final task model
+                                                              (e.g., inductive bias or loss), which could provide
+    only has orders of magnitude fewer param-                 superior performance.
+    eters comparing to PLMs (e.g., GPT2-XL).                     Apart from being annotation-free and efficient,
+    Apart from being annotation-free and efficient,           we are also interested in Z ERO G EN for the fol-
+    we argue that Z ERO G EN can also provide                 lowing reasons. First, Z ERO G EN can be seen as
+    useful insights from the perspective of data-             a variant of knowledge distillation (KD; Hinton
+    free model-agnostic knowledge distillation,
+                                                              et al. (2015)) that provides some exciting new
+    and unreferenced text generation evaluation.
+    Experiments and analysis on different NLP                 features. Unlike conventional KD, Z ERO G EN
+    tasks, namely, text classification, question              does not require any human annotations during
+    answering, and natural language inference,                distillation. Furthermore, Z ERO G EN makes no
+    show the effectiveness of Z ERO G EN.                     presumption on the architecture choice of student
+                                                              models, thus we can incorporate any task-specific
+1   Introduction                                              inductive bias into the design of student models
+While generating training data with language                  conveniently. Second, Z ERO G EN can serve as an
+model is not new to natural language processing               unreferenced evaluation method for text generation
+(Anaby-Tavor et al., 2020; Puri et al., 2020; Kumar           (Guan and Huang, 2020; Pillutla et al., 2021): the
+et al., 2020), it has garnered enormous interests             downstream tasks’ performance is dominated by
+recently due to the superior generative capacity of           the quality of the synthesized text, thus can serve
+large-scale pre-trained language models (PLMs).               as an indirect measure of the generation models
+Training examples created in such a manner have               and algorithms. Third, Z ERO G EN sheds new lights
+been found effective in various scenarios via the             on prompt engineering (Petroni et al., 2019; Brown
+data augmentation procedure (Lee et al., 2021;                et al., 2020) (i.e., the design of the prompts in
+Schick and Schütze, 2021; Wang et al., 2021; Meng             PLMs). As manual prompts reflect our essential
+et al., 2022, inter alia).                                    knowledge of specific tasks, an intriguing question
+   In this paper, we study an extreme scenario of             here is to what extend we can incorporate human
+such an approach, Z ERO G EN. Given a downstream              knowledge or instructions in these prompts.
+task, we first generate its training data from                   We evaluate Z ERO G EN in three NLP tasks which
+scratch using a powerful PLM, whose generation is             are text classification, question answering, and
+steered by carefully designed task-specific prompts.             1
+                                                                   Amazon estimates that 90% of production ML infrastruc-
+    ∗
+      Work done while interning at Shanghai AI Lab.           ture costs are for inference , rather than training (Jain et al.,
+    †
+      Equal Contribution.                                     2019).
+
+                                                         11653
+        Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 11653–11669
+                            December 7-11, 2022 ©2022 Association for Computational Linguistics
+natural language inference, across six datasets. Our   During the whole process, the pre-trained weights
+key research findings are summarized as follows:       of P are frozen and no training is required.
+                                                          The vast linguistic (Jawahar et al., 2019; Gold-
+• The zero-shot performance of TAM in Z ERO -          berg, 2019; Tenney et al., 2019) and factual
+  G EN framework significantly surpasses its PLM       (Petroni et al., 2019; Jiang et al., 2020b) knowledge
+  counterparts (which often serves as the teacher      encoded in PLMs’ parameters is the key towards
+  models under the knowledge distillation context),    P ROMPTING’s success. However, P ROMPTING
+  with only ∼0.4% number of parameters (§4.2);         fails to fully exert the capacity of PLMs and heavily
+• In some low-resourced settings, TAM trained          relies on gigantic PLMs during inference. This
+  with synthesized data even outperforms the same      motivates us to explore a more flexible and efficient
+  model trained with human annotations in a fully      way of conducting zero-shot learning with PLMs.
+  supervised manner (§4.3);
+                                                       3     Z ERO G EN
+• The quality of the generated text by known
+  models and algorithms are well reflected in          In this work, we take the dataset generation method
+  downstream tasks’ performance, and decoding          to the extreme and study Z ERO G EN, a flexible and
+  strategies that encourage more diversity also        efficient zero-shot learning framework via dataset
+  result in greater noise (§4.4);                      generation. Z ERO G EN framework comprises three
+• Prompt engineering is challenging – the perfor-      sequential stages as shown in Figure 1(b):
+  mance of more instructive or natural language
+                                                           1. The goal of the first stage is to make use of
+  style prompts varies in different tasks (§4.5).
+                                                              the generative power of PLMs to synthesize
+   In conclusion, we argue that Z ERO G EN is a               a dataset to solve the downstream task. With
+viable and promising approach towards flexible                carefully designed prompts and a powerful
+and efficient zero-shot learning in NLP. It also              PLM, the generated dataset is believed to
+has a great potential as a data-free model-agnostic           incorporate rich task-specific knowledge.
+knowledge distillation and unreferenced text eval-         2. Given pseudo dataset synthesized as above,
+uation method. Our code can be found at https:                we then train a tiny task model (TAM) to solve
+//github.com/HKUNLP/ZeroGen.                                  the task. TAM can integrate with any task-
+                                                              specific inductive bias and is also order-of-
+2   Preliminary: Prompt-based Zero-Shot                       magnitude smaller than PLMs.
+    Learning
+                                                           3. Finally, we perform efficient inference on
+We start with preliminary knowledge about                     target task using the trained model. During
+prompt-based zero-shot learning framework                     the whole process, no human annotations are
+(named P ROMPTING).                                           involved, thus the evaluation setting is purely
+   Giving a pre-trained language model (PLM) P                zero-shot.
+and a text classification (TC) task D = (X , Y),
+P ROMPTING first instantiates a prompt T (·) with      Pseudo dataset generation For a single-
+each input xi ∈ X and outputs a natural language       sentence classification task D, we aim to generate
+sequence to be completed by P. For instance, we        a pseudo dataset Dg = (X g , Y g ) with the help of a
+show an example on sentiment analysis task in          left-to-right PLM P. We first sample a class label
+Figure 1(a), where xi is "A deep and meaningful        y g from a uniform distribution:
+film." and T (xi ) is "A deep and meaningful
+                                                                      y g ∼ U(y1 , y2 , . . . , yk ),    (2)
+film. The sentiment of the movie review is ".
+Furthermore, P ROMPTING defines a verbalizer           where k is the number of classes. y g is then
+M(·) that maps each label/class yi to a word/words     wrapped up into a label-descriptive prompt T (y g )
+in P’s vocabulary. For instance, "positive" and        to steer the generation of xg :
+"negative" represents the two classes. In this
+way, P ROMPTING models the probability of class                          xg ∼ P(·|T (y g )).             (3)
+yi ∈ Y for xi as:
+                                                       Since the parameters of P is frozen and the
+         p(yi |xi ) = P (M(yi )|T (xi )) .      (1)    generation xg for each y g is deterministic, we can
+                                                   11654
+Figure 1: (a) Prompt-based zero-shot learning (P ROMPTING) framework. The text in green is the sentence to be
+classified. After concatenating the sentence with each prompt, a huge PLM (e.g., GPT-3) is used to calculate LM
+likelihood score for each class. (b) Our Z ERO G EN framework. We first generate a training set with PLM in a purely
+unsupervised manner. After simple filtering operations, we then train a tiny task model (e.g., LSTM) for flexible
+and efficient inference. The dash line indicates that the training procedure is only performed once before inference.
+
+
+adopt different sampling algorithms (e.g., Top-k            generated following procedure of generation for
+sampling (Fan et al., 2018) and nucleus sampling            single-sentence classification task. Since there
+(Holtzman et al., 2020)) to increase the diversity          could be no predefined label set for extractive
+of generated dataset. We then pair the generated            QA task, we use publicly available spaCy2 toolkit
+xg with y g to construct a pseudo training data.            to annotate entities, and then uniformly select
+We show an example about generating a pseudo                an entity as y g . Finally, the generated sentence-
+sentiment classification dataset in Figure 1(b). The        pair and label can form the pseudo dataset Dg =
+prompt T (y g ) for a positive label y g is "The movie      (C g , X g , Y g ). We elaborate details on prompts
+review in positive sentiment is: "". With the               chosen for each task in Section 4.5.
+sampling strategies, this prompt steers PLMs to
+generate multiple sentence ending with another              Pseudo-supervised training With the pseudo
+quotation mark, e.g., "A deep and meaningful                dataset Dg , we train a tiny task model TAM to
+movie."" or "Good film!!!"".                                conduct the given task. This procedure is highly
+                                                            flexible, meaning that we can use any model
+   For sentence-pair classification tasks, we need          architecture, loss function, and training strategy.
+to generate two sequences that bear certain rela-           In this work, we primarily focus on the overall
+tionships (e.g., premise and hypothesis in NLI,             framework, thus we leave the tuning of these
+context and question in QA). We decompose the               components for future work. Under the zero-shot
+generation into two steps: (i) We first generate            learning setting, it should be noted that we have no
+and/or sample a conditional context cg (e.g., cg            access to the standard validation set. Therefore, we
+represents premise in NLI and context in QA). The           use a portion (e.g., 10%) of the pseudo dataset as
+context cg is then concatenated with a sampled              the validation set for model selection.
+label yg and transformed into a prompt T (cg , yg ).
+                                                            Zero-shot evaluation Finally, we conduct infer-
+(ii) Giving the prompt T (cg , yg ), we can now
+                                                            ence on the trained TAM model. As TAM is
+generate the other sentence xg (e.g., hypothesis
+                                                            order-of-magnitude smaller than PLM, it is able
+in NLI and question in QA) as in Equation
+                                                            to perform extremely efficient inference.
+(3). In current implementation, we sample cg
+from an unlabeled corpus. But cg can also be                   2
+                                                                   https://spacy.io/
+
+                                                       11655
+

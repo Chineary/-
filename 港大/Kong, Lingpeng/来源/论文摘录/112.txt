@@ -1,0 +1,199 @@
+Good for Misconceived Reasons: An Empirical Revisiting on the Need for
+          Visual Context in Multimodal Machine Translation
+
+              Zhiyong Wu† ∗, Lingpeng Kong†¶ , Wei Bi‡ , Xiang Li§ , Ben Kao†
+                              †
+                                The University of Hong Kong,
+‡
+  Tencent AI Lab, Shanghai Artificial Intelligence Laboratory, § East China Normal University
+                  ¶
+      †
+        {zywu,lpk,kao}@cs.hku.hk, ‡ victoriabi@tencent.com, § xiangli@dase.ecnu.edu.cn
+
+
+
+                        Abstract                                 least as measured by automatic metrics. Elliott
+                                                                 (2018); Grönroos et al. (2018a) provide further ev-
+    A neural multimodal machine translation                      idence by showing that MMT models are, in fact,
+    (MMT) system is one that aims to perform bet-                insensitive to visual input and can translate without
+    ter translation by extending conventional text-
+                                                                 significant performance losses even in the pres-
+    only translation models with multimodal infor-
+    mation. Many recent studies report improve-                  ence of features derived from unrelated images. A
+    ments when equipping their models with the                   more recent study (Caglayan et al., 2019), however,
+    multimodal module, despite the controversy of                shows that under limited textual context (e.g., noun
+    whether such improvements indeed come from                   words are masked), models can leverage visual in-
+    the multimodal part. We revisit the contribu-                put to generate better translations. But it remains
+    tion of multimodal information in MMT by de-                 unclear where the gains of MMT methods come
+    vising two interpretable MMT models. To our
+                                                                 from, when the textual context is complete.
+    surprise, although our models replicate sim-
+    ilar gains as recently developed multimodal-                    The main tool utilized in prior discussion is ad-
+    integrated systems achieved, our models learn                versarial model comparison — explaining the be-
+    to ignore the multimodal information. Upon                   havior of complex and black-box MMT models by
+    further investigation, we discover that the im-              comparing performance changes when given adver-
+    provements achieved by the multimodal mod-                   sarial input (e.g., random images). Although such
+    els over text-only counterparts are in fact re-              an opaque tool is an acceptable beginning to in-
+    sults of the regularization effect. We report em-
+                                                                 vestigate the need for visual context in MMT, they
+    pirical findings that highlight the importance
+    of MMT models’ interpretability, and discuss
+                                                                 provide rather indirect evidence (Hessel and Lee,
+    how our findings will benefit future research.               2020). This is because performance differences
+                                                                 can often be attributed to factors unrelated to vi-
+1    Introduction                                                sual input, such as regularization (Kukačka et al.,
+                                                                 2017), data bias (Jabri et al., 2016), and some oth-
+Multimodal Machine Translation (MMT) aims at                     ers (Dodge et al., 2019).
+designing better translation systems by extending                   From these perspectives, we revisit the need
+conventional text-only translation systems to take               for visual context in MMT by designing two in-
+into account multimodal information, especially                  terpretable models. Instead of directly infusing
+from visual modality (Specia et al., 2016; Wang                  visual features into the model, we design learnable
+et al., 2019). Despite many previous success in                  components, which allow the model to voluntarily
+MMT that report improvements when models are                     decide the usefulness of the visual features and re-
+equipped with visual information (Calixto et al.,                inforce their effects when they are helpful. To our
+2017; Helcl et al., 2018; Ive et al., 2019; Lin et al.,          surprise, while our models are shown to be effective
+2020; Yin et al., 2020), there have been continuing              on Multi30k (Elliott et al., 2016) and VaTex (Wang
+debates on the need for visual context in MMT.                   et al., 2019) datasets, they learn to ignore the mul-
+   In particular, Specia et al. (2016); Elliott et al.           timodal information. Our further analysis suggests
+(2017); Barrault et al. (2018) argue that visual con-            that under sufficient textual context, the improve-
+text does not seem to help translation reliably, at              ments come from a regularization effect that is sim-
+    ∗
+     The majority of this work was done while the first author   ilar to random noise injection (Bishop, 1995) and
+was interning at Tencent AI Lab.                                 weight decay (Hanson and Pratt, 1989). The addi-
+
+                                                             6153
+                  Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics
+               and the 11th International Joint Conference on Natural Language Processing, pages 6153–6166
+                             August 1–6, 2021. ©2021 Association for Computational Linguistics
+tional visual information is treated as noise signals    instance, Doubly-ATT (Calixto et al., 2017; Helcl
+that can be used to enhance model training and lead      et al., 2018; Arslan et al., 2018) insert an extra
+to a more robust network with lower generalization       visual attention sub-layer between the decoder’s
+error (Salamon and Bello, 2017). Repeating the           source-target attention sub-layer and feed-forward
+evaluation under limited textual context further sub-    sub-layer. While there are more works on engi-
+stantiates our findings and complements previous         neering decoders, encoder-based approaches are
+analysis (Caglayan et al., 2019).                        relatively less explored. To this end, Yao and Wan
+   Our contributions are twofold. First, we revisit      (2020) and Yin et al. (2020) replace the vanilla
+the need for visual context in the popular task of       Transformer encoder with a multi-modal encoder.
+multimodal machine translation and find that: (1)           Besides the exploration on network structure, re-
+under sufficient textual context, the MMT models’        searchers also propose to leverage the benefits of
+improvements over text-only counterparts result          multi-tasking to improve MMT (Elliott and Kádár,
+from the regularization effect (Section 5.2). (2)        2017; Zhou et al., 2018). The Imagination archi-
+under limited textual context, MMT models can            tecture (Elliott and Kádár, 2017; Helcl et al., 2018)
+leverage visual context to help translation (Sec-        decomposes multimodal translation into two sub-
+tion 5.3). Our findings highlight the importance of      tasks: translation task and an auxiliary visual recon-
+MMT models’ interpretability and the need for a          struction task, which encourages the model to learn
+new benchmark to advance the community.                  a visually grounded source sentence representation.
+   Second, for the MMT task, we provide a strong
+                                                         Retrieval-based MMT The effectiveness of con-
+text-only baseline implementation and two mod-
+                                                         ventional MMT heavily relies on the availability
+els with interpretable components that replicate
+                                                         of images with bilingual annotations. This could
+similar gains as reported in previous works. Differ-
+                                                         restrict its wide applicability. To address this is-
+ent from adversarial model comparison methods,
+                                                         sue, Zhang et al. (2020) propose UVR-NMT that
+our models are interpretable due to the specifically
+                                                         integrates a retrieval component into MMT. They
+designed model structure and can serve as stan-
+                                                         use TF-IDF to build a token-to-image lookup ta-
+dard baselines for future interpretable MMT stud-
+                                                         ble, based on which images sharing similar topics
+ies. Our code is available at https://github.
+                                                         with a source sentence are retrieved as relevant
+com/LividWo/Revisit-MMT.
+                                                         images. This creates image-bilingual-annotation
+2   Background                                           instances for training. Retrieval-based models have
+                                                         been shown to improve performance across a vari-
+One can broadly categorize MMT systems into two          ety of NLP tasks besides MMT, such as question
+types: (1) Conventional MMT, where there is gold         answering (Guu et al., 2020), dialogue (Weston
+alignment between the source (target) sentence pair      et al., 2018), language modeling (Khandelwal et al.,
+and a relevant image and (2) Retrieval-based MMT,        2019), question generation (Lewis et al., 2020), and
+where systems retrieve relevant images from an im-       translation (Gu et al., 2018).
+age corpus as additional clues to assist translation.
+                                                         3   Method
+Conventional MMT Most MMT systems re-
+quire datasets consist of images with bilingual an-      In this section we introduce two interpretable
+notations for both training and inference. Many          MMT models: (1) Gated Fusion for conventional
+early attempts use a pre-trained model (e.g.,            MMT and (2) Dense-Retrieval-augmented MMT
+ResNet (He et al., 2016)) to encode images into          (RMMT) for retrieval-based MMT. Our design phi-
+feature vectors. This visual representation can          losophy is that models should learn, in an inter-
+be used to initialize the encoder/decoder’s hid-         pretable manner, to which degree multimodal in-
+den vectors (Elliott et al., 2015; Libovický and        formation is used. Following this principle, we
+Helcl, 2017; Calixto et al., 2016). It can also be       focus on the component that integrates multimodal
+appended/prepended to word embeddings as ad-             information. In particular, we use a gating matrix Λ
+ditional input tokens (Huang et al., 2016; Calixto       (Yin et al., 2020; Zhang et al., 2020) to control the
+and Liu, 2017). Recent works (Libovický et al.,         amount of visual information to be blended into the
+2018; Zhou et al., 2018; Ive et al., 2019; Lin et al.,   textual representation. Such a matrix facilitates in-
+2020) employ attention mechanism to generate a           terpreting the fusion process: a larger gating value
+visual-aware representation for the decoder. For         Λij ∈ [0, 1] indicates that the model exploits more
+
+                                                    6154
+visual context in translation, and vice versa.            Image Retriever Based on the TF-IDF model,
+                                                          searching in existing retrieval-based MMT (Zhang
+3.1    Gated Fusion MMT                                   et al., 2020) ignores the context information of a
+                                                          given query, which could lead to poor performance.
+Given a source sentence x of length T and an as-
+                                                          To improve the recall of our image retriever, we
+sociated image z, we compute the probability of
+                                                          compute the similarity between a sentence x and
+generating target sentence y of length N by:
+                                                          an image z with inner product:
+                       N
+                       Y                                      sim(x, z) = Embed text (x)> Embed image (z),
+         p(y|x, z) =       pθ (yi | x, z, y<i ) ,   (1)
+                       i                                  where Embedtext (x) and Embedimage (z) are d-
+where pθ (yi | x, z, y<i ) is implemented with a          dimensional representations of x and z, respec-
+Transformer-based (Vaswani et al., 2017) network.         tively. We then retrieve top-K images that are
+Specifically, we first feed x into a vanilla Trans-       closest to x. For Embedimage (z), we compute it by
+former encoder to obtain a textual representation         Eq. 2. For Embedtext (x), we implement it using
+Htext ∈ RT ×d , which is then fused with visual           BERT (Devlin et al., 2019):
+representation Embed image (z) before fed into the
+                                                                   Embed text (x) = Wtext BERTCLS (x) .     (4)
+Transformer decoder. For each image z, we use
+a pre-trained ResNet-50 CNN (He et al., 2016) to          Following standard practices, we use a pre-trained
+extract a 2048-dimensional average-pooled visual          BERT model1 to obtain the “pooled” representation
+representation, which is then projected to the same       of the sequence (denoted as BERTCLS (x)). Here,
+dimension as Htext :                                      Wtext is a projection matrix.
+
+      Embed image (z) = Wz ResNetpool (z) .         (2)   Multimodal Translator Different from Gated
+                                                          Fusion, p(y|x, Z) now is conditioning on a set of
+                                                          images rather than one single image. For each z in
+   We next generate a gating matrix Λ ∈ [0, 1]T ×d
+                                                          Z, we represent it using Embedimage (z) ∈ Rd as in
+to control the fusion of Htext and Embed image (z):
+                                                          Equation 2. The image set Z then forms a feature
+                                                         matrix Embedimage (Z) ∈ RK×d , where K = |Z|
+Λ = sigmoid WΛ Embed image (z) + UΛ Htext ,
+                                                          and each row corresponds to the feature vector of
+                                                          an image. We use a transformation layer fθ (∗) to
+where WΛ and UΛ are model parameters. Note                extract salient features from Embedimage (Z) and
+that this gating mechanism has been a building            obtain a compressed representation Rd of Z. Af-
+block for many recent MMT systems (Zhang et al.,          ter the transformation, ideally, we can implement
+2020; Lin et al., 2020; Yin et al., 2020). We are,        p(y|x, Z) using any existing MMT models. For
+however, the first to focus on its interpretability.      interpretability, we follow the Gated Fusion model
+Finally, we generate the output vector H by:              to fuse the textual and visual representations with
+                                                          a learnable gating matrix Λ:
+          H = Htext + Λ Embed image (z).            (3)
+                                                                     H = Htext + Λfθ ( Embed image (Z)).    (5)
+H is then fed into the decoder directly for transla-
+tion as in vanilla Transformer.                           Here, fθ (∗) denotes a max-pooling layer with win-
+                                                          dow size K × 1.
+3.2    Retrieval-Augmented MMT (RMMT)
+                                                          4        Experiment
+RMMT consists of two sequential components:
+(1) an image retriever p(z|x) that takes x as in-         In this section, we evaluate our models on the
+put and returns Top-K most relevant images from           Multi30k and VaTex benchmark.
+an image database;     (2) a multi-modal translator       4.1        Dataset
+p(y|x, Z) = N
+             Q
+                i p θ (y i | x, Z, y<i ) that generates
+                                                          We perform experiments on the widely-used MMT
+each yi conditioned on the input sentence x, the
+                                                          datasets: Multi30k. We follow a standard split
+image set Z returned by the retriever, and the pre-
+                                                               1
+viously generated tokens y<i .                                     Here we use bert-base-uncased version.
+
+                                                      6155
+

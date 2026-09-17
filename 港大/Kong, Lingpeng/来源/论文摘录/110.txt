@@ -1,0 +1,187 @@
+                                         Published as a conference paper at ICLR 2022
+
+
+
+
+                                         R EVISITING OVER - SMOOTHING IN BERT FROM THE
+                                         P ERSPECTIVE OF G RAPH
+                                          Han Shi1∗, Jiahui Gao2∗, Hang Xu3 , Xiaodan Liang4 ,
+                                          Zhenguo Li3 , Lingpeng Kong2 , Stephen M.S. Lee2 , James T. Kwok1
+                                          1
+                                            Hong Kong University of Science and Technology, 2 The University of Hong Kong,
+                                          3
+                                            Huawei Noah’s Ark Lab, 4 Sun Yat-sen University
+                                          {hshiac,jamesk}@cse.ust.hk,{sumiler,smslee}@hku.hk,lpk@cs.hku.hk,
+                                          {xu.hang,li.zhenguo}@huawei.com,xdliang328@gmail.com
+
+
+
+
+arXiv:2202.08625v1 [cs.LG] 17 Feb 2022
+                                                                                         A BSTRACT
+                                                      Recently over-smoothing phenomenon of Transformer-based models is observed
+                                                      in both vision and language fields. However, no existing work has delved deeper
+                                                      to further investigate the main cause of this phenomenon. In this work, we make
+                                                      the attempt to analyze the over-smoothing problem from the perspective of graph,
+                                                      where such problem was first discovered and explored. Intuitively, the self-attention
+                                                      matrix can be seen as a normalized adjacent matrix of a corresponding graph. Based
+                                                      on the above connection, we provide some theoretical analysis and find that layer
+                                                      normalization plays a key role in the over-smoothing issue of Transformer-based
+                                                      models. Specifically, if the standard deviation of layer normalization is sufficiently
+                                                      large, the output of Transformer stacks will converge to a specific low-rank subspace
+                                                      and result in over-smoothing. To alleviate the over-smoothing problem, we consider
+                                                      hierarchical fusion strategies, which combine the representations from different
+                                                      layers adaptively to make the output more diverse. Extensive experiment results on
+                                                      various data sets illustrate the effect of our fusion method.
+
+
+                                         1       I NTRODUCTION
+                                         Over the past few years, Transformer (Vaswani et al., 2017) has been widely used in various natural
+                                         language processing (NLP) tasks, including text classification (Wang et al., 2018a), text translation
+                                         (Ott et al., 2018), question answering (Rajpurkar et al., 2016; 2018) and text generation (Brown
+                                         et al., 2020). The recent application of Transformer in computer vision (CV) field also demonstrate
+                                         the potential capacity of Transformer architecture. For instance, Transformer variants have been
+                                         successfully used for image classification (Dosovitskiy et al., 2021), object detection (Carion et al.,
+                                         2020) and semantic segmentation (Strudel et al., 2021). Three fundamental descendants from
+                                         Transformer include BERT (Devlin et al., 2019), RoBERTa (Liu et al., 2019) and ALBERT (Lan
+                                         et al., 2020), which achieve state-of-the-art performance on a wide range of NLP tasks.
+                                         Recently, Dong et al. (2021) observes the “token uniformity” problem, which reduces the capacity
+                                         of Transformer-based architectures by making all token representations identical. They claim that
+                                         pure self-attention (SAN) modules cause token uniformity, but they do not discuss whether the token
+                                         uniformity problem still exists in Transformer blocks. On the other hand, Gong et al. (2021) observe
+                                         the “over-smoothing” problem for ViT (Dosovitskiy et al., 2021), in that different input patches are
+                                         mapped to a similar latent representation. To prevent loss of information, they introduce additional
+                                         loss functions to encourage diversity and successfully improve model performance by suppressing
+                                         over-smoothing. Moreover, “overthinking” phenomenon, indicating that shallow representations
+                                         are better than deep representations, also be observed in (Zhou et al., 2020; Kaya et al., 2019). As
+                                         discussed in Section 3, this phenomenon has some inherent connection with over-smoothing. In this
+                                         paper, we use “over-smoothing” to unify the above issues, and refer this as the phenomenon that the
+                                         model performance is deteriorated because different inputs are mapped to a similar representation.
+                                         As the over-smoothing problem is first studied in the graph neural network (GNN) literature (Li et al.,
+                                         2018; Xu et al., 2018; Zhao & Akoglu, 2020), in this paper, we attempt to explore the cause of such
+                                             ∗
+                                                 Equal contribution.
+
+
+                                                                                                1
+Published as a conference paper at ICLR 2022
+
+
+
+
+problem by building a relationship between Transformer blocks and graphs. Specifically, we consider
+the self-attention matrix as the normalized adjacency matrix of a weighted graph, whose nodes are
+the tokens in a sentence. Furthermore, we consider the inherent connection between BERT and graph
+convolutional networks (Kipf & Welling, 2017). Inspired by the over-smoothing problem in GNN,
+we study over-smoothing in BERT from a theoretical view via matrix projection. As opposed to Dong
+et al. (2021), where the authors claim that layer normalization is irrelevant to over-smoothing, we
+find that layer normalization (Ba et al., 2016) plays an important role in over-smoothing. Specifically,
+we theoretically prove that, if the standard deviation in layer normalization is sufficiently large, the
+outputs of the Transformer stacks will converge to a low-rank subspace, resulting in over-smoothing.
+Empirically, we verify that the conditions hold for a certain number of samples for a pre-trained and
+fine-tuned BERT model (Devlin et al., 2019), which is consistent with our above observations.
+To alleviate the over-smoothing problem, we propose a hierarchical fusion strategy that adaptively
+fuses representations from different layers. Three fusion approaches are used: (i) Concat Fusion,
+(ii) Max Fusion, and (iii) Gate Fusion. The proposed method reduces the similarity between tokens
+and outperforms BERT baseline on the GLUE (Wang et al., 2018a), SWAG (Zellers et al., 2018) and
+SQuAD (Rajpurkar et al., 2016; 2018) data sets.
+In summary, the contributions of this paper are as follows: (i) We develop the relationship between
+self-attention and graph for a better understanding of over-smoothing in BERT. (ii) We provide
+theoretical analysis on over-smoothing in the BERT model, and empirically verify the theoretical
+results. (iii) We propose hierarchical fusion strategies that adaptively combine different layers to
+alleviate over-smoothing. Extensive experimental results verify our methods’ effectiveness.
+
+2     R ELATED W ORK
+2.1   T RANSFORMER B LOCK AND S ELF -ATTENTION
+
+Transformer block is a basic component in Transformer model (Vaswani et al., 2017). Each Trans-
+former block consists of a self-attention layer and a feed-forward layer. Let X ∈ Rn×d be the input
+to a Transformer block, where n is the number of input tokens and d is the embedding size. The
+self-attention layer output can be written as:
+                           h
+                           X                                                  h
+                                                                              X
+       Attn(X) = X +             σ(XWkQ (XWkK )> )XWkV WkO> = X +                   Âk XWkV O ,     (1)
+                           k=1                                                k=1
+
+where h is the number of heads, σ is the softmax function, and WkQ , WkK , WkV , WkO ∈ Rd×dh
+(where dh = d/h is the dimension of a single-head output) are weight matrices for the query, key,
+value, and output, respectively of the kth head. In particular, the self-attention matrix
+                              Â = σ(XW Q (XW K )> ) = σ(QK > )                                      (2)
+in (1) plays a key role in the self-attention layer (Park et al., 2019; Gong et al., 2019; Kovaleva et
+                                                                                                    √al.,
+2019). As in (Yun et al., 2020; Shi et al., 2021; Dong et al., 2021), we drop the scale product 1/ dh
+to simplify analysis.
+The feed-forward layer usually has two fully-connected (FC) layers with residual connection:
+                   F F (X) = Attn(X) + ReLU (Attn(X)W1 + b1 )W2 + b2 ,
+where W1 ∈ R    d×dff
+                      , W2 ∈ Rdff ×d (dff is the size of the intermediate layer) are the weight matrices,
+and b1 , b2 are the biases. Two layer normalization (Ba et al., 2016) operations are performed after
+the self-attention layer and fully-connected layer, respectively.
+
+2.2   OVER - SMOOTHING
+
+In graph neural networks, over-smoothing refers to the problem that the performance deteriorates
+as representations of all the nodes become similar (Li et al., 2018; Xu et al., 2018; Huang et al.,
+2020). Its main cause is the stacked aggregation layer using the same adjacency matrix. Recently,
+several approaches have been proposed to alleviate the over-smoothing problem. Xu et al. (2018)
+propose a jumping knowledge network for better structure-aware representation, which flexibly
+
+
+                                                   2
+Published as a conference paper at ICLR 2022
+
+
+
+
+    (a) Token-wise cosine similarity.       (b) Token similarity and error.        (c) Hierarchical fusion.
+
+                                  Figure 1: Over-smoothing in BERT models.
+
+
+leverages different neighborhood ranges. ResGCN (Li et al., 2019) adapts the residual connection and
+dilated convolution in the graph convolutional network (GCN), and successfully scales the GCN to
+56 layers. Zhao & Akoglu (2020) propose PairNorm, a novel normalization layer, that prevents node
+embeddings from becoming too similar. DropEdge (Rong et al., 2020; Huang et al., 2020) randomly
+removes edges from the input graph at each training epoch, and reduces the effect of over-smoothing.
+Unlike graph neural networks, over-smoothing in Transformer-based architectures has not been
+discussed in detail. Dong et al. (2021) introduce the “token-uniformity” problem for self-attention,
+and show that skip connections and multi-layer perceptron can mitigate this problem. However, Gong
+et al. (2021) still observe over-smoothing on the Vision Transformers (Dosovitskiy et al., 2021).
+
+3        D OES OVER - SMOOTHING E XIST IN BERT?
+In this section, we first explore the existence of over-smoothing in BERT, by measuring the similarity
+between tokens in each Transformer layer. Specifically, we use the token-wise cosine similarity
+(Gong et al., 2021) as our similarity measure:
+                                                    1     X   h> i hj
+                                     CosSim =                             ,
+                                                 n(n − 1)   khi k2 khj k2
+                                                              i6=j
+
+where n is the number of tokens, hi and hj are two representations of different tokens, and k · k2 is
+the Euclidean norm. Following Dong et al. (2021), we use WikiBio (Lebret et al., 2016) as input to
+the following Transformer-based models fine-tuned on the SQuAD data set (Rajpurkar et al., 2018):
+(i) BERT (Devlin et al., 2019), (ii) RoBERTa (Liu et al., 2019) and (iii) ALBERT (Lan et al., 2020).1
+For comparison, all three models are stacked with 12 blocks. We calculate each CosSim for each data
+sample and show the average and standard derivation of CosSim values over all WikiBio data.
+In the figures, layer 0 represents original input token representation, and layer 1-12 represents the
+corresponding transformer layers. As shown in Figure 1(a), the original token representations are
+different from each other, while token similarities are high in the last layer. For instance, the average
+token-wise cosine similarity of the last layer of ALBERT and RoBERTa are both larger than 90%.
+To illustrate the relationship between “over-thinking” and “over-smoothing”, we compare the token-
+wise cosine similarity at each layer with the corresponding error rate. As for the corresponding error
+rate of layer i, we use the representations from layer i as the final output and fine-tune the classifier.
+Following Zhou et al. (2020), we experiment with ALBERT (Lan et al., 2020) fine-tuned on the
+MRPC data set (Dolan & Brockett, 2005) and use their error rate results for convenience. As shown
+in Figure 1(b), layer 10 has the lowest cosine similarity and error rate. At layers 11 and 12, the tokens
+have larger cosine similarities, making them harder to distinguish and resulting in the performance
+drop. Thus, “over-thinking” can be explained by “over-smoothing”.
+A direct consequence of over-smoothing is that the performance cannot be improved when the model
+gets deeper, since the individual tokens are no longer distinguishable. To illustrate this, we increase
+the number of layers in BERT to 24 while keeping the other settings. As shown in Figure 1(c), the
+     1
+         Our implementation is based on the HuggingFace’s Transformers library (Wolf et al., 2020).
+
+
+                                                          3
+

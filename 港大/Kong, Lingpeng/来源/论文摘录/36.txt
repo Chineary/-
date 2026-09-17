@@ -1,0 +1,224 @@
+                                                  Teaching Language Models to Critique via Reinforcement Learning
+
+
+                                                       Zhihui Xie * 1 Jie Chen * 2 Liyu Chen 2 Weichao Mao 2 Jingjing Xu 2 Lingpeng Kong 1
+                                                                                     https://critic-rl.github.io
+
+                                                                                                                                                             Critic
+                                                                  Abstract                                                                 CTRL            Qwen2.5-Coder                  GPT-4o
+                                                                                                                              Qwen2.5-Coder Generator                  GPT-4o Generator
+                                              Teaching large language models (LLMs) to cri-                                                                       26
+                                              tique and refine their outputs is crucial for build-                       16
+
+
+
+
+arXiv:2502.03492v2 [cs.LG] 29 Nov 2025
+                                              ing systems that can iteratively improve, yet it                           14                                       24
+
+                                                                                                                Pass@1
+                                              is fundamentally limited by the ability to pro-
+                                              vide accurate judgments and actionable sugges-                             12                                       22
+                                              tions. In this work, we study LLM critics for                              10                                       20
+                                              code generation and propose CTRL, a framework
+                                              for Critic Training via Reinforcement Learning,                            8
+                                                                                                                                                                  18
+                                              which trains a critic model to generate feedback                                0           2        4          6        0           2        4          6
+                                              that maximizes correction performance for a fixed                                   Critique-revision Iteration              Critique-revision Iteration
+                                              generator model without human supervision. Our                    Figure 1. Performance scaling of our CTRL critic (finetuned on
+                                              results demonstrate that critics trained with CTRL                Qwen2.5-Coder-32B-Ins, henceforth Qwen2.5-Coder) compared
+                                              significantly enhance pass rates and mitigate com-                to other critics across different generators on CodeContests. CTRL
+                                              pounding errors across both base and stronger                     demonstrates strong critiquing capabilities not only when paired
+                                              generator models. Furthermore, we show that                       with its base model but also with a stronger generator (GPT-4o,
+                                              these critic models act as accurate generative re-                right). Shaded regions indicate standard error across 5 seeds.
+                                              ward models and enable test-time scaling through
+                                              iterative critique-revision, achieving up to 106.1%               degradation. To address this, existing approaches primarily
+                                              relative improvements across challenging code                     rely on reward models (Sun et al., 2023; Yuan et al., 2024)
+                                              generation benchmarks.                                            or automated verification tools (Gou et al., 2023; Chen et al.,
+                                                                                                                2023). However, these mechanisms often fail to provide
+                                                                                                                actionable guidance — reward models compress complex
+                                         1. Introduction                                                        evaluation criteria into simplified numerical signals (Gao
+                                         Recent advances in Large Language Models (LLMs) have                   et al., 2023; Pan et al., 2024), while verification tools gener-
+                                         sparked interest in their potential for self-improvement               ate low-level execution traces that do not directly translate
+                                         through iterative feedback mechanisms (Pan et al., 2023).              to high-level fixes (Zhong et al., 2024). Even in domains
+                                         Methods like Reflexion (Shinn et al., 2024) and Self-Refine            like code generation (Li et al., 2022; Sun et al., 2024) where
+                                         (Madaan et al., 2024) demonstrate that LLMs can, in prin-              such feedback mechanisms are readily available, previous
+                                         ciple, critique their own outputs and generate refined re-             work (Zheng et al., 2024) as well as our experiment (Table 1)
+                                         sponses. This self-improvement paradigm offers a promis-               reveal that such feedback alone struggles to drive meaning-
+                                         ing direction toward more autonomous AI systems that can               ful improvements. At the heart of this issue lies the feedback
+                                         learn from their mistakes.                                             bottleneck: feedback needs to both accurately discriminate
+                                                                                                                the correctness of solutions and provide informative yet
+                                         However, the effectiveness of such self-improvement mech-              actionable suggestions for improvement.
+                                         anisms remains challenging in practice. Huang et al. (2023)
+                                         demonstrate that without appropriate external feedback,                To address these challenges, we propose CTRL (Critic
+                                         such self-improvement loops may lead to performance                    Training via Reinforcement Learning), a framework that
+                                                                                                                decouples the critic model from the task-performing model
+                                           *
+                                             Equal contribution 1 The University of Hong Kong 2 Bytedance       (e.g., GPT-4o) and focus on developing a specialized critic
+                                         Seed. Correspondence to: Zhihui Xie <zhxieml@gmail.com>.               that can effectively drive the task-performing model to-
+                                         Proceedings of the 42 nd International Conference on Machine           ward optimal solution generation through iterative critique-
+                                         Learning, Vancouver, Canada. PMLR 267, 2025. Copyright 2025            revisions (Figure 2). This decomposition naturally intro-
+                                         by the author(s).                                                      duces a well-defined proxy task for training the critic model:
+
+                                                                                                            1
+                                              Teaching Language Models to Critique via Reinforcement Learning
+
+               HUMAN                                                                                                                          ASSISTANT
+                                                                                                                                           def resultsArray(self, queries: List[List[int]], k:
+                                                                                                                                           int) → List[int]:
+          There is an infinite 2D plane.                                                                                                      min_heap = []
+          You are given a positive integer k. You are also given a 2D array queries, which contains the following queries:                    results = []
+
+          queries[i] = [x, y]: Build an obstacle at coordinate (x, y) in the plane. It is guaranteed that there is no obstacle at this       for x, y in queries:
+          coordinate when this query is made.                                                                                                  distance = abs(x) + abs(y)
+                                                                                                                                               heapq.heappush(min_heap, distance)
+          After each query, you need to find the distance of the k^th nearest obstacle from the origin.
+          Return an integer array results where results[i] denotes the k^th nearest obstacle after query i, or results[i] == 1 if there        if len(min_heap) >= k:
+          are less than k obstacles.                                                                                                                results.append(min_heap[k-1])
+          Note that initially there are no obstacles anywhere.                                                                                  else:
+          The distance of an obstacle at coordinate (x, y) from the origin is given by |x|  |y|.                                                   results.append(-1)
+
+                                                                                                                                             return results
+
+
+
+                CRITIC                                                                                                                        ASSISTANT
+          Analysis:
+                                                                                                                                           def resultsArray(self, queries: List[List[int]], k:
+          The provided solution attempts to use a min-heap to keep track of the distances of obstacles from the origin. However, it
+                                                                                                                                           int) → List[int]:
+          incorrectly assumes that accessing `min_heap[k-1]` will give the k-th smallest element directly. This is not the case
+                                                                                                                                              max_heap = []
+          because heaps do not maintain sorted order beyond the root element; they only ensure that the smallest element is
+                                                                                                                                              results = []
+          always at the root. Therefore, attempting to access elements by index does not yield the correct k-th smallest value.
+                                                                                                                                             for x, y in queries:
+          Furthermore, the approach does not efficiently handle the requirement to always return the k-th nearest obstacle after
+                                                                                                                                               distance = abs(x) + abs(y)
+          each query, especially considering the large constraints where the number of queries can be up to \2 \times 10^5\).
+                                                                                                                                                if len(max_heap) < k:
+          Improvement suggestions:
+                                                                                                                                                    heapq.heappush(max_heap, -distance)
+          To address these issues, consider maintaining a balanced data structure that allows efficient insertion and retrieval of the
+          k-th smallest element. A balanced binary search tree or a more advanced structure like a skip list could potentially work,
+                                                                                                                                                elif distance < -max_heap[0]:                    ···
+                                                                                                                                                    heapq.heappop(max_heap)
+          but these might be complex to implement within the given constraints.
+                                                                                                                                                    heapq.heappush(max_heap, -distance)
+          Alternatively, focus on using a heap-based strategy more effectively. One possible approach involves maintaining a
+                                                                                                                                                if len(max_heap) == k:
+          max-heap of size k to store the k smallest distances encountered so far. When a new obstacle is added, calculate its
+                                                                                                                                                    results.append(-max_heap[0])
+          distance and compare it with the largest element in the heap (the root of the max-heap). If the new distance is smaller,
+                                                                                                                                                else:
+          replace the largest element with the new distance. This ensures that the heap always contains the k smallest distances,
+                                                                                                                                                    results.append(-1)
+          and the root of the heap will be the k-th smallest distance.
+                                                                                                                                             return results
+          Overall judgment: Incorrect
+
+
+
+
+Figure 2. Illustration of the critique-correction process for a coding problem. Top: An initial solution is proposed by the task-performing
+using a min-heap approach. Bottom: The critic identifies flaws in the implementation (incorrect heap access and inefficient query
+handling) and suggests specific improvements, leading to a corrected max-heap solution. This example is taken from critiques of CTRL
+on LiveCodeBench, which demonstrates how structured feedback from the critic can guide meaningful improvements in code generation.
+
+
+while directly evaluating the quality of generated critiques                                                     critic significantly reduces the number of revision itera-
+remains challenging, the effectiveness of a critic can be                                                        tions needed, leading to both lower token consumption and
+measured by its ability to drive the task-performing model                                                       higher success rates. Our empirical analysis (Figure 4)
+toward correct outputs. Though such indirect optimization                                                        demonstrates that this efficiency stems from reduced error
+signals lead to a large space of possible critiques and there-                                                   compounding—the critic effectively identifies and corrects
+fore high variance during training, we address this through a                                                    mistakes early, guiding the model toward more direct solu-
+two-stage pipeline: first synthesizing high-quality critiques                                                    tion paths without compromising solution quality.
+using execution feedback for supervised finetuning, then
+                                                                                                                 Our work makes four key contributions: (1) We propose
+optimizing the critic through Group Relative Policy Opti-
+                                                                                                                 CTRL, a novel framework that decouples critic LLMs from
+mization (GRPO; Shao et al. 2024).
+                                                                                                                 task-performing models and trains them through two-stage
+Through extensive evaluations on diverse benchmarks                                                              GRPO to guide code improvement. (2) Through extensive
+including CodeContests (Li et al., 2022), Live-                                                                  evaluation on programming benchmarks, we demonstrate
+CodeBench (Jain et al., 2024), MBPP+ (Liu et al.,                                                                that CTRL significantly outperforms both self-critique meth-
+2024a), and JudgeBench (Tan et al., 2024), we demonstrate                                                        ods and approaches using stronger critic models. (3) We
+that training with CTRL significantly outperforms both                                                           establish that relatively weaker critic models can effectively
+self-critique approaches and methods using stronger critic                                                       guide stronger task-performing models, demonstrating a
+models. Notably, we observe remarkable generalization                                                            promising weak-to-strong generalization phenomenon in
+capabilities of the decoupled critic LLM across different                                                        LLM guidance. (4) We show that a trained critic enables
+problem domains and model scales. Our experiments                                                                test-time scaling through iterative critique-revisions, achiev-
+demonstrate that relatively weaker critic models can                                                             ing up to 106.1% and 23.5% relative Pass@1 improvements
+effectively guide stronger task-performing models such                                                           on the challenging CodeContests benchmark when paired
+as GPT-4o (Table 3), exhibiting a similar phenomenon                                                             with its base model and a stronger model, respectively.
+to weak-to-strong generalization (Christiano et al., 2018;
+Burns et al., 2023), where weaker models can be trained to                                                       2. Preliminaries and Motivation
+effectively supervise more capable ones.
+                                                                                                                 The success of iterative improvement methods critically
+Furthermore, CTRL enables efficient test-time scaling (Fig-
+                                                                                                                 depends on their ability to leverage feedback to improve
+ure 1). By providing targeted and actionable feedback, our
+
+                                                                                                            2
+                             Teaching Language Models to Critique via Reinforcement Learning
+
+solutions. Formally, let x be an input problem and y be a                                  Strong Critiquing          Weak Critiquing        No Critiquing
+candidate solution, with R(y) being the evaluation function
+that returns 1 if y is correct and 0 otherwise. Starting with                    0.8
+an initial proposal distribution y0 ∼ π(· | x), the iterative                    0.7
+process generates subsequent solutions by incorporating
+feedback f (· | x, yi ) and produce the next solution yi+1 .                     0.6
+
+In this context, the effectiveness of such feedback mecha-            pcorrect   0.5
+nisms relies on two key capabilities: (1) discrimination - the                   0.4
+ability to evaluate and rank solutions, and (2) critiquing -
+                                                                                 0.3
+the ability to provide actionable feedback for improvement.                                                                    Discrimination Ability
+While discrimination has been extensively studied (Gao                           0.2                                              Strong          Weak
+et al., 2023), we focus on the critiquing ability and pro-                             0         10        20       30        40        50      60
+                                                                                                                Number of Attempts
+pose to characterize it through the transition dynamics of
+a Markov chain (Meyn & Tweedie, 2012) governing the                  Figure 3. Simulation results showing success probability (pcorrect )
+correctness of the iteratively refined solutions {R(yi )}i :         as a function of the number of attempts, comparing different levels
+                                                                     of critiquing and discrimination ability.
+                          P (R(y0 ) = 1) = pinit ,
+          P (R(yi+1 ) = 1 | R(yi ) = 1) = pcc ,                      abilities. While perfect abilities are not necessary, systemat-
+                                                                     ically improving these capabilities — particularly the ability
+          P (R(yi+1 ) = 1 | R(yi ) = 0) = pcw ,                      to generate actionable critiques — is crucial for realizing the
+                                                                     full potential of iterative refinement approaches.
+where pcc represents the critiquing ability to avoid turning
+correct solutions into wrong ones, and pcw captures the
+helpfulness of the feedback in improving the solution.               3. Method
+                                                                     With analysis presented in Section 2, our goal is to teach
+Varying Critiquing Ability. To understand the impor-                 LLMs the ability of critiquing without human supervision.
+tance of the critiquing ability, we conduct simulations              We propose CTRL, a two-stage training approach: (1) syn-
+across different levels of critiquing strength while lever-          thesizing high-quality critiques by reasoning about execu-
+aging discrimination to aggregate the final solutions. We            tion feedback, then (2) refining the critic through reinforce-
+consider pinit = 0.1 and three scenarios: (1) No critiquing          ment learning. Once trained, the critic model can be used
+(pcw = pcc ), a special case representing methods that in-           at test time, paired with any generator models, to iteratively
+dependently sample from the base distribution, or equiv-             refine solutions. A complete overview of the pipeline is
+alently best-of-n sampling (Sessa et al., 2024); (2) Weak            provided in Section A, with critique samples in Section E.
+critiquing (pcc = 0.7, pcw = 0.15); and (3) Strong cri-
+tiquing (pcc = 0.9, pcw = 0.3). For each scenario, we                3.1. Problem Statement
+first generate n solutions based on the specified transition
+dynamics, then apply the discrimination ability to select            We focus on code generation as our primary domain as
+the best promising solution, and plot the final correctness          it provides clear objective metrics through test cases, fol-
+probability against the number of attempts n. We present             lowing previous work (McAleese et al., 2024). Given a
+more details in Section C.1.                                         programming problem x (specified in natural language) and
+                                                                     a solution y (code implementation), our goal is to enable
+Observations & Takeaways. As shown in Figure 3, our                  iterative refinement of solutions, which centers on two key
+analysis reveals several key findings: (1) Strong critiquing         components: (1) a generator model π(y | x) that proposes
+abilities significantly improve success rates compared to no         solutions, and (2) a critic model Cθ (c|x, y) that provides
+critiquing, with performance gains visible even with weak            textural feedback c for improvement.
+critiquing, aligning with recent empirical findings (Huang
+et al., 2023). (2) Strong critiquing ability can compensate          Assumptions. Let D = {(xi , Ti )}N      i=1 be our training
+for weaker discrimination — a system with weak discrim-              dataset, where each problem xi is paired with unit tests
+ination but strong critiquing feedback can outperform one            Ti . We have access to a sandbox environment that executes
+with stronger discrimination but no critiquing ability. (3)          code against test cases, which serves as the evaluation func-
+The benefits of critiquing compound with more iterations,            tion R(y) that returns 1 if y passes all tests, 0 otherwise.
+while approaches with no critiquing plateau quickly. These           Notably, the sandbox does not assist critique generation at
+findings highlight that effective iterative improvement re-          test time. While not required, we treat the generator model
+quires careful attention to both discrimination and critiquing       as a black-box, allowing our approach to build upon existing
+
+                                                                 3
+

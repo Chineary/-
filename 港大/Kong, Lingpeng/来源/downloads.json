@@ -1,0 +1,2572 @@
+[
+  {
+    "id": 1,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2019_Learning and Evaluating General Linguistic Intelligence.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/1.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1901.11373",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 2,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2018_Neural Phrase-to-Phrase Machine Translation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/2.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1811.02172",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 3,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2018_Sentence Encoding with Tree-constrained Relation Networks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/3.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1811.10475",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 4,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_SyntaxNet Models for the CoNLL 2017 Shared Task.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/4.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1703.04929",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 5,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_DRAGNN_ A Transition-based Framework for Dynamically Connected Neural Networks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/5.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1703.04474",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 6,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_DyNet_ The Dynamic Neural Network Toolkit.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/6.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1701.03980",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 7,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2014_An Empirical Comparison of Parsing Methods for Stanford Dependencies.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/7.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1404.4314",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 8,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/8.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2412.03920",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 9,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Autoregressive Models in Vision_ A Survey.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/9.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2411.05902",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 10,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Linearized Relative Positional Encoding.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/10.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2307.09270",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 11,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2206.10552",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Vicinity Vision Transformer.pdf.part https://arxiv.org/pdf/2206.10552\ncurl: (28) Operation timed out after 35002 milliseconds with 1716698 out of 547",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Vicinity Vision Transformer.pdf.part https://arxiv.org/pdf/2206.10552\ncurl: (28) Operation timed out after 35002 milliseconds with 1716698 out of 547"
+  },
+  {
+    "id": 12,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2021_Adaptive Semiparametric Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/12.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2021.tacl-1.22.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 13,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2020_Syntactic Structure Distillation Pretraining for Bidirectional Encoders.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/13.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2020.tacl-1.50.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 14,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2020_Better Document-Level Machine Translation with Bayes’ Rule.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/14.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2020.tacl-1.23.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 15,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_End-to-End Neural Segmental Models for Speech Recognition.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/15.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1708.00531",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 16,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2505.19897",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_ScienceBoard_ Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows.pdf.part https://arxiv.org/pdf/2505.19897\ncurl: (28) Operatio",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_ScienceBoard_ Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows.pdf.part https://arxiv.org/pdf/2505.19897\ncurl: (28) Operatio"
+  },
+  {
+    "id": 17,
+    "status": "待核验",
+    "file": null,
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/17.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2505.23932",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "首页标题或导师姓名需人工核验（标题词匹配率0.40）"
+  },
+  {
+    "id": 18,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_PERSONA_ Dynamic and Compositional Inference-Time Personality Control via Activation Vector Algebra.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/18.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.15669",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 19,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_ATTS_ Asynchronous Test-Time Scaling via Conformal Prediction.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/19.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2509.15148",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 20,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2506.20639",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_DiffuCoder_ Understanding and Improving Masked Diffusion Models for Code Generation.pdf.part https://arxiv.org/pdf/2506.20639\ncurl: (28) Operation ti",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_DiffuCoder_ Understanding and Improving Masked Diffusion Models for Code Generation.pdf.part https://arxiv.org/pdf/2506.20639\ncurl: (28) Operation ti"
+  },
+  {
+    "id": 21,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2508.21475",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_MMSearch-Plus_ Benchmarking Provenance-Aware Search for Multimodal Browsing Agents.pdf.part https://arxiv.org/pdf/2508.21475\ncurl: (28) Operation tim",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_MMSearch-Plus_ Benchmarking Provenance-Aware Search for Multimodal Browsing Agents.pdf.part https://arxiv.org/pdf/2508.21475\ncurl: (28) Operation tim"
+  },
+  {
+    "id": 22,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_DreamOn_ Diffusion Language Models For Code Infilling Beyond Fixed-size Canvas.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/22.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.01326",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 23,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2503.16929",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_TEMPLE_Temporal Preference Learning of Video LLMs via Difficulty Scheduling and Pre-SFT Alignment.pdf.part https://arxiv.org/pdf/2503.16929\ncurl: (28",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_TEMPLE_Temporal Preference Learning of Video LLMs via Difficulty Scheduling and Pre-SFT Alignment.pdf.part https://arxiv.org/pdf/2503.16929\ncurl: (28"
+  },
+  {
+    "id": 24,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2503.17195",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_TreeSynth_ Synthesizing Diverse Data from Scratch via Tree-Guided Subspace Partitioning.pdf.part https://arxiv.org/pdf/2503.17195\ncurl: (28) Operatio",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_TreeSynth_ Synthesizing Diverse Data from Scratch via Tree-Guided Subspace Partitioning.pdf.part https://arxiv.org/pdf/2503.17195\ncurl: (28) Operatio"
+  },
+  {
+    "id": 25,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_DynaAct_ Large Language Model Reasoning with Dynamic Action Spaces.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/25.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2511.08043",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 26,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.emnlp-main.1751.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition.pdf.part https://aclanthology.org/2025.emnlp-main.1751.pdf\ncurl: (28) Ope",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition.pdf.part https://aclanthology.org/2025.emnlp-main.1751.pdf\ncurl: (28) Ope"
+  },
+  {
+    "id": 27,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_ProReason_ Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/27.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.emnlp-main.1614.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 28,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.emnlp-main.240.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_QSpec_ Speculative Decoding with Complementary Quantization Schemes.pdf.part https://aclanthology.org/2025.emnlp-main.240.pdf\ncurl: (28) Operation ti",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2410.11305",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_QSpec_ Speculative Decoding with Complementary Quantization Schemes.pdf.part https://arxiv.org/pdf/2410.11305\ncurl: (28) Operation timed out after 35",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_QSpec_ Speculative Decoding with Complementary Quantization Schemes.pdf.part https://arxiv.org/pdf/2410.11305\ncurl: (28) Operation timed out after 35"
+  },
+  {
+    "id": 29,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_UNComp_ Can Matrix Entropy Uncover Sparsity_ — A Compressor Design from an Uncertainty-Aware Perspective.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/29.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.emnlp-main.209.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 30,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/30.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.findings-emnlp.102.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models.pdf.part https://aclanthology.org/2025.findings-e",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2503.03702",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 31,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Recipe2Plan_ Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/31.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.findings-emnlp.229.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 32,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2504.17343",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_TimeChat-Online_ 80% Visual Tokens are Naturally Redundant in Streaming Videos.pdf.part https://arxiv.org/pdf/2504.17343\ncurl: (28) Operation timed o",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_TimeChat-Online_ 80% Visual Tokens are Naturally Redundant in Streaming Videos.pdf.part https://arxiv.org/pdf/2504.17343\ncurl: (28) Operation timed o"
+  },
+  {
+    "id": 33,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Reasoning Does Not Necessarily Improve Role-Playing Ability.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/33.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.537.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 34,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_PromptCoT_ Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/34.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.935.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 35,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/35.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.acl-long.1199.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 36,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Teaching Language Models to Critique via Reinforcement Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/36.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2502.03492",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 37,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2502.14317",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_ParallelComp_ Parallel Long-Context Compressor for Length Extrapolation.pdf.part https://arxiv.org/pdf/2502.14317\ncurl: (28) Operation timed out afte",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_ParallelComp_ Parallel Long-Context Compressor for Length Extrapolation.pdf.part https://arxiv.org/pdf/2502.14317\ncurl: (28) Operation timed out afte"
+  },
+  {
+    "id": 38,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_VL-RewardBench_ A Challenging Benchmark for Vision-Language Generative Reward Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/38.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2411.17451",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 39,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Jailbreaking as a Reward Misspecification Problem.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/39.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2406.14393",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 40,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.06166",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Temporal Reasoning Transfer from Text to Video.pdf.part https://arxiv.org/pdf/2410.06166\ncurl: (28) Operation timed out after 35001 milliseconds with",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Temporal Reasoning Transfer from Text to Video.pdf.part https://arxiv.org/pdf/2410.06166\ncurl: (28) Operation timed out after 35001 milliseconds with"
+  },
+  {
+    "id": 41,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_MoS_ Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/41.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.00938",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 42,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Language Model Non-Myopic Generation for Reasoning and Planning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/42.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.17195",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 43,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Beyond Autoregression_ Discrete Diffusion for Complex Reasoning and Planning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/43.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.14157",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 44,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2502.19805",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Implicit Search via Discrete Diffusion_ A Study on Chess.pdf.part https://arxiv.org/pdf/2502.19805\ncurl: (28) Operation timed out after 35002 millise",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://openreview.net/pdf?id=A9y3LFX4ds",
+        "http": "403",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "HTTP 403，不是可读PDF"
+  },
+  {
+    "id": 45,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2312.11370",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_G-LLaVA_ Solving Geometric Problem with Multi-Modal Large Language Model.pdf.part https://arxiv.org/pdf/2312.11370\ncurl: (28) Operation timed out aft",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_G-LLaVA_ Solving Geometric Problem with Multi-Modal Large Language Model.pdf.part https://arxiv.org/pdf/2312.11370\ncurl: (28) Operation timed out aft"
+  },
+  {
+    "id": 46,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Why Does the Effective Context Length of LLMs Fall Short_.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/46.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.18745",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 47,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Scaling Diffusion Language Models via Adaptation from Autoregressive Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/47.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.17891",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 48,
+    "status": "待核验",
+    "file": null,
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/48.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.16736",
+        "http": "200",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://openreview.net/pdf?id=yitH9xAHQs",
+        "http": "403",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "HTTP 403，不是可读PDF"
+  },
+  {
+    "id": 49,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_ImgTrojan_ Jailbreaking Vision-Language Models with ONE Image.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/49.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.naacl-long.360.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_ImgTrojan_ Jailbreaking Vision-Language Models with ONE Image.pdf.part https://aclanthology.org/2025.naacl-long.360.pdf\ncurl: (28) Operation timed ou",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2403.02910",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 50,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_FactTrack_ Time-Aware World State Tracking in Story Outlines.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/50.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.naacl-long.144.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_FactTrack_ Time-Aware World State Tracking in Story Outlines.pdf.part https://aclanthology.org/2025.naacl-long.144.pdf\ncurl: (28) Operation timed out",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2407.16347",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 51,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_How Well Do LLMs Handle Cantonese_ Benchmarking Cantonese Capabilities of Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/51.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.findings-naacl.253.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_How Well Do LLMs Handle Cantonese_ Benchmarking Cantonese Capabilities of Large Language Models.pdf.part https://aclanthology.org/2025.findings-naacl",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2408.16756",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 52,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Diffusion of Thought_ Chain-of-Thought Reasoning in Diffusion Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/52.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2402.07754",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 53,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2401.13178",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_AgentBoard_ An Analytical Evaluation Board of Multi-turn LLM Agents.pdf.part https://arxiv.org/pdf/2401.13178\ncurl: (28) Operation timed out after 35",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_AgentBoard_ An Analytical Evaluation Board of Multi-turn LLM Agents.pdf.part https://arxiv.org/pdf/2401.13178\ncurl: (28) Operation timed out after 35"
+  },
+  {
+    "id": 54,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Retrieved Sequence Augmentation for Protein Representation Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/54.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.emnlp-main.104.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Retrieved Sequence Augmentation for Protein Representation Learning.pdf.part https://aclanthology.org/2024.emnlp-main.104.pdf\ncurl: (28) Operation ti",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2302.12563",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 55,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_VLFeedback_ A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/55.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.emnlp-main.358.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_VLFeedback_ A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment.pdf.part https://aclanthology.org/2024.emnlp-main.358.pdf\ncu",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2312.10665",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 56,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Empowering Large Language Model Agents through Action Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/56.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2402.15809",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 57,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2310.00280",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Corex_ Pushing the Boundaries of Complex Reasoning through Multi-Model Collaboration.pdf.part https://arxiv.org/pdf/2310.00280\ncurl: (28) Operation t",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Corex_ Pushing the Boundaries of Complex Reasoning through Multi-Model Collaboration.pdf.part https://arxiv.org/pdf/2310.00280\ncurl: (28) Operation t"
+  },
+  {
+    "id": 58,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2409.11365",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_CoCA_ Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration.pdf.part https://arxiv.org/pdf/2409.11365\ncurl: ",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_CoCA_ Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration.pdf.part https://arxiv.org/pdf/2409.11365\ncurl: "
+  },
+  {
+    "id": 59,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_A Reparameterized Discrete Diffusion Model for Text Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/59.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2302.05737",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 60,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.775.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multimodal ArXiv_ A Dataset for Improving Scientific Comprehension of Large Vision-Language Models.pdf.part https://aclanthology.org/2024.acl-long.77",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2403.00231",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multimodal ArXiv_ A Dataset for Improving Scientific Comprehension of Large Vision-Language Models.pdf.part https://arxiv.org/pdf/2403.00231\ncurl: (2",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multimodal ArXiv_ A Dataset for Improving Scientific Comprehension of Large Vision-Language Models.pdf.part https://arxiv.org/pdf/2403.00231\ncurl: (2"
+  },
+  {
+    "id": 61,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_L-Eval_ Instituting Standardized Evaluation for Long Context Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/61.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.776.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 62,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_PRoLoRA_ Partial Rotation Empowers More Parameter-Efficient LoRA.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/62.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.156.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 63,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_GSM-Plus_ A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/63.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.163.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 64,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_LoRA Meets Dropout under a Unified Framework.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/64.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.findings-acl.119.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 65,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.findings-acl.123.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Achilles-Bench_ A Challenging Benchmark for Low-Resource Evaluation.pdf.part https://aclanthology.org/2024.findings-acl.123.pdf\ncurl: (28) Operation ",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2303.03840",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Achilles-Bench_ A Challenging Benchmark for Low-Resource Evaluation.pdf.part https://arxiv.org/pdf/2303.03840\ncurl: (28) Operation timed out after 35",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Achilles-Bench_ A Challenging Benchmark for Low-Resource Evaluation.pdf.part https://arxiv.org/pdf/2303.03840\ncurl: (28) Operation timed out after 35"
+  },
+  {
+    "id": 66,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_SEGO_ Sequential Subgoal Optimization for Mathematical Problem-Solving.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/66.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.407.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 67,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_BBA_ Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/67.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.findings-acl.433.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_BBA_ Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models.pdf.part https://aclanthology.org/2024.findings-acl.433.pdf\ncurl: ",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2402.13577",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 68,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Large Language Models are not Fair Evaluators.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/68.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.acl-long.511.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 69,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Self-Infilling Code Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/69.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2311.17972",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 70,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Training- Free Long-Context Scaling of Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/70.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2402.17463",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 71,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2305.16366",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Decomposing the Enigma_ Subgoal-based Demonstration Learning for Formal Theorem Proving.pdf.part https://arxiv.org/pdf/2305.16366\ncurl: (28) Operatio",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Decomposing the Enigma_ Subgoal-based Demonstration Learning for Formal Theorem Proving.pdf.part https://arxiv.org/pdf/2305.16366\ncurl: (28) Operatio"
+  },
+  {
+    "id": 72,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2024.findings-naacl.176.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multilingual Machine Translation with Large Language Models_ Empirical Results and Analysis.pdf.part https://aclanthology.org/2024.findings-naacl.176",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2304.04675",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multilingual Machine Translation with Large Language Models_ Empirical Results and Analysis.pdf.part https://arxiv.org/pdf/2304.04675\ncurl: (28) Oper",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_Multilingual Machine Translation with Large Language Models_ Empirical Results and Analysis.pdf.part https://arxiv.org/pdf/2304.04675\ncurl: (28) Oper"
+  },
+  {
+    "id": 73,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Lemur_ Harmonizing Natural Language and Code for Language Agents.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/73.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2310.06830",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 74,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.emnlp-main.726.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Can Language Models Understand Physical Concepts_.pdf.part https://aclanthology.org/2023.emnlp-main.726.pdf\ncurl: (28) Operation timed out after 3500",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2305.14057",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Can Language Models Understand Physical Concepts_.pdf.part https://arxiv.org/pdf/2305.14057\ncurl: (28) Operation timed out after 35001 milliseconds w",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Can Language Models Understand Physical Concepts_.pdf.part https://arxiv.org/pdf/2305.14057\ncurl: (28) Operation timed out after 35001 milliseconds w"
+  },
+  {
+    "id": 75,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.emnlp-main.876.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_DetGPT_ Detect What You Need via Reasoning.pdf.part https://aclanthology.org/2023.emnlp-main.876.pdf\ncurl: (28) Operation timed out after 35004 milli",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2305.14167",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_DetGPT_ Detect What You Need via Reasoning.pdf.part https://arxiv.org/pdf/2305.14167\ncurl: (28) Operation timed out after 35001 milliseconds with 422",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_DetGPT_ Detect What You Need via Reasoning.pdf.part https://arxiv.org/pdf/2305.14167\ncurl: (28) Operation timed out after 35001 milliseconds with 422"
+  },
+  {
+    "id": 76,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Generating Data for Symbolic Language with Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/76.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.emnlp-main.523.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 77,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_DiffuSeq-v2_ Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/77.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.findings-emnlp.660.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 78,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2306.13089",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_GIM- LET_ A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning.pdf.part https://arxiv.org/pdf/2306.13089\ncurl: (28) Operation",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_GIM- LET_ A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning.pdf.part https://arxiv.org/pdf/2306.13089\ncurl: (28) Operation"
+  },
+  {
+    "id": 79,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Statistical Knowledge Assessment for Generative Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/79.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2305.10519",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 80,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2310.09512",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Attentive Multi-Layer Perceptron for Non-autoregressive Generation.pdf.part https://arxiv.org/pdf/2310.09512\ncurl: (28) Operation timed out after 350",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Attentive Multi-Layer Perceptron for Non-autoregressive Generation.pdf.part https://arxiv.org/pdf/2310.09512\ncurl: (28) Operation timed out after 350"
+  },
+  {
+    "id": 81,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Self-Adaptive In-Context Learning_ An Information Compression Perspective for In-Context Example Selection and Ordering.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/81.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.acl-long.79.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 82,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.findings-acl.765.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Explanation Regeneration via Information Bottleneck.pdf.part https://aclanthology.org/2023.findings-acl.765.pdf\ncurl: (28) Operation timed out after ",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2212.09603",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Explanation Regeneration via Information Bottleneck.pdf.part https://arxiv.org/pdf/2212.09603\ncurl: (28) Operation timed out after 35005 milliseconds",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Explanation Regeneration via Information Bottleneck.pdf.part https://arxiv.org/pdf/2212.09603\ncurl: (28) Operation timed out after 35005 milliseconds"
+  },
+  {
+    "id": 83,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Lego-MT_ Learning Detachable Models for Massively Multilingual Machine Translation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/83.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.findings-acl.731.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Lego-MT_ Learning Detachable Models for Massively Multilingual Machine Translation.pdf.part https://aclanthology.org/2023.findings-acl.731.pdf\ncurl: ",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2212.10551",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 84,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_INK_ Injecting kNN Knowledge in Nearest Neighbor Machine Translation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/84.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.acl-long.888.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_INK_ Injecting kNN Knowledge in Nearest Neighbor Machine Translation.pdf.part https://aclanthology.org/2023.acl-long.888.pdf\ncurl: (28) Operation tim",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2306.06381",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 85,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/85.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.acl-long.593.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 86,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_SORTIE_ Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/86.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2023.findings-acl.715.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 87,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Compositional Exemplars for In-context Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/87.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2302.05698",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 88,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_CAB_ Comprehensive Attention Benchmarking on Long Sequence Modeling.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/88.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2210.07661",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 89,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2303.15616",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Fine-grained Audible Video Description.pdf.part https://arxiv.org/pdf/2303.15616\ncurl: (28) Operation timed out after 35005 milliseconds with 1147385",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Fine-grained Audible Video Description.pdf.part https://arxiv.org/pdf/2303.15616\ncurl: (28) Operation timed out after 35005 milliseconds with 1147385"
+  },
+  {
+    "id": 90,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Efficient Attention via Control Variates.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/90.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2302.04542",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 91,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2205.12679",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Self-Guided Noise-Free Data Generation for Efficient Zero-Shot Learning.pdf.part https://arxiv.org/pdf/2205.12679\ncurl: (28) Operation timed out afte",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://openreview.net/pdf?id=h5OpjGd_lo6",
+        "http": "403",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "HTTP 403，不是可读PDF"
+  },
+  {
+    "id": 92,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Toeplitz Neural Network for Sequence Modeling.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/92.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2305.04749",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 93,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_DiffuSeq_ Sequence to Sequence Text Generation with Diffusion Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/93.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2210.08933",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 94,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Unsupervised Explanation Generation via Correct Instantiations.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/94.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2211.11160",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 95,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_ProGen_ Progressive Zero-shot Dataset Generation via In-context Feedback.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/95.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.findings-emnlp.269.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 96,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_ZeroGen_ Efficient Zero-shot Learning via Dataset Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/96.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.emnlp-main.801.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 97,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.emnlp-main.39.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_UnifiedSKG_ Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models.pdf.part https://aclanthology.org/2022.emnlp-",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2201.05966",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_UnifiedSKG_ Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models.pdf.part https://arxiv.org/pdf/2201.05966\ncur",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_UnifiedSKG_ Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models.pdf.part https://arxiv.org/pdf/2201.05966\ncur"
+  },
+  {
+    "id": 98,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_The Devil in Linear Transformer.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/98.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.emnlp-main.473.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_The Devil in Linear Transformer.pdf.part https://aclanthology.org/2022.emnlp-main.473.pdf\ncurl: (28) Operation timed out after 35002 milliseconds wit",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2210.10340",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 99,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/99.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.emnlp-main.684.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 100,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_CoNT_ Contrastive Neural Text Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/100.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2205.14690",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 101,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_A Contrastive Framework for Neural Text Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/101.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2202.06417",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 102,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2207.05042",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_Audio-Visual Segmentation.pdf.part https://arxiv.org/pdf/2207.05042\ncurl: (28) Operation timed out after 35000 milliseconds with 4198309 out of 60084",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_Audio-Visual Segmentation.pdf.part https://arxiv.org/pdf/2207.05042\ncurl: (28) Operation timed out after 35000 milliseconds with 4198309 out of 60084"
+  },
+  {
+    "id": 103,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Linear Complexity Randomized Self-attention Mechanism.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/103.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2204.04667",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 104,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Ripple Attention for Visual Perception with Sub-quadratic Complexity.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/104.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2110.02453",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 105,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/105.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.naacl-main.325.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling.pdf.part https://aclanthology.org/2022.naacl-main.325.pdf\ncurl: (28) Operatio",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2112.07874",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 106,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Event Transition Planning for Open-ended Text Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/106.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.findings-acl.269.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 107,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Lexical Knowledge Internalization for Neural Dialog Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/107.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.acl-long.547.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 108,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_ABC_ Attention with Bounded-memory Control.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/108.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2022.acl-long.515.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 109,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_cosFormer_ Rethinking Softmax In Attention.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/109.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2202.08791",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 110,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_Revisiting Over-smoothing in BERT from the Perspective of Graph.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/110.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2202.08625",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 111,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2021_Cascaded Head-colliding Attention.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/111.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2021.acl-long.45.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 112,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2021_Good for Misconceived Reasons_ An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/112.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2021.acl-long.480.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 113,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2021_Random Feature Attention.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/113.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2103.02143",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 114,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2020_A Mutual Information Maximization Perspective of Language Representation Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/114.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1910.08350",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 115,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1906.01076",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2019_Episodic Memory in Lifelong Language Learning.pdf.part https://arxiv.org/pdf/1906.01076\ncurl: (28) Operation timed out after 35005 milliseconds with ",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2019_Episodic Memory in Lifelong Language Learning.pdf.part https://arxiv.org/pdf/1906.01076\ncurl: (28) Operation timed out after 35005 milliseconds with "
+  },
+  {
+    "id": 116,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2019_Variational Smoothing in Recurrent Neural Network Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/116.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1901.09296",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 117,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_Multi-task Learning with CTC and Segmental CRF for Speech Recognition.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/117.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1702.06378",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 118,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2017_What Do Recurrent Neural Network Grammars Learn About Syntax_.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/118.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/E17-1117.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 119,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks for End-to-end Speech Recognition.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/119.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1603.00223",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 120,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2016_Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/120.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/D16-1180.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 121,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/121.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1511.06018",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 122,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2015_Bayesian Optimization of Text Representations.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/122.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/D15-1251.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 123,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2015_Transforming Dependencies into Phrase Structures.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/123.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/N15-1080.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 124,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2014_A Dependency Parser for Tweets.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/124.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/D14-1108.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 125,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2014_Dependency Parsing for Weibo_ An Efficient Probabilistic Logic Programming Approach.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/125.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/D14-1122.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 126,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2011_Formalization and Rules for Recognition of Satirical Irony.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/126.txt",
+    "attempts": [
+      {
+        "url": "https://ikekonglp.github.io/paper/ialp11a.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 127,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2011_Improving Chinese Dependency Parsing with Self-Disambiguating Patterns.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/127.txt",
+    "attempts": [
+      {
+        "url": "https://ikekonglp.github.io/paper/ialp11b.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 129,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2016_Document Context Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/129.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/1511.03962",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 130,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2015_ACBiMA_ Advanced Chinese Bi-Character Word Morphological Analyzer.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/130.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/W15-3105.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 131,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2022_SNCSE_ Contrastive Learning for Unsupervised Sentence Embedding with Soft Negative Samples.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/131.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2201.05979",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 132,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2205.02655",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_Language Models Can See_ Plugging Visual Controls in Text Generation.pdf.part https://arxiv.org/pdf/2205.02655\ncurl: (28) Operation timed out after 3",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2022_Language Models Can See_ Plugging Visual Controls in Text Generation.pdf.part https://arxiv.org/pdf/2205.02655\ncurl: (28) Operation timed out after 3"
+  },
+  {
+    "id": 133,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2301.13190",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Audio-Visual Segmentation with Semantics.pdf.part https://arxiv.org/pdf/2301.13190\ncurl: (28) Operation timed out after 35005 milliseconds with 12383",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Audio-Visual Segmentation with Semantics.pdf.part https://arxiv.org/pdf/2301.13190\ncurl: (28) Operation timed out after 35005 milliseconds with 12383"
+  },
+  {
+    "id": 134,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_In-Context Learning with Many Demonstration Examples.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/134.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2302.04931",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 135,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2304.08821",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_TTIDA_ Controllable Generative Data Augmentation via Text-to-Text and Text-to-Image Models.pdf.part https://arxiv.org/pdf/2304.08821\ncurl: (28) Opera",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_TTIDA_ Controllable Generative Data Augmentation via Text-to-Text and Text-to-Image Models.pdf.part https://arxiv.org/pdf/2304.08821\ncurl: (28) Opera"
+  },
+  {
+    "id": 136,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Optimizing Non-Autoregressive Transformers with Contrastive Learning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/136.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2305.13667",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 137,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_M$^3$IT_ A Large-Scale Dataset towards Multi-Modal Multilingual Instruction Tuning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/137.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2306.04387",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 138,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2023_Language Versatilists vs. Specialists_ An Empirical Revisiting on Multilingual Transfer Ability.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/138.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2306.06688",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 139,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2308.04948",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Extrapolating Large Language Models to Non-English by Aligning Languages.pdf.part https://arxiv.org/pdf/2308.04948\ncurl: (28) Operation timed out aft",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Extrapolating Large Language Models to Non-English by Aligning Languages.pdf.part https://arxiv.org/pdf/2308.04948\ncurl: (28) Operation timed out aft"
+  },
+  {
+    "id": 140,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/140.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2025.coling-main.688.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks.pdf.part https://aclanthology.org/2025.coling-main.",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2310.19740",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 142,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2312.11135",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Linear Attention via Orthogonal Memory.pdf.part https://arxiv.org/pdf/2312.11135\ncurl: (28) Operation timed out after 35003 milliseconds with 4599258",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2023_Linear Attention via Orthogonal Memory.pdf.part https://arxiv.org/pdf/2312.11135\ncurl: (28) Operation timed out after 35003 milliseconds with 4599258"
+  },
+  {
+    "id": 143,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2402.07456",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_OS-Copilot_ Towards Generalist Computer Agents with Self-Improvement.pdf.part https://arxiv.org/pdf/2402.07456\ncurl: (28) Operation timed out after 3",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_OS-Copilot_ Towards Generalist Computer Agents with Self-Improvement.pdf.part https://arxiv.org/pdf/2402.07456\ncurl: (28) Operation timed out after 3"
+  },
+  {
+    "id": 144,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2403.14734",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_A Survey of Neural Code Intelligence_ Paradigms, Advances and Beyond.pdf.part https://arxiv.org/pdf/2403.14734\ncurl: (28) Operation timed out after 3",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_A Survey of Neural Code Intelligence_ Paradigms, Advances and Beyond.pdf.part https://arxiv.org/pdf/2403.14734\ncurl: (28) Operation timed out after 3"
+  },
+  {
+    "id": 145,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Data Augmentation of Multi-turn Psychological Dialogue via Knowledge-driven Progressive Thought Prompting.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/145.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2406.16567",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 146,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_SubgoalXL_ Subgoal-based Expert Learning for Theorem Proving.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/146.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2408.11172",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 147,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_UncertaintyRAG_ Span-Level Uncertainty Enhanced Long-Context Modeling for Retrieval-Augmented Generation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/147.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.02719",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 148,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.10479",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_TMGBench_ A Systematic Game Benchmark for Evaluating Strategic Reasoning Abilities of LLMs.pdf.part https://arxiv.org/pdf/2410.10479\ncurl: (28) Opera",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2024_TMGBench_ A Systematic Game Benchmark for Evaluating Strategic Reasoning Abilities of LLMs.pdf.part https://arxiv.org/pdf/2410.10479\ncurl: (28) Opera"
+  },
+  {
+    "id": 149,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2024_Understanding the Role of LLMs in Multimodal Evaluation Benchmarks.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/149.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2410.12329",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 151,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_BioMaze_ Benchmarking and Enhancing Large Language Models for Biological Pathway Reasoning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/151.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2502.16660",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 153,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Scaling Reasoning without Attention.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/153.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2505.22425",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 154,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Dream 7B_ Diffusion Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/154.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2508.15487",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 155,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Dream-Coder 7B_ An Open Diffusion Language Model for Code.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/155.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2509.01142",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 156,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2509.07403",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_LongEmotion_ Measuring Emotional Intelligence of Large Language Models in Long-Context Interaction.pdf.part https://arxiv.org/pdf/2509.07403\ncurl: (2",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2025_LongEmotion_ Measuring Emotional Intelligence of Large Language Models in Long-Context Interaction.pdf.part https://arxiv.org/pdf/2509.07403\ncurl: (2"
+  },
+  {
+    "id": 157,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_PromptCoT 2.0_ Scaling Prompt Synthesis for Large Language Model Reasoning.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/157.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2509.19894",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 158,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2026.acl-long.431.pdf",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_OS-Sentinel_ Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows.pdf.part https://aclanthology.org/2026.acl-long.4",
+        "date": "2026-09-17"
+      },
+      {
+        "url": "https://arxiv.org/pdf/2510.24411",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_OS-Sentinel_ Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows.pdf.part https://arxiv.org/pdf/2510.24411\ncurl: (",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_OS-Sentinel_ Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows.pdf.part https://arxiv.org/pdf/2510.24411\ncurl: ("
+  },
+  {
+    "id": 159,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Reasoning Path Divergence_ A New Metric and Curation Strategy to Unlock LLM Diverse Thinking.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/159.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2510.26122",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 160,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_DoPE_ Denoising Rotary Position Embedding.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/160.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2511.09146",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 161,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Beyond Confidence_ Adaptive and Coherent Decoding for Diffusion Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/161.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2512.02044",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 162,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2025_Dream-VL & Dream-VLA_ Open Vision-Language and Vision-Language-Action Models with Diffusion Language Model Backbone.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/162.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2512.22615",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 163,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2601.03017",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_MMFormalizer_ Multimodal Autoformalization in the Wild.pdf.part https://arxiv.org/pdf/2601.03017\ncurl: (28) Operation timed out after 35005 milliseco",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_MMFormalizer_ Multimodal Autoformalization in the Wild.pdf.part https://arxiv.org/pdf/2601.03017\ncurl: (28) Operation timed out after 35005 milliseco"
+  },
+  {
+    "id": 164,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_Proxy Compression for Language Modeling.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/164.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.04289",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 165,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.05859",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_DLM-Scope_ Mechanistic Interpretability of Diffusion Language Models via Sparse Autoencoders.pdf.part https://arxiv.org/pdf/2602.05859\ncurl: (28) Ope",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_DLM-Scope_ Mechanistic Interpretability of Diffusion Language Models via Sparse Autoencoders.pdf.part https://arxiv.org/pdf/2602.05859\ncurl: (28) Ope"
+  },
+  {
+    "id": 166,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_ToolSelf_ Unifying Task Execution and Self-Reconfiguration via Tool-Driven Emergent Adaptation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/166.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.07883",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 167,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2602.08711",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_TimeChat-Captioner_ Scripting Multi-Scene Videos with Time-Aware and Structural Audio-Visual Captions.pdf.part https://arxiv.org/pdf/2602.08711\ncurl:",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_TimeChat-Captioner_ Scripting Multi-Scene Videos with Time-Aware and Structural Audio-Visual Captions.pdf.part https://arxiv.org/pdf/2602.08711\ncurl:"
+  },
+  {
+    "id": 168,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_Claw-Eval_ Towards Trustworthy Evaluation of Autonomous Agents.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/168.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2604.06132",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 169,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_ImplicitMemBench_ Measuring Unconscious Behavioral Adaptation in Large Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/169.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2026.acl-long.1301.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 170,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_Stratagem_ Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/170.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2026.acl-long.897.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 171,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_SAVOIR_ Learning Social Savoir-Faire via Shapley-based Reward Attribution.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/171.txt",
+    "attempts": [
+      {
+        "url": "https://aclanthology.org/2026.findings-acl.699.pdf",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 172,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_The Granularity Axis_ A Micro-to-Macro Latent Direction for Social Roles in Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/172.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2605.06196",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 173,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_Self-Distilled Trajectory-Aware Boltzmann Modeling_ Bridging the Training-Inference Discrepancy in Diffusion Language Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/173.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2605.11854",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 174,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_DreamReasoner-8B_ Block-Size Curriculum Learning for Diffusion Reasoning Models.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/174.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2606.19257",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 175,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_SoftSkill_ Behavioral Compression for Contextual Adaptation.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/175.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2606.20333",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 176,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2607.28609",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_OSReward_ Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models.pdf.part https://arxiv.org/pdf/2607.28609\ncurl: (28) Oper",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_OSReward_ Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models.pdf.part https://arxiv.org/pdf/2607.28609\ncurl: (28) Oper"
+  },
+  {
+    "id": 177,
+    "status": "已下载",
+    "file": "港大/Kong, Lingpeng/论文/2026_Structuring Semantic Embeddings for Principle Evaluation_ A Prototype-Guided Contrastive Learning Approach.pdf",
+    "textFile": "港大/Kong, Lingpeng/来源/论文摘录/177.txt",
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2608.15224",
+        "http": "200",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "PDF文件头、可读文本、首页标题词与导师姓名已核对"
+  },
+  {
+    "id": 178,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2608.28378",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_PersonaForge_ Realistic Multi-Turn User Simulation for Agentic Systems.pdf.part https://arxiv.org/pdf/2608.28378\ncurl: (28) Operation timed out after",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_PersonaForge_ Realistic Multi-Turn User Simulation for Agentic Systems.pdf.part https://arxiv.org/pdf/2608.28378\ncurl: (28) Operation timed out after"
+  },
+  {
+    "id": 179,
+    "status": "未下载",
+    "file": null,
+    "textFile": null,
+    "attempts": [
+      {
+        "url": "https://arxiv.org/pdf/2608.28383",
+        "error": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_Semantic Head Specialization Guides Hybrid ViT Attention for Multimodal LLMs.pdf.part https://arxiv.org/pdf/2608.28383\ncurl: (28) Operation timed out",
+        "date": "2026-09-17"
+      }
+    ],
+    "reason": "Command failed: curl -L -sS --connect-timeout 10 --max-time 35 -w %{http_code} -o /Users/kellybrown/Desktop/jiawei/ai导师可视化网站/港大/Kong, Lingpeng/论文/2026_Semantic Head Specialization Guides Hybrid ViT Attention for Multimodal LLMs.pdf.part https://arxiv.org/pdf/2608.28383\ncurl: (28) Operation timed out"
+  }
+]

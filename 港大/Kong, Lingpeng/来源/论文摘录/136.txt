@@ -1,0 +1,188 @@
+                                            Optimizing Non-Autoregressive Transformers with
+                                                         Contrastive Learning
+
+
+                                                   Chenxin An1,2 , Jiangtao Feng, Fei Huang3 , Xipeng Qiu2 , Lingpeng Kong1
+                                                                          1
+                                                                            The University of Hong Kong
+                                                                                2
+                                                                                  Fudan University
+                                                                      3
+                                                                        The CoAI group, Tsinghua University
+
+
+
+
+arXiv:2305.13667v2 [cs.CL] 2 Jun 2023
+                                                     {cxan20, xpqiu}@fudan.edu.cn jiangtaofeng0906@gmail.com
+                                                                     huangfei382@163.com, lpk@cs.hku.hk
+
+
+
+                                                                                         Abstract
+
+                                                  Non-autoregressive Transformers (NATs) reduce the inference latency of Au-
+                                                  toregressive Transformers (ATs) by predicting words all at once rather than in
+                                                  sequential order. They have achieved remarkable progress in machine translation
+                                                  as well as many other applications. However, a long-standing challenge for NATs
+                                                  is the learning of multi-modality data distribution, which is the main cause of the
+                                                  performance gap between NATs and ATs. In this paper, we propose to ease the
+                                                  difficulty of modality learning via sampling from the model distribution instead
+                                                  of the data distribution. We derive contrastive constraints to stabilize the training
+                                                  process and integrate this resulting objective with the state-of-the-art NAT architec-
+                                                  ture DA-Transformer [18]. Our model C O DAT is examined on 3 different tasks,
+                                                  including machine translation, text summarization, and paraphrasing with 5 bench-
+                                                  marks. Results show that our approach outperforms previous non-autoregressive
+                                                  baselines by a significant margin and establishes new state-of-the-art results for
+                                                  non-autoregressive transformers on all the benchmarks.
+
+
+                                        1    Introduction
+
+                                        Autoregressive Transformers (ATs) have become the dominant architecture for text generation,
+                                        but token-by-token decoding usually leads to inefficiency in inference stage. Non-autoregressive
+                                        Transformers (NATs) [9, 12, 13, 18] significantly reduce the decoding latency by removing the
+                                        dependency between target tokens and generating the whole sequence in parallel.
+                                        Despite the fast decoding speed, the main challenge of NATs lies in the learning of the ground-truth
+                                        data distribution, which often has a large number of modalities [13].1 ATs mitigate this problem by
+                                        treating sequence generation as a gradual modality collapsing process [13, 37]. As the generation of
+                                        later tokens is conditioned on the previous ones, it is unlikely for the model to flip around different
+                                        modalities. NATs, on the other hand, generate all the tokens all at once, hence prone to generate
+                                        tokens from mixed modalities in one sequence, which strongly hurts their performance.
+                                        A common fix for this issue is to directly reduce the number of modalities of original data distribution
+                                        by knowledge distillation through an autoregressive model [13]. Intuitively, this step regenerates the
+                                        training set using an autoregressive model learned from the original data distribution, making it more
+                                        manageable for the NATs but also introducing a redundant pipeline. Recent efforts start to scrutinize
+                                            1
+                                              We use the word multi-modality in the context of machine translation literature, where it refers to to the
+                                        phenomenon that there are multiple acceptable translations in the ground-truth data distribution and all of them
+                                        are used as training labels for the same input.
+
+
+                                        Preprint. Under review.
+    multi-modal data               multi-modal data                                        multi-modal data
+    distribution p(·|x)            distribution p(·|x)                                     distribution p(·|x)
+
+
+
+
+                                                               model distribution q(·|x)                               model distribution q(·|x)
+                                                               optimized with y~ p(·|x)                                optimized with y~ q(·|x)
+
+
+
+                          (a)                            (b)                                                     (c)
+Figure 1: (a) shows a bimodal data distribution (blue contours). Orange contours in (b) show a single
+modal model distribution that is optimized to fit the data distribution by samples from the bimodal
+data distribution. similar to (b), but the model distribution is optimized to a different local minimum
+with samples from the captured modality of model distribution.
+
+
+NATs’ conditional independence assumption and address the multi-modality challenge mainly by
+learning target alignment [6, 9, 18, 27] and enhancing input [8, 37].
+In this work, we propose to tackle this problem from a new perspective, with the goal of bypassing
+the modalities that are difficult for the model to capture in the learning procedure. Our method starts
+from the reverse Kullback-Leibler (KL) divergence optimization, which effectively converges to
+a local single modality given a complex multi-modal target distribution (Bishop and Nasrabadi 3;
+Figure 1). The connection between modality learning and model distribution optimization is further
+explained in §3.1. To stabilize the training and prevent collapsing, we derive a set of constraints
+from the data distribution and impose them to the model distribution. We find that in theory leads
+to a contrastive learning objective (§3.2). Finally, we show how to integrate this objective with the
+state-of-the-art NAT architecture DA-Transformer [18] (§3.3).
+We test the performance of our model, C O DAT, on three generation tasks with five benchmarks.
+Experiments on two major WMT machine translation benchmarks demonstrate that our approach
+substantially improves the performance over strong baseline DA-Transformer and establishes new
+state-of-the-art results directly trained on the raw datasets (§4.1). Similar to machine translation,
+we also achieve the best result for NAT on paraphrasing (§4.1), and impressive results on non-
+autoregressive summarization (§4.1). C O DAT exceeds the autoregressive model on two widely-used
+summarization benchmarks XSum [32] and Gigaword [38].
+
+2     Background
+Non-autoregressive Generation Consider predicting a target sequence y = {y1 , y2 , . . . , yn }
+with a source sequence x = {x1 , x2 , . . . , xm }, where n and m are target and source sequence
+length respectively. Typical autoregressive transformers model the conditional probability p(y|x) via
+autoregressive decomposition as:
+                                                         n
+                                                         Y
+                                       p(y|x) =                p(yi |y<i , x).                                                                     (1)
+                                                         i=1
+
+While non-autoregressive transformers factorize p(y|x) independently with conditional independence
+assumption:
+                                                 Yn
+                                      p(y|x) =      p(yi |x).                                   (2)
+                                                           i=1
+With this assumption, NATs are able to drop the left-to-right dependencies and decode the target
+sequence in parallel.
+
+DP Training for NATs The strict position alignment between predicted and target tokens [9, 12] of
+vanilla NAT has a poor ability to capture the multi-modality data distribution which typically results
+in generated tokens from mixed modality and repeated words [13]. Dynamic Programming (DP)
+training [6, 9, 27] greatly alleviate this problem by introducing a long decoder length and alignment-
+based training objectives that marginalize all the possible alignments that yield the ground-truth.
+
+
+                                                           2
+Take the latest work DAT (DA-Transformer) [18] as an example, given the ground truth sequence
+y = {y1 , y2 , . . . , yn } whose length is n and decoder length L ≫ n, log q(y|x) can be defined as:
+                                          X                    X
+                        log q(y|x) = log      q(y, a|x) = log     q(y|a, x) · q(a|x),
+                                         a∈Γ                  a∈Γ
+                                   n−1
+                                   Y
+                        q(a|x) =         Eai .ai+1 ,                                                   (3)
+                                   i=1
+                                   Yn
+                     q(y|a, x) =         softmax(Wvocab hai ),
+                                   i=1
+
+where a is a set of decoder position indexes    sorted in ascending order whose size |a| = n and Γ
+contains all possible a with a size of L
+                                          
+                                        n   . For example, target length n = 3 and L = 6 means Γ
+           6
+             
+contains 3 = 20 possible a, and a ∈ {0, 1, 2}, {0, 1, 3}...{3, 4, 5}. hai means the ai -th decoder
+hidden state. q(y|a, x) is the token prediction probablity in generation models. q(a|x) is given
+by the transition matrix E ∈ RL×L modeling the first-order dependency between decoder position
+indexes where Eai .ai+1 means the transition probability of index ai to index aj and it is predicted
+based on the decoder hidden states. Enumerating all a ∈ Γ will result in the curse of combination,
+but luckily E can be trained with the dynamic programming algorithm. Details of the algorithm can
+be found in Huang et al. [18]. In Figure 4 Appendix, we present an example that highlights 1) the
+difference between a Dynamic Programming (DP) model and a Vanilla model; 2) the calculation
+of q(a|x) and q(y|a, x). For the decoding procedure, please refer to Appendix E. Training with
+Dynamic Programming is essential for NATs on raw data; otherwise, their performance lags notably
+behind that of ATs.
+
+3     Method
+3.1   Learning on Model Distribution
+
+Unlike previous efforts that mitigate multi-modality problems via architecture design or decoding
+algorithm, we attribute the multi-modality problem to the learning objective, maximum likelihood
+estimation (MLE). MLE minimizes the KL divergence between the data distribution p(·|x) and the
+model distribution q(·|x), which can be formulated as follows,
+                                                      p(y|x)
+                           KL(p ∥ q) = Ey∼p(·|x) [log         ]
+                                                      q(y|x)                                           (4)
+                                         = −H(p) + Ey∼p(·|x) [− log q(y|x)]
+where H(p) denotes the entropy of data distribution and is a constant. Note that MLE requires
+sampling from the data distribution p(·|x), which forces the NAT model to assign a reasonable
+probability for each sampled y. We argue that this objective could be too difficult for NAT models
+because of its limited capacity, which may result in low-quality predictions with mixed modalities.
+In this work, we suggest that the above problem can be alleviated by replacing the samples from
+p(·|x) with the samples from q(·|x), therefore dropping some modalities that are too difficult for
+NATs to capture. Specifically, we propose a generalized divergence D(q ∥ p) as our objective:
+                                 D(q ∥ p) = Ey′ ∼q(·|x) [Mp,q (y ′ |x)],                               (5)
+where Mp,q (y ′ |x) measures the discrepancy between model and data distribution with a given sample
+y ′ from the simpler model distribution.
+To better explain our intuition, we illustrate an example in Figure 1. In previous objective, Ey∼p(·|x) [·]
+optimizes samples from all modalities in data distribution p(·|x) by assigning them importance rates
+p(y|x), thereby leading to a mixed-modal distribution (see Figure 1b); in contrast, Ey′ ∼q(·|x) [·]
+focuses on samples within a captured modality from modeling distribution q(·|x) by assigning low
+importance rate to uncaptured modalities and keeps on optimizing the captured modalities (see
+Figure 1c). The final training objective is the sum of KL(p ∥ q) and D(q ∥ p). KL(p ∥ q) acts as a
+regularization to prevent collapse if the samples from model distribution are low-quality.
+
+
+                                                       3
+

@@ -1,0 +1,182 @@
+                                                      M3IT: A Large-Scale Dataset towards
+                                                   Multi-Modal Multilingual Instruction Tuning
+
+
+                                            Lei Li† , Yuwei Yin† , Shicheng Li§ , Liang Chen§ , Peiyi Wang§ , Shuhuai Ren§ , Mukai Li‡
+                                                        Yazheng Yang† , Jingjing Xu‡ , Xu Sun§ , Lingpeng Kong† , Qi Liu†
+                                                                          †
+                                                                            The University of Hong Kong
+                                                         §
+
+
+
+
+arXiv:2306.04387v2 [cs.CV] 8 Jun 2023
+                                                           National Key Laboratory for Multimedia Information Processing,
+                                                                   School of Computer Science, Peking University
+                                                                                  ‡
+                                                                                    Shanghai AI Lab
+                                                                              nlp.lilei@gmail.com
+                                                             jingjingxu@pku.edu.cn {lpk, liuqi}@cs.hku.hk
+
+
+
+                                                                                       Abstract
+
+                                                    Instruction tuning has significantly advanced large language models (LLMs) such
+                                                    as ChatGPT, enabling them to align with human instructions across diverse tasks.
+                                                    However, progress in open vision-language models (VLMs) has been limited due
+                                                    to the scarcity of high-quality instruction datasets. To tackle this challenge and
+                                                    promote research in the vision-language field, we introduce the Multi-Modal, Mul-
+                                                    tilingual Instruction Tuning (M3 IT) dataset, designed to optimize VLM alignment
+                                                    with human instructions. Our M3 IT dataset comprises 40 carefully curated datasets,
+                                                    including 2.4 million instances and 400 manually written task instructions, refor-
+                                                    matted into a vision-to-text structure. Key tasks are translated into 80 languages
+                                                    with an advanced translation system, ensuring broader accessibility. M3 IT sur-
+                                                    passes previous datasets regarding task coverage, instruction number and instance
+                                                    scale. Moreover, we develop Ying-VLM, a VLM model trained on our M3 IT
+                                                    dataset, showcasing its potential to answer complex questions requiring world
+                                                    knowledge, generalize to unseen video tasks, and comprehend unseen instructions
+                                                    in Chinese. We have open-sourced the dataset to encourage further research.1
+
+
+                                        1       Introduction
+                                        There has been a continuously increasing trend to develop intelligent assistants that can follow human
+                                        instructions [3, 36, 37]. In the natural language processing (NLP) field, instruction tuning [35, 53]
+                                        is a success paradigm that leverages large-scale well-formatted instances to align large language
+                                        models (LLMs) to human instructions. By finetuning on instances with specific task descriptions,
+                                        LLMs learn to follow the instruction to perform various tasks, and demonstrate strong generalization
+                                        ability on unseen tasks [29]. Expanding beyond NLP, a general-purpose intelligent agent must
+                                        encompass various modalities, such as vision, prompting recent efforts to investigate instruction
+                                        tuning in vision-language domains [63, 28, 7]. To develop powerful vision-language models (VLMs),
+                                        it is essential to have a well-constructed dataset that encompasses diverse vision-language tasks and
+                                        aligns with human instructions. However, the instructional data supporting existing VLMs is either
+                                        not publicly available (e.g., GPT-4) or offers limited task and language coverage (e.g., only tasks in
+                                        English are considered). This scarcity of comprehensive datasets has impeded the progress of open
+                                        vision-language models, highlighting the importance of multi-modal instruction tuning and the need
+                                        for high-quality datasets.
+                                            1
+                                                Our dataset is available at https://huggingface.co/datasets/MMInstruction/M3IT
+
+
+                                        Preprint. Under review.
+In this paper, we aim to advance instruction tuning research in the multi-modal domain by introducing
+an open dataset M3 IT, a Multi-Modal Multilingual Instruction Tuning dataset, as an essential step
+towards building a versatile general-purpose assistant. We build this dataset by converting existing
+datasets into a unified vision-to-text schema with four stages: (1) manual instruction writing, (2)
+dataset pre-processing, (3) careful quality check and (4) dataset translation for key tasks. Our dataset
+encompasses a wide range of tasks, including classic image-text tasks such as image classification,
+visual question answering, and image captioning. Video-related tasks, such as video question-
+answering, are also incorporated to ensure comprehensive coverage across multiple modalities. We
+further integrate Chinese vision-language datasets with corresponding Chinese instructions. The
+resulting dataset compiles 40 diverse tasks and 400 instructions. Finally, key vision-language tasks
+are translated into 80 languages with a strong translation system, to support multilingual studies.
+To evaluate the effectiveness of the proposed dataset, we develop a vision-language model, Ying-VLM,
+by integrating a strong vision encoder, BLIP-2 [23] with a large language model, Ziya-13B [61],
+derived from LLaMA [49]. Building on the successful approach of incorporating visual tokens as
+textual prompts in LLMs [7, 63, 28], we employ a two-stage training process: (1) the initial stage
+aligns vision features with text embeddings through image captioning on LAION400M [41], and (2)
+the second stage enhances the model by conducting instruction tuning on selected tasks of our dataset.
+Experimental results reveal that Ying-VLM surpasses strong baseline models in knowledgeable
+VQA tasks and exhibits improved generalization performance to unseen video and cross-lingual
+tasks. Further analysis indicates that the improved performance corresponds to increased tasks for
+instruction tuning, while the diversity of instructions also affects outcomes.
+This paper presents two key contributions: (1) We introduce the open-source, large-scale Multi-
+modal, multilingual Instruction Tuning (M3 IT) dataset, designed to enable the development of
+general-purpose multi-modal agents. (2) We develop Ying-VLM, a visual assistant that excels in
+knowledgeable VQA tasks, demonstrates strong generalization to unseen video QA and Chinese
+multi-modal tasks, and offers valuable insights for future research.
+
+
+2    Related Work
+
+                   Table 1: Summary of multi-modal instruction tuning datasets.
+
+Dataset          # Tasks   Multi-Lingual   # of Instances   Avg. # of Manual Instructions / Task   Open-Sourced
+MiniGPT4          N/A           ✗              5K                          N/A                          ✓
+LLaVA               3           ✗            1.15M                         N/A                          ✓
+MultiModalGPT       3           ✗              6K                            5                          ✗
+MultiInstruct      26           ✗            ∼ 235K                          5                          ✗
+InstructBLIP       28           ✗            ∼ 1.6M                         9.7                         ✗
+M3 IT (Ours)       40           ✓             2.4M                          10                          ✓
+
+
+Our work draws inspiration from recent language instruction tuning benchmarks [53, 35], which
+have been proven effective for improving language models to obtain cross-task generalization
+ability [29, 52]. In this paper, we focus on exploring the instruction tuning paradigm from LLMs
+to multi-modal agents. Unlike text-only tasks, vision-language tasks generally have more diverse
+formats, which poses new challenges toward vision-language instruction tuning benchmarks.
+To develop a general-purpose vision-language model, it is crucial to create high-quality multi-modal
+instruction tuning datasets encompassing diverse tasks, languages, and instructions. Several studies
+have investigated multi-modal instruction tuning for VLMs. LLaVA [28] and MiniGPT-4 [63]
+generate visual content-related dialog by incorporating image caption data into GPT-4/ChatGPT
+models. MultiInstruct [56] reformats a series of visual classification tasks into an instruction-tuning
+format, while InstructBLIP [7] adapts 28 existing image-to-text tasks. However, these datasets do
+not provide an ideal multi-modal instruction tuning dataset due to their limited (1) coverage of
+various task types in multi-modal fields, (2) diversity and quality of instances, and (3) inclusion of
+multiple languages for wide linguistic diversity. In this paper, we construct an improved multi-modal
+instruction tuning dataset by expanding task coverage to 40 datasets, supplementing instances with
+10 manually written task instructions, and including tasks in different languages. Table 1 compares
+the characteristics of existing multi-modal instruction tuning datasets and M3 IT.
+
+
+                                                     2
+3     M3 IT: A Multi-Modal Multilingual Instruction Tuning Dataset
+
+In this section, we introduce our proposed M3 IT dataset by first elaborating the dataset cover-
+age (§ 3.1), followed by the details of the annotation process(§ 3.2). Finally, we present the dataset
+format and provide the statistics of the crafted datasets instructions(§ 3.3).
+
+
+3.1   Task Coverage
+
+Our dataset compiles diverse tasks of classical vision-language tasks, including captioning, visual
+question answering (VQA), visual conditioned generation, reasoning and classification.
+Captioning This task aims to produce descriptions of the given images according to different needs.
+We include MS COCO [27] (the Karpathy split) for generic image descriptions. TextCaps [44]
+requires models to capture the text presented in the image and generate captions accordingly. Image-
+Paragraph-Captioning [21] focuses on generating detailed descriptions for images.
+Reasoning This task evaluates specific reasoning capabilities. We incorporate CLEVR [19] and
+NLVR [46] for spatial reasoning, Visual Commonsense Reasoning (VCR) [60] for commonsense
+reasoning, Visual MRC [47] for reading comprehensive over images, and Winoground [48] for
+fine-grained semantics reasoning over text descriptions and image contents.
+Visual Question Answering (VQA) This is the most widely studied multi-modal task, which requires
+the model to answer a given question based on the image correctly. Tasks include VQA v2 [15],
+Shapes VQA [1], DocVQA [33], OCR-VQA [34], ST-VQA [2], Text-VQA [45], and GQA [18].
+Knowledgeable Visual Question Answering Unlike traditional VQA tasks focusing on the question
+relevant to the content image, knowledgeable visual question answer (KVQA) requires the model
+to draw upon outside knowledge to answer questions. We incorporate two outside knowledge VQA
+datasets: OK-VQA [32] and A-OK-VQA [42], ScienceQA [31] which contains multi-modal science
+questions, and ViQuAE [22] focusing on knowledge facts of named entities in images.
+Classification This task involves classifying an image based on a given set of candidate labels.
+ImageNet [40], Grounded Object Identification (COCO-GOI) [27], COCO-Text [50], Image Text
+Matching (COCO-ITM) [27], e-SNLI-VE [20], Multi-modal Fact Checking (Mocheg) [58], and
+IQA [9] are included. Due to language model input length constraints, we reduce the number of
+options in some datasets with extensive candidate labels, such as ImageNet.
+Generation Visual conditional general requires models to understand the visual content and make
+a composition meeting the task demand. We have Visual Storytelling (VIST) [17], Visual Dialog
+(VisDial) [8], and multi-modal machine translation Multi30k [10] in this category.
+Chinese and multilingual Vision-Language Tasks To examine the effect of instruction tuning on
+different languages, we incorporate several Chinese vision-language tasks including FM-IQA [11] for
+VQA, COCO-CN [25] and Flickr8k-CN [24] for captioning, Chinese Food Net [4] for classification,
+and MMChat [62] for generation.
+Video-Language Tasks Beyond the static images, we are interested in whether instruction tuning
+can also be applied to video-text tasks. We include the classic MSR-VTT datasets [55] for video
+captioning, MSRVTT-QA [54], ActivityNet-QA [59], iVQA [57] and MSVD-QA [54] for video
+question answering, Something-Something [14] for video action classification.
+As shown in Figure 1, our dataset makes a wide coverage of the current existing visual-language and
+video-language benchmarks, enabling different skill sets for the language models, from simple image
+captioning to complicated reasoning based on the image even beyond the visual content.
+
+
+3.2   Annotation Process
+
+To build high-quality multi-modal instruction datasets, we rewrite various datasets into a vision-to-
+text format. The annotation process includes four steps: (1) writing instructions for each task, (2)
+structuring images and texts into a unified schema, (3) checking the overall dataset quality, and (4)
+building multilingual sets. Eight authors of this work are employed as human annotators, each of
+whom is a graduate student familiar with relevant literature.
+
+
+                                                  3
+

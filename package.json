@@ -1,0 +1,35 @@
+{
+  "name": "hku-advisor-research",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "data:update": "node scripts/import-data.mjs",
+    "build": "npm run data:update && tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "echarts": "^6.0.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "cheerio": "^1.0.0",
+    "csv-parse": "^6.1.0",
+    "csv-stringify": "^6.6.0",
+    "fast-xml-parser": "^5.2.0",
+    "playwright": "^1.55.0",
+    "remark-parse": "^11.0.0",
+    "typescript": "~5.9.2",
+    "unified": "^11.0.5",
+    "vite": "^7.1.0"
+  }
+}

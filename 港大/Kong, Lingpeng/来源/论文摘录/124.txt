@@ -1,0 +1,210 @@
+                                  A Dependency Parser for Tweets
+                    Lingpeng Kong Nathan Schneider Swabha Swayamdipta
+                          Archna Bhatia Chris Dyer Noah A. Smith
+                                 Language Technologies Institute
+                                   Carnegie Mellon University
+                                   Pittsburgh, PA 15213, USA
+                 {lingpenk,nschneid,swabha,archna,cdyer,nasmith}@cs.cmu.edu
+
+
+                        Abstract                              on the Penn Treebank (Marcus et al., 1993), aug-
+                                                              mented using semi-supervision and in-domain data.
+      We describe a new dependency parser for                 Others, such as Soni et al. (2014), have used exist-
+      English tweets, T WEEBOPARSER. The                      ing Penn Treebank–trained models on tweets.
+      parser builds on several contributions: new                In this work, we argue that the Penn Treebank
+      syntactic annotations for a corpus of tweets            approach to annotation—while well-matched to
+      (T WEEBANK), with conventions informed                  edited genres like newswire—is poorly suited to
+      by the domain; adaptations to a statistical             more informal genres. Our starting point is that
+      parsing algorithm; and a new approach to                rapid, small-scale annotation efforts performed
+      exploiting out-of-domain Penn Treebank                  by imperfectly-trained annotators should provide
+      data. Our experiments show that the parser              enough evidence to train an effective parser. We
+      achieves over 80% unlabeled attachment                  see this starting point as a necessity, given observa-
+      accuracy on our new, high-quality test set              tions about the rapidly changing nature of tweets
+      and measure the benefit of our contribu-                (Eisenstein, 2013), the attested difficulties of do-
+      tions.                                                  main adaptation for parsing (Dredze et al., 2007),
+      Our dataset and parser can be found at                  and the expense of creating Penn Treebank–style
+      http://www.ark.cs.cmu.edu/TweetNLP.                     annotations (Marcus et al., 1993).
+                                                                 This paper presents T WEEBOPARSER, the first
+1     Introduction                                            syntactic dependency parser designed explicitly for
+In contrast to the edited, standardized language of           English tweets. We developed this parser follow-
+traditional publications such as news reports, social         ing current best practices in empirical NLP: we
+media text closely represents language as it is used          annotate a corpus (T WEEBANK) and train the pa-
+by people in their everyday lives. These informal             rameters of a statistical parsing algorithm. Our
+texts, which account for ever larger proportions of           research contributions include:
+written content, are of considerable interest to re-            • a survey of key challenges posed by syntactic
+searchers, with applications such as sentiment anal-              analysis of tweets (by humans or machines) and
+ysis (Greene and Resnik, 2009; Kouloumpis et al.,                 decisions motivated by those challenges and by
+2011). However, their often nonstandard content                   our limited annotation-resource scenario (§2);
+makes them challenging for traditional NLP tools.               • our annotation process and quantitative mea-
+Among the tools currently available for tweets are                sures of the quality of the annotations (§3);
+a POS tagger (Gimpel et al., 2011; Owoputi et al.,              • adaptations to a statistical dependency parsing
+2013) and a named entity recognizer (Ritter et al.,               algorithm to make it fully compatible with the
+2011)—but not a parser.                                           above, and also to exploit information from out-
+   Important steps have been taken. The English                   of-domain data cheaply and without a strong
+Web Treebank (Bies et al., 2012) represents an                    commitment (§4); and
+annotation effort on web text—which likely lies                 • an experimental analysis of the parser’s unla-
+somewhere between newspaper text and social me-                   beled attachment accuracy—which surpasses
+dia messages in formality and care of editing—that                80%—and contributions of various important
+was sufficient to support a shared task (Petrov and               components (§5).
+McDonald, 2012). Foster et al. (2011b) annotated              The dataset and parser can be found at http://www.
+a small test set of tweets to evaluate parsers trained        ark.cs.cmu.edu/TweetNLP.
+
+
+                                                         1001
+    Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1001–1012,
+                     October 25-29, 2014, Doha, Qatar. c 2014 Association for Computational Linguistics
+2     Annotation Challenges                              context into account, we developed a first-order
+                                                         sequence model and found that it achieves 97.4%
+Before describing our annotated corpus of tweets
+                                                         average accuracy (again, ten-fold cross-validated)
+(§3), we illustrate some of the challenges of syn-
+                                                         with either gold-standard or automatic POS tags.
+tactic analysis they present. These challenges moti-
+                                                         Features include POS; shape features that recog-
+vate an approach to annotation that diverges signif-
+                                                         nize the retweet marker, hashtags, usernames, and
+icantly from conventional approaches to treebank-
+                                                         hyperlinks; capitalization; and a binary feature
+ing. Figure 1 presents a single example illustrating
+                                                         for tokens that include punctuation. We trained
+four of these: token selection, multiword expres-
+                                                         the model using the structured perceptron (Collins,
+sions, multiple roots, and structure within noun
+                                                         2002).
+phrases. We discuss each in turn.
+                                                         2.2    Multiword Expressions
+2.1    Token Selection
+                                                         We consider multiword expressions (MWEs) of
+Many elements in tweets have no syntactic function.      two kinds. The first, proper names, have been
+These include, in many cases, hashtags, URLs, and        widely modeled for information extraction pur-
+emoticons. For example:                                  poses, and even incorporated into parsing (Finkel
+    RT @justinbieber : now Hailee get a twitter          and Manning, 2009). (An example found in Fig-
+The retweet discourse marker, username, and colon        ure 1 is LA Times.) The second, lexical idioms,
+should not, we argue, be included in the syntactic       have been a “pain in the neck” for many years (Sag
+analysis. By contrast, consider:                         et al., 2002) and have recently received shallow
+                                                         treatment in NLP (Baldwin and Kim, 2010; Con-
+Got #college admissions questions ? Ask them
+                                                         stant and Sigogne, 2011; Schneider et al., 2014).
+  tonight during #CampusChat I’m looking
+                                                         Constant et al. (2012), Green et al. (2012), Candito
+     forward to advice from @collegevisit
+                                                         and Constant (2014), and Le Roux et al. (2014)
+              http://bit.ly/cchOTk
+                                                         considered MWEs in parsing. Figure 1 provides
+Here, both the hashtags and the at-mentioned user-       LA Times and All the Rage as examples.
+name are syntactically part of the utterances, while        Penn Treebank–style syntactic analysis (and de-
+the punctuation and the hyperlink are not. In the        pendency representations derived from it) does
+example of Figure 1, the unselected tokens include       not give first-class treatment to this phenomenon,
+several punctuation tokens and the final token #be-      though there is precedent for marking multiword
+lieber, which marks the topic of the tweet.              lexical units and certain kinds of idiomatic relation-
+   Typically, dependency parsing evaluations ig-         ships (Hajič et al., 2012; Abeillé et al., 2003).1
+nore punctuation token attachment (Buchholz and             We argue that internal analysis of MWEs is not
+Marsi, 2006), and we believe it is a waste of an-        critical for many downstream applications, and
+notator (and parser) time to decide how to attach        therefore annotators should not expend energy on
+punctuation and other non-syntactic tokens. Ma           developing and respecting conventions (or mak-
+et al. (2014) recently proposed to treat punctua-        ing arbitrary decisions) within syntactically opaque
+tion as context features rather than dependents, and     or idiosyncratic units. We therefore allow annota-
+found that this led to state-of-the-art performance      tors to decide to group words as explicit MWEs,
+in a transition-based parser. A small adaptation         including: proper names (Justin Bieber, World
+to our graph-based parsing approach, described in        Series), noncompositional or entrenched nominal
+§4.2, allows a similar treatment.                        compounds (belly button, grilled cheese), connec-
+   Our approach to annotation (§3) forces annota-        tives (as well as), prepositions (out of), adverbials
+tors to explicitly select tokens that have a syntactic   (so far), and idioms (giving up, make sure).
+function. 75.6% tokens were selected by the anno-           From an annotator’s perspective, a MWE func-
+tators. Against the annotators’ gold standard, we        tions as a single node in the dependency parse,
+found that a simple rule-based filter for usernames,     with no internal structure. For idioms whose in-
+hashtags, punctuation, and retweet tokens achieves       ternal syntax is easily characterized, the parse can
+95.2% (with gold-standard POS tags) and 95.1%            be used to capture compositional structure, an at-
+(with automatic POS tags) average accuracy in the           1
+                                                             The popular Stanford typed dependencies (de Marneffe
+task of selecting tokens with a syntactic function       and Manning, 2008) scheme includes a special dependency
+in a ten-fold cross-validation experiment. To take       type for multiwords, though this is only applied to a small list.
+
+
+                                                    1002
+                                                       multiple roots                                                                                                NOUN PHRASE
+                                                                                                                                                                 INTERNAL STRUCTURE
+
+                                                            COORD                      MWE
+                                 #17AD3F               #1385F0
+                                                         coordination               #FA9F1B
+                                                                              multiword expressions        noun phrase internal structure
+                                                                                                                                                NOUN PHRASE
+                                                ROOT                                                                                        INTERNAL STRUCTURE
+                                                                          MULTIPLE ROOTS                                                             ROOT
+                                    COORD          ROOT MWE                                                                     NOUN PHRASE
+                                                                                            ROOT                            INTERNAL STRUCTURE
+                                 coordination     multiword expressions       noun phrase internal structure
+
+
+               OMG I ♥ the Biebs & want to
+                          ROOT
+                                           have his
+                                       MULTIPLE     babies ! —> LA Times : Teen
+                                                ROOTS                       ROOT Pop Star Heartthrob is All the Rage on Social Media … #belieber
+                             ROOT   COORD                                                          NOUN PHRASE
+                                                               ROOT                            INTERNAL STRUCTURE
+                                                                                                    MWE                                                                    MWE
+
+
+OMG I ♥ the Biebs & want to have his babies ! —> LA Times : Teen Pop Star Heartthrob is All the Rage on Social Media … #belieber
+                  COORD
+
+                                                                        MWE                                                                           MWE
+
+
+Figure 1: Parse tree for a (constructed) example illustrating annotation challenges discussed in §2.       Colors highlight token
+                                                                                                        … #belieber
+selection (gray; §2.1), multiword expressions (blue; §2.2), multiple roots (red; §2.3), coordination (dotted arcs, green; §3.2), and
+noun phrase internal structure (orange; §2.4). The internal structure of multiword expressions (dashed arcs below the sentence)
+was predicted automatically by a parser, as described in §2.2.
+
+
+tractive property from the perspective of semantic                                                 with four NN children and no internal structure. De-
+processing.                                                                                        pendency conversion tools would likely attach the
+   To allow training a fairly conventional statisti-                                               first three words in the NP to Heartthrob. Direct de-
+cal dependency parser from these annotations, we                                                   pendency annotation (rather than phrase-structure
+find it expedient to apply an automatic conversion                                                 annotation followed by automatic conversion) al-
+to the MWE annotations, in the spirit of Johnson                                                   lows a richer treatment of such structures, which is
+(1998). We apply an existing dependency parser,                                                    potentially important for semantic analysis (Vecchi
+the first-order TurboParser (Martins et al., 2009)                                                 et al., 2013).
+trained on the Penn Treebank, to parse each MWE
+independently, assigning structures like those for                                                 3           A Twitter Dependency Corpus
+LA Times and All the Rage in Figure 1. Arcs                                                        In this section, we describe the T WEEBANK cor-
+involving the MWE in the annotation are then re-                                                   pus, highlighting data selection (§3.1), the annota-
+connected to the MWE-internal root, so that the re-                                                tion process (§3.2), important convention choices
+sulting tree respects the original tokenization. The                                               (§3.3), and measures of quality (§3.4).
+MWE-internal arcs are given a special label so that
+the transformation can be reversed and MWEs re-                                                    3.1           Data Selection
+constructed from parser output.                                                                    We added manual dependency parses to 929 tweets
+                                                                                                   (12,318 tokens) drawn from the POS-tagged Twit-
+2.3    Multiple Roots                                                                              ter corpus of Owoputi et al. (2013), which are tok-
+For news text such as that found in the Penn Tree-                                                 enized and contain manually annotated POS tags.
+bank, sentence segmentation is generally consid-                                                      Owoputi et al.’s data consists of two parts. The
+ered a very easy task (Reynar and Ratnaparkhi,                                                     first, originally annotated by Gimpel et al. (2011),
+1997). Tweets, however, often contain multiple                                                     consists of tweets sampled from a particular day,
+sentences or fragments, which we call “utterances,”                                                October 27, 2010—this is known as O CT 27. Due
+each with its own syntactic root disconnected from                                                 to concerns about overfitting to phenomena specific
+the others. The selected tokens in Figure 1 com-                                                   to that day (e.g., tweets about a particular sports
+prise four utterances.                                                                             game), Owoputi et al. (2013) created a new set of
+   Our approach to annotation allows multiple ut-                                                  547 tweets (DAILY 547) consisting of one random
+terances to emerge directly from the connectedness                                                 English tweet per day from January 2011 through
+properties of the graph implied by an annotator’s                                                  June 2012.
+decisions. Our parser allows multiple attachments                                                     Our corpus is drawn roughly equally from
+to the “wall” symbol, so that multi-rooted analyses                                                O CT 27 and DAILY 547.2 Despite its obvious tem-
+can be predicted.                                                                                  poral skew, there is no reason to believe this sample
+                                                                                                   is otherwise biased; our experiments in §5 suggest
+2.4    Noun Phrase Internal Structure                                                              that this property is important.
+A potentially important drawback of deriving de-                                                   3.2           Annotation
+pendency structures from phrase-structure annota-
+tions, as is typically done using the Penn Treebank,                                               Unlike a typical treebanking project, which may
+is that flat annotations lead to loss of information.                                              take years and involve thousands of person-hours
+This is especially notable for noun phrases in the                                                 of work by linguists, most of T WEEBANK was built
+Penn Treebank (Vadas and Curran, 2007). Consider                                                   in a day by two dozen annotators, most of whom
+Teen Pop Star Heartthrob in Figure 1; Penn Tree-                                                   had only cursory training in the annotation scheme.
+                                                                                                          2
+bank conventions would label this as a single NP                                                               This results from a long-term goal to fully annotate both.
+
+
+                                                                                        1003
+

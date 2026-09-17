@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+
+  <title>Leyang Cui</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <link rel="stylesheet" href="w3.css">
+
+  <style>
+    :root {
+      --accent: #3c6ff0;
+      --accent-dark: #2741a5;
+      --accent-soft: rgba(60, 111, 240, 0.12);
+      --bg: #f4f6fb;
+      --card-bg: #ffffff;
+      --text-primary: #1f2a44;
+      --text-muted: #516175;
+    }
+
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .w3-wide {
+      font-family: "Montserrat", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease-in-out;
+    }
+
+    a:hover {
+      color: var(--accent-dark);
+    }
+
+    .w3-sidebar {
+      background: linear-gradient(190deg, #1e3c87 0%, #2741a5 60%, #1d2671 100%);
+      box-shadow: 0 8px 24px rgba(30, 60, 135, 0.35);
+    }
+
+    .w3-sidebar .w3-bar-item {
+      font-family: "Roboto", sans-serif;
+      color: rgba(255, 255, 255, 0.86);
+      border-radius: 8px;
+      margin: 4px 12px;
+    }
+
+    .w3-sidebar .w3-bar-item:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .w3-main {
+      background: transparent;
+      padding-top: 24px;
+      padding-bottom: 48px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 16px 44px rgba(60, 111, 240, 0.12);
+      border: 1px solid rgba(60, 111, 240, 0.08);
+      margin: 0 24px 32px;
+      padding: 36px 42px;
+    }
+
+    .section-card h2 {
+      font-size: 28px;
+      margin-bottom: 18px;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .section-card h2::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 6px;
+      height: 24px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .section-card p {
+      color: var(--text-muted);
+    }
+
+    #home.section-card {
+      text-align: center;
+      padding: 48px 42px;
+    }
+
+    #home img {
+      width: 80%;
+      max-width: 320px;
+      border-radius: 20px;
+      box-shadow: 0 24px 50px rgba(31, 58, 147, 0.25);
+      margin-bottom: 24px;
+    }
+
+    #home h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    #home .intro-text {
+      max-width: 640px;
+      margin: 0 auto 18px;
+      text-align: left;
+    }
+
+    #home .tagline {
+      font-size: 18px;
+      color: var(--accent-dark);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    #home .contact-line {
+      margin-top: 12px;
+    }
+
+    .inline-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      font-weight: 600;
+    }
+
+    .inline-links a {
+      position: relative;
+    }
+
+    .inline-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .inline-links a:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .news-list,
+    .styled-list,
+    .service-list,
+    .award-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .news-list li {
+      background: var(--accent-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .section-card ol {
+      padding-left: 20px;
+    }
+
+    .section-card li {
+      margin-bottom: 12px;
+    }
+
+    .styled-list li,
+    .service-list li,
+    .award-list li {
+      padding-left: 22px;
+      position: relative;
+      color: var(--text-muted);
+    }
+
+    .styled-list li::before,
+    .service-list li::before,
+    .award-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(60, 111, 240, 0.15);
+    }
+
+    header.w3-top {
+      background: linear-gradient(190deg, #1e3c87 0%, #2741a5 100%);
+      box-shadow: 0 6px 18px rgba(30, 60, 135, 0.2);
+    }
+
+    header.w3-top .w3-bar-item {
+      color: #ffffff;
+    }
+
+    #footer {
+      text-align: center;
+      color: var(--text-muted);
+      margin: 40px 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      .w3-main {
+        margin-left: 0;
+        padding-top: 96px;
+      }
+
+      .section-card {
+        margin: 0 12px 24px;
+        padding: 28px 22px;
+      }
+
+      #home.section-card {
+        padding: 40px 22px;
+      }
+
+      #home h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+
+  <link rel="icon" type="image/png" href="images/leyangcui.jpg">
+
+</head>
+
+
+<body class="w3-content" style="max-width:1000px">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-blue w3-collapse w3-top w3-right" style="z-index:3;width:150px" id="mySidebar">
+  <div class="w3-container w3-display-container w3-padding-16">
+    <h3><b>Leyang</b></h3>
+  </div>
+  <div class="w3-padding-64 w3-text-light-grey w3-large" style="font-weight:bold">
+    <a href="#home" class="w3-bar-item w3-button">Home</a>
+    <a href="#news" class="w3-bar-item w3-button">News</a>
+    <a href="#experience" class="w3-bar-item w3-button">Experience</a>
+    <a href="#publications" class="w3-bar-item w3-button">Publications</a>
+    <a href="#service" class="w3-bar-item w3-button">Services</a>
+    <a href="#award" class="w3-bar-item w3-button">Awards</a>
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+  <div class="w3-bar-item w3-padding-24">Leyang</div>
+  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-24 w3-right" style="font-stretch: extra-expanded;" onclick="w3_open()"><b>≡</b></a>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:150px">
+
+  <!-- Push down content on small screens -->
+  <div class="w3-hide-large" style="margin-top:83px"></div>
+
+<!-- The Home Section -->
+    <div class="w3-container w3-center w3-padding-32 section-card" id="home">
+      <img alt="profile photo" src="images/leyangcui.jpeg">
+      <h1>Leyang Cui （崔乐阳）</h1>
+      <!-- <p class="tagline">Senior Researcher, Tencent AI Lab</p> -->
+      <p class="intro-text w3-justify">
+          I obtained my Ph.D. degree at Zhejiang University and Westlake University, advised by <a href="https://frcchang.github.io/" target="_blank" rel="noopener">Prof. Yue Zhang</a>. My research interests center on large language models—especially coding agents, agentic reinforcement learning, and strategies for mitigating hallucinations.
+      </p>
+      <p class="contact-line">Looking for internship or collaboration? Drop me an email.</p>
+      <p class="contact-line">
+        <strong>Email</strong>: <a href="mailto:nealcly.nlp@gmail.com">nealcly.nlp AT gmail.com</a>
+      </p>
+      <div class="inline-links">
+        <a href="https://scholar.google.com/citations?user=6YVwZgkAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://dblp.org/pid/247/6181.html" target="_blank" rel="noopener">DBLP</a>
+      </div>
+    </div>
+
+
+
+    <!-- The News Section -->
+  <div class="w3-container w3-padding-32 section-card" id="news">
+    <h2>News</h2>
+    <ul class="news-list">
+      <li><strong>Jul. 2025</strong> &middot; Invited to deliver a talk titled “Hallucination in LLMs: Current Advances and Future Frontiers” at FEVER, ACL 2025.</li>
+      <li><strong>Aug. 2025</strong> &middot; Organizing a tutorial titled “LLM-based Role-Playing from the Perspective of Hallucinations” at IJCAI 2025.</li>
+      <li><strong>Aug. 2024</strong> &middot; Invited to serve as Session Chair at ACL 2024.</li>
+      <li><strong>Sep. 2023</strong> &middot; Invited to serve as Action Editor/Area Chair at EACL, NAACL, and ACL 2024.</li>
+      <li><strong>Dec. 2022</strong> &middot; Invited to serve as Area Chair (Syntax: Tagging, Chunking and Parsing) at ACL 2023.</li>
+      <li><strong>Jun. 2022</strong> &middot; Invited to serve as Area Chair (Dialogue and Interactive Systems) at EMNLP 2022.</li>
+    </ul>
+  </div>
+
+  
+  <!-- The Talks Section -->
+  <!-- w3-container w3-light-grey w3-padding-32 -->
+  <div class="w3-container w3-padding-32 section-card" id="experience">
+  <h2>Experience</h2>
+    <ul class="styled-list">
+      <li><strong>Jun. 2021 - Dec. 2021</strong> Research Intern, Pattern Recognition Center, WeChat, Tencent. Advised by <a href="http://fandongmeng.github.io/">Fandong Meng</a></li>
+      <li><strong>Nov. 2020 - May. 2021</strong> Research Intern, NLC Group, MSRA. Advised by <a href="https://sites.google.com/view/wuyu/home">Yu Wu</a> and <a href="https://www.microsoft.com/en-us/research/people/shujliu/">Shujie Liu</a></li>
+      <li><strong>Jun. 2019 - Sep. 2019</strong> Research Intern, NLC Group, MSRA. Advised by <a href="https://sites.google.com/view/wuyu/home">Yu Wu</a> and <a href="https://www.microsoft.com/en-us/research/people/shujliu/">Shujie Liu</a></li>
+      <li><strong>Sep. 2017 - Apr. 2018</strong> Research Intern, NLP Department, I2R, ASTAR. Advised by <a href="https://tuanluu.github.io/">Anh Tuan Luu</a></li>
+    </ul>
+  </div>
+ <!-- The Publications Section -->
+  <div class="w3-container w3-padding-32 section-card" id="publications">
+    <h2>Publications</h2>
+    (*: Equal contribution, &dagger;: Corresponding author)
+
+
+      <h4> Preprints:</h4>
+      <ol><p>
+
+
+
+
+    <p>
+      <li><strong>Neuro-Symbolic Integration Brings Causal and Reliable Reasoning Proofs</strong> <a href="https://arxiv.org/abs/2311.09802" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+      </li>
+      Sen Yang, Xin Li, <strong>Leyang Cui</strong>, Lidong Bing, Wai Lam
+      <br>
+    </p>
+
+
+      <p>
+      <li><strong>Towards Robust Online Dialogue Response Generation</strong> <a href="https://arxiv.org/abs/2203.03168" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+      <br>
+      <strong>Leyang Cui</strong>, Fandong Meng, Yijin Liu, Jie Zhou, Yue Zhang
+      <br>
+      </p>
+
+      </ol>
+    <h4> Conference Papers:</h4>
+    <ol>
+
+      <p>
+        <li>
+            <strong>Do Reasoning Models Show Better Verbalized Calibration?</strong> <a href="https://arxiv.org/pdf/2504.06564" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+        </li>
+        Qingcheng Zeng, Weihao Xuan, <strong>Leyang Cui</strong>, Rob Voigt
+         <br>
+      EMNLP 2025
+      </p>
+
+
+      <p>
+        <li>
+            <strong>Lost in Literalism: How Supervised Training Shapes Translationese in LLMs</strong> <a href="https://arxiv.org/pdf/2503.04369" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+        </li>
+        Yafu Li, Ronghao Zhang, Zhilin Wang, Huajian Zhang, <strong>Leyang Cui</strong>, Yongjing Yin, Tong Xiao, Yue Zhang
+         <br>
+        ACL 2025
+      </p>
+
+      <p>
+        <li>
+            <strong>Alleviating Hallucinations of Large Language Models through Induced Hallucinations</strong> <a href="https://arxiv.org/pdf/2312.15710" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+        </li>
+        Yue Zhang, <strong>Leyang Cui</strong>&dagger;, Wei Bi, Shuming Shi
+         <br>
+         Findings of NAACL 2025
+      </p>
+
+
+      <p>
+        <li>
+            <strong>Collaborative Evaluation: Exploring the Synergy of Large Language Models and Humans for Open-ended Generation Evaluation</strong> <a href="https://arxiv.org/abs/2310.19740" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+        </li>
+        Qintong Li,  <strong>Leyang Cui</strong>, Lingpeng Kong, Wei Bi
+        <br>
+        COLING 2025
+      </p>
+
+        <p>
+      <li><strong>Gated Slot Attention for Efficient Linear-Time Sequence Modeling</strong>
+      </li>
+      Yu Zhang, Songlin Yang, Rui-Jie Zhu, Yue Zhang, <strong>Leyang Cui</strong>, Yiqiao Wang, Bolun Wang, Freda Shi, Bailin Wang, Wei Bi, Peng Zhou, Guohong Fu
+       <br>
+       NeurIPS 2024
+    </p>
+
+        <p>
+      <li><strong>Knowledge Verification to Nip Hallucination in the Bud</strong>
+      </li>
+      Fanqi Wan, Xinting Huang, <strong>Leyang Cui</strong>, Xiaojun Quan, Wei Bi, Shuming Shi
+       <br>
+       EMNLP 2024
+    </p>
+
+
+        <p>
+      <li><strong>Not All Preference Pairs Are Created Equal: A Recipe for Annotation-Efficient Iterative Preference Learning</strong>
+      </li>
+      Sen Yang, <strong>Leyang Cui</strong>&dagger;, Deng Cai, Xinting Huang, Shuming Shi, Wai Lam
+       <br>
+        Findings of EMNLP 2024
+    </p>
+
+     <p>
+      <li><strong>Selection-p: Self-Supervised Task-Agnostic Prompt Compression for Faithfulness and Transferability</strong>
+      </li>
+      Tsz Ting Chung, <strong>Leyang Cui</strong>, Lemao Liu, Xinting Huang, Shuming Shi, Dit-Yan Yeung
+       <br>
+        Findings of EMNLP 2024
+    </p>
+
+
+
+      <p>
+      <li>
+        <strong>DETect: Deepfake Text Detection in the Wild</strong>
+      </li>
+     Yafu Li, Qintong Li, <strong>Leyang Cui</strong>&dagger;, Wei Bi, Zhilin Wang, Longyue Wang, Linyi Yang, Shuming Shi, Yue Zhang&dagger;
+      <br>
+      ACL 2024
+      </p>
+
+
+      <p>
+      <li>
+        <strong>Mitigating Catastrophic Forgetting in Large Language Models with Self-Synthesized Rehearsal</strong>
+      </li>
+     Jianheng Huang, <strong>Leyang Cui</strong>, Ante Wang, Chengyi Yang, Xinting Liao, Linfeng Song, Junfeng Yao, Jinsong Su
+      <br>
+      ACL 2024
+      </p>
+
+      <p>
+      <li>
+        <strong>GSM-Plus: A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers</strong>
+      </li>
+     Qintong Li, <strong>Leyang Cui</strong>, Xueliang Zhao, Lingpeng Kong, Wei Bi
+      <br>
+      ACL 2024
+      </p>
+
+            <p>
+      <li>
+        <strong>Spotting AI’s Touch: Identifying LLM-Paraphrased Spans in Text</strong>
+      </li>
+     Yafu Li, Zhilin Wang, <strong>Leyang Cui</strong>&dagger;, Wei Bi, Shuming Shi, Yue Zhang&dagger;
+      <br>
+      Findings of ACL 2024
+      </p>
+
+                    <p>
+      <li>
+        <strong>Benchmarking and Improving Long-Text Translation with Large Language Models</strong>
+      </li>
+     Zefeng Du, Wenxiang Jiao, Longyue Wang, Chenyang Lyu, Jianhui Pang, <strong>Leyang Cui</strong>, Kaiqiang Song, Derek F. Wong, Shuming Shi, Zhaopeng Tu
+      <br>
+      Findings of ACL 2024
+      </p>
+
+      <p>
+      <li>
+        <strong>Retrieval is Accurate Generation</strong>
+      </li>
+     Bowen Cao, Deng Cai, <strong>Leyang Cui</strong>, Xuxin Cheng, Wei Bi, Yuexian Zou, Shuming Shi
+      <br>
+      ICLR 2024
+      </p>
+
+      <p>
+      <li>
+        <strong>NaRuto: Automatically Acquiring Planning Models from Narrative Texts</strong>
+      </li>
+     Ruiqi Li, <strong>Leyang Cui</strong>, Songtuan Lin, Patrik Haslum
+      <br>
+      AAAI 2024
+      </p>
+
+
+    <p>
+      <li>
+        <strong>EDeR: Towards Understanding Dependency Relations Between Events</strong>
+      </li>
+      Ruiqi Li, Patrik Haslum, <strong>Leyang Cui</strong>&dagger;
+      <br>
+      EMNLP 2023
+    </p>
+
+        <p>
+      <li><strong>
+     RobustGEC: Robust Grammatical Error Correction Against Subtle Context Perturbation</strong>
+      <br>
+     Yue Zhang, <strong>Leyang Cui</strong>&dagger;, Enbo Zhao, Wei Bi, Shuming Shi
+      <br>
+      EMNLP 2023
+      </p>
+      <p>
+      <li><strong>
+     Non-autoregressive Text Editing with Copy-aware Latent Alignments</strong>
+      <br>
+     Yu Zhang*, Yue Zhang*, <strong>Leyang Cui</strong>, Guohong Fu
+      <br>
+      EMNLP 2023
+      </p>
+        <p>
+      <li><strong>
+
+     LogiCoT: Logical Chain-of-Thought Instruction Tuning</strong>
+      <br>
+     Hanmeng Liu, Zhiyang Teng, <strong>Leyang Cui</strong>, Chaoli Zhang, Qiji Zhou, Yue Zhang
+      <br>
+      Findings of EMNLP 2023
+      </p>
+      <p>
+      <li><strong>Explicit Syntactic Guidance for Neural Text Generation</strong>
+      <br>
+     Yafu Li, <strong>Leyang Cui</strong>&dagger;, Jianhao Yan, Yongjing Yin, Wei Bi, Shuming Shi, Yue Zhang&dagger;
+      <br>
+      ACL 2023, Best Paper Nomination (1.6%)
+      </p>
+      <p>
+      <li><strong>Enhancing Grammatical Error Correction Systems with Explanations</strong>
+      <br>
+     Yuejiao Fei, <strong>Leyang Cui</strong>&dagger;, Sen Yang, Wai Lam, Zhenzhong Lan, Shuming Shi
+      <br>
+      ACL 2023
+      </p>
+      <p>
+      <li><strong>Uni-Encoder: A Fast and Accurate Response Selection Paradigm for Generation-Based Dialogue Systems</strong>
+      <br>
+      Chiyu Song, Hongliang He, Haofei Yu, Pengfei Fang, <strong>Leyang Cui</strong>, Zhenzhong Lan
+      <br>
+      Findings of ACL 2023
+      </p>
+       <p>
+      <li><strong>Cross-domain Generalization for AMR Parsing</strong>
+      <br>
+      Xuefeng Bai, Sen Yang, <strong>Leyang Cui</strong>, Linfeng Song, Yue Zhang
+      <br>
+      EMNLP 2022
+      </p>
+      <p>
+      <li><strong>Multi-Granularity Optimization for Non-Autoregressive Translation</strong>
+      <br>
+      Yafu Li, <strong>Leyang Cui</strong>&dagger;, Yongjing Yin, Yue Zhang&dagger;
+      <br>
+      EMNLP 2022
+      </p>
+      <p>
+      <li><strong>FactMix: Using a Few Labeled In-domain Examples to Generalize to Cross-domain Named Entity Recognition</strong>
+      <br>
+      Linyi Yang, Lifan Yuan, <strong>Leyang Cui</strong>, Wenyang Gao, Yue Zhang
+      <br>
+      COLING 2022
+      </p>
+
+      <p>
+      <li><strong>Investigating Non-local Features for Neural Constituency Parsing</strong>
+      <br>
+      <strong>Leyang Cui</strong>*, Sen Yang*, Yue Zhang
+      <br>
+      ACL 2022
+      </p>
+
+      <p>
+      <li><strong>Challenges to Open-Domain Constituency Parsing</strong>
+      <br>
+      Sen Yang, <strong>Leyang Cui</strong>, Ruoxi Ning, Di Wu, Yue Zhang
+      <br>
+      Findings of ACL 2022
+      </p>
+
+      <p>
+      <li><strong>Knowledge Enhanced Fine-tuning for Better Handling Unseen Entities in Dialogue Generation</strong>
+      <br>
+      <strong>Leyang Cui</strong>, Yu Wu, Shujie Liu, Yue Zhang
+      <br>
+      EMNLP 2021
+      </p>
+
+      <p>
+      <li><strong>Solving Aspect Category Sentiment Analysis as a Text Generation Task</strong>
+      <br>
+      Jian Liu, Zhiyang Teng, <strong>Leyang Cui</strong>, Hanmeng Liu, Yue Zhang
+      <br>
+      EMNLP 2021
+      </p>
+
+      <p>
+      <li><strong>Template-based Named Entity Recognition Using BART</strong>
+      <br>
+      <strong>Leyang Cui</strong>, Yu Wu, Jian Liu, Sen Yang, Yue Zhang
+      <br>
+      Findings of ACL 2021
+      </p>
+
+      <p>
+      <li><strong>On Commonsense Cues in BERT for Solving Commonsense Tasks</strong>
+      <br>
+      <strong>Leyang Cui</strong>, Sijie Cheng, Yu Wu, Yue Zhang
+      <br>
+      Findings of ACL 2021
+      </p>
+
+
+      <p>
+      <li><strong>Natural Language Inference in Context Investigating Contextual Reasoning over Long Texts</strong>
+      <br>
+      Hangmeng Liu, <strong>Leyang Cui</strong>, Jian Liu, Yue Zhang
+      <br>
+      AAAI 2021
+      </p>
+
+      <p>
+      <li><strong>MuTual: A Dataset for Multi-Turn Dialogue Reasoning</strong>
+      <br>
+      <strong>Leyang Cui</strong>, Yu Wu, Shujie Liu, Yue Zhang, Ming Zhou
+      <br>
+      ACL 2020
+      </p>
+
+      <p>
+      <li><strong>What Have We Achieved on Text Summarization?</strong>
+      <br>
+      Dandan Huang*, <strong>Leyang Cui</strong>*, Sen Yang*, Guangsheng Bao, Kun Wang, Jun Xie, Yue Zhang
+      <br>
+      EMNLP 2020
+      </p>
+
+      <p>
+      <li><strong>Making the Best Use of Review Summary for Sentiment Analysis</strong>
+      <br>
+      Sen Yang*, <strong>Leyang Cui</strong>*, Jun Xie, Yue Zhang
+      <br>
+      COLING 2020
+      </p>
+
+      <p>
+      <li><strong>Does Chinese BERT Encode Word Structure?</strong>
+      <br>
+      Yile Wang, <strong>Leyang Cui</strong>, Yue Zhang
+      <br>
+      COLING 2020
+      </p>
+
+      <p>
+      <li><strong>LogiQA: A Challenge Dataset for Machine Reading Comprehension with Logical Reasoning</strong>
+      <br>
+      Jian Liu, <strong>Leyang Cui</strong>, Hanmeng Liu, Dandan Huang, Yile Wang, Yue Zhang
+      <br>
+      IJCAI 2020
+      </p>
+      <p>
+      <li><strong>Evaluating Commonsense in Pre-trained Language Models</strong>
+      <br>
+      Xuhui Zhou, Yue Zhang, <strong>Leyang Cui</strong>, Dandan Huang
+      <br>
+      AAAI 2020
+      </p>
+            <p>
+      <li><strong>Hierarchically-Refined Label Attention Network for Sequence Labeling</strong>
+      <br>
+      <strong>Leyang Cui</strong>, Yue Zhang
+      <br>
+      EMNLP 2019
+      </p>
+
+
+
+    </ol>
+
+      <h4> Journal Papers:</h4>
+
+
+      <ol>
+      <p>
+        <li>
+        <strong>Siren's Song in the AI Ocean: A Survey on Hallucination in Large Language Models</strong> <a href="https://arxiv.org/abs/2309.01219" target="_blank" style="text-decoration: none; color: #4285f4;font-weight: bold;">[PDF]</a>
+        </li>
+        Yue Zhang, Yafu Li, <strong>Leyang Cui</strong>&dagger;, Deng Cai, Lemao Liu, Tingchen Fu, Xinting Huang, Enbo Zhao, Yu Zhang, Yulong Chen, Longyue Wang, Anh Tuan Luu, Wei Bi, Freda Shi, Shuming Shi
+        <br>
+        Computational Linguistics
+      </p>
+
+
+
+          <p>
+      <li><strong>LogiQA 2.0—An Improved Dataset for Logical Reasoning in Natural Language Understanding</strong>
+      <br>
+        Hanmeng Liu, Jian Liu, <strong>Leyang Cui</strong>, Zhiyang Teng, Nan Duan, Ming Zhou, Yue Zhang
+      <br>
+      IEEE/ACM Transactions on Audio, Speech, and Language Processing, 2023
+      </p>
+
+
+      <p>
+      <li><strong>Label Attention Network for Structured Prediction</strong>
+      <br>
+        <strong>Leyang Cui</strong>*, Yafu Li*, Yue Zhang
+      <br>
+      IEEE/ACM Transactions on Audio, Speech, and Language Processing, 2022
+      </p>
+
+        <p>
+      <li><strong>Improving Skip-gram Embeddings Using BERT</strong>
+      <br>
+      Yile Wang, <strong>Leyang Cui</strong>, Yue Zhang
+      <br>
+      IEEE/ACM Transactions on Audio, Speech, and Language Processing, 2021
+      </p>
+      </ol>
+
+
+    </p>
+  </div>
+
+<!-- The Services Section -->
+<div class="w3-container w3-padding-32 section-card" id="service">
+    <h2>Services</h2>
+    <ul class="service-list">
+      <li>Senior Program Committee Member: IJCAI 2021</li>
+      <li>Area Chair: EMNLP 2022, ACL 2023, EACL 2024, NAACL 2024, ACL 2024</li>
+      <li>Reviewer: TASLP, TACL</li>
+      <li>Program Committee Member: NAACL 2022, ACL 2022, AAAI 2021, ACL 2021, EMNLP 2021, AAAI 2020, EMNLP 2020, COLING 2020, IJCAI 2020</li>
+    </ul>
+</div>
+
+  <!-- The Awards Section -->
+  <div class="w3-container w3-padding-32 section-card" id="award">
+    <h2>Awards</h2>
+    <ul class="award-list">
+      <li>Westlake Presidential Award, 2022</li>
+      <li>Stars of Tomorrow, MSRA, 2021</li>
+      <li>Outstanding Students, Zhejiang University, 2019, 2020 and 2021</li>
+      <li>National Scholarship, 2019</li>
+    </ul>
+  </div>
+
+<div id="footer">
+    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=EVM5Rrw7W8s9GiPqcW7_01sgW95zr5UDuTNRu-PW5eo&cl=ffffff&w=a"></script>
+<!--    <p>Last update date: Oct, 2022.</p>-->
+</div>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EZN0E83MPB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EZN0E83MPB');
+</script>
+
+  <script type="text/javascript">
+  var sc_project=12347113; 
+  var sc_invisible=0; 
+  var sc_security="21aca5d1"; 
+  var sc_https=1; 
+  var scJsHost = "https://";
+  document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+
+  "statcounter.com/counter/counter.js'></"+"script>");
+  <noscript>
+    <div class="statcounter"><a title="Web Analytics Made Easy -
+  StatCounter" href="https://statcounter.com/" target="_blank"><img
+  class="statcounter" src="https://c.statcounter.com/12347113/0/21aca5d1/0/"
+  alt="Web Analytics Made Easy - StatCounter"></a></div>
+  </noscript>
+  <!-- End of Statcounter Code -->
+  </div>
+  <!-- End page content -->
+</div>
+
+<script>
+// Accordion 
+function myAccFunc() {
+  var x = document.getElementById("demoAcc");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+// Click on the "Jeans" link on page load to open the accordion for demo purposes
+var defaultButton = document.getElementById("myBtn");
+if (defaultButton) {
+  defaultButton.click();
+}
+
+
+// Open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+</script>
+
+</body>
+</html>

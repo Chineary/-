@@ -1,0 +1,215 @@
+                                         Published as a conference paper at ICLR 2026
+
+
+
+
+                                         ATTS: A SYNCHRONOUS T EST-T IME S CALING VIA
+                                         C ONFORMAL P REDICTION
+                                          Jing Xiong1∗, Qiujiang Chen1∗, Fanghua Ye4 , Zhongwei Wan2 , Chuanyang Zheng5
+                                          Hui Shen1 , Chenyang Zhao2 , Hanbo Li3 , Chaofan Tao3 , Haochen Tan3
+                                          Haoli Bai3 , Lifeng Shang3 , Lingpeng Kong1 , Ngai Wong1
+                                          1                                        2                           3
+                                              The University of Hong Kong            Independent Researcher      Huawei Technologies Co., Ltd
+                                          4                                   5
+                                              University College London           The Chinese University of Hong Kong
+
+                                                    https://github.com/menik1126/Asynchronous-Test-Time-Scaling
+
+
+
+
+arXiv:2509.15148v3 [cs.CL] 24 Feb 2026
+                                                                                            A BSTRACT
+                                                       Large language models (LLMs) benefit from test-time scaling but are often ham-
+                                                       pered by high inference latency. Speculative decoding is a natural way to accel-
+                                                       erate the scaling process; however, scaling along both the parallel and sequential
+                                                       dimensions poses significant challenges, including substantial memory-bound ex-
+                                                       ecution and synchronization overhead. We introduce ATTS (Asynchronous Test-
+                                                       Time Scaling), a statistically guaranteed adaptive scaling framework that follows
+                                                       the hypothesis testing process to address these challenges. By revisiting arithmetic
+                                                       intensity, ATTS identifies synchronization as the primary bottleneck. It enables
+                                                       asynchronous inference through online calibration and proposes an ordinal classi-
+                                                       fication algorithm that supports a three-stage rejection sampling pipeline, scaling
+                                                       along both the sequential and parallel axes. Across experiments on the MATH,
+                                                       AMC23, AIME24, and AIME25 datasets and across multiple draft–target model
+                                                       families, we show that ATTS delivers up to 56.7x speedup in test-time scaling and
+                                                       a 4.14x throughput improvement, while maintaining accurate control of the rejec-
+                                                       tion rate, reducing latency and memory overhead, and incurring no accuracy loss.
+                                                       By scaling both in parallel and sequential dimensions, we enable the 1.5B/70B
+                                                       draft/target model combination to achieve the performance of the state-of-the-art
+                                                       reasoning model o3-mini (high) on the AIME dataset.
+
+                                         1        I NTRODUCTION
+                                         With the rapid advances in large language models (LLMs), attention is increasingly turning to
+                                         reasoning models (Guo et al., 2025; Muennighoff et al., 2025; McCoy et al., 2024; Shao et al.,
+                                         2024)—systems that transcend next-token prediction in order to emulate human-like reasoning be-
+                                         haviors. These models excel at leveraging complex reasoning chains, especially in test-time scaling
+                                         settings (Snell et al., 2024; Li et al., 2025; Muennighoff et al., 2025; Zeng et al., 2025), and have
+                                         shown strong potential in mathematical reasoning (Xiong et al., 2022; 2023b;a).
+                                         Test-time scaling (Chen et al., 2025; Muennighoff et al., 2025; Guo et al., 2025) constitutes a new
+                                         paradigm that enhances the model’s reasoning capabilities by allocating additional computational
+                                         resources during the inference stage. Typically, test-time scaling can be categorized into two ap-
+                                         proaches: sequential scaling (Muennighoff et al., 2025; Guo et al., 2025) and parallel scaling (Chen
+                                         et al., 2025). However, despite its potential, the challenge of efficiently managing increasing sam-
+                                         pling size or complexity during inference remains a critical limitation, hindering the achievement of
+                                         high-performance deployment.
+                                         Benefiting from the shared-prefix mechanism of the inference engines (Kwon et al., 2023; Zheng
+                                         et al., 2024), parallel scaling (Chen et al., 2025) increases the number of samples concurrently,
+                                         thereby partially mitigating the inference-time latency and memory footprint introduced by scaling
+                                         the per-trajectory token budget (i.e., longer reasoning paths), while simultaneously improving token-
+                                         sampling throughput.
+                                         Although some methods (Huang et al., 2025; Wan et al., 2024) that adopt confidence-based early
+                                         stopping of reasoning chains improve parallel sampling efficiency, problems still remain in memory
+                                              ∗
+                                                  Contact Email: junexiong@connect.hku.hk, Equal contribution.
+
+
+                                                                                                   1
+Published as a conference paper at ICLR 2026
+
+
+
+
+efficiency and high inference latency. Another potential issue is that early stopping prunes away
+potentially correct reasoning paths and reduces the diversity of the output space.
+                                                            Memory (GB)
+Speculative decoding (Li et al., 2024a; Leviathan            75
+                                                                          Static Param.               Dynamic Mem.
+
+et al., 2023; Kim et al., 2023; Pan et al., 2025b;                                                                     73.5
+
+
+Yang et al., 2025) represents a promising approach
+                                                             70
+for accelerating decoding. In this framework, a                                                                67.9
+lightweight draft model generates tokens, which
+are subsequently validated and refined by a target           65
+                                                                                              62.8
+model. This dual-phase approach not only speeds
+up inference by offloading most of the generation            60   59.5
+                                                                               60.0
+
+process to the draft model, but also ensures that the
+final outputs retain high fidelity, thereby achieving a      55                                                               Sample Size
+favorable balance between efficiency and accuracy.                   1             4             16          32       64
+
+                                                          Figure 1: Memory Overhead vs. Sampling
+However, when speculative decoding (Pan et al., Sizes (QwQ 32B, Token Budget 500)
+2025b; Yang et al., 2025) meets test-time scaling,
+the decoding process faces two key challenges. The first is the memory bottleneck of the target
+model during the prefill phase. As shown in Figure 1, as the number of sampling increases, the
+memory overhead of the target model tends to grow due to KV cache accumulation. This effect
+becomes more pronounced in target models when attempting to scale the number of requests from
+the draft model. During real-world deployment on the SGLang server (Zheng et al., 2024), high-
+concurrency sampling, especially when simultaneously validating multiple long reasoning chains,
+can lead to memory peaks that easily exceed the GPU’s maximum capacity, causing the server to
+crash. Therefore, it is crucial to constrain the request budget from the draft model to the target model
+within a manageable range.
+Synchronous                                                                                                  Done             Draft Model Prefill
+Speculative                                                                                                                   Draft Model Decode
+ Decoding                                                                                                                     Base Model Prefill
+                                                                                                                              Base Model Decode
+                                                                                                                              Bubble
+                                                                                                                              End Generation
+
+
+
+Asynchronous
+                                                                                       Done
+ Speculative
+  Decoding
+
+
+
+
+                Figure 2: Comparison of naive and asynchronous speculative decoding.
+In speculative decoding, one stage involves rejection sampling: prior to acceptance, the target model
+either ranks draft-generated candidates or computes a divergence between the draft and target dis-
+tributions, introducing an additional synchronization overhead bottleneck. As illustrated in Fig. 2,
+during the multi-turn sampling process (with a sampling quantity of 3 at each turn), if the target
+model aims to reject the sampling with the lowest two confidences, a ranking operation must be per-
+formed at each turn. Given the limited computational and memory resources, the target model needs
+to prioritize processing the most important requests. Especially in test-time scaling, when combin-
+ing sequential and parallel scaling, the synchronization overhead from precise budget control and
+the pursuit of globally optimal ranking is amplified. Although this issue has been widely discussed
+in the context of tool calls (Gim et al., 2024; Ginart et al., 2024), it has not been formally proposed
+in the context of test-time scaling.
+To analyze the synchronization bottleneck and address the two challenges mentioned above, we first
+introduce a novel variant of arithmetic intensity called asynchronous arithmetic intensity to analyze
+the system bottleneck, and then explore conformal prediction (Vovk et al., 2005; 2003; Romano
+et al., 2020; Lei et al., 2018) for ranking predictions to design the asynchronous algorithm. In our
+formulation, conformal prediction defines a prediction set Cα ; sampling in Cα are rejected, while
+sampling outside are accepted. This yields a distribution-free guarantee that the right sampling is
+retained (i.e., lies outside Cα ) with high probability, enabling asynchronous test-time scaling. This
+paper presents the following contributions:
+
+         • We propose asynchronous arithmetic intensity, a performance metric designed to character-
+           ize and quantify throughput/latency bottlenecks that emerge in test-time scaling scenarios.
+
+
+                                                    2
+Published as a conference paper at ICLR 2026
+
+
+
+
+       • We introduce conformal prediction to tackle prediction ranking, and—leveraging the result-
+         ing ranking—construct stable prediction sets that mitigate GPU-memory bottleneck risks.
+       • We propose ATTS, a training-free, lossless acceleration method that achieves a 56.7x
+         speedup in test-time scaling and a 4.14x throughput improvement in both sequential and
+         parallel settings.
+
+2    P RELIMINARY
+We first introduce how to build the prediction set in the classical setup, and then present our setup.
+Classic Setup.    Formally, let
+                                                                        
+                                   Dcal = (X1 , Y1 ), . . . , (Xn , Yn )                               (1)
+
+denote the calibration dataset. Each pair (Xi , Yi ) for i = 1, . . . , n is a data point, consisting of an
+Xi (the input question for the i-th example) and a ground truth denoted as Yi . The symbol n denotes
+the size of the calibration dataset. For each input Xi , we draw m candidate sampling
+
+                                             (Ŷi1 , . . . , Ŷim ),                                   (2)
+
+where m is the number of samples per input (the sampling budget), and Ŷik denotes the k-th can-
+didate sample. In adaptive prediction-set construction (Romano et al., 2020; Angelopoulos et al.,
+2020; Huang et al., 2023), the conformity score for each sample is computed via a softmax function:
+
+                                            exp(−ℓ(Xi , Ŷik ))
+                                    ski = Pm                    j
+                                                                  ,                                    (3)
+                                           j=1 exp(−ℓ(Xi , Ŷi ))
+
+where −ℓ denotes the negative log-likelihood loss. Next, the global conformity threshold τ is ob-
+tained by computing the p-quantile over all candidate scores:
+                                n                                         o
+                        τ = Qp sji , , i = 1, . . . , n, ; j = 1, . . . , m ,                 (4)
+
+                                              ⌈(n + 1)(1 − α)⌉
+                                        p=                     ,                                       (5)
+                                                     n
+and α ∈ (0, 1) is the user-specified miscoverage rate. To satisfy conditional coverage, The predic-
+tion set for input Xi is then defined as
+                                         n                                o
+                             Cα (Xi ) = Ŷik , , ski ≥ τ, k = 1, . . . , m .                    (6)
+
+which ensures that the resulting set includes the ground truth with probability at least 1 − α. Al-
+though conformal prediction in the classical setting can provide guaranteed conditional coverage, the
+conformal scores assigned to candidate outputs are typically required to be normalized, as shown in
+Eq. 3, and this normalization inherently introduces a bottleneck to parallelization. Therefore, in the
+subsequent Ordinal Classification, we transform the problem into a hypothesis testing framework via
+p-values to avoid normalization, with a proof of its coverage guarantee provided in Appendix A.8.
+
+Problem Setup. In the asynchronous test-time scaling setup, we leverage a draft model for
+fast sampling and delegate verification to a slower target model. Unlike classical rejection sam-
+pling (Chen et al., 2023), which approximates a target distribution with a draft distribution, we focus
+on accurately predicting the rejection rate, thereby reducing VRAM out-of-memory risk and the
+synchronization overhead caused by global ranking or softmax function. Given a predefined α, we
+estimate a confidence level such that the ground truth y falls within the prediction set Cα (Y ) with
+probability at least 1 − α:
+                                      P(y ∈ Cα (Y )) ≥ 1 − α,                                       (7)
+where α is conventionally interpreted as the significance level (e.g., 0.05 corresponding to 95%
+confidence). In this work, however, we reinterpret α as the rejection rate of the target model.
+
+                                                       3
+

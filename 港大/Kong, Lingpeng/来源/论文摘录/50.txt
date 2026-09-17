@@ -1,0 +1,216 @@
+                                                  FACT T RACK: Time-Aware World State Tracking in Story Outlines
+
+
+                                                           Zhiheng Lyu1 Kevin Yang2 Lingpeng Kong1 Daniel Klein2
+                                                                    1
+                                                                      The University of Hong Kong, 2 UC Berkeley
+                                                         {zhlyu,lpk}@cs.hku.hk, {yangk,klein}@berkeley.edu
+
+
+
+
+                                                                   Abstract                                                  Factual Inconsistency
+                                                                                                       Event 1: John realizes he           Event 1 indicates that John
+                                                 While accurately detecting and correcting fac-        forgot his laptop at home.          cannot use the laptop, but in
+                                                                                                                                           Event 2, John uses his laptop for
+                                                 tual contradictions in language model outputs                                             work. So, they are contradictory.
+                                                                                                       Event 1.5: John goes to
+
+
+
+
+arXiv:2407.16347v2 [cs.CL] 31 Jan 2025
+                                                 has become increasingly important as their ca-        home to retrieve his laptop.        The relationship between John
+                                                                                                                                           and his laptop is updated by
+                                                 pabilities improve, doing so is highly challeng-                                          Event 1.5, so Event 2 is not
+                                                                                                       Event 2: John opens his             contradicted.
+                                                 ing. We propose a novel method, FACT T RACK,          laptop for work.
+                                                 for tracking atomic facts and addressing fac-
+                                                                                                                               Plot Redundancy
+                                                 tual contradictions. Crucially, FACT T RACK
+                                                                                                       Premise: A story about a girl       They do not contradict each
+                                                 also maintains time-aware validity intervals for      defeating a monster                 other, rather, they can be seen
+                                                                                                                                           as complementary parts of a
+                                                 each fact, allowing for change over time. At a                                            larger narrative.
+                                                                                                       Event 1: After a hard fight,
+                                                 high level, FACT T RACK consists of a four-step       Eva finally killed the monster
+                                                                                                                                           After Event 1, the monster is
+                                                 pipeline to update a world state data structure                 ……                        already killed by Eva, it can not
+                                                                                                                                           be defeated again in Event n. So
+                                                                                                       Event n: Eva defeated the
+                                                 for each new event: (1) decompose the event           monster, returned to the city
+                                                                                                                                           they are contradictory.
+
+                                                 into directional atomic facts; (2) determine the
+                                                 validity interval of each atomic fact using the    Figure 1: FACT T RACK tackles the problems of factual incon-
+                                                                                                    sistency and plot redundancy. Note that those problems are
+                                                 world state; (3) detect contradictions with ex-    based on our observations, to provide a clearer understanding
+                                                 isting facts in the world state; and finally (4)   of the problem, with both issues considered together in our
+                                                 add new facts to the world state and update        pipeline and evaluation. For factual inconsistency detection,
+                                                 existing atomic facts. When we apply FACT-         FACT T RACK tracks a validity interval for each fact to distin-
+                                                 T RACK to contradiction detection on structured    guish legitimate contradictions from facts simply changing
+                                                                                                    over time. For plot redundancy detection, our method can rep-
+                                                 story outlines, we find that FACT T RACK using     resent the timeline in more structured form, making detection
+                                                 LLaMA2-7B-Chat substantially outperforms           easier.
+                                                 a fair baseline using LLaMA2-7B-Chat, and
+                                                 achieves performance comparable to a GPT4
+                                                                                                    Existing works using LLMs in hierarchical gen-
+                                                 baseline. Moreover, when using GPT4, FACT-
+                                                 T RACK significantly outperforms the GPT4
+                                                                                                    eration have explored structured approaches to
+                                                 baseline. 1                                        maintain strong internal coherence within extensive
+                                                                                                    texts of thousands of words (Yang et al., 2022a,b).
+                                         1       Introduction                                       However, challenges remain in maintaining factual
+                                                                                                    consistency and avoiding hallucinations during the
+                                         Large language models (LLMs) have recently sur-            generation. Especially when these problems occur
+                                         passed human performance across a wide range of            in a high-level planning stage, they can greatly dam-
+                                         tasks (Ouyang et al., 2022; OpenAI, 2023), yet             age performance on downstream tasks. Therefore,
+                                         generating long-form text remains fraught with             a system capable of detecting factual contradictions
+                                         challenges compared to tasks with shorter outputs.         and correcting them is essential. In Figure 1, we
+                                         Even when models are trained to support context            take story planning as an example, depicting two
+                                         windows of hundreds of thousands of tokens, they           common issues encountered: factual inconsistency
+                                         may still struggle to retrieve and reason over such        and plot redundancy.
+                                         long context (Liu et al., 2023). The most advanced
+                                         existing language models still take long context           Such issues are expected across various domains,
+                                         generation as a direction for further improvement          as training corpus documents often suffer from
+                                         in the future.                                             length limitations and originate from fragmented
+                                             1
+                                            Our code and data are at https://github.com/            sources, impairing the model’s ability to establish
+                                         cogito233/fact-track.                                      long-distance, multi-state connections. Moreover,
+generalizing current sentence-level fact verification    contradictions by a score margin of 0.384 more
+models (de Marneffe et al., 2008; Cai et al., 2021)      than a fair baseline using LLaMA2-7B-Chat. Ad-
+to accommodate longer texts remains a challenge.         ditionally, when FACT T RACK is run on GPT4, the
+We highlight two main distinctions that arise when       performance significantly surpasses all baselines,
+comparing sentence-level fact statements to length-      including the one using GPT-4 as a base model.
+ier texts: the complexity of multi-fact contexts, and
+                                                         In summary, our contributions are as follows:
+the dynamic, stateful nature of content over time.
+                                                             1. We introduce a framework for decomposing
+To tackle these challenges, Section 3 introduces the
+                                                                events into atomic facts and tracking their va-
+concept of directional atomic facts, establishing a
+                                                                lidity intervals on a timeline.
+universal framework for time-aware contradiction
+detection and state tracking. Section 3.1 details the        2. Based on that framework, we develop a
+analysis of structures to identify atomic facts and             method, FACT T RACK, for detecting time-
+detect contradictions around key events, employ-                aware factual contradictions in outlines.
+ing LLMs for event decomposition into pre-facts              3. We apply FACT T RACK to story outline gener-
+and post-facts. The concept of pre-facts and post-              ation, defining a task and LLM-based evalua-
+facts is akin to preconditions and postconditions               tion metrics for detecting contradictions. The
+but formulated in natural text, and implying truth-             results confirm our approach’s empirical ef-
+fulness for the entire validity time interval. This             fectiveness.
+approach facilitates tracking the state changes over
+time prompted by events. Maintaining a compre-
+                                                         2     Related Work
+hensive non-contradictory set of facts (world state)     Fact Verification. Fact verification is a task
+also allows for detection of contradictions by ver-      widely studied in natural language processing, rang-
+ifying and updating the atomic facts within the          ing from verifying scientific claims (Thorne et al.,
+world state. Section 3.2 explores the broader impli-     2018; Wadden et al., 2020) to validating fake news
+cations of atomic facts through a more flexible and      (Wang, 2017; Augenstein et al., 2019). Unlike
+time-aware framework, introducing a timeline for         verifying claims against a database of facts, exist-
+events and atomic facts to identify contradictions       ing work has also demonstrated the feasibility of
+or updates through their temporal overlaps.              performing verification within context (Mihaylova
+                                                         et al., 2019; Shaar et al., 2022; Li et al., 2023). We
+In Section 4, we describe the main implementa-
+                                                         also draw inspiration from efforts to decompose
+tion of our method, FACT T RACK. As shown
+                                                         complex sentences into multiple atomic facts using
+in Figure 5, we first maintain a list of pre-facts
+                                                         LLMs (Fan et al., 2020; Kamoi et al., 2023; Min
+and a list of post-facts as our data structure. To
+                                                         et al., 2023). Compared with prior works, our ap-
+update our data structure for a new event, we
+                                                         proach specifically operates on temporal structures,
+use a four-step pipeline: Decompose-Determine-
+                                                         maintaining time-dependent fact validity intervals
+Contradiction-Update. With this data structure, we
+                                                         to handle the dynamic nature of the world state as
+can detect whether two events contradict each other
+                                                         facts change over time.
+and identify the specific pair of atomic facts in con-
+flict, guiding the subsequent correction procedure.
+Furthermore, the validity interval of facts may be       State Tracking. Prior work on state tracking
+useful structural information in and of itself for       ranges from dialogue tracking (Thomson and
+downstream tasks.                                        Young, 2010; Chao and Lane, 2019) and mem-
+                                                         ory and entities networks (Sukhbaatar et al., 2015;
+To measure the effectiveness of our approach, we         Henaff et al., 2017) to using neural checklists (Kid-
+introduce a task for detecting contradictions in the     don et al., 2016) and story planning (Rashkin et al.,
+planning procedure, with story outlines serving          2020). With the advent of LLMs, state tracking
+as our test domain. For event pairs flagged by a         in long-form story planning and generation has
+method as contradictory, we use GPT-4 to anno-           shifted towards explicit tracking using natural lan-
+tate whether they are actually contradictory, on a 1     guage, ranging from unstructured text (Zhou et al.,
+to 5 scale. Experimental results show that contra-       2023) to structured dictionaries (Yang et al., 2022b).
+dictions flagged by FACT T RACK (using LLaMA2-           Additionally, there also exists some work on gener-
+7B-Chat as a base LLM) are judged to be real             ating better temporal fact validity by predicting the
+validity interval (Zhang and Choi, 2023), jointly        ters, settings, or the overarching scenario (Hühn
+modeling text with its timestamp (Dhingra et al.,        et al., 2009). We model these transitions using
+2022), or utilizing Wikipedia timestamps (Jang           directional atomic facts, capturing the essence of
+et al., 2023). Our approach is related to the lat-       events as transformations from one state to another.
+ter, but the main difference is our method operates      Atomic fact means a basic and concise statement
+on the generated output from a language model,           that conveys a single piece of information (Min
+and focuses on post-hoc detection rather than the        et al., 2023), see examples in Figure 2. Then we
+calibration of a language model.                         employ a novel strategy using LLMs to decom-
+                                                         pose these events into distinct atomic facts with
+                                                         directions and a time validity interval as shown in
+Hierarchical Generation. Hierarchical genera-
+                                                         Figure 2. These facts are then compared pairwise
+tion is widely applicable across various domains
+                                                         to assess their interrelations and impacts on the
+of long-form content creation, such as story gener-
+                                                         narrative structure. Recognizing that events rep-
+ation. It can be implemented through the internal
+                                                         resent transformations in the world state, we clas-
+hidden states of the model (Li et al., 2015; Shen
+                                                         sify these atomic facts into three categories: pre-
+et al., 2019; Guo et al., 2021), or explicitly via
+                                                         facts, post-facts, and static facts. pre-facts are those
+natural language text or structured schema (Yao
+                                                         truths that exist before an event takes place, post-
+et al., 2019; Rashkin et al., 2020; Tian and Peng,
+                                                         facts are truths that emerge following an event, and
+2022; Mirowski et al., 2022; Yang et al., 2022b,a).
+                                                         static facts are those truths that remain unchanged
+The paradigm of hierarchical generation brings
+                                                         throughout.2 To simplify the problem, we interpret
+both benefits and challenges to our work. On one
+                                                         static facts as a straightforward amalgamation of
+hand, it facilitates the resolution of contradictions
+                                                         a pre-fact and a post-fact, and henceforth concern
+at higher levels compared to those detected at the
+                                                         ourselves with only the latter two categories. Fig-
+bottom level or during sequential generation. On
+                                                         ure 2 shows an example of how we decompose
+the other hand, it may require a more complex data
+                                                         event B into pre-facts and post-facts.
+structure to maintain the validity intervals of facts.
+
+3     Time-Aware Atomic Facts                            World State. The term world state corresponds
+                                                         to a set of facts that hold at a particular point in
+Existing work focuses on leveraging the seman-           time. Compared with object-based tracking, fact-
+tic decomposition capabilities of LLMs for fine-         based tracking provides a more flexible state space.
+grained fact-checking (Min et al., 2023). In this        The world state at any given moment represents
+session, we propose an event-centric, time-aware         the maximum set of non-contradicting facts. For
+atomic fact decomposition method. We track facts         example, in a process that moves forward in time,
+on a timeline, building toward the design of our         at each new event, the world state is used to cross-
+FACT T RACK system. By analyzing the structure           check with pre-facts and is updated with post-facts.
+of an event and the representation of the world,         If a fact in the world state contradicts with a new
+we develop a method to better decompose events           post-fact, then we drop the former (Figure 2).
+into atomic facts (Section 3.1) with forward and
+backward directions. We then discuss how to use          3.2    State Tracking on Timeline
+knowledge of contradictions between atomic facts         Event Time Interval. Any given event can be
+to determine the validity intervals of these atomic      decomposed into multiple sub-events according to
+facts on the timeline (Section 3.2). Through this        the author’s desired level of detail. For instance,
+decomposition of facts and by maintaining validity       previous works use this strategy to generate a story
+intervals, our method is particularly effective for      outline by doing this decomposition recursively
+time-varying facts as is common in domains such          (Yang et al., 2022a; Wang et al., 2023). To effec-
+as story writing. Examples illustrating the concepts     tively model this hierarchical temporal structure,
+in this section are provided in Appendix A.
+                                                             2
+                                                               Traditional AI methods like STRIPS (Fikes and Nilsson,
+                                                         1971) discuss preconditions and postconditions. Similar to our
+3.1    Fact Decomposition                                pre-facts and post-facts, they model the requirements of the
+Events and Directional Atomic Facts. In nar-             world state before an action and the changes to the world state
+                                                         after an action. We prefer the terms pre-fact and post-fact to
+rative theory, events represent transitions in the       better express our meaning of tracking time-varying natural
+world state, reflecting shifts that impact charac-       language facts with validity intervals on a timeline.
+

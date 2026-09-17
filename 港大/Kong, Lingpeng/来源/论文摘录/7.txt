@@ -1,0 +1,152 @@
+                                                            An Empirical Comparison of Parsing Methods
+                                                                    for Stanford Dependencies
+                                                                             Lingpeng Kong Noah A. Smith
+                                                                              Language Technologies Institute
+
+
+
+
+arXiv:1404.4314v1 [cs.CL] 16 Apr 2014
+                                                                                Carnegie Mellon University
+                                                                                Pittsburgh, PA 15213, USA
+                                                                          {lingpenk,nasmith}@cs.cmu.edu
+
+
+                                                                                                Abstract
+                                                    Stanford typed dependencies are a widely desired representation of natural language sentences, but
+                                                parsing is one of the major computational bottlenecks in text analysis systems. In light of the evolving
+                                                definition of the Stanford dependencies and developments in statistical dependency parsing algorithms,
+                                                this paper revisits the question of Cer et al. (2010): what is the tradeoff between accuracy and speed in
+                                                obtaining Stanford dependencies in particular? We also explore the effects of input representations on
+                                                this tradeoff: part-of-speech tags, the novel use of an alternative dependency representation as input, and
+                                                distributional representaions of words. We find that direct dependency parsing is a more viable solution
+                                                than it was found to be in the past. An accompanying software release can be found at:
+                                                http://www.ark.cs.cmu.edu/TBSD
+
+
+                                        1 Introduction
+                                        The Stanford typed dependency (SD) representations of grammatical relations, introduced by de Marneffe and Manning
+                                        (2008), have become a popular text analysis scheme for a variety of NLP applications such as event ex-
+                                        traction (Björne et al., 2009), error correction (Tetreault et al., 2010), and machine translation (Stein et al.,
+                                        2010). Relative to other dependency representations, such as those of Yamada and Matsumoto (YM; 2003),
+                                        SD parses emphasize semantic relations (e.g., relative clauses are rooted in the verb rather than the com-
+                                        plementizer, prepositional phrases in the nominal rather than the preposition). This may contribute to their
+                                        attractiveness in downstream applications (Elming et al., 2013), but it also makes SD parsing more chal-
+                                        lenging than YM parsing.
+                                             Broadly speaking, there are two kinds of approaches to obtaining dependencies. One, which we call
+                                        c-parsing, applies phrase-structure parsing algorithms to obtain constituents, then extracts dependencies by
+                                        applying expert-crafted head rules and perhaps other transformations. This is the dominant approach for SD
+                                        parsing; indeed, the rules1 are considered definitive for the representation, and they are updated frequently.
+                                             The second approach, which we call d-parsing, applies dependency parsing algorithms, directly tack-
+                                        ling the grammatical relations without representing constituents. These parsers tend to be faster, and for
+                                        YM dependencies they achieve the best performance: Martins et al. (2013) report 93.1% unlabeled at-
+                                        tachment score on PTB §23, while a state-of-the-art phrase-structure parser (Charniak and Johnson, 2005;
+                                          1
+                                              http://nlp.stanford.edu/software/corenlp.shtml
+
+
+
+
+                                                                                                    1
+McClosky et al., 2006) achieves 92.5%. Several recent dependency parsers (Rush and Petrov, 2012; Choi and McCallum,
+2013; Zhang et al., 2013) further improve the speed of this approach while preserving accuracy.
+    The main contribution of this paper is an empirical comparison of a wide range of different ways to ob-
+tain SD parses. It follows on an important study by Cer et al. (2010), which found a 6.9% absolute unlabeled
+(8% absolute labeled) point gap in F1 between c-parsing with the best available phrase-structure parser and
+d-parsing with the best available dependency parser in SD parsing for CC PROCESSED dependencies (the
+most linguistically rich representation). Çetinoğlu et al. (2010) explored similar strategies for parsing into
+lexical-functional grammar representations without phrase-structure parsing.
+    Since those studies, dependency parsing has advanced, and the definition of SDs has evolved consid-
+erably, so it is worth revisiting the viability of d-parsing for Stanford typed dependencies. For Chinese,
+Che et al. (2012) found greater success with a second-order dependency parser, Mate (Bohnet, 2010).
+    This paper’s contributions are:
+   • We quantify the current tradeoff between accuracy and speed in SD parsing, notably closing the gap
+     between c-parsing and d-parsing to 1.8% absolute unlabeled (2.0% absolute labeled) F1 points (§3)
+     for CC PROCESSED SD parsing. The current gap is 30% (25%) the size of the one found by Cer et al.
+     (2010). An arc-factored d-parser is shown to perform a bit better than the Stanford CoreNLP pipeline,
+     at twenty times the speed.
+
+   • We quantify the effect of part-of-speech tagging on SD parsing performance, isolating POS errors as
+     a major cause of that gap (§4).
+
+   • We demonstrate the usefulness of the YM representation as a source of information for SD parsing,
+     in a stacking framework (§5).
+
+   • Noting recently attested benefits of distributional word representations in parsing (Koo et al., 2008),
+     we find that d-parsing augmented with Brown cluster features performs similarly to c-parsing with
+     the Stanford recursive neural network parser (Socher et al., 2013), at three times the speed.
+
+
+2 Background and Methods
+A Stanford dependency graph consists of a set of ordered dependency tuples hT, P, Ci, where T is the type
+of the dependency and P and C are parent and child word tokens, respectively. These graphs were designed
+to be generated from the phrase-structure tree of a sentence (de Marneffe et al., 2006). This transformation
+happens in several stages. First, head rules are used to extract parent-child pairs from a phrase-structure
+parse. Second, each dependency is labeled with a grammatical relation type, using the most specific match-
+ing pattern from an expert-crafted set.
+     There are several SD conventions. The simplest, BASIC SD graphs, are always trees. Additional rules
+can be applied to a phrase-structure tree to identify E XTRA depenencies (e.g., ref arcs attaching a rela-
+tivizer like which to the head of the NP modified by a relative clause), and then to collapse dependencies
+involving transitions and propagate conjunct dependencies, giving the richest convention, CC PROCESSED.
+In this paper we measure performance first on BASIC dependencies; in §3.2 we show that the quality of
+CC PROCESSED dependencies tends to improve as BASIC dependencies improve.
+     The procedures for c-parsing and d-parsing are well-established (Cer et al., 2010); we briefly review
+them. In c-parsing, a phrase-structure parser is applied, after which the Stanford CoreNLP rules are applied
+to obtain the SD graph. In this work, we use the latest version available at this writing, which is version
+3.3.0. In d-parsing, a statistical dependency parsing model is applied to the sentence; these models are
+
+                                                     2
+trained on Penn Treebank trees (§02–21) transformed into BASIC dependency trees using the Stanford rules.
+To obtain CC PROCESSED graphs, E XTRA dependencies must be added using rules, then the collapsing and
+propagation transformations must be applied.
+    One important change in the Stanford dependencies since Cer et al. (2010) conducted their study is the
+introduction of rules to infer E XTRA dependencies from the phrase-structure tree. (Cer et al. used version
+1.6.2; we use 3.3.0.) We found that, given perfect BASIC dependencies (but no phrase-structure tree), the
+inability to apply such inference rules accounts for a 0.6% absolute gap in unlabeled F1 (0.5% labeled)
+between c-parsing and d-parsing for CC PROCESSED dependencies (version 1.6.2).2
+
+
+3 Current Tradeoffs
+We measure the performance of different c-parsing and d-parsing methods in terms of unlabeled and labeled
+attachment score (UAS and LAS, respectively) on Penn Treebank §22 and §23. We report parsing speeds
+on a Lenovo ThinkCentre desktop computer with Core i7-3770 3.4GHz 8M cache CPU and 32GB memory.
+All parsers were trained using Penn Treebank §02–21. We target version 3.3.0 of SDs (released November
+12, 2013), and, where Stanford CoreNLP components are used, they are the same version.
+    We consider three c-parsing methods:
+
+   1. The Stanford “englishPCFG” parser, version 3.3.0 (Klein and Manning, 2003), which we believe is
+      the most widely used pipeline for SD parsing. This model uses additional non-WSJ training data for
+      their English parsing model.3
+
+   2. The Stanford “RNN” parser, version 3.3.0 (Socher et al., 2013), which combines PCFGs with a syn-
+      tactically untied recursive neural network that learns syntactic/semantic compositional vector repre-
+      sentations. Note this model uses distributional representations from external corpus; see section 5.1.
+
+   3. The Berkeley “Aug10(eng sm6.gr)” parser, version 1.7 (Petrov et al., 2006).
+
+   4. Charniak and Johnson’s “June06(CJ)” parser (Charniak and Johnson, 2005; McClosky et al., 2006).
+      Note this is the self-trained model which uses 2 million unlabeled sentences from the North American
+      News Text corpus, NANC (Graff, 1995). It is therefore technically semi-supervised.
+
+Each of these parsers performs its own POS tagging. Runtime measurements for these parsers include POS
+tagging and also conversion to SD graphs.
+    We consider eight d-parsing methods:
+
+   4. MaltParser liblinear stackproj (Nivre et al., 2006) a transition-based dependency parser that uses the
+      Stack-Projective algorithm. The transitions are essentially the same as in the “arc-standard” version of
+      Nivre’s algorithm and produce only projective dependency trees (Nivre, 2009; Nivre et al., 2009). In
+      learning, it uses the LIBLINEAR package implemented by Fan et al. (2008). This is the same setting
+      as the most popular pre-trained model provided by MaltParser.
+   2
+     In version 3.3.0, inference rules have been added to the Stanford CoreNLP package to convert from BASIC to CC PROCESSED
+without a phrase-structure tree. Given perfect BASIC dependencies, there is still a 0.2% unlabeled (0.3% labeled) gap in F1 in PTB
+§22 (0.4% and 0.5% for §23). We added some new rules to help close this gap by about 0.1 F1 (unlabeled and labeled), but more
+can be done. The new rules are not fine-tuned to §22–23; they are given in Appendix A.
+   3
+     See the Stanford Parser FAQ at http://nlp.stanford.edu/software/parser-faq.shtml.
+
+
+
+
+                                                                3
+

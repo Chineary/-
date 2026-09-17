@@ -1,0 +1,204 @@
+                                                        Unsupervised Explanation Generation via Correct Instantiations
+                                                                       Sijie Cheng1,2 * , Zhiyong Wu2† , Jiangjie Chen1 , Zhixing Li3 ,
+                                                                                       Yang Liu4,5 , Lingpeng Kong2,6
+                                                            1
+                                                                Shanghai Key Laboratory of Data Science, School of Computer Science, Fudan University
+                                                                                       2
+                                                                                         Shanghai AI Laboratory 3 Full Truck Alliance
+                                                                        4
+                                                                          Institute for AI Industry Research, Tsinghua University, Beijing, China
+                                                                5
+                                                                  Department of Computer Science and Technology, Tsinghua University, Beijing, China
+                                                                                              6
+                                                                                                The University of Hong Kong
+                                                                             {sjcheng20, jjchen19}@fudan.edu.cn, wuzhiyong@pjlab.org.cn
+
+
+
+
+arXiv:2211.11160v1 [cs.CL] 21 Nov 2022
+                                                                      lizx.2012@tsinghua.org.cn, liuyang2011@tsinghua.edu.cn, lpk@cs.hku.hk
+
+                                                                      Abstract                                                                           I. Correct Instantiations Generation
+                                                                                                                                                              John put a turkey into the fridge.
+                                           While large pre-trained language models (PLM) have shown                      False Statement
+                                                                                                                                                              John put a peach into the fridge.
+                                           their great skills at solving discriminative tasks, a significant    John put an elephant into the fridge.
+                                                                                                                                                              John put a bowl into the fridge.
+                                           gap remains when compared with humans for explanation-
+                                                                                                                                                              …
+                                           related tasks. Among them, explaining the reason why a state-
+                                           ment is wrong (e.g., against commonsense) is incredibly chal-                                                      John put a carrot into the fridge.
+                                           lenging. The major difficulty is finding the conflict point,            II. Explanation Generation
+                                           where the statement contradicts our real world. This paper
+                                                                                                                 Given the facts: 1. John put a turkey into the fridge, 2. John put a peach into
+                                           proposes N EON, a two-phrase, unsupervised explanation gen-           the fridge, 3. John put a bowl into the fridge, …
+                                           eration framework. N EON first generates corrected instantia-         Explain the false statement based on its difference with the facts: John put
+                                           tions of the statement (phase I), then uses them to prompt            an elephant into the fridge.
+                                           large PLMs to find the conflict point and complete the expla-         The explanation is:
+                                           nation (phase II). We conduct extensive experiments on two
+                                           standard explanation benchmarks, i.e., ComVE and e-SNLI.                                 Conflict Point                VOLUME
+
+
+
+
+                                                                                                                        🤔
+                                           According to both automatic and human evaluations, N EON                                                                  Turkey
+                                                                                                                                                                     Peach
+                                           outperforms baselines, even for those with human-annotated                                              Elephant > Fridge Bowl < Fridge
+                                           instantiations. In addition to explaining a negative prediction,                    Large PLMs                            …
+                                           we further demonstrate that N EON remains effective when                                                                  Carrot
+                                           generalizing to different scenarios.
+                                                                                                                An elephant is much bigger than a fridge.
+
+                                                                 1   Introduction                              Figure 1: Our proposed two-phase framework N EON (cor-
+                                         Nowadays, Explainable Natural Language Processing                     rect instantiations generation and explanation generation)
+                                         (ExNLP) (Danilevsky et al. 2020) has received increasing              explains a false statement in ComVE (Wang et al. 2020)
+                                         attention toward trustworthy NLP models. A valid explana-             task. The conflict point module is implicitly induced inside
+                                         tion can not only ensure that a model solves a problem using          the large pre-trained language models.
+                                         the corresponding knowledge rather than exploiting super-
+                                         ficial cues or short-cuts (Niven and Kao 2019; Geva, Gold-
+                                         berg, and Berant 2019; Cui et al. 2021), they can also be             we focus on free-text explanation, which justifies model pre-
+                                         used to improve model performance on downstream tasks                 dictions using natural language. Despite being more flexible
+                                         (Wei et al. 2022; Wang et al. 2022; Creswell, Shanahan, and           and human-readable, free-text explanations pose great chal-
+                                         Higgins 2022).                                                        lenges (Lin et al. 2020; Rajani et al. 2019), as they require
+                                            In general, there are two main types of explanations in            models’ ability to accurately understand the logic behind the
+                                         the field of ExNLP: highlights and free-text explanations             problem and express them in natural language.
+                                         (Wiegreffe and Marasovic 2021). Highlights (Lei, Barzilay,
+                                                                                                                  In this paper, we propose a model agnostic framework to
+                                         and Jaakkola 2016) methods use subsets of the input to sup-
+                                                                                                               generate free-text explanations for false statements. Given a
+                                         port model prediction, thus can not solve the majority of
+                                                                                                               false statement which is against commonsense, “John put an
+                                         tasks where input does not contain rationales. In this paper,
+                                                                                                               elephant into the fridge”, the model is expected to generate
+                                            *   Work done while interning at Shanghai AI Lab.                  a convincing explanation “an elephant is much bigger than
+                                            †
+                                                Corresponding author                                           a fridge” to state the reason why the former statement is in-
+                                         Copyright © 2023, Association for the Advancement of Artificial       correct (ComVE; Wang et al. 2020). Explaining a false state-
+                                         Intelligence (www.aaai.org). All rights reserved.                     ment is generally considered to be more challenging (Wang
+   False Statement                                      Explanation                                                   Conflict Point
+   John put an elephant into the fridge.                An elephant is much bigger than a fridge.                             Volume
+   He drinks apple.                                     Apple can not be drunk.                                              Function
+   Jeff ran 100,000 miles today.                        No way can someone run 100,000 miles in a day.                          Speed
+   A giraffe is a person.                               A giraffe is an animal, not human.                                   Property
+   Europe is in France.                                 Europe is a continent but france is a country.                    Geography
+
+                             Table 1: Examples and their exact conflict points to explain in ComVE task.
+
+
+et al. 2019), but it is the key to prevent models from making             instantiations as shown in Figure 1. In the first phase, given
+mistakes and to improve their performances (Hoffmann and                  the false statement, we attempt both in-context and unsu-
+Magazzeni 2019; Lipton 1990).1                                            pervised learning to generate correct instantiations automat-
+   Recent studies (Jon et al. 2020; Konar et al. 2020) gener-             ically. In the second phase, combining both generated in-
+ally adopt sequence-to-sequence or language model genera-                 stantiations and the false statement, the PLMs can implic-
+tion approaches. The sequence-to-sequence (seq2seq) meth-                 itly induce the conflict point better to generate explanations.
+ods (Jon et al. 2020; Wan and Huang 2020) use the false                   To purely detect the ability of implicit induction in off-the-
+statement as the source sequence to generate reason as the                shelf PLMs, we explore the model performance in the unsu-
+target sequence. As for the LM approaches (Konar et al.                   pervised setting rather than the traditional supervised setup
+2020; Fadel, Al-Ayyoub, and Cambria 2020), they manually                  (Wang et al. 2020). We conduct extensive experiments on
+design prompts for auto-regressive language models to gen-                two standard explanation benchmarks, ComVE (Wang et al.
+erate explanations. We argue that both methods neglect that               2020) and e-SNLI (Camburu et al. 2018). Experimental re-
+the key to solve such problems is to find the conflict point as           sults prove the effectiveness of our method on both auto-
+shown in Table 1, where the false statement contradicts the               matic and manual evaluations. Furthermore, we also con-
+commonsense knowledge. For instance, the conflict point of                duct analysis experiments to demonstrate that the main idea
+“John put an elephant into the fridge” is the relative volume             of N EON can generally be extended to accommodate other
+between “elephant” and “fridge”.                                          explanation tasks.
+   Finding the exact conflict point can be rather difficult,                 The contributions of our work are as follows:
+even for large PLMs. On the one hand, manually con-
+structing a dataset with conflict points for training is labor-            • We propose a novel method based on the importance of
+intensive and difficult to scale (Wang et al. 2020). On the                  conflict points to solve the false statement explanation
+other hand, exact triples of conflict points are rare in the                 problem. To the best of our knowledge, we are the first to
+external knowledge graph due to their tacitness and diver-                   introduce the concept of the conflict point in the task.
+sity. (Wan and Huang 2020; Konar et al. 2020). Considering
+                                                                           • We propose a two-phase framework named N EON to
+the limitations of these direct methods mentioned above, we
+                                                                             elicit the large PLMs to induce through instantiations to
+try to provide guided hints as prompts to implicitly elicit
+                                                                             unsupervisedly generate explanations.
+PLMs to reason the conflict point, inspired by the line of
+work about the chain of thought (Wei et al. 2022; Creswell,                • We present analyses of our generated instantiations and
+Shanahan, and Higgins 2022; Wang et al. 2022). To produce                    demonstrate the generality of N EON.
+guided hints, we automatically generate a bunch of correct
+instantiations based on the false statement. Then, the con-
+flict points can be implicitly induced from the difference be-                                2     Methodology
+tween the commonality of our generated instantiations and
+the false statement. For example, given the false statement               2.1   Problem Formulation
+“John put an elephant into the fridge”, we firstly generate
+a set of correct instantiations {“John put a turkey into the              Our target problem is to generate a reason to explain why
+fridge”, “John put a peach into the fridge”, · · · } and their            the false statement does not make sense or is inconsis-
+underlying commonality is that their volumes are all smaller              tent. Given the original false statement with n tokens x =
+than the fridge. Combining these instantiations and the false             {x1 , x2 , · · · , xn }, we automatically generate a set of cor-
+statement, their difference can help PLMs better implicitly               rect instantiations H = {h1 , h2 , · · · , hl } with a common-
+reason that the conflict point is relative volume where an ele-           ality. Each instantiation h = {h1 , h2 , · · · , hk } with k to-
+phant is much bigger than a fridge.                                       kens is a constrained text generating conditioned on the orig-
+   In this paper, we propose N EON, a two-phase frame-                    inal false statement x. According to both the false state-
+work for unsupervised explanation generation via correct                  ment x and our generated correct instantiations H, the pre-
+                                                                          trained language model G needs to implicitly reason the
+  1
+    It is worth noting that we also explore explaining correct state-     conflict point and give a rational explanation with m tokens
+ments in Section 4.5 to demonstrate the generality of our method.         y = {y 1 , y 2 , · · · , y m }.
+        Phase I: Correct Instantiations Generation                correct instantiations.
+ Task: Based on the incorrect statement, generate the cor-        Constrained Text Generation Despite its simplicity, in-
+ rect statement.                                                  context learning often requires human annotations, which
+                                                                  is not always available. In this section, we explore the
+ /* Example 1 */                                                  challenging setting where instantiations are generated in a
+ Incorrect statement: He drinks apple.                            fully unsupervised manner. As a preliminary study, we ap-
+ Correct statement: He drinks milk.                               ply the widely used constrained text generation framework
+                                                                  CGMH (Miao et al. 2019).
+ /* Test data */                                                     Considering that our first step is to detect the conflicting
+ Incorrect statement: John put an elephant into the fridge.       position, we adopt perplexity (PPL) to evaluate the influ-
+ Correct statement:                                               ence one token has on the whole statement. The perplex-
+                                                                  ity score is computed by the masked language models, such
+      Phase II: Unsupervised Explanation Generation
+                                                                  as RoBERTa (Liu et al. 2019). Given the false statement
+ Given the facts: 1. John put a turkey into the fridge, 2.        x = {x1 , x2 , · · · , xn }, we compute the relatively perplexity
+ John put a peach into the fridge, 3. John put a bowl into        score of the original statement to its masking sentence which
+ the fridge,                                                      replaces xi with [MASK]. If the i-th token is unlikely to ex-
+ Explain the following statement based on its difference                                                       i
+                                                                  ist in the position, the perplexity score SPPL   is larger, which
+ with the facts: John put an elephant into the fridge.            indicates the token should be edited with a higher priority.
+ The explanation is:
+                                                                                       i         PPL(x)
+                                                                                      SPPL =                                (1)
+Table 2: The prompt instances of in-context learning in our                                  PPL(x\{xi })
+two phases: presented are the incorrect statements and the           Given the sampled positions, we need to determine each
+correct statements. We use 16 examples per prompt in the          position’s action. Our token-level actions mainly include
+first phase. More details can be found in Appendix A.             three types following Chen et al. (2021): insert, delete and
+                                                                  replace. More details can be found in Appendix B. As for the
+                                                                  acceptance rate to each generated sentence x0 with edited ac-
+2.2    Correct Instantiations Generation                          tion, our considering property is fluency which is important
+                                                                  to guarantee in generative tasks. We measure this fluency
+In the first phase, we attempt two different means to gen-        score via computing likelihood based on the auto-regression
+erate correct instantiations H conditioned on the false state-    language models, e.g., GPT-2 (Radford et al. 2019).
+ments x to prove the flexibility of our framework N EON.
+One adopts in-context learning with larger language models                                      n
+                                                                                                Y
+under the few-shot setting, the other one is based on tradi-                       SFluency =         PLM (hi |h<i )           (2)
+tional constrained text generation in an unsupervised way.                                      i=1
+
+In-context Learning Considering the large number of               2.3   Unsupervised Explanation Generation
+parameters in PLMs, in-context learning uses a series of
+demonstrations of a specific task as prompts to induce model      As demonstrated in recent studies (Zhong et al. 2022), PLMs
+generation, while the parameters of large PLMs are fixed          can capture subtle yet critical differences between different
+(Brown et al. 2020; Radford et al. 2019). Besides the advan-      groups of sentences. This inspires us that capturing the dif-
+tage of no extra need to train or finetune, in-context learning   ferences between the false statement x and our generated in-
+can also reduce the reliance on large amounts of annotated        stantiations H can help PLMs induce conflict points. There-
+data. Therefore, due to the great performance of in-context       fore, in the second phase, given both the false statement x
+learning with large PLMs in the recent studies (Wiegreffe         and our generated instantiations H, we implicitly induce the
+et al. 2021), we attempt to use in-context learning to gener-     large PLMs to generate the free-text explanation y in the
+ate correct instantiations H automatically given the original     zero-shot setting.
+false statement xori .                                            Zero-shot Learning We adopt a similar prompt construc-
+   Following Wiegreffe et al. (2021), we apply the in-context     tion strategy as discussed in the correct instantiations gener-
+learning under few-shot setups to generate our correct in-        ation phase. However, unlike the template of few-shot learn-
+stantiations. We specifically design a prompt followed by         ing in instruction style, our template of zero-shot learning is
+the false statement that the model needs to correct. To con-      more fluency like a complete sentence, following previous
+struct the prompt, we firstly randomly sample 200 instances       studies (Sanh et al. 2021). In particular, we directly design a
+([correct statement, incorrect statement] in the ComVE task       natural language description according to different tasks in-
+and [entailment statement, contradiction statement] in the        stead of sampled exemplars from training datasets as shown
+e-SNLI task) from the training dataset. Then we randomly          at the bottom of Table 2. Considering the variance due to dif-
+select K instances and concatenate them to construct our          ferent descriptions, more analysis on the design of prompt-
+prompt as shown at the top of Table 2. Finally, we feed the       ing can be found in Section 4.2 and 4.4. Finally, based on
+model with both constructed prompt and our test data to in-       our constructed prompt, the PLMs generate the completion
+fer the completion which can be regarded as our generated         as our generated explanation.
+

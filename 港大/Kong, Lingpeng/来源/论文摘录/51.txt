@@ -1,0 +1,214 @@
+                                                   How Well Do LLMs Handle Cantonese? Benchmarking Cantonese
+                                                               Capabilities of Large Language Models
+
+                                                Jiyue Jiang♡ , Pengan Chen♠ , Liheng Chen♠ , Sheng Wang♠ , Qinghang Bao♠ ,
+                                                                   Lingpeng Kong♠ , Yu Li♡ , Chuan Wu♠
+                                                   ♡
+                                                     The Chinese University of Hong Kong, ♠ The University of Hong Kong
+                                         jiangjy@link.cuhk.edu.hk {cpa2001, clh648, u3009618, bill6176}@connect.hku.hk,
+                                                         lpk@cs.hku.hk liyu@cse.cuhk.edu.hk cwu@cs.hku.hk
+
+                                                                                                                         10000
+                                                                    Abstract                                                                     Language Group
+                                                                                                                                                  Asian Languages
+                                                                                                                          8000                    European Languages
+                                                  The rapid evolution of large language models
+
+
+                                                                                                      Number of papers
+                                                  (LLMs) has transformed the competitive land-                            6000
+
+
+
+
+arXiv:2408.16756v3 [cs.CL] 17 Feb 2025
+                                                  scape in natural language processing (NLP),
+                                                  particularly for English and other data-rich lan-                       4000
+                                                  guages. However, underrepresented languages
+                                                  like Cantonese, spoken by over 85 million peo-                          2000
+                                                  ple, face significant development gaps, which
+                                                                                                                             0
+                                                  is particularly concerning given the economic                                   Cantonese
+                                                                                                                                    Mandarin
+                                                                                                                                          Hindi
+                                                                                                                                        Arabic
+                                                                                                                                      Bengali
+                                                                                                                                      Persian
+                                                                                                                                    Japanese
+                                                  significance of the Guangdong-Hong Kong-                                            Marathi
+                                                                                                                                       Turkish
+                                                                                                                                       Korean
+                                                                                                                                 Vietnamese
+                                                                                                                                      English
+                                                                                                                                     German
+                                                                                                                                      Russian
+                                                                                                                                       French
+                                                  Macau Greater Bay Area, and in substantial                                            Italian
+                                                                                                                                     Spanish
+                                                                                                                                         Polish
+                                                                                                                                   Ukrainian
+                                                                                                                                   Romanian
+                                                                                                                                        Dutch
+                                                                                                                                      Language
+                                                                                                                                     Swedish
+                                                  Cantonese-speaking populations in places like
+                                                  Singapore and North America. Despite its
+                                                  wide use, Cantonese has scant representation         Figure 1: This is number of publications in the ACL
+                                                  in NLP research, especially compared to other        Anthology indexed by languages as of September 2024.
+                                                  languages from similarly developed regions.          Following (Xiang et al., 2024), we retrieve the publica-
+                                                  To bridge these gaps, we outline current Can-        tions via searching the language name in either the title
+                                                  tonese NLP methods and introduce new bench-          or the abstract from the ACL Anthology.
+                                                  marks designed to evaluate LLM performance
+                                                  in factual generation, mathematical logic, com-
+                                                  plex reasoning, and general knowledge in Can-           Cantonese (Yue language), spoken by over 85
+                                                  tonese, which aim to advance open-source Can-        million people worldwide (Xiang et al., 2024), has
+                                                  tonese LLM technology. We also propose fu-           seen slower technological development, particu-
+                                                  ture research directions and recommended mod-        larly in the LLMs. Language technologies for Can-
+                                                  els to enhance Cantonese LLM development1 .          tonese have not yet reaped the benefits of this revo-
+                                                                                                       lution (Xiang et al., 2022). As indicated in Figure 1
+                                                                                                       and Table 1, there is a low number of recent re-
+                                          1       Introduction                                         search publications related to Cantonese, especially
+                                          Increasingly impactful and LLMs have emerged                 when compared to the population ratio. Developed
+                                          (e.g., GPT-X, Llama-X, DeepSeek-X, etc.), which              regions like Swedish, German, Japanese have high
+                                          is propelled the development of technologies asso-           publication ratios, but among all languages with
+                                          ciated with LLMs. As shown in Figure 1, NLP re-              speakers more than 80 million, Cantonese has the
+                                          search has predominantly concentrated on creating            most limited relevant research publications. Given
+                                          models for English and a few other languages that            that the Guangdong-Hong Kong-Macau Greater
+                                          have substantial data resources (Aji et al., 2022).          Bay Area is one of the most economically vibrant
+                                          The scarcity of data is often identified as the pri-         regions in the world2 and that many countries (e.g.,
+                                          mary obstacle impeding advancements in NLP for               Singapore, Malaysia, Australia, Canada, U.S., etc.)
+                                          languages that are less represented (Hu et al., 2020;        have a large Cantonese-speaking population, ad-
+                                          Joshi et al., 2020; Aji et al., 2022), particularly for      vancing Cantonese LLM technology represents a
+                                          LLM-related technologies.                                    challenging yet worthwhile endeavor.
+
+                                              The code and data are available on github: https://
+                                              1
+                                                                                                           https://www.bayarea.gov.hk/filemanager/en/
+                                                                                                                         2
+
+                                          github.com/jiangjyjy/Yue-Benchmark                           share/pdf/Outline_Development_Plan.pdf
+Figure 2: Overview of the paper: We begin by summarizing approaches from small-scale neural networks in
+Cantonese, then progress to LLMs (work involving existing Cantonese LLMs). In these LLMs, researchers place a
+greater emphasis on alignment compared to pre-training. Consequently, we introduce four new benchmarks and a
+translation datatset to evaluate the Cantonese capabilities of LLMs. We analyze the performance of mainstream
+LLMs on these benchmarks and, in combination with the inherent challenges of Cantonese itself, identify three
+insightful research opportunities, and we summarize the models that perform good for each specific task. (Figure 5).
+
+
+      Asian      Pop.   Ratio   European    Pop.   Ratio    various capabilities of LLMs in Cantonese. To
+    Cantonese     87    0.78     English    1456    6.57    holistically evaluate the Cantonese capabilities of
+     Mandarin    1138   3.80     German     133    18.41
+       Hindi      610   1.24     Russian    255    2.68     both Cantonese and general-purpose LLMs, we
+      Arabic     376    4.82      French    310     7.34
+      Bengali     273   0.70      Italian    68    9.57     propose four new benchmarks in Cantonese (Yue-
+      Persian      79   1.84     Spanish    559    2.54     Truthful, Yue-GSM8K, Yue-ARC-C, Yue-MMLU)
+     Japanese     123   13.24     Polish     45    7.76
+     Marathi       99    1.14   Ukrainian    39     2.46    and a translation dataset (Yue-TRANS), which are
+      Turkish     90    4.16    Romanian     26    9.19
+      Korean      82    6.59      Dutch      55     8.56    respectively the evaluation of LLMs’ abilities in
+    Vietnamese    86    2.40     Swedish     11    35.55    Cantonese for factual generation, mathematical
+                                                            logic, complex reasoning, general knowledge, and
+Table 1: Language, population (Pop.), and publication
+to population ratio indirectly show the proportion of
+                                                            translation. These benchmarks are translated from
+NLP resources to different languages (Appendix 7).          English or Mandarin and manually reviewed for
+                                                            accuracy. We analyze the Cantonese capabilities
+                                                            of 35 mainstream Cantonese and general-purpose
+                                                            LLMs using these new Cantonese benchmarks, and
+   LLM technology, as one of the most influen-
+                                                            also explored LLMs that are suitable for generating
+tial techniques in NLP, currently has very limited
+                                                            high-quality Cantonese translations. We specifi-
+Cantonese-related development, and most of it re-
+                                                            cally focus on benchmarking vanilla LLMs without
+mains closed-source. In order to better promote the
+                                                            fine-tuning to test these LLMs’ intrinsic abilities,
+development of Cantonese NLP and LLM technol-
+                                                            which can also better inform their performance af-
+ogy, we first systematically summarize the research
+                                                            ter fine-tuning. Finally, addressing the existing
+progress on existing methods for small-scale neu-
+                                                            challenges in Cantonese, and based on the anal-
+ral networks for Cantonese, including rumor de-
+                                                            ysis and these challenges, potential research and
+tection, sentiment analysis, machine translation,
+                                                            recommend LLMs for use are proposed.
+dialogue, language modeling, and NLP tools. Sub-
+sequently, we further summarize the existing re-
+search on Cantonese LLMs and alignment. Be-                 2     Cantonese existing NLP method
+cause training data resources for Cantonese LLMs
+                                                            2.1    Cantonese small-scale neural network
+are essential, we summarize the existing data re-
+sources and benchmarks. However, these are chal-            Cantonese NLP based on small-scale neural net-
+lenging to use for comprehensively evaluating the           work research encompasses a variety of domains
+such as rumor detection, sentiment analysis, ma-       detection, utilizing permutation learning and adver-
+chine translation, and dialogue, leveraging small      sarial training, though the training corpus included
+neural network methods, models, and tools.             significant Standard Chinese content (Chen et al.,
+   Rumor Detection. (Chen et al., 2020) devel-         2024; Yang et al., 2019; Clark et al., 2020).
+oped a dataset of 27,328 Cantonese tweets, di-            Cantonese NLP Tools. The landscape of Can-
+vided into rumors and non-rumors, and introduced       tonese NLP tools is broad, with applications rang-
+an attention-based model, XGA, which integrates        ing from corpus data handling with PyCantonese to
+XLNet and BiGRU to analyze semantic and senti-         enhancing English-to-Cantonese translation with
+ment aspects (Chen et al., 2020; Yang et al., 2019).   TransCan. Tools like Cantonese Word Segmen-
+(Chen et al., 2024) further developed Cantonese-       tation and cantoseg improve text accuracy, while
+BERT to capture glyph and pronunciation clues          canto-filter and songotsti support language identifi-
+of Cantonese characters, along with a Cantonese        cation (Lee et al., 2022).
+rumor detection model, SA-GCN, that uses the
+BiGCN model to encode global structural informa-       2.2      Cantonese large language model
+tion of tweet hierarchies (Chen et al., 2024).         Developing Cantonese LLMs faces challenges due
+   Sentiment Analysis. Cantonese sentiment anal-       to the unique linguistic features of Cantonese and
+ysis employs diverse methodologies to tackle lin-      limited data availability, necessitating comprehen-
+guistic complexities. Early approaches used Naive      sive, high-quality datasets for effective pre-training.
+Bayes and SVMs with character-based bi-grams,          Despite these hurdles, such models demonstrate
+while later studies utilized Hidden Markov Models      significant potential in processing Cantonese data.
+for text segmentation and part-of-speech tagging,         There are very few large Cantonese models avail-
+developing emotion-specific dictionaries via rule-     able, with Sensechat-53 being the only reliable non-
+based systems (Zhang et al., 2011; Chen et al.,        commercial Cantonese LLM at present. In subse-
+2013, 2015). More recent studies have enhanced         quent experiments, in addition to testing Sensechat-
+classification accuracy using both supervised and      5, we also evaluate the Cantonese capabilities of
+unsupervised methods across various domains,           general-purpose LLMs.
+with (Lee, 2019) exploring fine-grained emotion
+                                                          Recent research validates the effectiveness of
+analysis across languages (Ngai et al., 2018; Xiang
+                                                       ChatGPT in Cantonese dialogue and sentiment
+et al., 2019; Lee, 2019).
+                                                       analysis, particularly in analyzing interactions from
+   Machine Translation. Initial Cantonese ma-
+                                                       a Hong Kong web counseling service (Fu et al.,
+chine translation research used heuristic rules and
+                                                       2024). The introduction of the CanChat bot has
+bilingual knowledge bases (Zhang, 1998; Wu et al.,
+                                                       improved emotional support for students in Hong
+2006), transitioning to statistical methods to ad-
+                                                       Kong, particularly during and post the COVID-19
+dress resource limitations (Huang et al., 2016). Re-
+                                                       pandemic (Fung et al., 2023).
+cent advancements include large-scale datasets and
+                                                          As we transition from small-scale networks to
+unsupervised models that utilize cross-lingual em-
+                                                       Cantonese LLMs, both general-purpose and propri-
+beddings and Transformer architecture (Liu, 2022;
+                                                       etary models show promise. However, quantifying
+Dare et al., 2023).
+                                                       their performance remains a challenge. We pro-
+   Dialogue Summarization and Generation.
+                                                       pose four benchmarks to assess and enhance the
+(Lee et al., 2021) focused on generating questions
+                                                       capabilities of Cantonese LLMs.
+and restating information in Cantonese dialogue
+systems, particularly enhancing performance in
+                                                       3       Cantonese data summary and new
+counseling chatbots by fine-tuning the BertSum
+                                                               benchmarks construction
+model (Lee et al., 2021; Liu and Lapata, 2019).
+Lee also developed a dataset for virtual counselors    3.1      Existing Cantonese data
+to guide response selection through a regression
+model (Lee and Liang, 2021).                           The documentation of dialects expanded due to
+   Cantonese Language Model. Challenges in             trade and cultural interactions, with Cantonese be-
+training Cantonese models like XLNet and ELEC-         coming the main focus of most bilingual dictio-
+TRA include data scarcity and legal constraints.       naries by the 19th century (Xiang et al., 2024).
+(Chen et al., 2024) introduced CantoneseBERT and           https://www.sensetime.com/en/news-detail/
+                                                           3
+
+the SA-GCN model for detailed analysis and rumor       51168164?categoryId=1072
+

@@ -1,0 +1,199 @@
+    A Cognitive Stimulation Dialogue System with Multi-source Knowledge
+                 Fusion for Elders with Cognitive Impairment
+
+                 Jiyue Jiang, Sheng Wang, Qintong Li, Lingpeng Kong, Chuan Wu
+                                   The University of Hong Kong
+                           {jiangjy,u3009618,qtli}@connect.hku.hk
+                                     {lpk,cwu}@cs.hku.hk
+
+
+                        Abstract                                        I remember the time when I used to work in Hong Kong. (None,
+                                                                        Reminiscence, Self-disclosure)
+
+                                                                        I should understand his/her situation. Let me ask him/her about
+     When communicating with elders with cog-                           his time working in Hong Kong.
+
+     nitive impairment, cognitive stimulation (CS)                          Did you enjoy the time being there? (None, Inquiry, Question)
+     help to maintain the cognitive health of elders.
+                                                                        Not really. I was a waiter and life was hard at that time. (Sadness,
+     Data sparsity is the main challenge in building                    Reminiscence, Self-disclosure)
+
+     CS-based dialogue systems, particularly in the                     I should comfort his/her and ask her more questions to stimulate
+     Chinese language. To fill this gap, we construct                   his/her mind and expression.
+
+     a Chinese CS conversation (CSConv) dataset,                        Oh, I understand you. I thought you were a teacher then! Anyway,
+                                                                        do you think teacher is better compared with waiter? (Surprise,
+     which contains about 2.6K groups of dialogues                      Reminiscence , Question)
+
+     with therapy principles and emotional support
+                                                                        I cannot decide. I guess teacher is better. (None, Expression , Self-
+     strategy labels. Making chit chat while pro-                       disclosure)
+
+     viding emotional support is overlooked by the                             I should ask her why to encourage him/her to think further.
+     majority of existing cognitive dialogue systems.
+                                                                                 Why so? Tell me more about it. (None, Inquiry, Question)
+     In this paper, we propose a multi-source knowl-
+     edge fusion method for CS dialogue (CSD), to
+     generate open-ended responses guided by the               Figure 1: An example of a Chinese CS-based dialogue
+     therapy principle and emotional support strat-            from the CSConv dataset (translated from Chinese to En-
+     egy. We first use a progressive mask method               glish), being provided to the elders (left) by the therapist
+     based on external knowledge to learn encoders             (right). The emotion classification, therapy principle,
+     as effective classifiers, which is the prerequisite       support strategy are marked in the parentheses after the
+     to predict the therapy principle and emotional            utterances. The underline highlight the emotion words
+     support strategy of the target response. Then             and keywords.
+     a decoder interacts with the perceived therapy
+     principle and emotional support strategy to gen-
+     erate responses. Extensive experiments con-               et al., 2010; Garcia, 2022). Meanwhile, several
+     ducted on the CSConv dataset demonstrate the              studies have shown that emotional support is ben-
+     effectiveness of the proposed method, while               eficial for maintaining or even increasing cogni-
+     there is still a large space for improvement com-
+                                                               tive function in elders (Ellwardt et al., 2013; Liu
+     pared to human performance1 .
+                                                               et al., 2020; Sharma et al., 2020). Nonetheless,
+1    Introduction                                              there remains an open question on how to intro-
+                                                               duce emotional support and therapy principles si-
+Dialogue systems have enjoyed rapid progress in re-            multaneously into chit-chat dialogue systems to
+cent years, through communication with humans to               provide cognitive recovery training for elders with
+satisfy diverse needs (Liu et al., 2021; Kann et al.,          cognitive impairment.
+2022). Cognition stimulation of elders is a criti-                One main obstacle to building cognitive dialogue
+cal psychological therapy where dialogue systems               is the lack of training corpora, especially in the Chi-
+serve as effective tools for restoring the cognition           nese language. Therefore, we first construct a Chi-
+of older adults (De Oliveira et al., 2014; Park et al.,        nese CS Conversation (CSConv) dataset, contain-
+2019; Tokunaga et al., 2021).                                  ing about 2.6K groups of dialogue data where each
+   Some studies have shown that chit-chat can help             utterance is annotated with three types of labels,
+older people with cognitive restoration (van Rijn              i.e., therapy principle, emotional labels, and emo-
+   1
+     Our data and code could be found in https://github.       tional support strategy labels. To generate open-
+com/jiangjyjy/CSD                                              ended responses with emotional support strategies,
+                                                           10628
+                  Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics
+                                        Volume 1: Long Papers, pages 10628–10640
+                            July 9-14, 2023 ©2023 Association for Computational Linguistics
+we propose a multi-source knowledge fusion in a         system, our efforts include the following. (1) The
+Chinese CS Dialogue (CSD) system. We use Ji-            videos are Cantonese. We first translate the Can-
+agu2 , a Chinese NLP toolkit, to extract emotional      tonese conversations in the videos into Mandarin
+words and keywords to form knowledge source and         Chinese, in a format suitable for CS model train-
+progressively mask the extracted knowledge on the       ing. (2) We make Mandarin conversations artifi-
+encoder side, to increase the generalizability of the   cially based on the eighteen therapy principles in
+model. Meanwhile, we adopt Chinese EmoBank              the handbook. (3) We clean the dataset based on
+(Lee et al., 2022) to calculate the weight value of     rules (e.g., truncating excessively long utterances,
+each word in the utterance, so that the model pays      removing the multiple consecutive symbols in the
+more attention to words with high values. By in-        utterance). (4) We manually annotate whether
+troducing multiple sources of external knowledge,       each utterance is spoken by the SPEAKER or the
+we greatly enrich the content of the conversation.      LISTENER (SPEAKER for elder, LISTENER for
+Moreover, we judge the content and emotions that        smart speaker or health care worker). (5) We use
+elders express which is critical to generate satis-     BERT-based text classification models to annotate
+fied responses, matching them with the cognitive        the emotion label, strategy label, therapy label of
+therapeutic principles, and coming up with corre-       each utterance, and then conduct manual review
+sponding supporting strategies. At last, we design      and modification. (6) All the data are profession-
+a multi-source interactive mechanism so that emo-       ally produced and reviewed twice. (7) We test our
+tional support strategies and cognitive stimulation     CSConv dataset on some text classification models
+therapies can be reasonably combined to generate        and text generation models, which can directly re-
+responses benefiting to mental health. Figure 1         flect the performance differences between models.
+shows an example of a conversation with an elder
+based on the therapy principle.                          Therapy Labels    Explanation
+   In summary, our contributions are as follows:         None              Neutral
+(1) We construct a Chinese CS-based conversation         Inquiry           Ask questions for information or open-
+                                                                           domain questions
+dataset to facilitate the following research; (2) We     Respect           Be respectful or use a set pattern when
+propose a progressive mask method for encoder                              talking to older people
+modules, which enhances the generalizability on          Reminiscence      Remember things elders did when elders
+                                                                           were a child, as well as things elders did
+emotional knowledge and the applicability of the                           before and personal information
+therapeutic conversations with elders; (3) We de-        Expression        Improve elders language skills and ex-
+sign a multi-source interactive method to model                            pression
+                                                         Enjoyment         To have fun in conversation or to enjoy
+the interaction among encoder modules, decoder                             something
+modules and external knowledge; (4) We conduct           Comfort           Comfort the elderly to some extent
+extensive experiments to demonstrate the effective-
+ness of the proposed CSD.                                  Table 1: Therapy Labels and their interpretation.
+
+2       Dataset                                            The CSConv dataset consists of about three thou-
+                                                        sand conversations, separated by blank rows. Each
+2.1 Data Collection
+                                                        line in each conversation represents the utterance
+There is no publicly available CS-based Chinese         of SPEAKER or LISTENER, and SPEAKER and
+conversation dataset to enable a cognitively restora-   LISTENER’s utterances alternate. The format of
+tive dialogue system for elders with cognitive im-      each line is: SPEAKER/LISTENER utterance +
+pairment. We introduce a Chinese one-to-one             <CS> + therapy label + <EMO> + emotion label +
+open-domain CS Conversation dataset, (CSConv),          <strategy> + strategy label, where <CS> is the sep-
+which is collected and created via cognitive stimu-     arator of therapy label and SPEAKER/LISTENER
+lation therapy videos and handbook3 , and the ratio     utterance; <EMO> is the separator of therapy label
+of conversation data from videos to those from the      and emotion label; <Strategy> is the separator of
+handbook is approximately 2:1.                          emotion label and strategy label. There are eight
+   As high-quality conversation examples are            types of emotional labels, namely none, disgust,
+needed for building Chinese CS-based dialogue           sadness, fear, surprise, like, happiness and anger.
+    2
+        https://github.com/ownthink/Jiagu               There are nine strategies (i.e., None, Question, Re-
+    3
+        https://www.brainlive.socialwork.hku.hk/        flection of Feelings, Self-disclosure, Providing Sug-
+                                                   10629
+gestions, Information, Others), which are similar to      decoder. The first stage is divided into two mod-
+the strategies in (Liu et al., 2021). There are seven     ules: progressive mask encoder for context training
+types of therapy labels. Table 1 shows the name of        and encoders for text classification.
+explanation of each therapy label.
+                                                          3.2   Progressive Mask Encoder
+2.2 Data Statistics
+                                                          Progressive Mask Encoder for Context Train-
+Statistics of the CSConv dataset are given in Ta-
+                                                          ing. Like the traditional BERT pre-training task,
+ble 2. The number and proportion of therapy labels,
+                                                          in order to better represent information of the ut-
+emotion labels and strategy labels are shown in
+                                                          terances and evaluate the Next Sentence Prediction
+Table 3.
+                                                          (NSP) task, the utterances of the SPEAKER and
+     Categories                            Number         LISTENER are used to generate three types of
+     Conversations                           2643
+                                                          embeddings (Vaswani et al., 2017), namely word
+     Utterances                             16845         embedding, position embedding and segment em-
+     SPEAKER Utterances                      8363         bedding.
+     LISTENER Utterances                     8480
+     Average token per conversation         60.39             During training, the encoder randomly masks
+     Average utterance per conversation      6.37         tokens to improve generalizability. We first use
+     Average token per utterance             9.48         Jiagu’s sentiment analysis function to extract en-
+                                                          tities (i.e., one and multiple words) and sentences
+      Table 2: Statistics of the CSConv dataset.
+                                                          with positive or negative values generated by Ji-
+                                                          agu greater than the λemo threshold, and Jiagu’s
+    Therapy Labels           Number       Proportion
+                                                          keyword extraction function to extract keywords in
+                                                          the utterances. Eventually, emotion and keyword
+    None                       5296         31.44
+    Inquiry                    4156         24.67         dictionaries are constructed. Through the emotion
+    Respect                    2134         12.70         and keyword dictionaries, the data during training
+    Reminiscence               464          2.76          is masked in pre-defined proportions. As the train-
+    Expression                 2651         15.74
+    Enjoyment                  1862         11.05         ing progresses, the span of a single mask gradually
+    Comfort                    281          1.67          increases (i.e., from one word to multiple words,
+    Emotion Labels           Number       Proportion      and finally to a sentence), the ratios of masking
+    None                      12060         71.60         one-word entities, two-word entities, three-word
+    Disgust                    273          1.62          entities, four-word entities and sentences are λ1 ,
+    Sadness                    629          3.74
+    Fear                        62           0.37         λ2 , λ3 , λ4 and λ5 , respectively. In order to further
+    Surprise                   355          2.11          improve the encoder’s generalization through the
+    Like                       1317          7.82         progressive mask method, we retain a certain pro-
+    Happiness                  1954         11.60
+    Anger                      193          1.15          portion of the traditional BERT mask method. To
+    Strategy Labels          Number       Proportion      be more specific, 5% of the entities in the utterances
+    None                       7060         41.92
+                                                          are randomly masked, of which 80% proceed mask
+    Question                   4195         24.91         processing, 10% proceed random replacement pro-
+    Reflection of feelings     293          17.40         cessing, and 10% remain unchanged.
+    Self-disclosure            3022         17.94
+    Providing suggestions      262           1.56             After the progressive mask operation, encoders
+    Information                819           4.86         are used to encode context information for the ut-
+    Others                     1190          7.07         terances (i.e., context learning) and finally the pre-
+                                                          trained models are obtained.
+Table 3: Number and proportion of therapy, emotion,
+strategy labels.                                              Encoders of context training based on the emo-
+                                                          tion dictionary are used for utterance emotion clas-
+                                                          sification. Encoders based on the keyword dictio-
+3   Method                                                nary are used to classify the therapy principle and
+                                                          support strategy of the utterances.
+3.1 Overview                                                  Encoders for Text Classification. A multi-
+Figure 2 gives an overview of our Chinese CSD             turn dialogue context consists of M utterances
+architecture, which consists of two stages: (1) Pro-      emitted by SPEAKER and LISTENER in turn.
+gressive mask encoder; (2) Multi-source interactive       The context U refers to the sequence of utterance,
+                                                       10630
+

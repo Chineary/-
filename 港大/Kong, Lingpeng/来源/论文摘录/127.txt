@@ -1,0 +1,263 @@
+                                 2011 International Conference on Asian Language Processing
+
+
+
+
+                                  Improving Chinese Dependency Parsing
+                                    with Self-Disambiguating Patterns
+                        Likun Qiu1,3, Lei Wu2,3, Kai Zhao3, Changjian Hu3, Lingpeng Kong3
+         1
+             Key Laboratory of Computational Linguistics (Peking University), Ministry of Education, Beijing, China
+                                   2
+                                     Institute of Automation, China Academy of Science
+                                              3
+                                                NEC Laboratories, Beijing, China
+                                                    qiulikun@pku.edu.cn
+
+    Abstract—To solve the data sparseness problem in                 SDP-based method could extract labeled substructures
+    dependency parsing, most previous studies used features          effectively.
+    constructed from large-scale auto-parsed data. Unlike                Moreover, unlike previous studies which improved
+    previous work, we propose a new approach to improve              performance by either using only verb-noun relations
+    dependency parsing with context-free dependency triples          [1], or considering all kinds of syntactic collocations as
+    (CDT) extracted by using self-disambiguating patterns            only one pattern [2-3], we propose to view substructures
+    (SDP). The use of SDP makes it possible to avoid the             differently according to the dependency relations.
+    dependency on a baseline parser and explore the influence            To demonstrate the effectiveness of the proposed
+    of different types of substructures one by one.
+                                                                     approach, we made experiments on Penn Chinese Tree
+    Additionally, taking the available CDTs as seeds, a label
+    propagation process is used to tag a large number of
+                                                                     Bank (CTB). The results showed that the proposed
+    unlabeled word pairs as CDTs. Experiments show that,             approach greatly improves the accuracy over the
+    when CDT features are integrated into a maximum                  baseline parser and outperforms the state-of-art system.
+    spanning tree (MST) dependency parser, the new parser            We also demonstrate that the label propagation process
+    improves significantly over the baseline MST parser.             further improve the dependency parsing by tagging more
+    Comparative results also show that CDTs with                     CDTs.
+    dependency relation labels perform much better than                  The rest of this paper is organized as follows.
+    CDT without dependency relation label.                           Section 2 introduces how to extract CDTs by using
+                                                                     SDPs; Section 3 proposes label propagation method;
+    Dependency parsing; self-disambiguating pattern; raw             Section 4 explains Chinese dependency parser using
+    corpus (key words)                                               dependency triples. Experimental results are showed in
+                                                                     section 5. Finally, a brief conclusion and our future work
+                                                                     plan will be given in Section 6.
+                        I.   INTRODUCTION
+        To obtain dependency parsers with high accuracy,               II.   SDP-BASED APPROACH FOR CDT EXTRACTION
+    one promising direction is to use knowledge acquired                In this paper, we would use SDPs to extract CDTs
+    from large-scale unannotated text, e.g., substructures           from large scale unannotated data.
+    extracted from auto-parsed data (i.e. “verb-object” and
+    “modifier-head” structures in [1], case structure in [2]         A. CDT
+    and subtrees in [3]).                                                A CDT is a context-free dependency triple with the
+        However, since most of the substructures are                 form of {w1, r, w2}, in which r is the dependency
+    extracted based on auto-parsed results, and the                  relation between two words w1 and w2. In the sentence in
+    accuracies of auto-parsing is not high (about 82% [2] on         Fig. 1, the word 㾷‫( އ‬solve) is in four CDTs: {ᴥᄤ
+    real POS-tag), there are many errors in the extracted            (village), SUB, 㾷‫( އ‬solve)}, {Ꮖ㒣 (already), VMOD,
+    substructures. Naturally, these errors might decrease the        㾷‫( އ‬solve)}, {㾷‫( އ‬solve), VMOD, њ (le)}, {㾷‫އ‬
+    performance of dependency parsing. Moreover, most of
+                                                                     (solve), OBJ, 䯂 乬 (problem)}. After extracted from
+    previous researches (except [1]) used all kinds of
+    substructures and took them as one type 1 . So it is             many different sentences, the relation type of a
+    difficult for us to know the influence of each type of           dependency triple is not dependent on its contexts.
+    substructures and hard to achieve further improvements.          Therefore, we call it context-free.
+        Instead of extracting from auto-parsed data, we
+    propose an approach to extract substructures directly
+    from auto-segmented and auto-POS-tagged data. The
+    approach is referred to as SDP-based approach. Here,
+    SDP denotes self-disambiguating pattern, which could
+                                                                                 Figure 1. Example of Dependency Tree
+    resolve the ambiguity of a syntactic structure by itself.
+    Since the precision of word segmentation and POS-
+    tagging is much higher2 than syntactic parsing and SDP           B. SDP
+    could resolve syntactic ambiguity in a certain degree, the          There exist many ambiguous syntactic structures in
+                                                                     natural languages. For instance, in Chinese, the
+    1
+      Here, “type” denotes syntactic relation types such as          dependency relation between a verb and a noun might be
+    coordinate, predicate-object, etc.                               OBJ or NMOD; the relation between two verbs might be
+    2
+       Currently, the best performance of Chinese word               OBJ, NMOD, or VMOD.
+    segmentation has achieved 99.20% on F-score, and the best
+    accuracy of Chinese POS-tagging was 96.89% [4].
+
+
+978-0-7695-4554-7/11 $26.00 © 2011 IEEE                          7
+DOI 10.1109/IALP.2011.36
+      However, in some cases, the relation of words can                 respectively; the quantifier-noun NMOD structure is a
+ be decided without uncertainty. For example, although                  typical relation of Chinese, where the quantifier and
+ relation between a verb and a noun might be OBJ or                     noun select mutually. That’s why we choose them in our
+ NMOD, but in the case: “Verb + њ + Numeral +                           experiment.
+ Quantifier + Anywords + Noun + EOS”3, the relation of
+ the verb and the noun is almost certainly OBJ. For                         III.   CHINESE DEPENDENCY PARSER USING CDT
+                                                                                                   FEATURES
+ example, in “ᬊࠄ(receive)+њ+ϔ(a)+ᴳ(bunch)+ⓖ҂
+ ⱘ(beautiful)+剰㢅(flower)+EOS”, the relation between                         We generate new features based on the extracted
+ “ᬊࠄ” and “剰㢅” is OBJ. Such pattern is referred to as                   CDTs and refer them as CDT-based features. Since
+ self-disambiguating pattern (SDP).                                     these features only contain two words, they correspond
+                                                                        to the first-order features in the MST parsing model.
+ C. SDP-based Approach for CDT Extraction                               Second-order or higher-order features would not be tried
+                                                                        in this paper.
+                  TABLE I.       INSTANCES OF CDTS                          A CDT-based feature is represented as follows:
+           Verb                   Noun            Frequency
+                                                                                     feature(wi,wj)=idi,j-typei,j-directioni,j
+                                                  64965                     where idi,j, typei,j and directioni,j denote the frequency,
+       㾷‫(އ‬solve)           䯂乬(problem)
+                                                                        dependency relation type and dependency direction of
+       ᦤߎ(raise)           㽕∖(claim)              54313                 the CDT respectively.
+       থ᣹(play)            ԰⫼(role)               46052                     All the extracted CDTs are grouped into different
+       পᕫ(score)           ៤㒽(achievement)        42867                 sets in terms of frequencies. With experiments and
+       ༴ᅮ(lay)             ෎⸔(foundation)         37495                 reference to [3], we chose the following way. CDTs are
+                                                                        grouped into three sets: “high-frequency (HF)”,
+                                                                        “middle-frequency (MF)” and “low-frequency (LF)”.
+               TABLE II.       SDPS USED IN THIS PAPER                  HF, MF and LF are used as set IDs for the three sets
+                                                                        respectively. The following are the settings: if the
+     Target CDT                           SDP                           frequency of a CDT is larger than the threshold λ1, it is
+                           BOS + [Adjective | Noun | Pronoun |          in set HF; else if the frequency is larger than λ2, it is in
+                        Numeral | Quantifier |ⱘ]* + Noun + Adverb       set MF; else it is in set LF. We store the set ID for every
+<Noun, SUB, Verb>
+                        + Verb + њ + [Adjective | Noun | Pronoun|       CDT in Lst.
+                         Numeral | Quantifier |ⱘ]* + Noun + EOS             The dependency type set contains three elements:
+                             Verb +њ+ Numeral + Quantifier +
+                                                                        SUB, OBJ and NMOD. The dependency directions of
+<Verb, OBJ, Noun>                                                       SUB, OBJ and NMOD are “left”, “right” and “left”
+                                 Anywords + Noun + EOS
+                                                                        respectively. Here, “left” means in the CDT the left
+<Quantifier, NMOD,           њ+ Numeral + NominalQuantifier +           word depends on the right word. If a CDT with SUB
+Noun>                            Anywords + Noun + EOS
+                                                                        label is matched, the value of “direction” would be set as
+<Noun, NMOD,                                                            “left”.
+                                 ⱘ + Noun + Verb + EOS
+Verb>                                                                       For instance, if the frequency of <㾷‫( އ‬solve), OBJ,
+                                                                        䯂乬 (problem)> is larger than λ1, its set ID is HF. Then
+                             њ+ Numeral + NominalQuantifier +
+                              Anywords +Verb + Noun + EOS               the system would generate a feature of HF-OBJ-Right.
+<Verb, NMOD,
+Noun>                                                                         IV.   CDT EXPANSION : LABEL PROPAGATION
+                                 ⱘ + Verb + Noun + EOS                                       PROCESS
+                                                                            Since large scale unannotated data is also limit, the
+     Since SDP can resolve the ambiguity of a structure,                data sparseness problem still exists. To solve this
+ we can use it to extract correct CDTs. For instance,                   problem further, we try to use a Label Propagation
+ given a SDP such as “Verb +њ+ Numeral + Quantifier                     process to tag dependency pairs as CDTs.
+ + Anywords + Noun + EOS”, we might extract many                            The problem of CDT Tagging is to assign an
+ instances of <Verb, OBJ, Noun>. Some high-frequency                    appropriate dependency relation type to a context-free
+ CDTs are show in Table I.                                              dependency pair. It can be represented as follows:
+     For each ambiguous structure, we might design one
+ or more SDPs. Therefore, the number of SDPs in a
+                                                                                              r − > ( wi , w j )
+ certain language might be very large. In this paper, we                    where wi and wj denote the first and second word of a
+ present five SDPs to resolve three ambiguous structures                dependency pair. The CDT tagging problem is to assign
+ (see Table II) in Chinese. In this table, the first column             an appropriate dependency type r to the pair (wi, wj).
+ denotes the target CDT that could be extracted by the                  Then, we would get a CDT < wi, r, wj >.
+ SDP in the second column. The SUB and OBJ structure                        To solve the CDT tagging problem, we need to do
+ form the stretch of a common sentence; the noun-verb                   three steps. The first is to acquire large scale dependency
+ NMOD structure and verb-noun NMOD structure are                        pairs. The second is to measure the similarity between
+ the corresponding ambiguous structure of SUB and OBJ,                  two dependency pairs. And the third is to apply the label
+                                                                        propagation algorithm.
+ 3
+   Here, “EOS” denotes the end of a sentence or clause;
+ “Anywords” denotes any words occurring zero or many times;
+ “[w]*” means the word w occurs zero or many times.
+
+
+
+
+                                                                    8
+    For the sub-problem of dependency pair acquisition,                The results of CDT extraction are show in Table III.
+we directly use the result of [5] 4 , which used several           There are 55,175 and 1485 dependency triples (SUB,
+statistical methods to extract 18M word pairs on a data            OBJ, NMOD) in training set and test set respectively.
+set containing about 100M web pages.                               Auto-parsed CDTs are extracted from auto-parsed result
+   For word similarity, we used the method proposed by             (using the baseline parser) on the Chinese Raw-Corpus.
+(Curran, 2006) to compute Chinese word similarity.                 SDP-based CDTs are extracted from Sogou Corpus
+Given a corpus and a set of words CS(w). Collect                   based on the five proposed SDPs and using
+context of the words in CS(w) from a corpus. Denote                ICTCLAS2009 (Zhang, 2002)9 as the segmentation and
+context of a headword w1 as CT(w1), where w1∈CS(w).                POS-tagging tool. The proposed result is expanded by
+                                                                   the label propagation process based on the SDP-based
+The context of a headword w1 includes 2 words before
+                                                                   CDTs.
+w1 and 2 words after w1. Define contextual similarity of
+                                                                       Since the dependency triples in training set and test
+wi and wj as Sim(wi, wj). Cosine distance is used to               set are context-dependent yet CDT is context-free, it is
+compute Sim(wi, wj). See the following formula for                 difficult for us to evaluate CDT in terms of precision.
+concrete definition, where n denotes the dimension of              We only evaluate the coverage rate of CDT, i.e. the
+the two vectors, while vik and vjk denote the weighted             percentage of CDTs in training set and test set that have
+value of the kth context word of wi and wj respectively.           been covered by the given CDT set. Table III shows that
+
+     Sim(wi , w j ) =
+                           ¦ nj=1 vik v jk                         auto-parsed CDTs can cover more than SDP-based
+                                                                   CDTs. It is mainly because we only used five SDPs and
+                      ¦ nk =1 vik ¦ nk =1 v jk
+                                 2             2
+                                                                   can only cover a small part of the SUB, OBJ and NMOD
+   As for the label propagation algorithm, we follow [7].          CDTs. The usefulness of the three CDT sets would be
+                                                                   evaluated by dependency parsing evaluation.
+                    V.    EXPERIMENTS
+                                                                                      TABLE III.        CDT QUANTITY
+A. Experimental Setting                                                    CDT Source                  Quantity        Coverage Rate
+    We made experiments on the Penn Chinese                                Training Set        55,175              -
+Treebank (CTB)5.0 5 [8]. CTB is converted into                               Test Set           1485               -
+dependency structures using a standard set of head rules                 Auto-parsed           8.52M              53.9
+by the tool “Penn2Malt” 6 (Yamada and Matsumoto,                         SDP-based             1.69M              16.1
+2003). In CTB 5.0, Section 1-270 and 400-931 are used                     Proposed             3.09M              22.2
+for training, Section 271-300 for testing, and Section
+                                                                   5.2.2     Results of Dependency Parsing
+301-325 for development. Data partition and POS-tags
+                                                                       The dependency parsing results of proposed parsers
+on CTB 5.0 are the same as the settings in [2-3, 9]. All
+                                                                   are show in Table IV. Five parsers are compared
+the evaluation metrics are calculated on the dependency
+                                                                   together with a baseline parser:
+relations in which the modifier is not a punctuation.
+                                                                        Baseline: We use the second order MSTParser as
+    Two unannotated corpus are used for extracting
+                                                                   our baseline parser.
+CDTs. The first one is a self-made corpus, called Raw-
+                                                                       Auto1: The parser which uses CDTs extracted
+Corpus. Raw-Corpus contains about 20M sentences,
+                                                                   from auto-parsed data, without dependency label.
+which are collected from Chinese news websites from
+                                                                       Auto2: The parser which uses CDTs extracted
+January to December 2006. We use the second order
+                                                                   from auto-parsed data, with dependency label.
+MSTParser 7 as our baseline parser. It is trained with
+                                                                       SDP1: The parser which only uses seed CDTs
+Section 1-270 and 400-931 of CTB 5.0. All the
+                                                                   without dependency label. That is, all kinds of CDT are
+sentences in the Raw-Corpus are parsed by the baseline
+                                                                   considered as one kind.
+parser for extracting CDTs from auto-parsed sentences
+                                                                       SDP2: The parser which uses seed CDTs with
+directly.
+                                                                   different dependency label.
+    The second corpus is Sogou Web Corpus8 V2.0. This
+                                                                       Proposed: The proposed parser, in which both seed
+corpus contains 120G web pages, yet we only used the
+                                                                   CDTs and expanded CDTs are used.
+previous 30G for extracting CDTs by SDP-based
+                                                                      Note that all the SDP1/2 and Auto1/2 parsers only
+method.
+                                                                   used CDTs of SBJ, OBJ and NMOD relations.
+    We use the same feature with [10] and adopt the
+                                                                      Table IV shows that all the five parsers outperform
+default settings of MSTParser throughout the paper:
+                                                                   the baseline parsers. There is an absolute improvement
+iters=10; training-k=1; decode-type=proj; order=2.
+                                                                   of 1.26 points (UAS) by adding CDT-based features in
+When grouping CDTs by frequencies, the parameters λ1
+                                                                   the proposed parser. The improvement of parsing with
+and λ2 are set as 100 and 10 respectively.                         CDT-based features is significant in McNemar’s Test (p
+B. Experimental Results                                            < 10-5). Fig. 3 and Fig. 4 show the dependency trees of
+Results of CDT Extraction                                          the same sentences created by the baseline parser and
+                                                                   the proposed parser, respectively. After using the CDT
+4
+    The collocation set might be downloaded             from       < Ӯ 䇜 (interview), SUB, ‫ ݋‬᳝ (have)>, the correct
+http://www.sogou.com/labs/dl/r.html.                               subject of ‫ ݋‬᳝ (have) was found by the proposed
+5
+  http://www.cis.upenn.edu/~chinese/                               parser.
+6
+  http://w3.msi.vxu.se/~nivre/research/Penn2Malt.html
+7
+  http://mstparser.sourceforge.net
+8                                                                  9
+  http://www.sogou.com/labs/dl/t.html                                  http://ictclas.org/index.html
+
+
+
+
+                                                               9
+

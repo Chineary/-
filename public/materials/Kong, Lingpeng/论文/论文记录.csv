@@ -1,0 +1,1354 @@
+﻿序,论文标题,年份,作者,发表载体,条目类型,论文链接,被引次数,引用统计日期,引用来源网址,抓取日期,下载状态,备注
+1,Learning and Evaluating General Linguistic Intelligence,2019,Dani Yogatama；Cyprien de Masson d’Autume；Jerome Connor；Tomas Kocisky；Mike Chrzanowski；Lingpeng Kong；Angeliki Lazaridou；Wang Ling；Lei Yu；Chris Dyer；Phil Blunsom,", arXiv:1901.11373, February 2019.",预印本,"https://arxiv.org/pdf/1901.11373.pdf
+https://arxiv.org/abs/1901.11373",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序1：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2019_Learning and Evaluating General Linguistic Intelligence.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1901.11373；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We define general linguistic intelligence as the ability to reuse previously acquired knowledge about a language's lexicon, syntax, semantics, and pragmatic conventions to adapt to new tasks quickly. ”。"
+2,Neural Phrase-to-Phrase Machine Translation,2018,Jiangtao Feng；Lingpeng Kong；Po-Sen Huang；Chong Wang；Da Huang；Jiayuan Mao；Kan Qiao；Dengyong Zhou,", arXiv:1811.02172, November 2018.",预印本,"https://arxiv.org/pdf/1811.02172.pdf
+https://arxiv.org/abs/1811.02172",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序2：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2018_Neural Phrase-to-Phrase Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1811.02172；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“In this paper, we propose Neural Phrase-to-Phrase Machine Translation (NP$^2$MT). Our model uses a phrase attention mechanism to discover relevant input (source) segments that are used by a decoder to”。"
+3,Sentence Encoding with Tree-constrained Relation Networks,2018,Lei Yu；Cyprien de Masson d’Autume；Chris Dyer；Phil Blunsom；Lingpeng Kong；Wang Ling,", arXiv:1811.10475, November 2018.",预印本,"https://arxiv.org/pdf/1811.10475.pdf
+https://arxiv.org/abs/1811.10475",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序3：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2018_Sentence Encoding with Tree-constrained Relation Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1811.10475；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“The meaning of a sentence is a function of the relations that hold between its words. We instantiate this relational view of semantics in a series of neural models based on variants of relation networ”。"
+4,SyntaxNet Models for the CoNLL 2017 Shared Task,2017,Chris Alberti；Daniel Andor；Ivan Bogatyy；Michael Collins；Dan Gillick；Lingpeng Kong；Terry Koo；Ji Ma；Mark Omernick；Slav Petrov；Chayut Thanapirom；Zora Tung；David Weiss,", arXiv:1703.04929, March 2017. [ Link ]",预印本,"https://arxiv.org/pdf/1703.04929.pdf
+http://universaldependencies.org/conll17/
+https://arxiv.org/abs/1703.04929",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序4：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_SyntaxNet Models for the CoNLL 2017 Shared Task.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1703.04929；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We describe a baseline dependency parsing system for the CoNLL2017 Shared Task. This system, which we call ""ParseySaurus,"" uses the DRAGNN framework [Kong et al, 2017] to combine transition-based recu”。"
+5,DRAGNN: A Transition-based Framework for Dynamically Connected Neural Networks,2017,Lingpeng Kong；Chris Alberti；Daniel Andor；Ivan Bogatyy；David Weiss,", arXiv:1703.04474, March 2017. [ GitHub ][ Google AI Blog ]",预印本,"https://arxiv.org/pdf/1703.04474.pdf
+https://github.com/tensorflow/models/tree/master/research/syntaxnet
+https://ai.googleblog.com/2017/03/an-upgrade-to-syntaxnet-new-models-and.html
+https://arxiv.org/abs/1703.04474",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序5：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_DRAGNN_ A Transition-based Framework for Dynamically Connected Neural Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1703.04474；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“In this work, we present a compact, modular framework for constructing novel recurrent neural architectures. Our basic module is a new generic unit, the Transition Based Recurrent Unit (TBRU). In addi”。"
+6,DyNet: The Dynamic Neural Network Toolkit,2017,Graham Neubig；Chris Dyer；Yoav Goldberg；Austin Matthews；Waleed Ammar；Antonios Anastasopoulos；Miguel Ballesteros；David Chiang；Daniel Clothiaux；Trevor Cohn；Kevin Duh；Manaal Faruqui；Cynthia Gan；Dan Garrette；Yangfeng Ji；Lingpeng Kong；Adhiguna Kuncoro；Gaurav Kumar；Chaitanya Malaviya；Paul Michel；Yusuke Oda；Matthew Richardson；Naomi Saphra；Swabha Swayamdipta；Pengcheng Yin,", arXiv:1701.03980, January 2017. [ GitHub ]",预印本,"https://arxiv.org/pdf/1701.03980.pdf
+https://github.com/clab/dynet
+https://arxiv.org/abs/1701.03980",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序6：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_DyNet_ The Dynamic Neural Network Toolkit.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1701.03980；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We describe DyNet, a toolkit for implementing neural network models based on dynamic declaration of network structure. In the static declaration strategy that is used in toolkits like Theano, CNTK, an”。"
+7,An Empirical Comparison of Parsing Methods for Stanford Dependencies,2014,Lingpeng Kong；Noah A. Smith,Journal papers,预印本,"https://arxiv.org/pdf/1404.4314.pdf
+http://www.cs.cmu.edu/~ark/TBSD/
+https://arxiv.org/abs/1404.4314",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序7：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_An Empirical Comparison of Parsing Methods for Stanford Dependencies.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1404.4314；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“Stanford typed dependencies are a widely desired representation of natural language sentences, but parsing is one of the major computational bottlenecks in text analysis systems. In light of the evolv”。"
+8,A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios,2025,Xiachong Feng；Longxu Dou；Minzhi Li；Qinghao Wang；Yu Guo；Haochuan Wang；Chang Ma；Lingpeng Kong,TMLR,期刊,https://arxiv.org/abs/2412.03920,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序8：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2412.03920；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+PDF发表标记：“Published in Transactions on Machine Learning Research (05/2025)”。
+原文摘要依据：“Game-theoretic scenarios have become pivotal in evaluating the social intelligence of Large Language Model (LLM)-based social agents. While numerous studies have explored these agents in such settings”。"
+9,Autoregressive Models in Vision: A Survey,2025,Jing Xiong；Gongye Liu；Lun Huang；Chengyue Wu；Taiqiang Wu；Yao Mu；Yuan Yao；Hui Shen；Zhongwei Wan；Jinfa Huang；Chaofan Tao；Shen Yan；Huaxiu Yao；Lingpeng Kong；Hongxia Yang；Mi Zhang；Guillermo Sapiro；Jiebo Luo；Ping Luo；Ngai Wong,TMLR,期刊,https://arxiv.org/abs/2411.05902,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序9：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Autoregressive Models in Vision_ A Survey.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2411.05902；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published in Transactions on Machine Learning Research (03/2025)”。
+原文摘要依据：“Autoregressive modeling has been a huge success in the field of natural language processing (NLP). Recently, autoregressive models have emerged as a significant area of focus in computer vision, where”。"
+10,Linearized Relative Positional Encoding,2023,Zhen Qin；Weixuan Sun；Kaiyue Lu；Dongxu Li；Xiaodong Han；Yuchao Dai；Lingpeng Kong；Yiran Zhong,TMLR,期刊,https://arxiv.org/abs/2307.09270,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序10：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Linearized Relative Positional Encoding.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2307.09270；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Relative positional encoding is widely used in vanilla and linear transformers to represent positional information. However, existing encoding methods of a vanilla transformer are not always directly ”。"
+11,Vicinity Vision Transformer,2023,Weixuan Sun；Zhen Qin；Hui Deng；Jianyuan Wang；Yi Zhang；Kaihao Zhang；Nick Barnes；Stan Birchfield；Lingpeng Kong；Yiran Zhong,TPAMI,期刊,https://arxiv.org/abs/2206.10552,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序11：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2206.10552；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Vision transformers have shown great success on numerous computer vision tasks. However, its central component, softmax attention, prohibits vision transformers from scaling up to high-resolution imag”。"
+12,Adaptive Semiparametric Language Models,2021,Dani Yogatama；Cyprien de Masson d’Autume；Lingpeng Kong,"Transactions of the Association for Computational Linguistics, Volume 9",期刊,"https://aclanthology.org/2021.tacl-1.22/
+https://arxiv.org/pdf/2102.02557.pdf
+https://arxiv.org/abs/2102.02557",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序12：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Adaptive Semiparametric Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.tacl-1.22/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“We present a language model that combines a large parametric neural network (i.e., a transformer) with a non-parametric episodic memory component in an integrated architecture. Our model uses extended”。"
+13,Syntactic Structure Distillation Pretraining for Bidirectional Encoders,2020,Adhiguna Kuncoro；Lingpeng Kong；Daniel Fried；Dani Yogatama；Laura Rimell；Chris Dyer；Phil Blunsom,"Transactions of the Association for Computational Linguistics, Volume 8",期刊,"https://aclanthology.org/2020.tacl-1.50/
+https://arxiv.org/pdf/2005.13482.pdf
+https://arxiv.org/abs/2005.13482",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序13：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_Syntactic Structure Distillation Pretraining for Bidirectional Encoders.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2020.tacl-1.50/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Textual representation learners trained on large amounts of data have achieved notable success on downstream tasks; intriguingly, they have also performed well on challenging tests of syntactic compet”。"
+14,Better Document-Level Machine Translation with Bayes’ Rule,2020,Lei Yu；Laurent Sartran；Wojciech Stokowiec；Wang Ling；Lingpeng Kong；Phil Blunsom；Chris Dyer,"Transactions of the Association for Computational Linguistics, Volume 8",期刊,"https://aclanthology.org/2020.tacl-1.23/
+https://arxiv.org/pdf/1910.00553.pdf
+https://arxiv.org/abs/1910.00553",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序14：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_Better Document-Level Machine Translation with Bayes’ Rule.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2020.tacl-1.23/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“We show that Bayes’ rule provides an effective mechanism for creating document translation models that can be learned from only parallel sentences and monolingual documents a compelling benefit becaus”。"
+15,End-to-End Neural Segmental Models for Speech Recognition,2017,Hao Tang；Liang Lu；Lingpeng Kong；Kevin Gimpel；Karen Livescu；Chris Dyer；Noah A. Smith；Steve Renals,Peer-refereed conference publications,期刊,"https://arxiv.org/pdf/1708.00531.pdf
+https://arxiv.org/abs/1708.00531",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序15：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_End-to-End Neural Segmental Models for Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1708.00531；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Segmental models are an alternative to frame-based models for sequence prediction, where hypothesized path weights are based on entire segment scores rather than a single frame at a time. Neural segme”。"
+16,ScienceBoard: Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows,2026,Qiushi Sun；Zhoumianze Liu；Chang Ma；Zichen Ding；Fangzhi Xu；Zhangyue Yin；Haiteng Zhao；Zhenyu Wu；Kanzhi Cheng；Zhaoyang Liu；Jianing Wang；Qintong Li；Xiangru Tang；Tianbao Xie；Xiachong Feng；Lingpeng Kong,ICLR 2026,会议,https://arxiv.org/abs/2505.19897,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序16：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2505.19897；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Large Language Models (LLMs) have extended their impact beyond Natural Language Processing, substantially fostering the development of interdisciplinary research. Recently, various LLM-based agents ha”。"
+17,SwingArena: Adversarial Programming Arena for Long-Context GitHub Issue Solving,2026,Wendong Xu；Jing Xiong；Chenyang Zhao；Qiujiang Chen；Haoran Wang；Hui Shen；Zhongwei Wan；Jianbo Dai；Taiqiang Wu；He Xiao；Chaofan Tao；Z. Morley Mao；Ying Sheng；Zhijiang Guo；Hongxia Yang；Bei Yu；Lingpeng Kong；Quanquan Gu；Ngai Wong,ICLR 2026,会议,https://arxiv.org/abs/2505.23932,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+标题和完整作者顺序采用arXiv:2505.23932v3（2026-03-08）首页；CV和API旧名单中的Zhuoqing Mao不直接等同于Z. Morley Mao；新增Bei Yu、Quanquan Gu。首页标明ICLR 2026。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序17：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SwingArena_ Adversarial Programming Arena for Long-Context GitHub Issue Solving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2505.23932；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“We present SwingArena, a competitive evaluation framework for Large Language Models (LLMs) that closely mirrors real-world software development workflows. Unlike traditional static benchmarks, SwingAr”。"
+18,PERSONA: Dynamic and Compositional Inference-Time Personality Control via Activation Vector Algebra,2026,Xiachong Feng；Liang Zhao；Weihong Zhong；Yichong Huang；Yuxuan Gu；Lingpeng Kong；Xiaocheng Feng；Bing Qin,ICLR 2026,会议,https://arxiv.org/abs/2602.15669,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序18：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_PERSONA_ Dynamic and Compositional Inference-Time Personality Control via Activation Vector Algebra.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.15669；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Current methods for personality control in Large Language Models rely on static prompting or expensive fine-tuning, failing to capture the dynamic and compositional nature of human traits. We introduc”。"
+19,ATTS: Asynchronous Test-Time Scaling via Conformal Prediction,2026,Jing Xiong；Qiujiang Chen；Fanghua Ye；Zhongwei Wan；Chuanyang Zheng；Chenyang Zhao；Hui Shen；Alexander Hanbo Li；Chaofan Tao；Haochen Tan；Haoli Bai；Lifeng Shang；Lingpeng Kong；Ngai Wong,ICLR 2026,会议,https://arxiv.org/abs/2509.15148,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序19：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ATTS_ Asynchronous Test-Time Scaling via Conformal Prediction.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.15148；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Large language models (LLMs) benefit from test-time scaling but are often hampered by high inference latency. Speculative decoding is a natural way to accelerate the scaling process; however, scaling ”。"
+20,DiffuCoder: Understanding and Improving Masked Diffusion Models for Code Generation,2026,Shansan Gong；Ruixiang Zhang；Huangjie Zheng；Jiatao Gu；Navdeep Jaitly；Lingpeng Kong；Yizhe Zhang,ICLR 2026,会议,https://arxiv.org/abs/2506.20639,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序20：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2506.20639；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Diffusion large language models (dLLMs) are compelling alternatives to autoregressive (AR) models because their denoising models operate over the entire sequence. The global planning and iterative ref”。"
+21,MMSearch-Plus: Benchmarking Provenance-Aware Search for Multimodal Browsing Agents,2026,Xijia Tao；Yihua Teng；Xinxing Su；Xinyu Fu；Jihao Wu；Chaofan Tao；Ziru Liu；Haoli Bai；Rui Liu；Lingpeng Kong,ICLR 2026,会议,https://arxiv.org/abs/2508.21475,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序21：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2508.21475；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Existing multimodal browsing benchmarks often fail to require genuine multimodal reasoning, as many tasks can be solved with text-only heuristics without vision-in-the-loop verification. We introduce ”。"
+22,DreamOn: Diffusion Language Models For Code Infilling Beyond Fixed-size Canvas,2026,Zirui Wu；Lin Zheng；Zhihui Xie；Jiacheng Ye；Jiahui Gao；Shansan Gong；Yansong Feng；Zhenguo Li；Wei Bi；Guorui Zhou；Lingpeng Kong,ICLR 2026,会议,"https://hkunlp.github.io/blog/2025/dreamon
+https://arxiv.org/abs/2602.01326",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序22：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_DreamOn_ Diffusion Language Models For Code Infilling Beyond Fixed-size Canvas.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.01326；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Diffusion Language Models (DLMs) present a compelling alternative to autoregressive models, offering flexible, any-order infilling without specialized prompting design. However, their practical utilit”。"
+23,TEMPLE:Temporal Preference Learning of Video LLMs via Difficulty Scheduling and Pre-SFT Alignment,2026,Shicheng Li；Lei Li；Kun Ouyang；Shuhuai Ren；Yuanxin Liu；Yuanxing Zhang；Fuzheng Zhang；Lingpeng Kong；Qi Liu；Xu Sun,AAAI 2026,会议,https://arxiv.org/abs/2503.16929,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+版本归并：原候选序152并入序23；候选标题“TEMPLE: Incentivizing Temporal Understanding of Video Large Language Models via Progressive Pre-SFT Alignment”；依据：相同arXiv编号与作者名单。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序23：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2503.16929；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Video Large Language Models (Video LLMs) have achieved significant success by adopting the paradigm of large-scale pre-training followed by supervised fine-tuning (SFT). However, existing approaches s”。"
+24,TreeSynth: Synthesizing Diverse Data from Scratch via Tree-Guided Subspace Partitioning,2025,Sheng Wang；Pengan Chen；Jingqi Zhou；Qintong Li；Jingwei Dong；Jiahui Gao；Boyang Xue；Jiyue Jiang；Lingpeng Kong；Chuan Wu,NeurIPS 2025,会议,https://arxiv.org/abs/2503.17195,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序24：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2503.17195；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Model customization necessitates high-quality and diverse datasets, but acquiring such data remains time-consuming and labor-intensive. Despite the great potential of large language models (LLMs) for ”。"
+25,DynaAct: Large Language Model Reasoning with Dynamic Action Spaces,2025,Xueliang Zhao；Wei Wu；Jian Guan；Qintong Li；Lingpeng Kong,NeurIPS 2025,会议,"https://neurips.cc/virtual/2025/poster/118067
+https://arxiv.org/abs/2511.08043",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序25：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_DynaAct_ Large Language Model Reasoning with Dynamic Action Spaces.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2511.08043；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“In modern sequential decision-making systems, the construction of an optimal candidate action space is critical to efficient inference. However, existing approaches either rely on manually defined act”。"
+26,Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition,2025,Chenxin An；Zhihui Xie；Xiaonan Li；Ming Zhong；Shansan Gong；Lei Li；Jun Zhang；Jingjing Xu；Lingpeng Kong,Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing,会议,https://aclanthology.org/2025.emnlp-main.1751/,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序26：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2025.emnlp-main.1751/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Reasoning models have demonstrated remarkable performance on complex tasks by generating long reasoning traces prior to producing final answers. However, previous research on long-context scaling in l”。"
+27,ProReason: Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom,2025,Jingqi Zhou；Sheng Wang；Jingwei Dong；Kai Liu；Lei Li；Jiahui Gao；Jiyue Jiang；Lingpeng Kong；Chuan Wu,Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2025.emnlp-main.1614/
+https://arxiv.org/abs/2410.14138",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序27：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_ProReason_ Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.emnlp-main.1614/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 31662–31691”。
+原文摘要依据：“Large vision-language models (LVLMs) have witnessed significant progress on visual understanding tasks. However, they often prioritize language knowledge over image information on visual reasoning tas”。"
+28,QSpec: Speculative Decoding with Complementary Quantization Schemes,2025,Juntao Zhao；Wenhao Lu；Sheng Wang；Lingpeng Kong；Chuan Wu,Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2025.emnlp-main.240/
+https://arxiv.org/abs/2410.11305",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序28：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2025.emnlp-main.240/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Quantization is widely adopted to accelerate inference and reduce memory consumption in large language models (LLMs). While activation-weight joint quantization enables efficient low-precision decodin”。"
+29,UNComp: Can Matrix Entropy Uncover Sparsity? — A Compressor Design from an Uncertainty-Aware Perspective,2025,Jing Xiong；Jianghan Shen；Fanghua Ye；Chaofan Tao；Zhongwei Wan；Jianqiao Lu；Xun Wu；Chuanyang Zheng；Zhijiang Guo；Min Yang；Lingpeng Kong；Ngai Wong,Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2025.emnlp-main.209/
+https://arxiv.org/abs/2410.03090",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+CV标题为“UNComp: Can Information Compression Uncover Sparsity? A Compressor Design from an Uncertainty-Aware Perspective”；arXiv标题为“UNComp: Can Matrix Entropy Uncover Sparsity? -- A Compressor Design from an Uncertainty-Aware Perspective”；相同预印本编号，保留版本信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序29：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_UNComp_ Can Matrix Entropy Uncover Sparsity_ — A Compressor Design from an Uncertainty-Aware Perspective.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.emnlp-main.209/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 4179–4199”。
+原文摘要依据：“Deploying large language models (LLMs) for long-context inference remains challenging due to their substantial memory and computational demands. While techniques such as Key-Value (KV) cache compressi”。"
+30,Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models,2025,Jiyue Jiang；Alfred Kar Yin Truong；Yanyu Chen；Qinghang Bao；Sheng Wang；Pengan Chen；Jiuming Wang；Lingpeng Kong；Yu Li；Chuan Wu,Findings of the Association for Computational Linguistics: EMNLP 2025,会议,"https://aclanthology.org/2025.findings-emnlp.102/
+https://arxiv.org/abs/2503.03702",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序30：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-emnlp.102/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“High-quality data resources play a crucial role in learning large language models (LLMs), particularly for low-resource languages like Cantonese. Despite having more than 85 million native speakers, C”。"
+31,Recipe2Plan: Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions,2025,Zirui Wu；Xiao Liu；Jiayi Li；Lingpeng Kong；Yansong Feng,Findings of the Association for Computational Linguistics: EMNLP 2025,会议,"https://aclanthology.org/2025.findings-emnlp.229/
+https://arxiv.org/abs/2503.02238",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序31：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Recipe2Plan_ Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-emnlp.229/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“While Large Language Model-based agents have demonstrated substantial progress in task completion, existing evaluation benchmarks tend to overemphasize single-task performance, with insufficient atten”。"
+32,TimeChat-Online: 80% Visual Tokens are Naturally Redundant in Streaming Videos,2025,Linli Yao；Yicheng Li；Yuancheng Wei；Lei Li；Shuhuai Ren；Yuanxin Liu；Kun Ouyang；Lean Wang；Shicheng Li；Sida Li；Lingpeng Kong；Qi Liu；Yuanxing Zhang；Xu Sun,ACMMM 2025,会议,https://arxiv.org/abs/2504.17343,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序32：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2504.17343；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The rapid growth of online video platforms, particularly live streaming services, has created an urgent need for real-time video understanding systems. These systems must process continuous video stre”。"
+33,Reasoning Does Not Necessarily Improve Role-Playing Ability,2025,Xiachong Feng；Longxu Dou；Lingpeng Kong,Findings of the Association for Computational Linguistics: ACL 2025,会议,"https://aclanthology.org/2025.findings-acl.537/
+https://arxiv.org/abs/2502.16940",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序33：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Reasoning Does Not Necessarily Improve Role-Playing Ability.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-acl.537/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The application of role-playing large language models (LLMs) is rapidly expanding in both academic and commercial domains, driving an increasing demand for high-precision role-playing models. Simultan”。"
+34,PromptCoT: Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models,2025,Xueliang Zhao；Wei Wu；Jian Guan；Lingpeng Kong,Findings of the Association for Computational Linguistics: ACL 2025,会议,"https://aclanthology.org/2025.findings-acl.935/
+https://arxiv.org/abs/2503.02324",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序34：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_PromptCoT_ Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-acl.935/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The ability of large language models to solve complex mathematical problems has progressed significantly, particularly for tasks requiring advanced reasoning. However, the scarcity of sufficiently cha”。"
+35,Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning,2025,Lei Huang；Xiaocheng Feng；Weitao Ma；Yuchun Fan；Xiachong Feng；Yuxuan Gu；Yangfan Ye；Liang Zhao；Weihong Zhong；Baoxin Wang；Dayong Wu；Guoping Hu；Lingpeng Kong；Tong Xiao；Ting Liu；Bing Qin,Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,https://aclanthology.org/2025.acl-long.1199/,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序35：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.acl-long.1199/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 24564–24579”。
+原文摘要依据：“Large language models (LLMs) are known to suffer from severe hallucination issues. One of the main causes lies in the knowledge misalignment between the pre-training stage and the supervised fine-tuni”。"
+36,Teaching Language Models to Critique via Reinforcement Learning,2025,Zhihui Xie；Jie chen；Liyu Chen；Weichao Mao；Jingjing Xu；Lingpeng Kong,ICML 2025,会议,https://arxiv.org/abs/2502.03492,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序36：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Teaching Language Models to Critique via Reinforcement Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2502.03492；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 42 nd International Conference on Machine           ward optimal solution generation through iterative critique-”。
+原文摘要依据：“Teaching large language models (LLMs) to critique and refine their outputs is crucial for building systems that can iteratively improve, yet it is fundamentally limited by the ability to provide accur”。"
+37,ParallelComp: Parallel Long-Context Compressor for Length Extrapolation,2025,Jing Xiong；Jianghan Shen；Chuanyang Zheng；Zhongwei Wan；Chenyang Zhao；Chiwun Yang；Fanghua Ye；Hongxia Yang；Lingpeng Kong；Ngai Wong,ICML 2025,会议,https://arxiv.org/abs/2502.14317,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序37：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2502.14317；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Extrapolating ultra-long contexts (text length >128K) remains a major challenge for large language models (LLMs), as most training-free extrapolation methods are not only severely limited by memory bo”。"
+38,VL-RewardBench: A Challenging Benchmark for Vision-Language Generative Reward Models,2025,Lei Li；Yuancheng Wei；Zhihui Xie；Xuqing Yang；Yifan Song；Peiyi Wang；Chenxin An；Tianyu Liu；Sujian Li；Bill Yuchen Lin；Lingpeng Kong；Qi Liu,CVPR 2025,会议,https://arxiv.org/abs/2411.17451,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序38：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_VL-RewardBench_ A Challenging Benchmark for Vision-Language Generative Reward Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2411.17451；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Vision-language generative reward models (VL-GenRMs) play a crucial role in aligning and evaluating multimodal AI systems, yet their own evaluation remains under-explored. Current assessment methods p”。"
+39,Jailbreaking as a Reward Misspecification Problem,2025,Zhihui Xie；Jiahui Gao；Lei Li；Zhenguo Li；Qi Liu；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2406.14393,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序39：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Jailbreaking as a Reward Misspecification Problem.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2406.14393；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“The widespread adoption of large language models (LLMs) has raised concerns about their safety and reliability, particularly regarding their vulnerability to adversarial attacks. In this paper, we pro”。"
+40,Temporal Reasoning Transfer from Text to Video,2025,Lei Li；Yuanxin Liu；Linli Yao；Peiyuan Zhang；Chenxin An；Lean Wang；Xu Sun；Lingpeng Kong；Qi Liu,ICLR 2025,会议,https://arxiv.org/abs/2410.06166,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序40：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2410.06166；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Video Large Language Models (Video LLMs) have shown promising capabilities in video comprehension, yet they struggle with tracking temporal changes and reasoning about temporal relationships. While pr”。"
+41,MoS: Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards,2025,Sheng Wang；Liheng Chen；Pengan Chen；Jingwei Dong；Boyang Xue；Jiyue Jiang；Lingpeng Kong；Chuan Wu,ICLR 2025,会议,https://arxiv.org/abs/2410.00938,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序41：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_MoS_ Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.00938；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“The rapid scaling of large language models necessitates more lightweight finetuning methods to reduce the explosive GPU memory overhead when numerous customized models are served simultaneously. Targe”。"
+42,Language Model Non-Myopic Generation for Reasoning and Planning,2025,Chang Ma；Haiteng Zhao；Junlei Zhang；Junxian He；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2410.17195,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+CV标题为“Language Model Non-Myopic Generation for Reasoning and Planning”；arXiv标题为“Non-myopic Generation of Language Models for Reasoning and Planning”；相同预印本编号，保留版本信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序42：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Language Model Non-Myopic Generation for Reasoning and Planning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.17195；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Large Language Models have demonstrated remarkable abilities in reasoning and planning by breaking down complex problems into sequential steps. Despite their success in various domains like mathematic”。"
+43,Beyond Autoregression: Discrete Diffusion for Complex Reasoning and Planning,2025,Jiacheng Ye；Jiahui Gao；Shansan Gong；Lin Zheng；Xin Jiang；Zhenguo Li；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2410.14157,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序43：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Beyond Autoregression_ Discrete Diffusion for Complex Reasoning and Planning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.14157；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“Autoregressive language models, despite their impressive capabilities, struggle with complex reasoning and long-term planning tasks. We introduce discrete diffusion models as a novel solution to these”。"
+44,Implicit Search via Discrete Diffusion: A Study on Chess,2025,Jiacheng Ye；Zhenyu Wu；Jiahui Gao；Zhiyong Wu；Xin Jiang；Zhenguo Li；Lingpeng Kong,ICLR 2025,会议,"https://openreview.net/forum?id=A9y3LFX4ds
+https://arxiv.org/abs/2502.19805",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序44：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2502.19805；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“In the post-AlphaGo era, there has been a renewed interest in search techniques such as Monte Carlo Tree Search (MCTS), particularly in their application to Large Language Models (LLMs). This renewed ”。"
+45,G-LLaVA: Solving Geometric Problem with Multi-Modal Large Language Model,2025,Jiahui Gao；Renjie Pi；Jipeng Zhang；Jiacheng Ye；Wanjun Zhong；Yufei Wang；Lanqing Hong；Jianhua Han；Hang Xu；Zhenguo Li；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2312.11370,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序45：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2312.11370；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have shown remarkable proficiency in human-level reasoning and generation capabilities, which encourages extensive research on their application in mathematical problem so”。"
+46,Why Does the Effective Context Length of LLMs Fall Short?,2025,Chenxin An；Jun Zhang；Ming Zhong；Lei Li；Shansan Gong；Yao Luo；Jingjing Xu；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2410.18745,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序46：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Why Does the Effective Context Length of LLMs Fall Short_.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.18745；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Advancements in distributed training and efficient attention mechanisms have significantly expanded the context window sizes of large language models (LLMs). However, recent work reveals that the effe”。"
+47,Scaling Diffusion Language Models via Adaptation from Autoregressive Models,2025,Shansan Gong；Shivam Agarwal；Yizhe Zhang；Jiacheng Ye；Lin Zheng；Mukai Li；Chenxin An；Peilin Zhao；Wei Bi；Jiawei Han；Hao Peng；Lingpeng Kong,ICLR 2025,会议,https://arxiv.org/abs/2410.17891,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序47：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Scaling Diffusion Language Models via Adaptation from Autoregressive Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.17891；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“Diffusion Language Models (DLMs) have emerged as a promising new paradigm for text generative modeling, potentially addressing limitations of autoregressive (AR) models. However, current DLMs have bee”。"
+48,Forewarned is Forearmed: Harnessing LLMs for Data Synthesis via Failure-induced Exploration,2025,Qintong Li；Jiahui Gao；Sheng Wang；Renjie Pi；Xueliang Zhao；Chuan Wu；Xin Jiang；Zhenguo Li；Lingpeng Kong,ICLR 2025,会议,"https://openreview.net/forum?id=yitH9xAHQs
+https://arxiv.org/abs/2410.16736",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+版本归并：原候选序150并入序48；候选标题“Forewarned is Forearmed: Leveraging LLMs for Data Synthesis through Failure-Inducing Exploration”；依据：完整作者顺序及ReverseGen研究内容一致，采用OpenReview正式版。
+已核对arXiv:2410.16736v1：标题为Forewarned is Forearmed: Leveraging LLMs for Data Synthesis through Failure-Inducing Exploration，作者顺序与CV正式版一致。原候选150合并入48，PDF为早期版本；正式发表状态仅由CV支持，待出版记录复核。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序48：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Forewarned is Forearmed_ Harnessing LLMs for Data Synthesis via Failure-induced Exploration.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.16736；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have significantly benefited from training on diverse, high-quality task-specific data, leading to impressive performance across a range of downstream applications. Curren”。"
+49,ImgTrojan: Jailbreaking Vision-Language Models with ONE Image,2025,Xijia Tao；Shuai Zhong；Lei Li；Qi Liu；Lingpeng Kong,Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers),会议,"https://aclanthology.org/2025.naacl-long.360/
+https://arxiv.org/abs/2403.02910",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序49：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_ImgTrojan_ Jailbreaking Vision-Language Models with ONE Image.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.naacl-long.360/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“There has been an increasing interest in the alignment of large language models (LLMs) with human values. However, the safety issues of their integration with a vision module, or vision language model”。"
+50,FactTrack: Time-Aware World State Tracking in Story Outlines,2025,Zhiheng Lyu；Kevin Yang；Lingpeng Kong；Dan Klein,Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers),会议,"https://aclanthology.org/2025.naacl-long.144/
+https://arxiv.org/abs/2407.16347",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序50：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_FactTrack_ Time-Aware World State Tracking in Story Outlines.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.naacl-long.144/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“While accurately detecting and correcting factual contradictions in language model outputs has become increasingly important as their capabilities improve, doing so is highly challenging. We propose a”。"
+51,How Well Do LLMs Handle Cantonese? Benchmarking Cantonese Capabilities of Large Language Models,2025,Jiyue Jiang；Pengan Chen；Liheng Chen；Sheng Wang；Qinghang Bao；Lingpeng Kong；Yu Li；Chuan Wu,Findings of the Association for Computational Linguistics: NAACL 2025,会议,"https://aclanthology.org/2025.findings-naacl.253/
+https://arxiv.org/abs/2408.16756",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序51：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_How Well Do LLMs Handle Cantonese_ Benchmarking Cantonese Capabilities of Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-naacl.253/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“The rapid evolution of large language models (LLMs) has transformed the competitive landscape in natural language processing (NLP), particularly for English and other data-rich languages. However, und”。"
+52,Diffusion of Thought: Chain-of-Thought Reasoning in Diffusion Language Models,2024,Jiacheng Ye；Shansan Gong；Liheng Chen；Lin Zheng；Jiahui Gao；Han Shi；Chuan Wu；Xin Jiang；Zhenguo Li；Wei Bi；Lingpeng Kong,NeurIPS 2024,会议,https://arxiv.org/abs/2402.07754,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序52：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Diffusion of Thought_ Chain-of-Thought Reasoning in Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.07754；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Recently, diffusion models have garnered significant interest in the field of text processing due to their many potential advantages compared to conventional autoregressive models. In this work, we pr”。"
+53,AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents,2024,Chang Ma；Junlei Zhang；Zhihao Zhu；Cheng Yang；Yujiu Yang；Yaohui Jin；Zhenzhong Lan；Lingpeng Kong；Junxian He,NeurIPS 2024,会议,https://arxiv.org/abs/2401.13178,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序53：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2401.13178；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Evaluating Large Language Models (LLMs) as general-purpose agents is essential for understanding their capabilities and facilitating their integration into practical applications. However, the evaluat”。"
+54,Retrieved Sequence Augmentation for Protein Representation Learning,2024,Chang Ma；Haiteng Zhao；Lin Zheng；Jiayi Xin；Qintong Li；Lijun Wu；Zhihong Deng；Yang Young Lu；Qi Liu；Sheng Wang；Lingpeng Kong,Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2024.emnlp-main.104/
+https://www.biorxiv.org/content/10.1101/2023.02.22.529597v3
+https://arxiv.org/abs/2302.12563",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+正式ACL记录有Sheng Wang；下载的arXiv旧版未列Sheng Wang。研究内容用正式记录摘要；其署名单位待核验，其他作者单位未从旧版强行补入。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序54：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Retrieved Sequence Augmentation for Protein Representation Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.emnlp-main.104/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Protein Language Models traditionally depend on Multiple Sequence Alignments (MSA) to incorporate evolutionary knowledge. However, MSA-based approaches suffer from substantial computational overhead a”。"
+55,VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment,2024,Lei Li；Zhihui Xie；Mukai Li；Shunian Chen；Peiyi Wang；Liang Chen；Yazheng Yang；Benyou Wang；Lingpeng Kong；Qi Liu,Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2024.emnlp-main.358/
+https://arxiv.org/abs/2312.10665
+https://arxiv.org/abs/2410.09421",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+版本归并：原候选序141并入序55；候选标题“Silkie: Preference Distillation for Large Visual Language Models”；依据：相同arXiv编号与作者名单。
+下载PDF标题Silkie: Preference Distillation for Large Visual Language Models，早期作者名单不含Qi Liu。ACL正式版标题为VLFeedback。合并关系由共同arXiv标识、作者核心名单与摘要研究内容支持；正文版本差异保留，新增作者单位待核验。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序55：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_VLFeedback_ A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.emnlp-main.358/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“As large vision-language models (LVLMs) evolve rapidly, the demand for high-quality and diverse data to align these models becomes increasingly crucial. However, the creation of such data with human s”。"
+56,Empowering Large Language Model Agents through Action Learning,2024,Haiteng Zhao；Chang Ma；Guoyin Wang；Jing Su；Lingpeng Kong；Jingjing Xu；Zhi-Hong Deng；Hongxia Yang,COLM 2024,会议,https://arxiv.org/abs/2402.15809,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序56：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Empowering Large Language Model Agents through Action Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.15809；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large Language Model (LLM) Agents have recently garnered increasing interest yet they are limited in their ability to learn from trial and error, a key element of intelligent behavior. In this work, w”。"
+57,Corex: Pushing the Boundaries of Complex Reasoning through Multi-Model Collaboration,2024,Qiushi Sun；Zhangyue Yin；Xiang Li；Zhiyong Wu；Xipeng Qiu；Lingpeng Kong,COLM 2024,会议,https://arxiv.org/abs/2310.00280,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序57：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2310.00280；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large Language Models (LLMs) are evolving at an unprecedented pace and have exhibited considerable capability in the realm of natural language processing (NLP) with world knowledge. Benefiting from ul”。"
+58,CoCA: Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration,2024,Jiahui Gao；Renjie Pi；Tianyang Han；Han Wu；Lanqing Hong；Lingpeng Kong；Xin Jiang；Zhenguo Li,COLM 2024,会议,https://arxiv.org/abs/2409.11365,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序58：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2409.11365；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“The deployment of multimodal large language models (MLLMs) has demonstrated remarkable success in engaging in conversations involving visual inputs, thanks to the superior power of large language mode”。"
+59,A Reparameterized Discrete Diffusion Model for Text Generation,2024,Lin Zheng；Jianbo Yuan；Lei Yu；Lingpeng Kong,COLM 2024,会议,"https://arxiv.org/abs/2302.05737
+https://github.com/HKUNLP/reparam-discrete-diffusion",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序59：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_A Reparameterized Discrete Diffusion Model for Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.05737；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“This work studies discrete diffusion probabilistic models with applications to natural language generation. We derive an alternative yet equivalent formulation of the sampling from discrete diffusion ”。"
+60,Multimodal ArXiv: A Dataset for Improving Scientific Comprehension of Large Vision-Language Models,2024,Lei Li；Yuqi Wang；Runxin Xu；Peiyi Wang；Xiachong Feng；Lingpeng Kong；Qi Liu,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.775/
+https://arxiv.org/abs/2403.00231",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序60：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.acl-long.775/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large vision-language models (LVLMs) excel across diverse tasks involving concrete images from natural scenes. However, their ability to interpret abstract figures, such as geometry shapes and scienti”。"
+61,L-Eval: Instituting Standardized Evaluation for Long Context Language Models,2024,Chenxin An；Shansan Gong；Ming Zhong；Xingjian Zhao；Mukai Li；Jun Zhang；Lingpeng Kong；Xipeng Qiu,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.776/
+https://arxiv.org/abs/2307.11088",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序61：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_L-Eval_ Instituting Standardized Evaluation for Long Context Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.776/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 14388–14411”。
+原文摘要依据：“Recently, there has been growing interest in long-context scaling of large language models (LLMs). To facilitate research in this field, we propose L-Eval to institute a more standardized evaluation f”。"
+62,PRoLoRA: Partial Rotation Empowers More Parameter-Efficient LoRA,2024,Sheng Wang；Boyang Xue；Jiacheng Ye；Jiyue Jiang；Liheng Chen；Lingpeng Kong；Chuan Wu,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.156/
+https://arxiv.org/abs/2402.16902",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序62：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_PRoLoRA_ Partial Rotation Empowers More Parameter-Efficient LoRA.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.156/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2829–2841”。
+原文摘要依据：“With the rapid scaling of large language models (LLMs), serving numerouslow-rank adaptations (LoRAs) concurrently has become increasingly impractical,leading to unaffordable costs and necessitating mo”。"
+63,GSM-Plus: A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers,2024,Qintong Li；Leyang Cui；Xueliang Zhao；Lingpeng Kong；Wei Bi,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.163/
+https://arxiv.org/abs/2402.19255",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序63：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_GSM-Plus_ A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.163/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2961–2984”。
+原文摘要依据：“Large language models (LLMs) have achieved impressive performance across various mathematical reasoning benchmarks. However, there are increasing debates regarding whether these models truly understan”。"
+64,LoRA Meets Dropout under a Unified Framework,2024,Sheng Wang；Liheng Chen；Jiyue Jiang；Boyang Xue；Lingpeng Kong；Chuan Wu,Findings of the Association for Computational Linguistics: ACL 2024,会议,"https://aclanthology.org/2024.findings-acl.119/
+https://arxiv.org/abs/2403.00812",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序64：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_LoRA Meets Dropout under a Unified Framework.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.findings-acl.119/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“With the remarkable capabilities, large language models (LLMs) have emergedas essential elements in numerous NLP applications, while parameter-efficientfinetuning, especially LoRA, has gained populari”。"
+65,Achilles-Bench: A Challenging Benchmark for Low-Resource Evaluation,2024,Yudong Wang；Chang Ma；Qingxiu Dong；Zhifang Sui；Lingpeng Kong；Jingjing Xu,Findings of the Association for Computational Linguistics: ACL 2024,会议,"https://arxiv.org/abs/2303.03840
+https://aclanthology.org/2024.findings-acl.123/",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+版本归并：原候选序180并入序65；候选标题“Achilles-Bench: A Challenging Benchmark for Low-Resource Evaluation”；依据：摘要研究问题、11个数据集及作者核心名单一致，采用ACL正式版。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序65：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.findings-acl.123/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“With promising yet saturated results in high-resource settings, low-resource datasets have gradually become crucial benchmarks (e.g., BigBench Hard, superGLUE) for evaluating the learning ability of a”。"
+66,SEGO: Sequential Subgoal Optimization for Mathematical Problem-Solving,2024,Xueliang Zhao；Xinting Huang；Wei Bi；Lingpeng Kong,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.407/
+https://arxiv.org/abs/2310.12960",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序66：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_SEGO_ Sequential Subgoal Optimization for Mathematical Problem-Solving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.407/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 7544–7565”。
+原文摘要依据：“Large Language Models (LLMs) have driven substantial progress in artificial intelligence in recent years, exhibiting impressive capabilities across a wide range of tasks, including mathematical proble”。"
+67,BBA: Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models,2024,Xueliang Zhao；Xinting Huang；Tingchen Fu；Qintong Li；Shansan Gong；Lemao Liu；Wei Bi；Lingpeng Kong,Findings of the Association for Computational Linguistics: ACL 2024,会议,"https://aclanthology.org/2024.findings-acl.433/
+https://arxiv.org/abs/2402.13577",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序67：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_BBA_ Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.findings-acl.433/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Multimodal reasoning stands as a pivotal capability for large vision-language models (LVLMs). The integration with Domain-Specific Languages (DSL), offering precise visual representations, equips thes”。"
+68,Large Language Models are not Fair Evaluators,2024,Peiyi Wang；Lei Li；Liang Chen；Zefan Cai；Dawei Zhu；Binghuai Lin；Yunbo Cao；Lingpeng Kong；Qi Liu；Tianyu Liu；Zhifang Sui,Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2024.acl-long.511/
+https://arxiv.org/abs/2305.17926",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序68：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Large Language Models are not Fair Evaluators.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.511/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 9440–9450”。
+原文摘要依据：“In this paper, we uncover a positional bias in the evaluation paradigm of adopting large language models (LLMs), e.g., GPT-4, as a referee to score and compare the quality of responses generated by ca”。"
+69,Self-Infilling Code Generation,2024,Lin Zheng；Jianbo Yuan；Zhi Zhang；Hongxia Yang；Lingpeng Kong,ICML 2024,会议,https://arxiv.org/abs/2311.17972,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序69：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Self-Infilling Code Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2311.17972；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 41 st International Conference on Machine          terruption point to infill the bypassed context (Figure 1c).”。
+原文摘要依据：“This work introduces self-infilling code generation, a general framework that incorporates infilling operations into auto-regressive decoding. Our approach capitalizes on the observation that recent i”。"
+70,Training- Free Long-Context Scaling of Large Language Models,2024,Chenxin An；Fei Huang；Jun Zhang；Shansan Gong；Xipeng Qiu；Chang Zhou；Lingpeng Kong,ICML 2024,会议,https://arxiv.org/abs/2402.17463,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序70：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Training- Free Long-Context Scaling of Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.17463；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 41 st International Conference on Machine            tion indices or increasing the base frequency in RoPE (Su”。
+原文摘要依据：“The ability of Large Language Models (LLMs) to process and generate coherent text is markedly weakened when the number of input tokens exceeds their pretraining length. Given the expensive overhead of”。"
+71,Decomposing the Enigma: Subgoal-based Demonstration Learning for Formal Theorem Proving,2024,Xueliang Zhao；Wenda Li；Lingpeng Kong,ICML 2024,会议,https://arxiv.org/abs/2305.16366,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序71：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2305.16366；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Large language models~(LLMs) present an intriguing avenue of exploration in the domain of formal theorem proving. Nonetheless, the full utilization of these models, particularly in terms of demonstrat”。"
+72,Multilingual Machine Translation with Large Language Models: Empirical Results and Analysis,2024,Wenhao Zhu；Hongyi Liu；Qingxiu Dong；Jingjing Xu；Shujian Huang；Lingpeng Kong；Jiajun Chen；Lei Li,Findings of the Association for Computational Linguistics: NAACL 2024,会议,"https://aclanthology.org/2024.findings-naacl.176/
+https://arxiv.org/abs/2304.04675",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序72：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.findings-naacl.176/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have demonstrated remarkable potential in handling multilingual machine translation (MMT). In this paper, we systematically investigate the advantages and challenges of LL”。"
+73,Lemur: Harmonizing Natural Language and Code for Language Agents,2024,Yiheng Xu；Hongjin Su；Chen Xing；Boyu Mi；Qian Liu；Weijia Shi；Binyuan Hui；Fan Zhou；Yitao Liu；Tianbao Xie；Zhoujun Cheng；Siheng Zhao；Lingpeng Kong；Bailin Wang；Caiming Xiong；Tao Yu,ICLR 2024,会议,https://arxiv.org/abs/2310.06830,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序73：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Lemur_ Harmonizing Natural Language and Code for Language Agents.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2310.06830；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2024”。
+原文摘要依据：“We introduce Lemur and Lemur-Chat, openly accessible language models optimized for both natural language and coding capabilities to serve as the backbone of versatile language agents. The evolution fr”。"
+74,Can Language Models Understand Physical Concepts?,2023,Lei Li；Jingjing Xu；Qingxiu Dong；Ce Zheng；Xu Sun；Lingpeng Kong；Qi Liu,Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2023.emnlp-main.726/
+https://arxiv.org/abs/2305.14057",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序74：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.emnlp-main.726/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Language models (LMs) gradually become general-purpose interfaces in the interactive and embodied world, where the understanding of physical concepts is an essential prerequisite. However, it is uncle”。"
+75,DetGPT: Detect What You Need via Reasoning,2023,Renjie Pi；Jiahui Gao；Shizhe Diao；Rui Pan；Hanze Dong；Jipeng Zhang；Lewei Yao；Jianhua Han；Hang Xu；Lingpeng Kong；Tong Zhang,Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2023.emnlp-main.876/
+https://arxiv.org/abs/2305.14167",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序75：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.emnlp-main.876/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“In recent years, the field of computer vision has seen significant advancements thanks to the development of large language models (LLMs). These models have enabled more effective and sophisticated in”。"
+76,Generating Data for Symbolic Language with Large Language Models,2023,Jiacheng Ye；Chengzu Li；Lingpeng Kong；Tao Yu,Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2023.emnlp-main.523/
+https://arxiv.org/abs/2305.13917",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序76：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Generating Data for Symbolic Language with Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.emnlp-main.523/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, pages 8418–8443”。
+原文摘要依据：“While large language models (LLMs) bring not only performance but also complexity, recent work has started to turn LLMs into data generators rather than task inferencers, where another affordable task”。"
+77,DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models,2023,Shansan Gong；Mukai Li；Jiangtao Feng；Zhiyong Wu；Lingpeng Kong,Findings of the Association for Computational Linguistics: EMNLP 2023,会议,"https://aclanthology.org/2023.findings-emnlp.660/
+https://arxiv.org/abs/2310.05793",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+CV标题为“Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models”；arXiv标题为“DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models”；相同预印本编号，保留版本信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序77：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_DiffuSeq-v2_ Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-emnlp.660/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Diffusion models have gained prominence in generating high-quality sequences of text. Nevertheless, current approaches predominantly represent discrete text within a continuous diffusion space, which ”。"
+78,GIM- LET: A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning,2023,Haiteng Zhao；Shengchao Liu；Chang Ma；Hannan Xu；Jie Fu；Zhi-Hong Deng；Lingpeng Kong；Qi Liu,NeurIPS 2023,会议,https://arxiv.org/abs/2306.13089,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序78：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2306.13089；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Molecule property prediction has gained significant attention in recent years. The main bottleneck is the label insufficiency caused by expensive lab experiments. In order to alleviate this issue and ”。"
+79,Statistical Knowledge Assessment for Generative Language Models,2023,Qingxiu Dong；Jingjing Xu；Lingpeng Kong；Zhifang Sui；Lei Li,NeurIPS 2023,会议,https://arxiv.org/abs/2305.10519,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+CV标题为“Statistical Knowledge Assessment for Generative Language Models”；arXiv标题为“Statistical Knowledge Assessment for Large Language Models”；相同预印本编号，保留版本信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序79：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Statistical Knowledge Assessment for Generative Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.10519；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Given varying prompts regarding a factoid question, can a large language model (LLM) reliably generate factually correct answers? Existing LLMs may generate distinct responses for different prompts. I”。"
+80,Attentive Multi-Layer Perceptron for Non-autoregressive Generation,2023,Shuyang Jiang；Jun Zhang；Jiangtao Feng；Lin Zheng；Lingpeng Kong,ECML/PKDD 2023,会议,https://arxiv.org/abs/2310.09512,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序80：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2310.09512；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Autoregressive~(AR) generation almost dominates sequence generation for its efficacy. Recently, non-autoregressive~(NAR) generation gains increasing popularity for its efficiency and growing efficacy.”。"
+81,Self-Adaptive In-Context Learning: An Information Compression Perspective for In-Context Example Selection and Ordering,2023,Zhiyong Wu；Yaoxiang Wang；Jiacheng Ye；Lingpeng Kong,Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2023.acl-long.79/
+https://arxiv.org/abs/2212.10375",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序81：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Self-Adaptive In-Context Learning_ An Information Compression Perspective for In-Context Example Selection and Ordering.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.79/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Despite the surprising few-shot performance of in-context learning (ICL), it is still a common practice to randomly sample examples to serve as context. This paper advocates a new principle for ICL: s”。"
+82,Explanation Regeneration via Information Bottleneck,2023,Qintong Li；Zhiyong Wu；Lingpeng Kong；Wei Bi,Findings of the Association for Computational Linguistics: ACL 2023,会议,"https://aclanthology.org/2023.findings-acl.765/
+https://arxiv.org/abs/2212.09603",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序82：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.findings-acl.765/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Explaining the black-box predictions of NLP models naturally and accurately is an important open problem in natural language generation. These free-text explanations are expected to contain sufficient”。"
+83,Lego-MT: Learning Detachable Models for Massively Multilingual Machine Translation,2023,Fei Yuan；Yinquan Lu；Wenhao Zhu；Lingpeng Kong；Lei Li；Yu Qiao；Jingjing Xu,Findings of the Association for Computational Linguistics: ACL 2023,会议,"https://aclanthology.org/2023.findings-acl.731/
+https://arxiv.org/abs/2212.10551",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序83：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Lego-MT_ Learning Detachable Models for Massively Multilingual Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-acl.731/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Multilingual neural machine translation (MNMT) aims to build a unified model for many language directions. Existing monolithic models for MNMT encounter two challenges: parameter interference among la”。"
+84,INK: Injecting kNN Knowledge in Nearest Neighbor Machine Translation,2023,Wenhao Zhu；Jingjing Xu；Shujian Huang；Lingpeng Kong；Jiajun Chen,Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2023.acl-long.888/
+https://arxiv.org/abs/2306.06381",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序84：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_INK_ Injecting kNN Knowledge in Nearest Neighbor Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.888/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Neural machine translation has achieved promising results on many translation tasks. However, previous studies have shown that neural models induce a non-smooth representation space, which harms its g”。"
+85,A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment,2023,Jiyue Jiang；Sheng Wang；Qintong Li；Lingpeng Kong；Chuan Wu,Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2023.acl-long.593/
+https://arxiv.org/abs/2305.08200",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+CV标题为“A Cognitive Stimulation Therapy Dialogue System with Multi-Source Knowledge Fusion for Elders with Cognitive Impairment”；arXiv标题为“A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment”；相同预印本编号，保留版本信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序85：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.593/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“When communicating with elders with cognitive impairment, cognitive stimulation (CS) help to maintain the cognitive health of elders. Data sparsity is the main challenge in building CS-based dialogue ”。"
+86,SORTIE: Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation,2023,Xueliang Zhao；Tingchen Fu；Lemao Liu；Lingpeng Kong；Shuming Shi；Rui Yan,Findings of the Association for Computational Linguistics: ACL 2023,会议,"https://aclanthology.org/2023.findings-acl.715/
+https://aclanthology.org/2023.findings-acl.715.pdf",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序86：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_SORTIE_ Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-acl.715/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Logical data-to-text generation is a representative task in measuring the capabilities of both language generation and complex reasoning. Despite the introduction of reasoning skills in generation, ex”。"
+87,Compositional Exemplars for In-context Learning,2023,Jiacheng Ye；Zhiyong Wu；Jiangtao Feng；Tao Yu；Lingpeng Kong,ICML 2023,会议,"https://arxiv.org/abs/2302.05698
+https://github.com/HKUNLP/icl-ceil",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序87：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Compositional Exemplars for In-context Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.05698；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 40 th International Conference on Machine       7 distinct tasks, including sentiment analysis, paraphrase”。
+原文摘要依据：“Large pretrained language models (LMs) have shown impressive In-Context Learning (ICL) ability, where the model learns to do an unseen task via a prompt consisting of input-output examples as the demo”。"
+88,CAB: Comprehensive Attention Benchmarking on Long Sequence Modeling,2023,Jun Zhang；Shuyang Jiang；Jiangtao Feng；Lin Zheng；Lingpeng Kong,ICML 2023,会议,https://arxiv.org/abs/2210.07661,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序88：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_CAB_ Comprehensive Attention Benchmarking on Long Sequence Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2210.07661；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 40 th International Conference on Machine           causality modeling. We present four patterns of attentions,”。
+原文摘要依据：“Transformer has achieved remarkable success in language, image, and speech processing. Recently, various efficient attention architectures have been proposed to improve transformer's efficiency while ”。"
+89,Fine-grained Audible Video Description,2023,Xuyang Shen；Dong Li；Jinxing Zhou；Zhen Qin；Bowen He；Xiaodong Han；Aixuan Li；Yuchao Dai；Lingpeng Kong；Meng Wang；Yiran Zhong,CVPR 2023,会议,https://arxiv.org/abs/2303.15616,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序89：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2303.15616；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“We explore a new task for audio-visual-language modeling called fine-grained audible video description (FAVD). It aims to provide detailed textual descriptions for the given audible videos, including ”。"
+90,Efficient Attention via Control Variates,2023,Lin Zheng；Jianbo Yuan；Chong Wang；Lingpeng Kong,ICLR 2023,会议,"https://openreview.net/pdf?id=G-uNfHKrj46
+https://arxiv.org/abs/2302.04542",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序90：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Efficient Attention via Control Variates.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.04542；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Random-feature-based attention (RFA) is an efficient approximation of softmax attention with linear runtime and space complexity. However, the approximation gap between RFA and conventional softmax at”。"
+91,Self-Guided Noise-Free Data Generation for Efficient Zero-Shot Learning,2023,Jiahui Gao；Renjie Pi；Lin Yong；Hang Xu；Jiacheng Ye；Zhiyong Wu；Weizhong Zhang；Xiaodan Liang；Zhenguo Li；Lingpeng Kong,ICLR 2023,会议,"https://openreview.net/pdf?id=h5OpjGd_lo6
+https://arxiv.org/abs/2205.12679",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序91：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2205.12679；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“There is a rising interest in further exploring the zero-shot learning potential of large pre-trained language models (PLMs). A new paradigm called data-generation-based zero-shot learning has achieve”。"
+92,Toeplitz Neural Network for Sequence Modeling,2023,Zhen Qin；Xiaodong Han；Weixuan Sun；Bowen He；Dong Li；Dongxu Li；Yuchao Dai；Lingpeng Kong；Yiran Zhong,ICLR 2023,会议,"https://openreview.net/pdf?id=IxmWsm4xrua
+https://arxiv.org/abs/2305.04749",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序92：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Toeplitz Neural Network for Sequence Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.04749；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Sequence modeling has important applications in natural language processing and computer vision. Recently, the transformer-based models have shown strong performance on various sequence modeling tasks”。"
+93,DiffuSeq: Sequence to Sequence Text Generation with Diffusion Models,2023,Shansan Gong；Mukai Li；Jiangtao Feng；Zhiyong Wu；Lingpeng Kong,ICLR 2023,会议,https://arxiv.org/abs/2210.08933,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序93：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_DiffuSeq_ Sequence to Sequence Text Generation with Diffusion Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2210.08933；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Recently, diffusion models have emerged as a new paradigm for generative models. Despite the success in domains using continuous signals such as vision and audio, adapting diffusion models to natural ”。"
+94,Unsupervised Explanation Generation via Correct Instantiations,2023,Sijie Chen；Zhiyong Wu；Jiangjie Chen；Zhixing Li；Yang Liu；Lingpeng Kong,AAAI 2023,会议,https://arxiv.org/abs/2211.11160,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序94：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Unsupervised Explanation Generation via Correct Instantiations.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2211.11160；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“While large pre-trained language models (PLM) have shown their great skills at solving discriminative tasks, a significant gap remains when compared with humans for explanation-related tasks. Among th”。"
+95,ProGen: Progressive Zero-shot Dataset Generation via In-context Feedback,2022,Jiacheng Ye；Jiahui Gao；Zhiyong Wu；Jiangtao Feng；Tao Yu；Lingpeng Kong,Findings of the Association for Computational Linguistics: EMNLP 2022,会议,"https://aclanthology.org/2022.findings-emnlp.269/
+https://arxiv.org/abs/2210.12329",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序95：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ProGen_ Progressive Zero-shot Dataset Generation via In-context Feedback.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.findings-emnlp.269/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Recently, dataset-generation-based zero-shot learning has shown promising results by training a task-specific model with a dataset synthesized from large pre-trained language models (PLMs). The final ”。"
+96,ZeroGen: Efficient Zero-shot Learning via Dataset Generation,2022,Jiacheng Ye；Jiahui Gao；Qintong Li；Hang Xu；Jiangtao Feng；Zhiyong Wu；Tao Yu；Lingpeng Kong,Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2022.emnlp-main.801/
+https://arxiv.org/abs/2202.07922",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序96：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ZeroGen_ Efficient Zero-shot Learning via Dataset Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.801/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 11653–11669”。
+原文摘要依据：“There is a growing interest in dataset generation recently due to the superior generative capacity of large pre-trained language models (PLMs). In this paper, we study a flexible and efficient zero-sh”。"
+97,UnifiedSKG: Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models,2022,Tianbao Xie；Chen Henry Wu；Peng Shi；Ruiqi Zhong；Torsten Scholak；Michihiro Yasunaga；Chien-Sheng Wu；Ming Zhong；Pengcheng Yin；Sida I. Wang；Victor Zhong；Bailin Wang；Chengzu Li；Connor Boyle；Ansong Ni；Ziyu Yao；Dragomir Radev；Caiming Xiong；Lingpeng Kong；Rui Zhang；Noah A. Smith；Luke Zettlemoyer；Tao Yu,Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2022.emnlp-main.39/
+https://arxiv.org/abs/2201.05966",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序97：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2022.emnlp-main.39/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Structured knowledge grounding (SKG) leverages structured knowledge to complete user requests, such as semantic parsing over databases and question answering over knowledge bases. Since the inputs and”。"
+98,The Devil in Linear Transformer,2022,Zhen Qin；Xiaodong Han；Weixuan Sun；Dongxu Li；Lingpeng Kong；Nick Barnes；Yiran Zhong,Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2022.emnlp-main.473/
+https://arxiv.org/abs/2210.10340",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序98：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_The Devil in Linear Transformer.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.473/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Linear transformers aim to reduce the quadratic space-time complexity of vanilla transformers. However, they usually suffer from degraded performances on various tasks and corpus. In this paper, we ex”。"
+99,An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks,2022,Changlong Yu；Tianyi Xiao；Lingpeng Kong；Yangqiu Song；Wilfred Ng,Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/2022.emnlp-main.684/
+https://arxiv.org/abs/2210.13002",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序99：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.684/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 10064–10070”。
+原文摘要依据：“Though linguistic knowledge emerges during large-scale language model pretraining, recent work attempt to explicitly incorporate human-defined linguistic priors into task-specific fine-tuning. Infusin”。"
+100,CoNT: Contrastive Neural Text Generation,2022,Chenxin An；Jiangtao Feng；Kai Lv；Lingpeng Kong；Xipeng Qiu；Xuanjing Huang,NeurIPS 2022,会议,https://arxiv.org/abs/2205.14690,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序100：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_CoNT_ Contrastive Neural Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2205.14690；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Recently, contrastive learning attracts increasing interests in neural text generation as a new solution to alleviate the exposure bias problem. It introduces a sequence-level training signal which is”。"
+101,A Contrastive Framework for Neural Text Generation,2022,Yixuan Su；Tian Lan；Yan Wang；Dani Yogatama；Lingpeng Kong；Nigel Collier,NeurIPS 2022,会议,https://arxiv.org/abs/2202.06417,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序101：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_A Contrastive Framework for Neural Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.06417；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“Text generation is of great importance to many natural language processing applications. However, maximization-based decoding methods (e.g. beam search) of neural language models often lead to degener”。"
+102,Audio-Visual Segmentation,2022,Jinxing Zhou；Jianyuan Wang；Jiayi Zhang；Weixuan Sun；Jing Zhang；Stan Birchfield；Dan Guo；Lingpeng Kong；Meng Wang；Yiran Zhong,ECCV 2022,会议,https://arxiv.org/abs/2207.05042,未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序102：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2207.05042；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We propose to explore a new problem called audio-visual segmentation (AVS), in which the goal is to output a pixel-level map of the object(s) that produce sound at the time of the image frame. To faci”。"
+103,Linear Complexity Randomized Self-attention Mechanism,2022,Lin Zheng；Chong Wang；Lingpeng Kong,ICML 2022,会议,https://arxiv.org/abs/2204.04667,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序103：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Linear Complexity Randomized Self-attention Mechanism.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2204.04667；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 39 th International Conference on Machine        the estimator is still consistent, the bias in question is elusive and”。
+原文摘要依据：“Recently, random feature attentions (RFAs) are proposed to approximate the softmax attention in linear time and space complexity by linearizing the exponential kernel. In this paper, we first propose ”。"
+104,Ripple Attention for Visual Perception with Sub-quadratic Complexity,2022,Lin Zheng；Huijie Pan；Lingpeng Kong,ICML 2022,会议,https://arxiv.org/abs/2110.02453,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序104：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Ripple Attention for Visual Perception with Sub-quadratic Complexity.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2110.02453；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 39 th International Conference on Machine     table technique (§3.3).”。
+原文摘要依据：“Transformer architectures are now central to sequence modeling tasks. At its heart is the attention mechanism, which enables effective modeling of long-term dependencies in a sequence. Recently, trans”。"
+105,Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling,2022,Jakob Prange；Nathan Schneider；Lingpeng Kong,Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies,会议,"https://aclanthology.org/2022.naacl-main.325/
+https://arxiv.org/pdf/2204.09453.pdf
+https://arxiv.org/abs/2112.07874",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序105：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.naacl-main.325/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We examine the extent to which, in principle, different syntactic and semantic graph representations can complement and improve neural language modeling. Specifically, by conditioning on a subgraph en”。"
+106,Event Transition Planning for Open-ended Text Generation,2022,Qintong Li；Piji Li；Wei Bi；Zhaochun Ren；Yuxuan Lai；Lingpeng Kong,Findings of the Association for Computational Linguistics: ACL 2022,会议,https://aclanthology.org/2022.findings-acl.269/,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+CV误链至另一篇论文 arXiv:2204.09453；按论文标题和ACL正式记录消歧，不使用该错误链接。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序106：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Event Transition Planning for Open-ended Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.findings-acl.269/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“Open-ended text generation tasks, such as dialogue generation and story completion, require models to generate a coherent continuation given limited preceding context. The open-ended nature of these t”。"
+107,Lexical Knowledge Internalization for Neural Dialog Generation,2022,Zhiyong Wu；Wei Bi；Xiang Li；Lingpeng Kong；Ben Kao,Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2022.acl-long.547/
+https://arxiv.org/abs/2205.01941",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序107：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Lexical Knowledge Internalization for Neural Dialog Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.acl-long.547/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“We propose knowledge internalization (KI), which aims to complement the lexical knowledge into neural dialog models. Instead of further conditioning the knowledge-grounded dialog (KGD) models on exter”。"
+108,ABC: Attention with Bounded-memory Control,2022,Hao Peng；Jungo Kasai；Nikolaos Pappas；Dani Yogatama；Zhaofeng Wu；Lingpeng Kong；Roy Schwartz；Noah A. Smith,Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2022.acl-long.515/
+https://arxiv.org/abs/2110.02488",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序108：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ABC_ Attention with Bounded-memory Control.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.acl-long.515/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Transformer architectures have achieved state- of-the-art results on a variety of natural language processing (NLP) tasks. However, their attention mechanism comes with a quadratic complexity in seque”。"
+109,cosFormer: Rethinking Softmax In Attention,2022,Zhen Qin；Weixuan Sun；Hui Deng；Dongxu Li；Yunshen Wei；Baohong Lv；Junjie Yan；Lingpeng Kong；Yiran Zhong,ICLR 2022,会议,"https://openreview.net/pdf?id=Bl8CQrx2Up4
+https://arxiv.org/abs/2202.08791",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序109：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_cosFormer_ Rethinking Softmax In Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.08791；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2022”。
+原文摘要依据：“Transformer has shown great successes in natural language processing, computer vision, and audio processing. As one of its core components, the softmax attention helps to capture long-range dependenci”。"
+110,Revisiting Over-smoothing in BERT from the Perspective of Graph,2022,Han Shi；Jiahui Gao；Hang Xu；Xiaodan Liang；Zhenguo Li；Lingpeng Kong；Stephen M. S. Lee；James Kwok,ICLR 2022,会议,"https://openreview.net/pdf?id=dUV91uaXm3
+https://arxiv.org/abs/2202.08625",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序110：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Revisiting Over-smoothing in BERT from the Perspective of Graph.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.08625；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2022”。
+原文摘要依据：“Recently over-smoothing phenomenon of Transformer-based models is observed in both vision and language fields. However, no existing work has delved deeper to further investigate the main cause of this”。"
+111,Cascaded Head-colliding Attention,2021,Lin Zheng；Zhiyong Wu；Lingpeng Kong,Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers),会议,"https://aclanthology.org/2021.acl-long.45/
+https://arxiv.org/abs/2105.14850",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序111：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Cascaded Head-colliding Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.acl-long.45/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Transformers have advanced the field of natural language processing (NLP) on a variety of important tasks. At the cornerstone of the Transformer architecture is the multi-head attention (MHA) mechanis”。"
+112,Good for Misconceived Reasons: An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation,2021,Zhiyong Wu；Lingpeng Kong；Wei Bi；Xiang Li；Ben Kao,Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers),会议,"https://aclanthology.org/2021.acl-long.480/
+https://arxiv.org/abs/2105.14462",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序112：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Good for Misconceived Reasons_ An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.acl-long.480/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“A neural multimodal machine translation (MMT) system is one that aims to perform better translation by extending conventional text-only translation models with multimodal information. Many recent stud”。"
+113,Random Feature Attention,2021,Hao Peng；Nikolaos Pappas；Dani Yogatama；Roy Schwartz；Noah Smith；Lingpeng Kong,ICLR 2021,会议,"https://openreview.net/pdf?id=QtTKTdVrFBB
+https://arxiv.org/abs/2103.02143",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序113：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Random Feature Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2103.02143；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2021”。
+原文摘要依据：“Transformers are state-of-the-art models for a variety of sequence modeling tasks. At their core is an attention function which models pairwise interactions between the inputs at every timestep. While”。"
+114,A Mutual Information Maximization Perspective of Language Representation Learning,2020,Lingpeng Kong；Cyprien de Masson d’Autume；Wang Ling；Lei Yu；Zihang Dai；Dani Yogatama,ICLR 2020,会议,"https://arxiv.org/abs/1910.08350.pdf
+https://arxiv.org/abs/1910.08350",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序114：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_A Mutual Information Maximization Perspective of Language Representation Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1910.08350；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We show state-of-the-art word representation learning methods maximize an objective function that is a lower bound on the mutual information between different parts of a word sequence (i.e., a sentenc”。"
+115,Episodic Memory in Lifelong Language Learning,2019,Cyprien de Masson d’Autume；Sebastian Ruder；Lingpeng Kong；Dani Yogatama,NeurIPS 2019,会议,"https://arxiv.org/pdf/1906.01076.pdf
+https://arxiv.org/abs/1906.01076",未获取,未获取,未获取,2026-09-17,未下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序115：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/1906.01076；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We introduce a lifelong language learning setup where a model needs to learn from a stream of text examples without any dataset identifier. We propose an episodic memory model that performs sparse exp”。"
+116,Variational Smoothing in Recurrent Neural Network Language Models,2019,Lingpeng Kong；Gabor Melis；Wang Ling；Lei Yu；Dani Yogatama,ICLR 2019,会议,"https://arxiv.org/pdf/1901.09296.pdf
+https://arxiv.org/abs/1901.09296",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序116：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2019_Variational Smoothing in Recurrent Neural Network Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1901.09296；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2019”。
+原文摘要依据：“We present a new theoretical perspective of data noising in recurrent neural network language models (Xie et al., 2017). We show that each variant of data noising is an instance of Bayesian recurrent ”。"
+117,Multi-task Learning with CTC and Segmental CRF for Speech Recognition,2017,Liang Lu；Lingpeng Kong；Chris Dyer；Noah A. Smith,INTERSPEECH 2017,会议,"https://arxiv.org/pdf/1702.06378.pdf
+https://arxiv.org/abs/1702.06378",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序117：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_Multi-task Learning with CTC and Segmental CRF for Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1702.06378；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“Segmental conditional random fields (SCRFs) and connectionist temporal classification (CTC) are two sequence labeling methods used for end-to-end training of speech recognition models. Both models def”。"
+118,What Do Recurrent Neural Network Grammars Learn About Syntax?,2017,Adhiguna Kuncoro；Miguel Ballesteros；Lingpeng Kong；Chris Dyer；Graham Neubig；Noah A. Smith,"Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 1, Long Papers",会议,"https://aclanthology.org/E17-1117/
+https://aclweb.org/anthology/E17-1117
+https://arxiv.org/abs/1611.05774",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序118：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_What Do Recurrent Neural Network Grammars Learn About Syntax_.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/E17-1117/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 1, Long Papers, pages 1249–1258,”。
+原文摘要依据：“Recurrent neural network grammars (RNNG) are a recently proposed probablistic generative modeling family for natural language. They show state-of-the-art language modeling and parsing performance. We ”。"
+119,Segmental Recurrent Neural Networks for End-to-end Speech Recognition,2016,Liang Lu；Lingpeng Kong；Chris Dyer；Noah A. Smith；Steve Renals,INTERSPEECH 2016,会议,"https://arxiv.org/pdf/1603.00223.pdf
+https://arxiv.org/abs/1603.00223",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序119：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks for End-to-end Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1603.00223；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“We study the segmental recurrent neural network for end-to-end acoustic modelling. This model connects the segmental conditional random field (CRF) with a recurrent neural network (RNN) used for featu”。"
+120,Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser,2016,Adhiguna Kuncoro；Miguel Ballesteros；Lingpeng Kong；Chris Dyer；Noah A. Smith,Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/D16-1180/
+https://www.aclweb.org/anthology/D16-1180
+https://arxiv.org/abs/1609.07561",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序120：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D16-1180/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing, pages 1744–1753,”。
+原文摘要依据：“We introduce two first-order graph-based dependency parsers achieving a new state of the art. The first is a consensus parser built from an ensemble of independently trained greedy LSTM transition-bas”。"
+121,Segmental Recurrent Neural Networks,2016,Lingpeng Kong；Chris Dyer；Noah A. Smith,ICLR 2016,会议,"https://arxiv.org/pdf/1511.06018.pdf
+https://github.com/clab/dynet/tree/master/examples/segmental-rnn
+https://arxiv.org/abs/1511.06018",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序121：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1511.06018；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2016”。
+原文摘要依据：“We introduce segmental recurrent neural networks (SRNNs) which define, given an input sequence, a joint probability distribution over segmentations of the input and labelings of the segments. Represen”。"
+122,Bayesian Optimization of Text Representations,2015,Dani Yogatama；Lingpeng Kong；Noah A. Smith,Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing,会议,"https://aclanthology.org/D15-1251/
+https://aclweb.org/anthology/D15-1251",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序122：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_Bayesian Optimization of Text Representations.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D15-1251/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing, pages 2100–2105,”。
+原文摘要依据：“When applying machine learning to problems in NLP, there are many choices to make about how to represent input texts. They can have a big effect on performance, but they are often uninteresting to res”。"
+123,Transforming Dependencies into Phrase Structures,2015,Lingpeng Kong；Alexander M. Rush；Noah A. Smith,Proceedings of the 2015 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies,会议,"https://aclanthology.org/N15-1080/
+https://www.aclweb.org/anthology/N15-1080
+https://github.com/ikekonglp/PAD",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序123：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_Transforming Dependencies into Phrase Structures.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/N15-1080/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“We present a new algorithm for transforming dependency parse trees into phrase-structure parse trees. We cast the problem as structured prediction and learn a statistical model. Our algorithm is faste”。"
+124,A Dependency Parser for Tweets,2014,Lingpeng Kong；Nathan Schneider；Swabha Swayamdipta；Archna Bhatia；Chris Dyer；Noah A. Smith,Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP),会议,"https://aclanthology.org/D14-1108/
+https://www.aclweb.org/anthology/D14-1108
+https://github.com/ikekonglp/TweeboParser",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序124：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_A Dependency Parser for Tweets.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D14-1108/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1001–1012,”。
+原文摘要依据：“We describe a new dependency parser for English tweets, TWEEBOPARSER. The parser builds on several contributions: new syntactic annotations for a corpus of tweets (TWEEBANK), with conventions informed”。"
+125,Dependency Parsing for Weibo: An Efficient Probabilistic Logic Programming Approach,2014,William Yang Wang；Lingpeng Kong；Kathryn Mazaitis；William W. Cohen,Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP),会议,"https://aclanthology.org/D14-1122/
+https://www.aclweb.org/anthology/D14-1122",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序125：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_Dependency Parsing for Weibo_ An Efficient Probabilistic Logic Programming Approach.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D14-1122/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1152–1158,”。
+原文摘要依据：“Dependency parsing is a core task in NLP, and it is widely used by many applications such as information extraction, question answering, and machine translation. In the era of social media, a big chal”。"
+126,Formalization and Rules for Recognition of Satirical Irony,2011,Lingpeng Kong；Likun Qiu,IALP 2011,会议,https://ikekonglp.github.io/paper/ialp11a.pdf,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序126：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2011_Formalization and Rules for Recognition of Satirical Irony.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://ikekonglp.github.io/paper/ialp11a.pdf；访问2026-09-17。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“2011 International Conference on Asian Language Processing”。
+原文摘要依据：“Satirical irony is a very important language phenomena. Its recognition is of great importance to sentiment analysis. However, researches on this topic are still quite rare and existing studies have p”。"
+127,Improving Chinese Dependency Parsing with Self-Disambiguating Patterns,2011,Likun Qiu；Lei Wu；Kai Zhao；Changjian Hu；Lingpeng Kong,IALP 2011,会议,https://ikekonglp.github.io/paper/ialp11b.pdf,未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；访问2026-09-17；非Scholar全量成果。
+作者顺序采用PDF首页；CV中Kai Zhao和Changjian Hu顺序相反。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序127：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2011_Improving Chinese Dependency Parsing with Self-Disambiguating Patterns.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://ikekonglp.github.io/paper/ialp11b.pdf；访问2026-09-17。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“2011 International Conference on Asian Language Processing”。
+原文摘要依据：“To solve the data sparseness problem in dependency parsing, most previous studies used features constructed from large-scale auto-parsed data. Unlike previous work, we propose a new approach to improv”。"
+128,Neural Representation Learning in Linguistic Structured Prediction,2017,Lingpeng Kong,卡内基梅隆大学博士学位论文,学位论文,https://ikekonglp.github.io/thesis_draft.pdf,未获取,未获取,未获取,2026-09-17,不适用,学位论文不计入175篇论文；仅作博士阶段补查证据。来源CV第12页。
+129,Document Context Language Models,2016,Yangfeng Ji；Trevor Cohn；Lingpeng Kong；Chris Dyer；Jacob Eisenstein,". In International Conference on Learning Representations Workshop Track, San Juan, Puerto Rico, May 2016.",Workshop,"https://arxiv.org/pdf/1511.03962.pdf
+https://arxiv.org/abs/1511.03962",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序129：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Document Context Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1511.03962；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第13页；版本2026-01-27。
+PDF发表标记：“Workshop track - ICLR 2016”。
+原文摘要依据：“Text documents are structured on multiple levels of detail: individual words are related by syntax, but larger units of text are related by discourse structure. Existing language models generally fail”。"
+130,ACBiMA: Advanced Chinese Bi-Character Word Morphological Analyzer,2015,Ting-Hao Huang；Yun-Nung Chen；Lingpeng Kong,Proceedings of the Eighth SIGHAN Workshop on Chinese Language Processing,Workshop,"https://aclanthology.org/W15-3105/
+https://www.aclweb.org/anthology/W15-3105
+https://github.com/windx0303/ACBiMA",未获取,未获取,未获取,2026-09-17,已下载,"来源：CV；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序130：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_ACBiMA_ Advanced Chinese Bi-Character Word Morphological Analyzer.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/W15-3105/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第13页；版本2026-01-27。
+PDF发表标记：“Proceedings of the Eighth SIGHAN Workshop on Chinese Language Processing (SIGHAN-8), pages 26–31,”。
+原文摘要依据：“While morphological information has been demonstrated to be useful for various Chinese NLP tasks, there is still a lack of complete theories, category schemes, and toolkits for Chinese morphology. Thi”。"
+131,SNCSE: Contrastive Learning for Unsupervised Sentence Embedding with Soft Negative Samples,2022,Hao Wang；Yangguang Li；Zhen Huang；Yong Dou；Lingpeng Kong；Jing Shao,arXiv,预印本,https://arxiv.org/abs/2201.05979,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序131：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_SNCSE_ Contrastive Learning for Unsupervised Sentence Embedding with Soft Negative Samples.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2201.05979；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Unsupervised sentence embedding aims to obtain the most appropriate embedding for a sentence to reflect its semantic. Contrastive learning has been attracting developing attention. For a sentence, cur”。"
+132,Language Models Can See: Plugging Visual Controls in Text Generation,2022,Yixuan Su；Tian Lan；Yahui Liu；Fangyu Liu；Dani Yogatama；Yan Wang；Lingpeng Kong；Nigel Collier,arXiv,预印本,https://arxiv.org/abs/2205.02655,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序132：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2205.02655；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Generative language models (LMs) such as GPT-2/3 can be prompted to generate text with remarkable quality. While they are designed for text-prompted generation, it remains an open question how the gen”。"
+133,Audio-Visual Segmentation with Semantics,2023,Jinxing Zhou；Xuyang Shen；Jianyuan Wang；Jiayi Zhang；Weixuan Sun；Jing Zhang；Stan Birchfield；Dan Guo；Lingpeng Kong；Meng Wang；Yiran Zhong,arXiv,预印本,https://arxiv.org/abs/2301.13190,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序133：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2301.13190；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We propose a new problem called audio-visual segmentation (AVS), in which the goal is to output a pixel-level map of the object(s) that produce sound at the time of the image frame. To facilitate this”。"
+134,In-Context Learning with Many Demonstration Examples,2023,Mukai Li；Shansan Gong；Jiangtao Feng；Yiheng Xu；Jun Zhang；Zhiyong Wu；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2302.04931,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序134：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_In-Context Learning with Many Demonstration Examples.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.04931；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large pre-training language models (PLMs) have shown promising in-context learning abilities. However, due to the backbone transformer architecture, existing PLMs are bottlenecked by the memory and co”。"
+135,TTIDA: Controllable Generative Data Augmentation via Text-to-Text and Text-to-Image Models,2023,Yuwei Yin；Jean Kaddour；Xiang Zhang；Yixin Nie；Zhenguang Liu；Lingpeng Kong；Qi Liu,arXiv,预印本,https://arxiv.org/abs/2304.08821,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序135：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2304.08821；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Data augmentation has been established as an efficacious approach to supplement useful information for low-resource datasets. Traditional augmentation techniques such as noise injection and image tran”。"
+136,Optimizing Non-Autoregressive Transformers with Contrastive Learning,2023,Chenxin An；Jiangtao Feng；Fei Huang；Xipeng Qiu；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2305.13667,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序136：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Optimizing Non-Autoregressive Transformers with Contrastive Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.13667；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Non-autoregressive Transformers (NATs) reduce the inference latency of Autoregressive Transformers (ATs) by predicting words all at once rather than in sequential order. They have achieved remarkable ”。"
+137,M$^3$IT: A Large-Scale Dataset towards Multi-Modal Multilingual Instruction Tuning,2023,Lei Li；Yuwei Yin；Shicheng Li；Liang Chen；Peiyi Wang；Shuhuai Ren；Mukai Li；Yazheng Yang；Jingjing Xu；Xu Sun；Lingpeng Kong；Qi Liu,arXiv,预印本,https://arxiv.org/abs/2306.04387,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序137：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_M$^3$IT_ A Large-Scale Dataset towards Multi-Modal Multilingual Instruction Tuning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2306.04387；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Instruction tuning has significantly advanced large language models (LLMs) such as ChatGPT, enabling them to align with human instructions across diverse tasks. However, progress in open vision-langua”。"
+138,Language Versatilists vs. Specialists: An Empirical Revisiting on Multilingual Transfer Ability,2023,Jiacheng Ye；Xijia Tao；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2306.06688,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序138：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Language Versatilists vs. Specialists_ An Empirical Revisiting on Multilingual Transfer Ability.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2306.06688；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Multilingual transfer ability, which reflects how well the models fine-tuned on one source language can be applied to other languages, has been well studied in multilingual pre-trained models (e.g., B”。"
+139,Extrapolating Large Language Models to Non-English by Aligning Languages,2023,Wenhao Zhu；Yunzhe Lv；Qingxiu Dong；Fei Yuan；Jingjing Xu；Shujian Huang；Lingpeng Kong；Jiajun Chen；Lei Li,arXiv,预印本,https://arxiv.org/abs/2308.04948,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序139：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2308.04948；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Existing large language models show disparate capability across different languages, due to the imbalance in the training data. Their performances on English tasks are often stronger than on tasks of ”。"
+140,Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks,2025,Qintong Li；Leyang Cui；Lingpeng Kong；Wei Bi,Proceedings of the 31st International Conference on Computational Linguistics,会议,"https://aclanthology.org/2025.coling-main.688/
+https://arxiv.org/abs/2310.19740",未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序140：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.coling-main.688/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Previous work adopts large language models (LLMs) as evaluators to evaluate natural language process (NLP) tasks. However, certain shortcomings, e.g., fairness, scope, and accuracy, persist for curren”。"
+142,Linear Attention via Orthogonal Memory,2023,Jun Zhang；Shuyang Jiang；Jiangtao Feng；Lin Zheng；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2312.11135,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序142：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2312.11135；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Efficient attentions have greatly improved the computational efficiency of Transformers. However, most existing linear attention mechanisms suffer from an \emph{efficiency degradation} problem, leadin”。"
+143,OS-Copilot: Towards Generalist Computer Agents with Self-Improvement,2024,Zhiyong Wu；Chengcheng Han；Zichen Ding；Zhenmin Weng；Zhoumianze Liu；Shunyu Yao；Tao Yu；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2402.07456,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序143：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2402.07456；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Autonomous interaction with the computer has been a longstanding challenge with great potential, and the recent proliferation of large language models (LLMs) has markedly accelerated progress in build”。"
+144,"A Survey of Neural Code Intelligence: Paradigms, Advances and Beyond",2024,Qiushi Sun；Zhirui Chen；Fangzhi Xu；Kanzhi Cheng；Chang Ma；Zhangyue Yin；Jianing Wang；Chengcheng Han；Renyu Zhu；Shuai Yuan；Qipeng Guo；Xipeng Qiu；Pengcheng Yin；Xiaoli Li；Fei Yuan；Lingpeng Kong；Xiang Li；Zhiyong Wu,arXiv,预印本,https://arxiv.org/abs/2403.14734,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序144：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2403.14734；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Neural Code Intelligence -- leveraging deep learning to understand, generate, and optimize code -- holds immense potential for transformative impacts on the whole society. Bridging the gap between Nat”。"
+145,Data Augmentation of Multi-turn Psychological Dialogue via Knowledge-driven Progressive Thought Prompting,2024,Jiyue Jiang；Liheng Chen；Sheng Wang；Lingpeng Kong；Yu Li；Chuan Wu,arXiv,预印本,https://arxiv.org/abs/2406.16567,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序145：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Data Augmentation of Multi-turn Psychological Dialogue via Knowledge-driven Progressive Thought Prompting.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2406.16567；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Existing dialogue data augmentation (DA) techniques predominantly focus on augmenting utterance-level dialogues, which makes it difficult to take dialogue contextual information into account. The adve”。"
+146,SubgoalXL: Subgoal-based Expert Learning for Theorem Proving,2024,Xueliang Zhao；Lin Zheng；Haige Bo；Changran Hu；Urmish Thakker；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2408.11172,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序146：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_SubgoalXL_ Subgoal-based Expert Learning for Theorem Proving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2408.11172；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Formal theorem proving, a field at the intersection of mathematics and computer science, has seen renewed interest with advancements in large language models (LLMs). This paper introduces SubgoalXL, a”。"
+147,UncertaintyRAG: Span-Level Uncertainty Enhanced Long-Context Modeling for Retrieval-Augmented Generation,2024,Zixuan Li；Jing Xiong；Fanghua Ye；Chuanyang Zheng；Xun Wu；Jianqiao Lu；Zhongwei Wan；Xiaodan Liang；Chengming Li；Zhenan Sun；Lingpeng Kong；Ngai Wong,arXiv,预印本,https://arxiv.org/abs/2410.02719,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序147：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_UncertaintyRAG_ Span-Level Uncertainty Enhanced Long-Context Modeling for Retrieval-Augmented Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.02719；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We present UncertaintyRAG, a novel approach for long-context Retrieval-Augmented Generation (RAG) that utilizes Signal-to-Noise Ratio (SNR)-based span uncertainty to estimate similarity between text c”。"
+148,TMGBench: A Systematic Game Benchmark for Evaluating Strategic Reasoning Abilities of LLMs,2024,Haochuan Wang；Xiachong Feng；Lei Li；Yu Guo；Zhanyue Qin；Dianbo Sui；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2410.10479,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序148：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2410.10479；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The rapid advancement of large language models has accelerated their application in reasoning, with strategic reasoning drawing increasing attention. To evaluate the strategic reasoning capabilities o”。"
+149,Understanding the Role of LLMs in Multimodal Evaluation Benchmarks,2024,Botian Jiang；Lei Li；Xiaonan Li；Zhaowei Li；Xiachong Feng；Lingpeng Kong；Qi Liu；Xipeng Qiu,arXiv,预印本,https://arxiv.org/abs/2410.12329,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序149：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Understanding the Role of LLMs in Multimodal Evaluation Benchmarks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.12329；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The rapid advancement of Multimodal Large Language Models (MLLMs) has been accompanied by the development of various benchmarks to evaluate their capabilities. However, the true nature of these evalua”。"
+151,BioMaze: Benchmarking and Enhancing Large Language Models for Biological Pathway Reasoning,2025,Haiteng Zhao；Chang Ma；Fangzhi Xu；Lingpeng Kong；Zhi-Hong Deng,arXiv,预印本,https://arxiv.org/abs/2502.16660,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序151：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_BioMaze_ Benchmarking and Enhancing Large Language Models for Biological Pathway Reasoning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2502.16660；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The applications of large language models (LLMs) in various biological domains have been explored recently, but their reasoning ability in complex biological systems, such as pathways, remains underex”。"
+153,Scaling Reasoning without Attention,2025,Xueliang Zhao；Wei Wu；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2505.22425,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序153：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Scaling Reasoning without Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2505.22425；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) have made significant advances in complex reasoning tasks, yet they remain bottlenecked by two core challenges: architectural inefficiency due to reliance on Transformers,”。"
+154,Dream 7B: Diffusion Large Language Models,2025,Jiacheng Ye；Zhihui Xie；Lin Zheng；Jiahui Gao；Zirui Wu；Xin Jiang；Zhenguo Li；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2508.15487,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序154：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream 7B_ Diffusion Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2508.15487；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We introduce Dream 7B, the most powerful open diffusion large language model to date. Unlike autoregressive (AR) models that generate tokens sequentially, Dream 7B employs discrete diffusion modeling ”。"
+155,Dream-Coder 7B: An Open Diffusion Language Model for Code,2025,Zhihui Xie；Jiacheng Ye；Lin Zheng；Jiahui Gao；Jingwei Dong；Zirui Wu；Xueliang Zhao；Shansan Gong；Xin Jiang；Zhenguo Li；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2509.01142,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序155：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream-Coder 7B_ An Open Diffusion Language Model for Code.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.01142；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We present Dream-Coder 7B, an open-source discrete diffusion language model for code generation that exhibits emergent any-order generation capabilities. Unlike traditional autoregressive (AR) models ”。"
+156,LongEmotion: Measuring Emotional Intelligence of Large Language Models in Long-Context Interaction,2025,Weichu Liu；Jing Xiong；Yuxuan Hu；Zixuan Li；Minghuan Tan；Ningning Mao；Hui Shen；Wendong Xu；Chaofan Tao；Min Yang；Chengming Li；Lingpeng Kong；Ngai Wong,arXiv,预印本,https://arxiv.org/abs/2509.07403,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序156：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2509.07403；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) have made significant progress in Emotional Intelligence (EI) and long-context modeling. However, existing benchmarks often overlook the fact that emotional information pr”。"
+157,PromptCoT 2.0: Scaling Prompt Synthesis for Large Language Model Reasoning,2025,Xueliang Zhao；Wei Wu；Jian Guan；Zhuocheng Gong；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2509.19894,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序157：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_PromptCoT 2.0_ Scaling Prompt Synthesis for Large Language Model Reasoning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.19894；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) are evolving from conversational systems into strong reasoners for tasks such as Olympiad mathematics and competitive programming. While scaling parameters and test-time c”。"
+158,OS-Sentinel: Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows,2026,Qiushi Sun；Mukai Li；Zhoumianze Liu；Zhihui Xie；Fangzhi Xu；Zhangyue Yin；Kanzhi Cheng；Zehao Li；Zichen Ding；Qi Liu；Zhiyong Wu；Zhuosheng Zhang；Ben Kao；Lingpeng Kong,Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2026.acl-long.431/
+https://arxiv.org/abs/2510.24411",未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序158：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2026.acl-long.431/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Computer-using agents powered by Vision-Language Models (VLMs) have demonstrated human-like capabilities in operating digital environments like mobile platforms. While these agents hold great promise ”。"
+159,Reasoning Path Divergence: A New Metric and Curation Strategy to Unlock LLM Diverse Thinking,2025,Feng Ju；Zeyu Qin；Rui Min；Zhitao He；Lingpeng Kong；Yi R. Fung,arXiv,预印本,https://arxiv.org/abs/2510.26122,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序159：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Reasoning Path Divergence_ A New Metric and Curation Strategy to Unlock LLM Diverse Thinking.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2510.26122；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“While Test-Time Scaling (TTS) has proven effective in improving the reasoning ability of large language models (LLMs), low diversity in model outputs often becomes a bottleneck; this is partly caused ”。"
+160,DoPE: Denoising Rotary Position Embedding,2025,Jing Xiong；Liyang Fan；Hui Shen；Zunhai Su；Min Yang；Lingpeng Kong；Ngai Wong,arXiv,预印本,https://arxiv.org/abs/2511.09146,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序160：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_DoPE_ Denoising Rotary Position Embedding.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2511.09146；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Positional encoding is essential for large language models (LLMs) to represent sequence order, yet recent studies show that Rotary Position Embedding (RoPE) can induce massive activation. We investiga”。"
+161,Beyond Confidence: Adaptive and Coherent Decoding for Diffusion Language Models,2025,Kecheng Chen；Ziru Liu；Xijia Tao；Hui Liu；Xinyu Fu；Suiyun Zhang；Dandan Tu；Lingpeng Kong；Rui Liu；Haoliang Li,arXiv,预印本,https://arxiv.org/abs/2512.02044,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序161：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Beyond Confidence_ Adaptive and Coherent Decoding for Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2512.02044；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Diffusion Language Models (DLMs) have recently achieved significant success due to their any-order generation capabilities. However, existing inference methods typically rely on local, immediate-step ”。"
+162,Dream-VL & Dream-VLA: Open Vision-Language and Vision-Language-Action Models with Diffusion Language Model Backbone,2025,Jiacheng Ye；Shansan Gong；Jiahui Gao；Junming Fan；Shuang Wu；Wei Bi；Haoli Bai；Lifeng Shang；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2512.22615,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序162：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream-VL & Dream-VLA_ Open Vision-Language and Vision-Language-Action Models with Diffusion Language Model Backbone.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2512.22615；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“While autoregressive Large Vision-Language Models (VLMs) have achieved remarkable success, their sequential generation often limits their efficacy in complex visual planning and dynamic robotic contro”。"
+163,MMFormalizer: Multimodal Autoformalization in the Wild,2026,Jing Xiong；Qi Han；Yunta Hsieh；Hui Shen；Huajian Xin；Chaofan Tao；Chenyang Zhao；Hengyuan Zhang；Taiqiang Wu；Zhen Zhang；Haochen Wang；Zhongwei Wan；Lingpeng Kong；Ngai Wong,arXiv,预印本,https://arxiv.org/abs/2601.03017,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序163：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2601.03017；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Autoformalization, which translates natural language mathematics into formal statements to enable machine reasoning, faces fundamental challenges in the wild due to the multimodal nature of the physic”。"
+164,Proxy Compression for Language Modeling,2026,Lin Zheng；Xinyu Li；Qian Liu；Xiachong Feng；Lingpeng Kong,arXiv,会议,https://arxiv.org/abs/2602.04289,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序164：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Proxy Compression for Language Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.04289；访问2026-09-17；arXiv作者顺序和摘要。
+PDF发表标记：“Proceedings of the 43 International Conference on Machine               trasting it with compressed sequences often derived from that byte”。
+原文摘要依据：“Modern language models are trained almost exclusively on token sequences produced by a fixed tokenizer, an external lossless compressor often over UTF-8 byte sequences, thereby coupling the model to t”。"
+165,DLM-Scope: Mechanistic Interpretability of Diffusion Language Models via Sparse Autoencoders,2026,Xu Wang；Bingqing Jiang；Yu Wan；Baosong Yang；Lingpeng Kong；Difan Zou,arXiv,预印本,https://arxiv.org/abs/2602.05859,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序165：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2602.05859；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Sparse autoencoders (SAEs) have become a standard tool for mechanistic interpretability in autoregressive large language models (LLMs), enabling researchers to extract sparse, human-interpretable feat”。"
+166,ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Emergent Adaptation,2026,Jingqi Zhou；Sheng Wang；Dezhao Deng；Junwen Lu；Junwei Su；Qintong Li；Jiahui Gao；Hao Wu；Jiyue Jiang；Lingpeng Kong；Dunhong Jin；Chuan Wu,arXiv,预印本,https://arxiv.org/abs/2602.07883,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序166：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ToolSelf_ Unifying Task Execution and Self-Reconfiguration via Tool-Driven Emergent Adaptation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.07883；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“LLM-powered agentic systems excel at complex long-horizon tasks, but remain constrained by static configurations fixed before execution. Such rigidity forces a trade-off between domain-specific perfor”。"
+167,TimeChat-Captioner: Scripting Multi-Scene Videos with Time-Aware and Structural Audio-Visual Captions,2026,Linli Yao；Yuancheng Wei；Yaojie Zhang；Lei Li；Xinlong Chen；Feifan Song；Ziyue Wang；Kun Ouyang；Yuanxin Liu；Lingpeng Kong；Qi Liu；Pengfei Wan；Kun Gai；Yuanxing Zhang；Xu Sun,arXiv,预印本,https://arxiv.org/abs/2602.08711,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序167：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2602.08711；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“This paper proposes Omni Dense Captioning, a novel task designed to generate continuous, fine-grained, and structured audio-visual narratives with explicit timestamps. To ensure dense semantic coverag”。"
+168,Claw-Eval: Towards Trustworthy Evaluation of Autonomous Agents,2026,Bowen Ye；Rang Li；Qibin Yang；Yuanxin Liu；Linli Yao；Hanglong Lv；Zhihui Xie；Chenxin An；Lei Li；Lingpeng Kong；Qi Liu；Zhifang Sui；Tong Yang,arXiv,预印本,https://arxiv.org/abs/2604.06132,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序168：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Claw-Eval_ Towards Trustworthy Evaluation of Autonomous Agents.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2604.06132；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models are increasingly deployed as autonomous agents for multi-step workflows in real-world software environments. However, existing agent benchmarks are limited by trajectory-opaque g”。"
+169,ImplicitMemBench: Measuring Unconscious Behavioral Adaptation in Large Language Models,2026,Chonghan Qin；Xiachong Feng；Weitao Ma；Xiaocheng Feng；Lingpeng Kong,Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2026.acl-long.1301/
+https://arxiv.org/abs/2604.08064",未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序169：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ImplicitMemBench_ Measuring Unconscious Behavioral Adaptation in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.acl-long.1301/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+PDF发表标记：“Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 28232–28261”。
+原文摘要依据：“Existing memory benchmarks for LLM agents evaluate explicit recall of facts, yet overlook implicit memory where experience becomes automated behavior without conscious retrieval. This gap is critical:”。"
+170,Stratagem: Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play,2026,Xiachong Feng；Deyi Yin；Xiaocheng Feng；Yi Jiang；Libo Qin；Yangfan Ye；Lei Huang；Weitao Ma；Qiming Li；Yuxuan Gu；Bing Qin；Lingpeng Kong,Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers),会议,"https://aclanthology.org/2026.acl-long.897/
+https://arxiv.org/abs/2604.17696",未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序170：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Stratagem_ Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.acl-long.897/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+PDF发表标记：“Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 19595–19614”。
+原文摘要依据：“Games offer a compelling paradigm for developing general reasoning capabilities in language models, as they naturally demand strategic planning, probabilistic inference, and adaptive decision-making. ”。"
+171,SAVOIR: Learning Social Savoir-Faire via Shapley-based Reward Attribution,2026,Xiachong Feng；Yi Jiang；Xiaocheng Feng；Deyi Yin；Libo Qin；Yangfan Ye；Lei Huang；Weitao Ma；Yuxuan Gu；Chonghan Qin；Bing Qin；Lingpeng Kong,Findings of the Association for Computational Linguistics: ACL 2026,会议,"https://aclanthology.org/2026.findings-acl.699/
+https://arxiv.org/abs/2604.18982",未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；ACL；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序171：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SAVOIR_ Learning Social Savoir-Faire via Shapley-based Reward Attribution.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.findings-acl.699/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Social intelligence, the ability to navigate complex interpersonal interactions, presents a fundamental challenge for language agents. Training such agents via reinforcement learning requires solving ”。"
+172,The Granularity Axis: A Micro-to-Macro Latent Direction for Social Roles in Language Models,2026,Chonghan Qin；Xiachong Feng；Ziyun Song；Xiaocheng Feng；Jing Xiong；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2605.06196,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序172：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_The Granularity Axis_ A Micro-to-Macro Latent Direction for Social Roles in Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2605.06196；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) are routinely prompted to take on social roles ranging from individuals to institutions, yet it remains unclear whether their internal representations encode the granulari”。"
+173,Self-Distilled Trajectory-Aware Boltzmann Modeling: Bridging the Training-Inference Discrepancy in Diffusion Language Models,2026,Kecheng Chen；Ziru Liu；Xijia Tao；Hui Liu；Yibing Liu；Xinyu Fu；Shi Wu；Suiyun Zhang；Dandan Tu；Lingpeng Kong；Rui Liu；Haoliang Li,arXiv,预印本,https://arxiv.org/abs/2605.11854,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序173：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Self-Distilled Trajectory-Aware Boltzmann Modeling_ Bridging the Training-Inference Discrepancy in Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2605.11854；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Diffusion Language Models (DLMs) have recently emerged as a promising alternative to autoregressive language models, offering stronger global awareness and highly parallel generation. However, post-tr”。"
+174,DreamReasoner-8B: Block-Size Curriculum Learning for Diffusion Reasoning Models,2026,Zirui Wu；Lin Zheng；Jiacheng Ye；Shansan Gong；Xueliang Zhao；Yansong Feng；Wei Bi；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2606.19257,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序174：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_DreamReasoner-8B_ Block-Size Curriculum Learning for Diffusion Reasoning Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2606.19257；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Block diffusion language models accelerate decoding through parallel block-wise denoising, yet whether they can be reliably scaled for long chain-of-thought (CoT) reasoning remains unresolved. To this”。"
+175,SoftSkill: Behavioral Compression for Contextual Adaptation,2026,Xijia Tao；Yihua Teng；Xinyu Fu；Ziru Liu；Kecheng Chen；Yuzhi Zhao；Suiyun Zhang；Rui Liu；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2606.20333,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序175：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SoftSkill_ Behavioral Compression for Contextual Adaptation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2606.20333；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Agent skills are commonly deployed as natural-language Markdown files that encode answer policies, evidence-use habits, and task procedures. These files are readable and portable, but they are consume”。"
+176,OSReward: Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models,2026,Qiushi Sun；Kanzhi Cheng；Yian Wang；Bowen Yang；Hang Yan；Liheng Chen；Fangzhi Xu；Zichen Ding；Nuo Chen；Jialin Cao；Xingdong Gong；Zehao Li；Kaiming Jin；Xinfeng Yuan；Zhoumianze Liu；Jingyang Gong；Zhangyue Yin；Jiahui Gao；Zhiyong Wu；Tianbao Xie；Jianbing Zhang；Ben Kao；Lingpeng Kong,arXiv,预印本,https://arxiv.org/abs/2607.28609,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序176：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2607.28609；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Computer-using agents (CUAs) are advancing rapidly across the digital world. A CUA trajectory records the agent's actions, states, and reasoning. Verifying whether it fulfilled the task instruction is”。"
+177,Structuring Semantic Embeddings for Principle Evaluation: A Prototype-Guided Contrastive Learning Approach,2026,Che Shen；Junwei Su；Lingpeng Kong；Chuan Wu,Transactions on Machine Learning Research (08/2026),期刊,https://arxiv.org/abs/2608.15224,未获取,未获取,未获取,2026-09-17,已下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+下载PDF首页明确标明Published in Transactions on Machine Learning Research (08/2026)，并给出OpenReview链接https://openreview.net/forum?id=nZCPG2Aarv。API仍标为arXiv，展示采用PDF公开发表信息。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序177：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Structuring Semantic Embeddings for Principle Evaluation_ A Prototype-Guided Contrastive Learning Approach.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2608.15224；访问2026-09-17；arXiv作者顺序和摘要。
+PDF发表标记：“Published in Transactions on Machine Learning Research (08/2026)”。
+原文摘要依据：“Reliable post-hoc evaluation asks whether already generated text satisfies a target criterion after generation. In this paper we study a focused frozen-embedding setting using principle-evaluation pro”。"
+178,PersonaForge: Realistic Multi-Turn User Simulation for Agentic Systems,2026,Hanglong Lv；Dawei Zhu；Lei Li；Bowen Ye；Huaqiu Liu；Yifan Song；Bofei Gao；Weimin Xiong；Jinhao Dong；Chenhong He；Lingpeng Kong；Qi Liu；Tong Yang；Fuli Luo,arXiv,预印本,https://arxiv.org/abs/2608.28378,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序178：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2608.28378；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models are increasingly used as agentic workflow executors, yet existing training data and benchmarks largely assume informationally complete, single-turn queries. Our analysis of 16K r”。"
+179,Semantic Head Specialization Guides Hybrid ViT Attention for Multimodal LLMs,2026,Chenhong He；Lei Li；Shicheng Li；Hanglong Lv；Lingpeng Kong；Qi Liu；Tong Yang；Shuhuai Ren,arXiv,预印本,https://arxiv.org/abs/2608.28383,未获取,未获取,未获取,2026-09-17,未下载,"来源：arXiv；访问2026-09-17；非Scholar全量成果。
+Scholar访问失败，引用未获取（2026-09-17）。
+论文信息汇总.csv 序179：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2608.28383；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Hybrid attention dominates frontier LLMs, yet Vision Transformers (ViTs) in multimodal LLMs lack a satisfactory hybrid design, with no consensus on why certain attention patterns work better. To fill ”。"

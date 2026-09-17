@@ -1,0 +1,193 @@
+                              Dependency Parsing for Weibo:
+                 An Efficient Probabilistic Logic Programming Approach
+             William Yang Wang, Lingpeng Kong, Kathryn Mazaitis, William W. Cohen
+                   Language Technologies Institute & Machine Learning Department
+                                    Carnegie Mellon University
+                                    Pittsburgh, PA 15213, USA.
+                      {yww,lingpenk,krivard,wcohen}@cs.cmu.edu
+
+
+                         Abstract                             there are fewer resources in other languages in
+                                                              general. Second, microblog posts are typically
+         Dependency parsing is a core task in NLP,            short, noisy (Gimpel et al., 2011), and can be
+         and it is widely used by many applica-               considered as a “dialect”, which is very differ-
+         tions such as information extraction, ques-          ent from news data. Due to the differences in
+         tion answering, and machine translation.             genre, part-of-speech taggers and parsers trained
+         In the era of social media, a big chal-              on newswire corpora typically fail on social media
+         lenge is that parsers trained on traditional         texts. Third, most existing parsers use language-
+         newswire corpora typically suffer from the           independent standard features (McDonald et al.,
+         domain mismatch issue, and thus perform              2005), and these features may not be optimal for
+         poorly on social media data. We present a            Chinese (Martins, 2012). To most of the applica-
+         new GFL/FUDG-annotated Chinese tree-                 tion developers, the parser is more like a blackbox,
+         bank with more than 18K tokens from Sina             which is not directly programmable. Therefore,
+         Weibo (the Chinese equivalent of Twit-               it is non-trivial to adapt these generic parsers to
+         ter). We formulate the dependency pars-              language-specific social media text.
+         ing problem as many small and paralleliz-               In this paper, we present a new probabilistic de-
+         able arc prediction tasks: for each task,            pendency parsing approach for Weibo, with the
+         we use a programmable probabilistic first-           following contributions:
+         order logic to infer the dependency arc of a
+         token in the sentence. In experiments, we               • We present a freely available Chinese Weibo
+         show that the proposed model outperforms                  dependency treebank3 , manually annotated
+         an off-the-shelf Stanford Chinese parser,                 with more than 18,000 tokens;
+         as well as a strong MaltParser baseline that
+         is trained on the same in-domain data.                  • We introduce a novel probabilistic logic
+                                                                   programming approach for dependency arc
+1        Introduction                                              prediction, making the parser directly pro-
+                                                                   grammable for theory engineering;
+Weibo, in particular Sina Weibo1 , has attracted
+more than 30% of Internet users (Yang et al.,                    • We show that the proposed approach outper-
+2012), making it one of the most popular social                    forms an off-the-shelf dependency parser, as
+media services in the world. While Weibo posts                     well as a strong baseline trained on the same
+are abundantly available, NLP techniques for ana-                  in-domain data.
+lyzing Weibo posts have not been well-studied in
+the past.                                                       In the next section, we describe existing work
+   Syntactic analysis of Weibo is made difficult              on dependency parsing for Chinese. In Section 3,
+for three reasons: first, in the last few decades,            we present the new Chinese Weibo Treebank to
+Computational Linguistics researchers have pri-               the research community. In Section 4, we intro-
+marily focused on building resources and tools us-            duce the proposed efficient probabilistic program-
+ing standard English newswire corpora2 , and thus,            ming approach for parsing Weibo. We show the
+                                                              experimental results in Section 5, and conclude in
+     1
+     http://en.wikipedia.org/wiki/Sina Weibo                  Section 6.
+     2
+     For example, Wall Street Journal articles are used for
+                                                                 3
+building the Penn Treebank (Marcus et al., 1993).                    http://www.cs.cmu.edu/˜yww/data/WeiboTreebank.zip
+
+
+                                                          1152
+    Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1152–1158,
+                     October 25-29, 2014, Doha, Qatar. c 2014 Association for Computational Linguistics
+2    Related Work
+Chinese dependency parsing has attracted many
+interests in the last fifteen years. Bikel and Chi-
+ang (2000; 2002) are among the first to use Penn
+Chinese Tree Bank for dependency parsing, where
+they adapted Xia’s head rules (Xia, 1999). An im-     Figure 1: An example of pro-drop phenomenon
+portant milestone for Chinese dependency pars-        from the Weibo data.
+ing is that, a few years later, the CoNLL shared
+task launched a track for multilingual dependency          ing this English version of the Weibo cor-
+parsing, which also included Chinese (Buchholz             pus for the total counts of the word “the”,
+and Marsi, 2006; Nilsson et al., 2007). These              there are 2,084 occurrences in 2,003 sen-
+shared tasks soon popularized Chinese depen-               tences. Whereas in Chinese, there are only
+dency parsing by making datasets available, and            52 occurrences of the word “the” out of the
+there has been growing amount of literature since          2,003 sentences.
+then (Zhang and Clark, 2008; Nivre et al., 2007;
+Sagae and Tsujii, 2007; Che et al., 2010; Carreras,      • The other interesting thing is the position of
+2007; Duan et al., 2007).                                  the head. In English, the head of the tree
+   Besides the CoNLL shared tasks, there are also          occurs more frequent on the left-to-middle
+many interesting studies on Chinese dependency             of the sentence, while the distribution of the
+parsing. For example, researchers have studied             head is more complicated in Chinese. This is
+case (Yu et al., 2008) and morphological (Li and           also verified from the parallel Weibo data.
+Zhou, 2012) structures for learning a Chinese de-
+                                                         • Another well-known issue in Chinese is that
+pendency parser. Another direction is to perform
+                                                           Chinese is a pro-drop topical language. This
+joint learning and inference for POS tagging and
+                                                           is extremely prominent in the short text,
+dependency parsing (Li et al., 2011; Hatori et al.,
+                                                           which clearly creates a problem for parsing.
+2011; Li et al., 2011; Ma et al., 2012). In recent
+                                                           For example, in the Chinese Weibo data, we
+years, there has been growing interests in depen-
+                                                           have observed the sentence in Figure 1.
+dency arc prediction in Chinese (Che et al., 2014),
+and researchers have also investigated character-        To facilitate the annotation process, we first
+level Chinese dependency parsing (Zhang et al.,       preprocess the Weibo posts using the Stanford
+2014). However, even though the above methods         NLP pipeline, including a Chinese Word Seg-
+all have merits, the results are reported only on     menter (Tseng et al., 2005) and a Chinese Part-
+standard newswire based Chinese Treebank (e.g.        of-Speech tagger (Toutanova and Manning, 2000).
+from People’s Daily (Liu et al., 2006)), and it is    Two native speakers of Chinese with strong lin-
+unclear how they would perform on Weibo data.         guistic backgrounds have annotated the depen-
+   To the best of our knowledge, together with the    dency relations from 1,000 posts of the µtopia
+recent study on parsing tweets (Kong et al., 2014),   dataset, using the FUDG (Schneider et al., 2013)
+we are among the first to study the problem of de-    and GFL annotation tool (Mordowanec et al.,
+pendency parsing for social media text.               2014). The annotators communicate regularly dur-
+                                                      ing the annotation process, and a coding man-
+3    The Chinese Weibo Treebank                       ual that relies majorly on the Stanford Dependen-
+We use the publicly available µtopia dataset (Ling    cies (Chang et al., 2009) is designed. The anno-
+et al., 2013) for dependency annotation. An in-       tation process has two stages: in the first stage,
+teresting aspect of this Weibo dataset is that, be-   we rely on the word segmentation produced by
+sides the Chinese posts, it also includes a copy of   the segmenter, and produce a draft version of the
+the English translations. This allows us to observe   treebank; in the second stage, the annotators ac-
+some interesting phenomena that mark the differ-      tively discuss the difficult cases to reach agree-
+ences of the two languages. For example:              ments, manually correct the mis-segmented word
+                                                      tokens, and revise the annotations of the tricky
+    • Function words are more frequently used in      cases. The final inter-annotator agreement rate on
+      English than in Chinese. When examin-           a randomly-selected subset of 373 tokens in this
+
+
+                                                  1153
+treebank is 82.31%.                                          Algorithm 1 A Dependency Arc Inference Algo-
+   Fragmentary Unlabeled Dependency Grammar                  rithm for Parsing Weibo
+(FUDG) is a newly proposed flexible framework                   Given:
+that offers a relative easy way to annotate the syn-            (1) a sentence with tokens Ti , where i is the in-
+tactic structure of text. Beyond the traditional tree           dex, and L is the length;
+view of dependency syntax in which the tokens                   (2) a database D of token relations from the cor-
+of a sentence form nodes in a tree, FUDG also                   pus;
+allows the annotation of additional lexical items               (3) first-order logic inference rule set R.
+such as multiword expressions. It provides special
+devices for coordination and coreference; and fa-               for i = 1 → L tokens do
+cilitates underspecified (partial) annotations where              S ← ConstructSearchSpace(Ti , R, D);
+producing a complete parse would be difficult.                    P~i ← Inf erP arentU singP roP P R(Ti , S);
+Graph Fragment Language (GFL) is an implemen-                   end for
+tation of unlabeled dependency annotations in the
+FUDG framework, which fully supports Chinese,                   Greedy Global Inference
+English and other languages. The training set of                for i = 1 → L tokens do
+our Chinese Weibo Treebank4 includes 14,774 to-                   Yi = arg max P~i ;
+kens, while the development and test sets include               end for
+1,846 and 1,857 tokens respectively.
+
+4       A Programmable Parser with                           4.1   Problem Formulation
+        Personalized PageRank Inference                         We formulate the dependency parsing prob-
+                                                             lem as many small dependency arc prediction
+A key problem in multilingual dependency parsing
+                                                             problems. For each token, we form the par-
+is that generic feature templates may not work well
+                                                             ent inference problem of a token Ti as solving a
+for every language. For example, Martins (2012)
+                                                             query edge(Ti , ?) using stochastic theorem prov-
+shows that for Chinese dependency parsing, when
+                                                             ing on a search graph. Our approach relies on a
+adding the generic grandparents and siblings fea-
+                                                             database D of inter-token relations. To construct
+tures, the performance was worse than using the
+                                                             the database, we automatically extract the token
+standard bilexical, unilexical, and part-of-speech
+                                                             relations from the text data. For example, to de-
+features. Unfortunately, for many parsers such
+                                                             note the adjacency of two tokens T1 and T2 , we
+as Stanford Chinese Parser (Levy and Manning,
+                                                             store the entry adjacent(T1 , T2 ) in D. One can
+2003) and MaltParser (Nivre et al., 2007), it is
+                                                             also store the part-of-speech tag of a token in the
+very difficult for programmers to specify the fea-
+                                                             form haspos(T1 , DT ). There is no limitations
+ture templates and inference rules for dependency
+                                                             on the arity and the types of the predicates in the
+arc prediction.
+                                                             database.
+    In this work, we present a Chinese dependency
+parsing method for Weibo, based on efficient prob-              Given the database of token relations, one then
+abilistic first-order logic programming (Wang et             needs to construct the first-order logic inference
+al., 2013). The advantage of probabilistic pro-              theory R for predicting dependency arcs. For ex-
+gramming for parsing is that, software engineers             ample, to construct simple bilexical and bi-POS
+can simply conduct theory engineering, and op-               inference rules to model the dependency of an ad-
+timize the performance of the parser for a spe-              jacent head and a modifier, one can write first-
+cific genre of the target language. Recently, proba-         order clauses such as:
+bilistic programming approaches (Goodman et al.,             edge(V1,V2) :-
+                                                               adjacent(V1,V2),hasword(V1,W1),
+2012; Wang et al., 2013; Lloyd et al., 2014) have              hasword(V2,W2),keyword(W1,W2) #adjWord.
+demonstrated its efficiency and effectiveness in
+many areas such as information extraction (Wang              edge(V1,V2) :-
+                                                               adjacent(V1,V2),haspos(V1,W1),
+et al., 2014), entity linking, and text classifica-            haspos(V2,W2),keypos(W1,W2) #adjPos.
+tion (Wang et al., 2013).
+                                                             keyword(W1,W2) :- # kw(W1,W2).
+    4
+    The corpus is freely available for download at the URL   keypos(W1,W2) :- # kp(W1,W2).
+specified in Section 1.
+
+
+                                                         1154
+

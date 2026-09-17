@@ -1,0 +1,210 @@
+    GSM-P LUS: A Comprehensive Benchmark for Evaluating the Robustness
+                of LLMs as Mathematical Problem Solvers
+               Qintong Li1∗ Leyang Cui2 Xueliang Zhao1∗ Lingpeng Kong1† Wei Bi2†
+                            1 The University of Hong Kong 2 Tencent AI Lab
+
+                                    {qtli,xlzhao,lpk}@cs.hku.hk
+                                        nealcly.nlp@gmail.com
+                                       victoriabi@tencent.com
+                                      qtli.github.io/GSM-Plus/
+
+                             Abstract                              Question Context: James leaves home for shopping. He walks 4 miles/hour in the first 2 hours.
+
+                                                                                Question 1                                           Question 2
+        Large language models (LLMs) have achieved                 Then he increased his speed to 5 miles/
+                                                                   hour. After one more hour, how far is he
+                                                                                                                 Then he realized that he forgot something at home
+                                                                                                                 and had to return and increased his speed to 5 miles/
+        impressive performance across various mathe-               from home?
+                                                                        Answer:
+                                                                                                                 hour. After one more hour, how far is he from home?
+                                                                                                                      Answer:
+        matical reasoning benchmarks. However, there               Step 1: In the first 2 hours, James walks 2
+                                                                   * 4 = 8 miles.
+                                                                                                                 Step 1: In the first 2 hours, he walks 2 * 4 = 8 miles.
+                                                                                                                 Step 2: In the third hour, he walks 1 * 5 = 5 miles.
+        are increasing debates regarding whether these             Step 2: For the remaining one hour, he
+                                                                   walks 1 * 5 = 5 miles.
+                                                                                                                 Step 3: Therefore, James is 8 + 5 = 13 miles away
+                                                                                                                 from home.       (It should be 8 - 5 = 3 miles due to
+        models truly understand and apply mathemati-               Step 3: Therefore, James is 8 + 5 = 13
+                                                                   miles away from home.
+                                                                                                                 “return” yielding the opposite directions.)
+
+        cal knowledge or merely rely on shortcuts for
+        mathematical reasoning. One essential and fre-             Figure 1: Comparing the answers of GPT-3.5-Turbo to
+        quently occurring evidence is that when the                a math word question and its variation with additional
+        math questions are slightly changed, LLMs can              constraints, the former answer is correct, while the latter
+        behave incorrectly. This motivates us to eval-             answer is incorrect (red) due to the misuse of operators.
+        uate the robustness of LLMs’ math reasoning
+        capability by testing a wide range of question
+        variations. We introduce the adversarial grade
+        school math (GSM-P LUS) dataset, an exten-                 math GSM8K (Cobbe et al., 2021), high school
+        sion of GSM8K augmented with various math-                 math MATH (Hendrycks et al., 2021), and college
+        ematical perturbations. Our experiments on 25              math Theoremqa (Chen et al., 2023). Regarding the
+        LLMs and 4 prompting techniques show that                  widely-used GSM8K benchmark, proprietary mod-
+        while LLMs exhibit different levels of math                els like GPT-4 and cutting-edge open-source mod-
+        reasoning abilities, their performances are far            els have reported accuracy rates exceeding 90%
+        from robust. In particular, even for problems
+                                                                   and 80%, respectively. However, the debate within
+        that have been solved in GSM8K, LLMs can
+        make mistakes when new statements are added
+                                                                   the research community regarding whether these
+        or the question targets are altered. We also               models truly understand and apply mathematical
+        explore whether more robust performance can                knowledge or merely solve math word problems
+        be achieved by composing existing prompting                based on superficial patterns (Patel et al., 2021) or
+        methods, in which we try an iterative method               even due to training data leakage (Golchin and Sur-
+        that generates and verifies each intermediate              deanu, 2023) has never ceased. Apparent evidence
+        thought based on its reasoning goal and calcu-             supports such concerns. Figure 1 shows an exam-
+        lation result.
+                                                                   ple case of GPT-3.5-turbo performing multiple-step
+   1    Introduction                                               reasoning on the GSM8K dataset, where LLMs
+                                                                   sometimes make simple errors that humans would
+   Mathematical reasoning stands as a crucial tes-                 not (Zhou et al., 2023b; Shi et al., 2023). Sim-
+   tament to the development of artificial intelli-                ply due to the fact that GPT-3.5-turbo struggles
+   gence (Lake et al., 2017). It requires rigorous                 with distinguishing the directions of “leave” and
+   problem understanding, strategy formulating, and                “return”, resulting in the misuse of an operator.
+   calculation performing abilities (Baroody, 1987;                   In response to these issues, we advocate for a
+   Verschaffel et al., 1999). Large language models                more rigorous and adversarial evaluation bench-
+   (LLMs) (Brown et al., 2020; Touvron et al., 2023a)              mark that can systematically study the math reason-
+   have demonstrated strong performance on various                 ing capability of LLMs. Our benchmark revealed
+   mathematical benchmarks including grade school                  a gap of up to 20% between the accuracy reported
+        ∗                                                          by the current model and the accuracy observed
+            Work done during an internship at Tencent AI Lab.
+        †
+            Corresponding authors.                                 in our setting, while human performance remains
+                                                                2961
+Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2961–2984
+                              August 11-16, 2024 ©2024 Association for Computational Linguistics
+  Grade School Math Dataset             Parent Set    Size       Answer Format     Annotation                 Perturbation
+
+  ASDiv-A (Miao et al., 2020)           N/A            2,305     Equation-formed   Human (A.)                 N/A
+  GSM8K (Cobbe et al., 2021)            N/A            1,319     Open-formed       Human (Q.,A.)              N/A
+
+  SVAMP (Patel et al., 2021) ?          ASDiv-A        1,000     Equation-formed   Human (Q.,A.)              P R
+  MetaMathQA (Yu et al., 2023a)         GSM8K, MATH    240K      Open-formed       GPT-3.5-Turbo              R
+  GSM-HARD (Gao et al., 2023)           GSM8K          1,319     Program-formed    Codex (Q.A.), Human (A.)   D
+  GSM-IC (Shi et al., 2023) ?           GSM8K         58,052     Open-formed       Human (Q.)                 P D
+  GSM8k_robust (Chern et al., 2023) ?   GSM8K          1,319     Open-formed       GPT-4                      N
+  GSM-P LUS (Our) ?                     GSM8K         10,552     Open-formed       GPT4, Human (Q.,A.)        N D I A R P D C
+
+
+Table 1: Overview of the grade school math datasets. ?refers to datasets specifically designed to evaluate the
+robustness of model performance. Different colors represent different perturbation types: N umerical Substitution;
+D igit Expansion; I integer-decimal-fraction Conversion; A dding Operation; R eversing Operation; P roblem
+Understanding; D istractor Insertion; C ritical Thinking.
+
+
+unaffected due to the unchanged inherent difficulty                  • LLMs perform far less well when confronted
+level of the questions. In this work, we perturb the              with critical thinking, arithmetic variation, and dis-
+most popularly used GSM8K dataset, yielding an                    tractor insertion, but they are relatively resilient to
+adversarial dataset for grade school math GSM-                    perturbations in numerical variation and problem
+P LUS. Motivated by the capability taxonomy for                   understanding (§5.2).
+solving math problems mentioned in Polya’s prin-                     • All investigated prompting techniques show a
+ciples (Polya, 2004), we identify 5 perspectives                  lack of robustness, especially for arithmetic vari-
+to guide the development of GSM-P LUS: (1) nu-                    ation and critical thinking. We further explore a
+merical variation refers to altering the numerical                compositional prompting method by drawing on
+data or its types (e.g., from integer to decimal).                advancements in other domains, which involves
+(2) arithmetic variation refers to reversing or in-               iteratively generating and verifying each reasoning
+troducing additional operations, such as addition,                thought, and demonstrates good performance on
+subtraction, multiplication, and division, to math                both GSK8K and GSM-P LUS (§5.4).
+problems. (3) problem understanding refers to
+                                                                  Based on the endeavors and results of this work,
+rephrasing the text description of the math prob-
+                                                                  we urge further research on LLMs in math domains
+lems. (4) distractor insertion refers to inserting
+                                                                  to enhance not only their performance for math
+topic-related but useless sentences to the problems.
+                                                                  reasoning but also their performance robustness.
+(5) critical thinking focuses on question or doubt
+ability when the question lacks necessary state-                  2     Related Work
+ments. Based on the 1,319 test questions from
+GSM8K, we create eight variations for each ques-                  Numerous datasets have been curated to assess
+tion, the yielding GSM-P LUS comprises 10,552                     the mathematical reasoning abilities of AI systems.
+question variations. By testing LLMs using each                   Early math datasets (Kushman et al., 2014; Ling
+question and its eight variations, GSM-P LUS can                  et al., 2017, i.a.) focused on basic math prob-
+facilitate the holistic evaluation of LLMs’ robust-               lems with equation-based solutions. Subsequently,
+ness in solving math word problems.                               more difficult datasets have been introduced, span-
+                                                                  ning grade-school level (Cobbe et al., 2021; Mishra
+   We use GSM-P LUS to evaluate the robustness
+                                                                  et al., 2022), high-school level (Hendrycks et al.,
+of 25 LLMs with different model scales and task-
+                                                                  2021), and college-level datasets (Sawada et al.,
+specific fine-tuning, along with 4 popular prompt-
+                                                                  2023; Zheng et al., 2021). Amid this progress,
+ing techniques to obtain LLMs’ math reasoning
+                                                                  there has been a surge in the development of LLMs
+results. Overall, we find that LLMs can accurately
+                                                                  towards solving those math benchmarks (Ahn et al.,
+solve the GSM8K questions while struggling with
+                                                                  2024). Despite the substantial difficulties posed
+answering the variations in GSM-P LUS. Our de-
+                                                                  by advanced-level math for LLMs, recent LLMs
+tailed findings are in three folds:
+                                                                  has shown huge potential for solving grade school
+   • Task-specific optimization, e.g., math SFT,                  math (Touvron et al., 2023a).
+usually gives better accuracy on benchmarks, while                   Supervised fine-tuning (SFT) is a line of work to
+the robustness depends more on the selection of the               effectively adapt language models to mathematics
+base model and fine-tuning dataset (§5.1).                        domains (Luo et al., 2023; Azerbayev et al., 2023;
+                                                               2962
+  Seed Question: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her
+  friends every day with four. She sells the remainder at the farmers’ market daily for $2 per fresh duck egg. How much in
+  dollars does she make every day at the farmers’ market?
+  Solution: Janet sells 16 - 3 - 4 = 9 duck eggs a day. She makes 9 * 2 = 18 every day at the farmer’s market. Answer: 18
+  Perturbation Category       Question Variation
+                Num. Sub.     16 → 20     three → five     four → six    2→3
+  Numerical
+  Variation     Digit Exp.    16 → 1600      four → 400
+                IDF Conv.     three → 1/4     2 → 2.5
+                              Janet’s ducks lay . . . every day with four. She also uses two eggs to make a homemade hair
+                Add. Op.
+                              mask every day. She sells . . . make every day at the farmers’ market?
+  Arithmetic
+  Variation                   Janet’s ducks lay 16 eggs per day. She eats three . . . with four. She sells the remainder at
+                Rev. Op.      the farmers’ market daily for a certain amount per fresh duck egg. She makes $18 every
+                              day at the farmers’ market. How much does each duck egg cost?
+                              Janet’s ducks lay 16 eggs daily. She eats three for breakfast and uses four to bake muffins for
+  Problem Understanding
+                              her friends. She sells the remaining eggs at the local farmers’ market for $2 per fresh duck
+                              egg. How much money does she make each day by selling eggs at the farmers’ market?
+  Distractor Insertion        Janet’s ducks . . . with four. She also uses two eggs to feed her pet parrot, but her neighbor
+                              gives her two eggs from his own ducks to replace them. She sells . . . at the farmers’ market?
+  Critical Thinking           Janet’s ducks lay eggs per day. She eats three for breakfast every morning and . . . How
+                              much in dollars does she make every day at the farmers’ market?
+
+Table 2: An example of question variations generated using 8 perturbations from 5 perspectives based on a seed
+math question. Modifications are marked in green.
+
+Liang et al., 2023; Gou et al., 2023, i.a.). Meta-               existing evaluation settings only cover limited types
+Math (Yu et al., 2023a) highlights the efficacy of               of automatically constructed perturbations. In con-
+question bootstrapping, while MAmmoTH (Yue                       trast, we create eight variations of a single question
+et al., 2023) proved the benefits of training LLMs               by perturbing it with eight different math reasoning
+on various data sources and hybrid rationales.                   skills. Using GSM-P LUS, we conduct a systematic
+   Another trend improves LLMs’ math capabilities                evaluation of the LLM’s robustness across vari-
+by prompting with carefully designed inputs (Yao                 ous reasoning types. For most LLMs, GSM-P LUS
+et al., 2023; Yang et al., 2023; Zhou et al., 2023a,             is a challenging benchmark, with GPT-3.5-Turbo
+i.a.). Chain-of-thought prompting guides models                  reaching only 61.19% accuracy.
+to generate natural language reasoning steps before
+                                                                 3      The GSM-P LUS Dataset
+reaching the final answer (Wei et al., 2022; Ko-
+jima et al., 2022). Program-of-thought prompting                 To comprehensively evaluate the robustness of
+generates programs as the intermediate steps and                 LLMs in utilizing math-related skills, we build an
+integrates external tools like a Python interpreter              adversarial dataset GSM-P LUS using the GSM8K
+for precise calculation (Gao et al., 2023; Chen et al.,          dataset as a foundation. Inspired by Polya’s princi-
+2022). The promising outcomes made by LLMs, es-                  ples, we design eight types of perturbations from
+pecially in grade school math, motivate researchers              five different perspectives to test the robustness of
+to study whether they can maintain high perfor-                  LLMs in math reasoning, as depicted in Table 2.
+mance in realistic settings (Bubeck et al., 2023).
+                                                                 3.1     Perturbation Categories
+   In this work, we aim to develop a consolidated
+benchmark that systematically examines the robust-               Numerical variation tests whether LLMs have
+ness of LLMs in solving math word problems. Re-                  been overfitted by altering the numerical data and
+cent work concerns the robustness of math reason-                seeing the prediction behaviors. We define three
+ing using different perturbations, such as semantic              subcategories of numerical variation below:
+substitution (Jin et al., 2020; Li et al., 2020; Wang               • Numerical Substitution: replaces numerical
+et al., 2023; Zhou et al., 2023b), reversal predic-              data with another number that has the same number
+tion (Berglund et al., 2023; Yu et al., 2023a), and              of digits, such as replacing “16” with “20”.
+irrelevant context distraction (Shi et al., 2023; Li                • Digit Expansion: increases the number of dig-
+et al., 2023). However, as shown in Table 1, most                its in a number, such as replacing “16” with “1600”.
+                                                            2963
+

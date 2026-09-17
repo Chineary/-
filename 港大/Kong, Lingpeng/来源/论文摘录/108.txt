@@ -1,0 +1,242 @@
+                     A BC: Attention with Bounded-Memory Control
+ Hao Peng♠       Jungo Kasai♠ Nikolaos Pappas⋆∗ Dani Yogatama♣ Zhaofeng Wu♢∗
+                   Lingpeng Kong♦ Roy Schwartz♡ Noah A. Smith♠♢
+     ♠
+       Paul G. Allen School of Computer Science & Engineering, University of Washington
+       ⋆
+         Amazon Web Services ♣ DeepMind ♢ Allen Institute for Artificial Intelligence
+         ♡
+           School of Computer Science & Engineering, Hebrew University of Jerusalem
+               ♦
+                 Department of Computer Science, The University of Hong Kong
+        {hapeng,jkasai,npappas,zfw7,nasmith}@cs.washington.edu
+                     dyogatama@deepmind.com, lpk@cs.hku.hk
+                          roy.schwartz1@mail.huji.ac.il
+                   Abstract                     reads from it using a softmax-normalized linear
+    Transformer architectures have achieved state-            combination, with overhead linear in the memory
+    of-the-art results on a variety of natural lan-           size. This amounts to a quadratic complexity over-
+    guage processing (NLP) tasks. However, their              all, making transformers’ computational overhead
+    attention mechanism comes with a quadratic                prohibitive, especially for long sequences.
+    complexity in sequence lengths, making the                   One way to improve attention’s efficiency is
+    computational overhead prohibitive, especially
+                                                              to bound its memory size. Imposing a constant-
+    for long sequences. Attention context can be
+    seen as a random-access memory with each to-
+                                                              sized constraint over the memory ensures that read-
+    ken taking a slot. Under this perspective, the            ing from it has constant time and space overhead,
+    memory size grows linearly with the sequence              yielding a linear overall complexity in sequence
+    length, and so does the overhead of reading               lengths. This is in fact a common strategy adopted
+    from it. One way to improve the efficiency is             by several recent works. In this work, we show
+    to bound the memory size. We show that dis-               that some of these works are closely connected
+    parate approaches can be subsumed into one                in ways that, to date, have gone unremarked. We
+    abstraction, attention with bounded-memory
+                                                              propose attention with bounded-memory control
+    control (A BC), and they vary in their organi-
+    zation of the memory. A BC reveals new, unex-             (A BC), a unified abstraction over them. In A BC,
+    plored possibilities. First, it connects several          constant-sized memories are organized with vari-
+    efficient attention variants that would otherwise         ous control strategies, e.g., induced from heuristic
+    seem distinct. Second, this abstraction gives             patterns (Beltagy et al., 2020; Zaheer et al., 2020;
+    new insights—an established approach (Wang                Ainslie et al., 2020; Rae et al., 2020, inter alia),
+    et al., 2020b) previously thought to not be appli-        locality assumptions (Parmar et al., 2018; Liu et al.,
+    cable in causal attention, actually is. Last, we
+                                                              2018), or positions (Wang et al., 2020b).
+    present a new instance of A BC, which draws in-
+    spiration from existing A BC approaches, but re-             These strategies, by and large, are “context-
+    places their heuristic memory-organizing func-            agnostic.” In response to this, we propose A BCMLP ,
+    tions with a learned, contextualized one. Our             a particular instance of A BC that learns a contex-
+    experiments on language modeling, machine                 tualized control strategy from data. Specifically,
+    translation, and masked language model fine-              A BCMLP uses a neural network to determine how
+    tuning show that our approach outperforms pre-            to store each token into the memory (if at all).
+    vious efficient attention models; compared to
+                                                              Compared to previous bounded-memory models,
+    strong transformer baselines, it significantly im-
+    proves the inference time and space efficiency            it strikes a better trade-off between accuracy and
+    with no or negligible accuracy loss.                      efficiency: controlling for the accuracy, A BCMLP
+                                                              can get away with much smaller memory sizes.
+1   Introduction
+                                                                 A BC models (including A BCMLP ) come with a
+Transformer architectures are now central in natural          linear complexity in sequence lengths, and admit
+language processing (Vaswani et al., 2017). They              recurrent computation graphs in causal attention
+rely on the attention mechanism (Bahdanau et al.,             (self-attention over the prefix). Therefore they are
+2015) to contextualize the input. The context can             appealing choices in a variety of applications, in-
+be seen as a random access memory whose size lin-             cluding text encoding, language modeling and text
+early grows with the sequence length; each query              generation. This leads to a surprising finding. Lin-
+    ∗
+     This work was done while Zhaofeng Wu and Nikolaos        former (Wang et al., 2020b), an established effi-
+Pappas were at the University of Washington.                  cient attention method, was previously thought not
+                                                         7469
+                 Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics
+                                        Volume 1: Long Papers, pages 7469 - 7483
+                          May 22-27, 2022 c 2022 Association for Computational Linguistics
+to be applicable in causal attention or autoregres-             y]i,j = xi yj . N -dimensional vectors {ei } form
+sive decoding (Tay et al., 2020). Through the A BC              the standard basis: ei has the ith element being
+view, we show that it actually is, and achieves com-            one and others zeros. We can view ei as control
+petitive performance in our machine translation                 vectors that determine where to store ki and vi :
+experiments.                                                                                             ⊤
+   A BC connects existing models that would oth-                     ei ⊗ ki = 0, . . . 0, 1, 0, . . . , 0 ⊗ ki
+                                                                                  | {z } | {z }
+erwise seem distinct, reveals new insights into                                     i−1         N −i
+                                                                                                                (2)
+                                                                                                           ⊤
+established methods, and inspires new efficient
+                                                                                
+                                                                             = |{z}  0 ; ki ; |{z}   0        .
+attention architectures. We explore its applica-                                       d×(i−1)    d×(N −i)
+tions in transformers, as a drop-in substitute for
+the canonical softmax attention. A BC offers a                  The N -by-d matrix on the last line has its ith row
+novel lens that can help future research in the                 being k⊤i and all others zeros; in this sense, ki is
+analysis of transformers, where the theoretical in-             stored in the ith slot by ei , not affecting others.
+sights are still catching up with empirical suc-
+                                                                3       Attention with Bounded Memory
+cess. Experiments on language modeling, machine
+translation, and masked language model finetun-                 A straightforward way to improve attention’s ef-
+ing show that our A BCMLP model outperforms pre-                ficiency is to bound its memory size. Our outer-
+vious A BC approaches in accuracy with a much                   product view of attention provides a straightfor-
+smaller memory size. Compared to the strong                     ward way to devise this, by replacing {ei } with
+transformer baseline, A BCMLP achieves a signif-                control vectors that select n ≪ N vectors to
+icant speedup and memory savings at inference                   attend to. We dub this approach attention with
+time, with no or negligible accuracy loss. The                  bounded-memory control (A BC). Concretely, let
+efficiency improvements are more prominent for                  K,
+                                                                 e Ve ∈ Rn×d denote a constant-size memory with
+long sequences, suggesting that the asymptotic sav-             n slots, with n set a priori.
+ings are even more appealing in applications in-
+                                                                              N                        N
+volving long sequences. We release our code at                                X                        X
+                                                                        K
+                                                                        e =         ϕi ⊗ k i ,   V
+                                                                                                 e =         ϕi ⊗ vi .   (3)
+https://github.com/Noahs-ARK/ABC.
+                                                                              i=1                      i=1
+
+2       An Outer-Product View of Attention                      {ϕi ∈ Rn }Ni=1 denotes a sequence of control vec-
+This section presents our outer-product memory                  tors. The output is calculated by attending to K
+                                                                                                               e
+perspective of attention, which allows for a smooth             and V: A BC (q, {ki }, {vi }, {ϕi }) =
+                                                                     e
+transition to later discussion.                                                             
+                                                                               e ⊤ softmax Kq
+                                                                                                  
+                                                                              V                     .         (4)
+   In attention, a sequence of queries {qi }N
+                                                                                               e
+                                                i=1 at-
+tend to a memory with N slots, each storing a
+                                                                We will discuss various ways to construct {ϕi } in
+key and value pair: K = [k1 , . . . , kN ]⊤ , V =
+                                                                the subsequent sections. Reading from the memory
+[v1 , . . . , vN ]⊤ ∈ RN ×d .1 Query q reads from the
+                                                                takes a constant O(n) time and space; therefore
+memory using a softmax-normalized linear combi-
+                                                                A BC’s overall complexity is O(N n), linear in the
+nation, producing a d-dimensional vector:
+                                                                sequence length.2
+    attn(q, {ki }, {vi }) = V⊤ softmax (Kq) . (1)                  Eq. 3 offers an equivalent recurrent computa-
+                                                                tion, which is particularly useful in causal attention
+This takes O(N ) time and space. When the atten-                where only the prefix is looked at,
+tion with N queries can be parallelized (e.g., in
+                                                                              K       e t + ϕt+1 ⊗ kt+1 ,
+                                                                              e t+1 = K                                  (5)
+text encoding), it takes linear time and quadratic
+space; when it cannot be (e.g., in decoding), it
+                                                                likewise for V e t. K
+                                                                                    e t and Ve t can be seen as the
+takes quadratic time and linear space.
+                                                                recurrent hidden state that encodes the prefix.
+   The memory can be equivalently represented
+                                                                   In what follows, we study several existing effi-
+as                   PN products: K = IK =
+PNsums of vector outer                                          cient attention approaches and show that they are
+   i=1 ei ⊗ ki , V =   i=1 ei ⊗ vi . I is the identity          in fact instances of the A BC abstraction.
+matrix, and ⊗ denotes the outer product: [x ⊗                       2
+                                                                     Using bounded memory distinguishes A BC from softmax
+    1
+     The number of queries and key-value pairs may differ,      attention. If growing-size memory were allowed (n = N ), an
+e.g., in the cross attention of a sequence-to-sequence model.   A BC with ϕi = ei would fall back to softmax attention.
+
+                                                            7470
+3.1 Linformer                                                       likewise for the values. It then attends over the cen-
+                                                                                             e CL = [k
+                                                                    troids using Eq. 4, with K                       eCL ]⊤ =
+                                                                                                       eCL , . . . , k
+                                                                                                        1              n
+Linformer (Wang et al., 2020b) is an established ef-
+ficient transformer variant that has proven success-                n                  n          N
+                                                                    X
+                                                                               eCL =
+                                                                                       X          X    Mi,j
+ful in masked language modeling and text encoding.                        ej ⊗ k j         ej ⊗     PN         ki
+                                                                    j=1                j=1      i=1   ℓ=1 Mℓ,j
+It assumes fixed-length inputs and learns a low-rank                                                         
+approximation of the attention weights. A learned                                       N     n
+                                                                                       X     X        M i,j    ⊗ ki .
+n-by-N matrix WLF down projects the N -by-d                                          =          ej PN
+dimensional keys and values along the timestep di-                                     i=1   j=1     ℓ=1 Mℓ,j
+
+mension, to an n-by-d memory: e     KLF = WLF K,                    The last line indicates
+   LF        LF
+V = W V; they are then used for attention                                             P that thisPmodel is an instance
+                                                                    of A BC: ϕi = nj=1 (Mi,j / N
+ e
+                                                                                                     ℓ=1 Mℓ,j )ej . The
+computation with Eq. 4. This yields a linear com-                   stack of centroids can be seen as the constant-size
+plexity in the input length. Linformer is an A BC                   memory. Putting aside the clustering overhead (i.e.,
+instance with ϕLF         LF
+                 i = W:,i (ith column), and in this                 constructing M and computing centroids), it has a
+sense, it learns a control vector for each position.                linear complexity in the sequence length.
+   Previous works have noted that Linformer can-
+not be efficiently applied in causal attention (Table               3.3    Sliding-Window Attention
+1 of Tay et al., 2020). Indeed, it is less straightfor-             In some applications, being able to remove entries
+ward to avoid mixing future with the past when                      from the memory can be beneficial: clearing up
+projecting along the timestep dimension. A BC                       older context frees slots for more recent ones, pro-
+reveals that, in fact, Linformer is applicable in                   moting a locality inductive bias. A BC offers the
+causal attention. Like all A BC models, it admits                   capability to do so, if augmented with an additional
+a linear-complexity recurrent computation (Eq. 5):                  matrix multiplication. We use the sliding-window
+Ke LF = K e t + ϕLF ⊗ kt+1 . This confirms A BC’s                   attention as an example.
+   t+1             t+1
+benefits: it reveals new insights about existing mod-                  Attending to the most recent n input tokens (Belt-
+els and reassesses their applications and impact.                   agy et al., 2020; Zaheer et al., 2020; Sukhbaatar
+Our experiments show that Linformer achieves                        et al., 2021, inter alia) can be seen as a first-
+competitive performance in machine translation.                     in-first-out queue that “pops” out the oldest to-
+                                                                    ken while “pushing” in the most recent one:
+3.2 Clustering-Based Attention                                      KWD
+                                                                     e
+                                                                       t     = [kt−n+1 , ..., kt ]⊤ . The pop operation can
+                                                                    be achieved by multiplying an n-by-n upper shift
+Improving attention’s efficiency with clustering has                matrix: Ui,j = δi+1,j , with δ being the Kronecker
+received an increasing amount of interest (Kitaev                   delta (i.e., U has ones only on the superdiagonal
+et al., 2020; Roy et al., 2020; Wang et al., 2020a,                 and zeros elsewhere). Left-multiplying U against
+inter alia). A BC bears interesting connections to                  KWD
+                                                                     e
+                                                                       t     shifts its rows one position up, with zeros
+clustering-based methods. Here we discuss an                        appearing in the last:
+approach that closely follows Vyas et al. (2020),
+                                                                         e WD = U kt−n+1 , . . . , kt ⊤
+                                                                                                         
+except that it clusters keys and values instead of                   UK    t
+                                                                                        |      {z       }
+queries, and only attends to the centroids to reduce                                         n
+                                                                                                              ⊤
+the effective context size. Formally, keys and val-                           = kt−n+2 , . . . , kt−1 , kt , 0 ∈ Rn×d .
+                                                                                 
+ues are grouped into n < N clusters {k       eCL }n ,                           |          {z            }
+                                              j   j=1                                       n−1
+{e  CL  n  3
+ vj }j=1 . Let an N -by-n binary matrix M de-
+note the cluster membership shared between keys                     Then the most recent token can be put into the
+                                                                    slot freed up: K e WD = UK  e WD + en ⊗ kt+1 . U
+and values. Mi,j = 1 iff. ki is assigned to cluster                                    t+1        t
+eCL and vi to vejCL . The jth centroid for the keys is              and ϕt = en ensure a first-in-first-out queue. Di-
+k j
+                                                                    lated and stride convolution patterns (Beltagy et al.,
+                                                                    2020) can be similarly recovered (§A.4).
+                          N                                            Recurrently multiplying U simulates the discrete
+                 eCL =
+                          X     Mi,j
+                 k j          PN         ki ;                (6)    pop operation (Grefenstette et al., 2015; Joulin and
+                          i=1  ℓ=1 M ℓ,j
+                                                                    Mikolov, 2015; Yogatama et al., 2018) in a differen-
+                                                                    tiable way. This is reminiscent of recurrent neural
+   3          eCL
+       We use kj to denote both the jth cluster and its centroid.   networks, while in this case U is never updated as
+                                                                7471
+

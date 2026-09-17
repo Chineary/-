@@ -1,0 +1,223 @@
+                                                                    Lego-MT: Learning Detachable Models for
+                                                                    Massively Multilingual Machine Translation
+                                          Fei Yuan1 , Yinquan Lu1 , Wenhao Zhu2 , Lingpeng Kong3 , Lei Li4 , Yu Qiao1 , Jingjing Xu1
+                                                                  1
+                                                                    Shanghai Artificial Intelligence Laboratory
+                                              2
+                                                National Key Laboratory for Novel Software Technology, Nanjing University, China
+                                                    3
+                                                      The University of Hong Kong, 4 University of California, Santa Barbara
+                                         {yuanfei, luyinquan, qiaoyu}@pjlab.org.cn, zhuwh@smail.nju.edu.cn
+                                              lpk@cs.hku.hk, leili@cs.ucsb.edu, jingjingxupku.02@gmail.com
+
+                                                                   Abstract
+                                                                                                              Hello                                                   你好
+                                                                                                                                          M               M
+                                                 Multilingual neural machine translation                      你好                                                      Hello
+                                                                                                                                      (1) Monolithic Model
+                                                 (MNMT) aims to build a unified model for
+                                                 many language directions. Existing monolithic                E       1       5       E
+
+
+
+
+arXiv:2212.10551v3 [cs.CL] 19 Jul 2023
+                                                                                                      Hello                                                   E 1   U 6   C   你好
+                                                 models for MNMT encounter two challenges:                    C 2             6       C
+                                                                                                                                              Inference
+                                                                                                                          U
+                                                 parameter interference among languages and                   N
+                                                                                                                  3               7
+                                                                                                                                      N
+                                                                                                                                                Paths
+
+                                                 inefficient inference for large models. In           你好
+                                                                                                                  4               8                           C 2   U 5   E   Hello
+                                                                                                              M                       M
+                                                 this paper, we revisit the classic multi-way
+                                                                                                                                          (2) Multi-Way
+                                                 structures and develop a detachable model
+                                                 by assigning each language (or group of lan-       Figure 1: Multi-way architecture. (1) Monolithic Model
+                                                 guages) to an individual branch that supports      is the fully-shared model for all translation directions;
+                                                 plug-and-play training and inference. To           (2) Lego-MT is a multi-way structure that includes both
+                                                 address the needs of learning representations      multilingual (denoted as M) and language-specific en-
+                                                 for all languages in a unified space, we propose   coders and decoders for English (denoted as E), Chinese
+                                                 a novel efficient training recipe, upon which we   (denoted as C) and Nepali (denotes as N). The architec-
+                                                 build an effective detachable model, Lego-MT.      ture is detachable at inference time where only a specific
+                                                 For a fair comparison, we collect data from        encoder and decoder are needed. U (Unified space) rep-
+                                                 OPUS and build a translation benchmark             resents hidden representations generated by encoders.
+                                                 covering 433 languages and 1.3B parallel
+                                                 data. Experiments show that Lego-MT with
+                                                 1.2B parameters brings an average gain of 3.2      few-shot) translation, especially for language-to-
+                                                 spBLEU. It even outperforms M2M-100 with           English translation. Despite great potential, there
+                                                 12B parameters. The proposed training recipe       is still a large gap between LLMs and existing
+                                                 brings a 28.2× speedup over the conventional       MNMT models on massive translation directions.
+                                                 multi-way training method.1                           Simply using a shared model for massive MNMT
+                                                                                                    brings new effectiveness and efficiency issues.
+                                         1       Introduction                                       First, memorizing multilingual knowledge within
+                                         Multilingual neural machine translation (MNMT)             finite parameters causes parameter interference (Ha
+                                         translates languages by mapping a source sentence          et al., 2016a), especially between high-resource
+                                         to a unified representation space and decoding a           and low-resource languages (Li and Gong, 2021),
+                                         target sentence from this space (Johnson et al.,           which leads to significant performance degrada-
+                                         2017; Gu et al., 2018; Neubig and Hu, 2018; Aha-           tion. Second, the centralization feature requires
+                                         roni et al., 2019; Zhang et al., 2020). Traditional        all parameters to be included in the computation
+                                         MNMT models use a shared network to align repre-           graph during the inference stage, resulting in heavy
+                                         sentations in different languages. Recently, scaling       computational overhead (Song et al., 2021). Com-
+                                         up the size of MNMT models brings significant              mon fixes of these issues include adapter-based
+                                         quantitative improvements and new qualitative ca-          approaches (Zhu et al., 2021), which handle param-
+                                         pabilities (M2M-100, Fan et al. 2021; NLLB-200,            eter interference via fine-tuning new parameters
+                                         Costa-jussà et al. 2022; inter alia). Beyond MNMT,         to fit bilingual translation, and mixture-of-expert
+                                         recent large-scale language models (e.g., Chat-            (MoE), which supports dynamic activation. These
+                                         GPT) also show promising results on zero-shot (or          methods either fail to adapt to massive translation
+                                                                                                    directions or require all parameters to be loaded
+                                             1
+                                                 https://github.com/CONE-MT/Lego-MT.                into memory, thus remaining unsatisfactory consid-
+ering the efficiency of training and inference.          speedup compared with the conventional multi-
+   To find out the best recipe for massive multilin-     way training method. We also conduct com-
+gual translation, we revisit the classic multi-way       prehensive experiments on branch combinations,
+(or multi-branch) architecture (Dong et al., 2015;       thanks to the detachable nature of the model. We
+Firat et al., 2016), whose philosophy is to allo-        find that low-resource languages prefer multilin-
+cate an individual encoder and decoder for each          gual branches and high-resource languages prefer
+language (or group of languages), as shown in Fig-       language-specific branches. In addition, we also
+ure 1. The immediate benefit of this structure is:       observe that the unseen combination of a high-
+1) The utilization of individual modules for spe-        resource language encoder and a high-resource
+cific languages mitigates parameter interference;        language decoder can achieve better performance,
+2) Each branch can be independently loaded dur-          showing that Lego-MT can align different branches
+ing inference, significantly reducing computational      into a unified space effectively. The main contribu-
+costs and decreasing inference latency.                  tions can be summarized as follows:
+   Despite appealing, there remain two big chal-          • We build an effective detachable model Lego-
+lenges when training multi-way structures: repre-           MT for multilingual machine translation.
+sentation alignment between different languages           • Experiments demonstrate that Lego-MT brings
+due to the lack of shared parameters; and low GPU           an average gain of 3.2 spBLEU. This training
+efficiency during training because unused param-            recipe results in a 28.2× training speedup com-
+eters occupy GPU memory but do not have any                 pared with the naive multi-branch architecture.
+computations. Furthermore, the feature of random          • We construct a massive multilingual translation
+language mixture in a batch makes it infeasible             dataset covering 433 languages, which greatly
+to use an online-loading method (i.e., loading dur-         extends the scale of languages.
+ing usage) to accelerate training since it will cause
+impractical IO communication costs during batch          2   Related Work
+switching (between CPU and GPU).
+   To address these challenges, we propose a novel       In this part, we review recent related multilingual
+training recipe, which results in our new detach-        machine translation models. We classify them into
+able model, Lego-MT. We classify the training data       three categories: fully / group-shared (Dabre et al.,
+into different language-centric groups such that we      2020), and Mixture-of-expert (MoE).
+only need to load specific branches into GPU mem-           The fully-shared model is the most prevalent
+ory, eliminating the need to load different modules      model in Multilingual Neural Machine Transla-
+constantly. The language-centric group is trained        tion (MNMT). This model employs a single ar-
+in sequential order. Second, during each language-       chitecture to translate in all directions (Ha et al.,
+centric training, we introduce a multilingual branch     2016b; Johnson et al., 2017; Bapna et al., 2019;
+and propose a new triple-flow method to help a           Lin et al., 2020; Liu et al., 2020; Pan et al., 2021;
+model learn to map to and translate from a unified       Sun et al., 2021) and has demonstrated efficacy
+space. Specifically, a unified space is a type of rep-   in aiding low-resource directions. However, fully-
+resentation space rather than a module. It creates       shared models are often subject to capacity bottle-
+a common representation of language that can be          necks and trade-offs between translation quality
+used across multiple language tasks.                     and the number of languages (Aharoni et al., 2019;
+   To evaluate our training recipe for massive           Zhang et al., 2020; Ha et al., 2016a). Group-shared
+MNMT, we construct a many-to-many transla-               models incorporate individual parameters for each
+tion dataset2 covering 7 language-centric groups,        group and represent a popular solution for shar-
+433 languages, based on the open-source website          ing language-specific encoders or decoders (Lee
+OPUS3 (Tiedemann, 2012).                                 et al., 2017; Zoph and Knight, 2016). Lee et al.
+   Lego-MT-1.2B yields average gains of 3.2              (2017); Sachan and Neubig (2018); Ji et al. (2020);
+spBLEU, and even outperforms M2M-100-12B                 Lyu et al. (2020); Sachan and Neubig (2018) pro-
+which has 10× inference parameters. Further-             posed an MNMT model only for shared language-
+more, the proposed training recipe brings a 28.2×        specific modules. LaSS (Lin et al., 2021) learns
+   2                                                     language-specific sub-networks for each language
+    The dataset is released on https://github.com/
+CONE-MT/Lego-MT.git.                                     direction for multilingual translation. Adpater
+  3
+    https://opus.nlpl.eu.                                methods (Bapna and Firat, 2019; Zhu et al., 2021)
+                                                                                         English-Centric              Chinese-Centric                  Nepali-Centric
+                                               Training Stage                                                         E                   E        E                        E
+                                                                                                                                                                                          Inference Stage
+                                                                                     E                           E
+                                                                                                                                                                                                   three paths
+                                                                   Mix-Flow          C                           C    C                   C        C                        C
+                                                                                                    U                            U                              U
+                                                                                     N 4                        8N    N 4                8N        N   4                8 N
+                                                                                     M                           M    M                   M    M                            M   Hello World!       Hello World!     Hello World!
+
+          E       1       5       E        E                   E                     E          1                E    E                   E    E                            E
+                                                                   Enc-Flow                                                 2                                                       M                  M                 E
+                                                                                     C                           C    C                   C        C                        C
+          C 2             6       C        C                   C                                    U                           U                       3       U
+                                                                                     N                           N    N                   N    N                            N       4                  4                1
+              3       U       7                      U                                                      8                        8                              8
+          N                       N        N                   N                     M                           M   M                    M    M                            M
+                                                                                                                                                                                     U                  U                U
+              4           8
+                                                                                                                                              xL
+          M                       M        M                   M
+                                                                                                                                                                                    8                  6                6
+                                                                                     E                  5        E    E                   E        E                        E
+
+                                                                   Dec-Flow          C                           C    C              6    C        C                        C       M                   C                C
+                                                                                                    U                           U                               U       7
+                                                                                     N                           N    N                   N    N                            N
+                                                                                            4                               4                               4
+         Multi-Way Architecture                Initial State                         M                          M    M                    M    M                            M   你好，世界！             你好，世界！           你好，世界！
+
+                                                                                            Step #1                         Step #2                        Step #3
+
+
+                                  E   English Input / Output   C   Chinese Input / Output           N           Nepali Input / Output         M             Multilingual Input / Output        U    Unified Space
+                                  1   English Encoder          2   Chinese Encoder                  3           Nepali Encoder                 4            Multilingual Encoder
+                                  5                            6                                    7           Nepali Decoder                 8            Multilingual Decoder
+                                      English Decoder              Chinese Decoder
+
+
+
+Figure 2: The overview of Lego-MT and training recipe. During training, we introduce an efficient training method
+by classifying multilingual data into language-centric groups. The language-centric groups are trained in a sequential
+way. During each training phase, only language-specific parameters are loaded into GPU memory. The training
+maintains three flows: Enc-Flow (language-specific encoder + multilingual decoder) for training specific encoder,
+Dec-Flow (Multilingual encoder + language-specific decoder) to train language-specific decoder, and Mix-Flow
+(multilingual encoder + multilingual decoder) to avoid the overfitting of multilingual encoder and decoder to each
+language-centric training data. U means the unified space, hidden representations generated by encoders.
+
+
+add additional side networks to each language di-                                                                         3          Lego-MT
+rection in addition to the main multilingual Trans-
+                                                                                                                          3.1            Overview
+former encoder-decoder. While these studies can
+alleviate the capacity bottleneck to some extent,                                                                         This paper aims to build a detachable multi-branch
+challenges remain when handling larger-scale lan-                                                                         model with a language (or group)-specific encoder
+guages.                                                                                                                   and a language (or group)-specific decoder. As
+                                                                                                                          shown in Figure 2, the detachable structure pro-
+                                                                                                                          vides an effective mechanism to only load a part of
+                                                                                                                          modules during training and inference.
+   Mixture-of-Expert (MoE) has recently emerged
+                                                                                                                             During training, we introduce a new train-
+as a prominent research direction (Jacobs et al.,
+                                                                                                                          ing method by classifying multilingual data into
+1991; Shazeer et al., 2017; Lepikhin et al., 2020;
+                                                                                                                          language-centric groups. During each training
+Fedus et al., 2021; Du et al., 2022; Fan et al., 2021;
+                                                                                                                          phase, only language-centric data and related
+Costa-jussà et al., 2022), which are sparsely acti-
+                                                                                                                          branches are loaded. All language-centric groups
+vated, with each inference only activating a subset
+                                                                                                                          are trained in a sequential way. We empirically
+of parameters. Researchers have applied MoE to
+                                                                                                                          found that the orders contribute little to the final
+massively multilingual translation and introduced
+                                                                                                                          performance and we fix the training order for sim-
+various regularization strategies to enhance perfor-
+                                                                                                                          plification in the next parts.
+mance (Dai et al., 2022; Costa-jussà et al., 2022).
+                                                                                                                             During each language-centric training phase, we
+Despite promising results, MoE’s objective differs
+                                                                                                                          introduce a multi-lingual branch to help language-
+from ours, as it still requires the entire structure to
+                                                                                                                          specific branches learn to encode to a unified space
+be stored in GPU memory during inference.
+                                                                                                                          and decode from a unified space. Unified Space is
+                                                                                                                          a concept that aims to map all languages into a uni-
+                                                                                                                          fied representation space without any parameters.
+   The encoder-decoder structure has demonstrated                                                                         This concept is used in natural language processing
+considerable flexibility through the utilization of                                                                       and machine learning to create a common repre-
+the Lego-NN (Dalmia et al., 2022). The Lego-NN                                                                            sentation of language (Lyu et al., 2020; Fan et al.,
+can be applied to various tasks with decoder mod-                                                                         2021) that can be used across different languages.
+ules being detachable, in contrast, the Lego-MT                                                                              The training maintains triple-flow: Enc-Flow
+model design allows for the performance of mas-                                                                           (language-specific encoder + multilingual decoder)
+sively MNMT with all modules being detachable.                                                                            for training specific encoder, Dec-Flow (multilin-
+

@@ -1,0 +1,263 @@
+                                        Published as a conference paper at ICLR 2023
+
+
+
+
+                                        E FFICIENT ATTENTION VIA C ONTROL VARIATES
+                                         Lin Zheng1∗ Jianbo Yuan2 Chong Wang3∗ Lingpeng Kong1
+                                         1
+                                           The University of Hong Kong 2 ByteDance Inc. 3 Apple Inc.
+                                         {lzheng2,lpk}@cs.hku.hk
+                                         jianbo.yuan@bytedance.com mr.chongwang@apple.com
+
+
+
+                                                                                         A BSTRACT
+
+                                                     Random-feature-based attention (RFA) is an efficient approximation of softmax at-
+
+
+
+
+arXiv:2302.04542v1 [cs.LG] 9 Feb 2023
+                                                     tention with linear runtime and space complexity. However, the approximation gap
+                                                     between RFA and conventional softmax attention is not well studied. Built upon
+                                                     previous progress of RFA, we characterize this gap through the lens of control vari-
+                                                     ates and show that RFA can be decomposed into a sum of multiple control variate
+                                                     estimators for each element in the sequence. This new framework reveals that exact
+                                                     softmax attention can be recovered from RFA by manipulating each control variate.
+                                                     Besides, it allows us to develop a more flexible form of control variates, resulting
+                                                     in a novel attention mechanism that significantly reduces the approximation gap
+                                                     while maintaining linear complexity. Extensive experiments demonstrate that our
+                                                     model outperforms state-of-the-art efficient attention mechanisms on both vision
+                                                     and language tasks.1
+
+
+                                        1       I NTRODUCTION
+
+                                        Random-feature-based attention (RFA, also known as Performer; Choromanski et al., 2021; Peng
+                                        et al., 2021b) is an established fast approximation to the conventional softmax attention mechanism
+                                        (Bahdanau et al., 2014; Vaswani et al., 2017), which successfully scales Transformer models to
+                                        processing much longer sequences (Choromanski et al., 2021). At its core is the usage of random
+                                        features (RF; Rahimi & Recht, 2008) to linearize the exponential kernel in softmax attention, which
+                                        reduces the computational cost from quadratic to linear runtime and space complexity. Despite
+                                        its efficiency, recent studies have pointed out that such approximation suffers from substantial
+                                        performance degeneration (Xiong et al., 2021a; Zheng et al., 2022b).
+                                        In this work, we generalize the formulation of RFA via control variates (Owen, 2013), which
+                                        characterizes the approximation gap between RFA and softmax attention in theory. We first show
+                                        that RFA can be decomposed from a global approximation over the whole sequence into a sum of
+                                        local control variate estimators, each of which is applied to an individual element in the sequence.
+                                        Under this formulation, RFA is equivalent to employing the same coefficient for all control variate
+                                        estimators to scale their variance isotropically (§3.1). Besides, we prove that if we optimize the
+                                        coefficient of each control variate to minimize the estimation variance individually, RFA estimation
+                                        becomes exact, that is, softmax attention is recovered with zero bias and zero variance (§3.2).
+                                        Our key observation is that such formulation reveals a localized perspective of the RFA approximation.
+                                        Instead of directly seeking a better estimate over the entire sequence, we can break down the problem
+                                        into smaller problems that aim at improving the approximation for each subsequence (§4). The
+                                        control variate estimator for each subsequence can be tuned separately and combined to yield better
+                                        estimation, which provably reduces approximation error in the global sense (§4.1). Nevertheless,
+                                        one caveat is that as the number of sub-problems increases, the approximation gap will be reduced
+                                        but at the expense of higher computational complexity. For instance, if we optimize the control
+                                        variate for every single element, softmax attention would be recovered as desired but with quadratic
+                                        complexity. To attain a good trade-off between approximation quality and efficiency, we develop a
+                                        new Efficient attention via control VAriates (EVA) that implements this divide-and-conquer strategy
+                                        efficiently. In EVA, the sequence is partitioned into a fixed number of disjoint subsets. For the subset
+                                            ∗
+                                                The majority of this work was done while these authors were at Bytedance.
+                                            1
+                                                Our code and models are available at this link.
+
+
+                                                                                                1
+Published as a conference paper at ICLR 2023
+
+
+
+
+that might bear the highest correlations to the query, we explicitly optimize the control variate for
+each element, which recovers exact softmax attention probabilities; while for the others, the control
+variate coefficient is shared locally among all elements within the same subset. The resulting attention
+mechanism is not only highly effective but also runs with the same computational complexity as RFA
+(§4.2). Extensive experiments on both language and vision tasks demonstrate that EVA outperforms
+the state-of-the-art efficient attention methods (§5).
+
+2     BACKGROUND
+2.1     S OFTMAX ATTENTION M ECHANISM
+
+Assume there exist a set of N queries {qn }N   n=1 and M key-value pairs K = [k1 , . . . , kM ] and
+V = [v1 , . . . , vM ], where queries, keys and values are all d-dimensional vectors. The softmax
+attention mechanism (Bahdanau et al., 2014; Vaswani et al., 2017) is defined as an average over the
+value vectors weighted by the dot-product similarities of the queries and keys. For the n-th query, the
+attention mechanism outputs
+                                                   M
+                                                            exp q>
+                                                                        
+                                                                   n km
+                                                  X
+                      SoftmaxAttn(qn , K, V) :=        PM                     vm .                  (1)
+                                                                       >
+                                                           m0 =1 exp (qn km )
+                                                                            0
+                                                  m=1
+
+In the case of self-attention (Lin et al., 2017; Vaswani et al., 2017), we have M = N , which results
+in quadratic computational complexity since we have to compute the similarity for each query-key
+pair explicitly.
+
+2.2     R ANDOM -F EATURE - BASED ATTENTION WITH S ELF - NORMALIZED I MPORTANCE
+        S AMPLING
+
+Recently, Zheng et al. (2022b) identifies that softmax attention (Equation 1) can be written as an
+expectation over an attention-like aggregating function,
+                                       M
+                                                exp q>
+                                                           
+                                                      n km
+                                       X
+         SoftmaxAttn(qn , K, V) =          PM                    vm = Eω∼pn (ω) [fn (ω)] ,     (2)
+                                                          >
+                                              m0 =1 exp (qn km )
+                                                               0
+                                      m=1
+
+where
+             PM                                                              PM            >
+                    ξ(qn , ω)ξ(km , ω)vm                    N (ω; 0, I)       m=1 ξ(qn , ω) ξ(km , ω)
+    fn (ω) := Pm=1
+                M
+                                         ,      pn (ω) :=                                               . (3)
+                m0 =1 ξ(qn , ω)ξ(km , ω)
+                                    0                                             Z
+
+Here ξ(·, ·) is the randomized mapping defined in such a way that exp q>
+                                                                                         
+                                                                                    n km   =
+                     >
+                                            PM            >
+                                                                
+Eω∼N (0,I) ξ(qn , ω) ξ(km , ω) , and Z =        m=1 exp qn km denotes the normalizing con-
+stant of distribution
+                     pn . Throughout this paper, we consider the positive randomized mapping
+                                
+                              2
+ξ(x, ω) = exp ω > x − 12 kxk (Choromanski et al., 2021) unless otherwise specified.
+
+Random-Feature-based Attention (RFA) methods (Choromanski et al., 2021; Peng et al., 2021b)
+can be interpreted as performing self-normalized importance sampling (SNIS; Hesterberg, 1995) to
+approximate Equation 2 (Zheng et al., 2022b). In SNIS, one draws Monte Carlo samples from some
+proposal distribution q(ω) instead of the true distribution pn (ω) and estimates the target expectation
+                                                       PS    pn (ω)
+                                                                    fn (ωs )
+                                   h             i
+as Eω∼pn (ω) [fn (ω)] = Eω∼q(ω) pq(ω)n (ω)
+                                           fn (ω) ≈ s=1   PS
+                                                              q(ω)
+                                                                 pn (ωs )    , where ω1 , . . . , ωS ∼ q(ω).
+                                                              s=1   q(ωs )
+Vanilla RFA amounts to constructing the SNIS estimation with q(ω) = N (ω; 0, I). The SNIS
+representation also turns out equivalent to the more established form of RFA,
+                                PS pn (ωs )             PM
+                                   s=1 q(ωs ) f (ωs )
+                                                                          >
+                                                           m=1 φ(qn , ω) φ(km , ω)vm
+           RFA(qn , K, V) :=       PS pn (ωs )        =  PM                              ,       (4)
+                                                                            >
+                                                            m0 =1 φ(qn , ω) φ(km , ω)
+                                                                                 0
+                                      s=1 q(ωs )
+                                                        √
+where the random feature, denoted by φ(x, ω) := 1/ S[ξ(x, ω1 ), . . . , ξ(x, ωS )]> , is proposed to
+approximate exponential kernels in its original motivation (see Appendix A for a detailed review).
+
+
+                                                     2
+Published as a conference paper at ICLR 2023
+
+
+
+
+2.3    C ONTROL VARIATES
+
+Control variates aim to reduce the estimation variance of an expectation E [g(ω)]. Assuming our
+original RFA estimation is g(ω) ∈ Rd and there is some control variate h(ω) ∈ R with a known
+expectation E [h(ω)], we can employ the control variate h(ω) with the coefficient β ∈ Rd as follows,
+                                    ge(ω) = g(ω) − βh(ω) + βE [h(ω)]                                             (5)
+Note that the resulting estimator remains unbiased since E [e  g (ω)] = E [g(ω)] − βE [h(ω)] +
+βE [h(ω)] = E [g(ω)]. However, the estimation variance can be largely reduced if g(·) and the
+scaled control variate βh(ω) are positively correlated (Owen, 2013).
+
+3     D ISSECTING RFA WITH C ONTROL VARIATES
+In this section, we first go through the connections among RFA, importance sampling, and control
+variates, revealing a decomposed formulation of RFA (§3.1), and then quantify the approximation
+gap between RFA and softmax attention (§3.2) from these connections.
+
+3.1    RFA AS A S UM OF L OCAL C ONTROL VARIATE E STIMATORS
+
+As shown in Equation 4, RFA estimation considers all key-value pairs and produces a global
+approximation over the entire sequence. In contrast, our work develops a decomposed representation
+of RFA based on the recent advances in SNIS (Vlassis et al., 2021), which indicates that an SNIS
+estimate is asymptotically equivalent to a control variate estimate (the detailed derivations is deferred
+to Appendix B.2). In particular, we have
+     PS pn (ωs )                S
+                                                      PS pn (ωs )                 S
+                                                                                                  !
+       s=1 q(ωs ) f (ωs )    1 X pn (ωs )                s=1 q(ωs ) f (ωs )    1 X pn (ωs )
+        PS pn (ωs )       =                 f (ωs ) −     PS pn (ωs )                         −1
+                             S s=1 q(ωs )                                     S s=1 q(ωs )
+           s=1 q(ωs )                                               s=1 q(ωs )
+
+                              := g(ω) − b
+                                        β(ω) (h(ω) − E [h(ω)]) := ge(ω),                                         (6)
+                   1
+                     PS    pn (ωs )                                                 PS
+                                                                                 pn (ωs )
+                                                                                  1
+where g(ω) := S       s=1 q(ωs ) f (ωs ) is our base estimate, h(ω) := S    s=1 q(ωs ) is the control
+                                            P                    .P              
+                                                S   pn (ωs )           S   pn (ωs )       g(ω)
+variate with control coefficient β(ω)
+                                   b    :=      s=1 q(ωs ) f (ωs )     s=1 q(ωs )     = h(ω)   .
+
+We now examine the formulation of g(·) and h(·) in the context of RFA. According to Equation 3,
+                               S                    S          M
+                            1 X pn (ωs )           X          X
+                 g(ω) =                  f (ωs ) =     α(ωs )     ξ(qn , ωs )ξ(km , ωs )vm ,
+                            S s=1 q(ωs )           s=1        m=1
+                               S            S          M
+                            1 X pn (ωs ) X            X
+                 h(ω) =                  =     α(ωs )     ξ(qn , ωs )ξ(km , ωs ),
+                            S s=1 q(ωs )   s=1        m=1
+
+where α(ωs ) := S1 NZq(ω
+                     (ωs ;0,I)
+                          s)
+                               collects terms that is constant w.r.t. queries, keys, and values. Our key
+observation is that by changing the order of summations, both g(·) and h(·) can be decomposed as
+        PM                             PM
+g(ω) = m=1 gm (ω) and h(ω) = m=1 hm (ω) respectively, where
+                 S
+                 X                                                         S
+                                                                           X
+      gm (ω) =         α(ωs )ξ(qn , ωs )ξ(km , ωs )vm ,         hm (ω) =         α(ωs )ξ(qn , ωs )ξ(km , ωs ).
+                 s=1                                                       s=1
+As a result, we can decompose the entire RFA estimate in Equation 6 into a summation of M control
+variate estimates following
+              ge(ω) = g(ω) − β(ω)
+                              b     (h(ω) − E [h(ω)])
+                          M
+                                   !              M
+                                                             !       " M          #!
+                         X                        X                    X
+                    =       gm (ω) − β(ω)b            hm (ω) − E           hm (ω)
+                             m=1                              m=1                  m=1
+                            M
+                            X                                                     M
+                                                                                  X
+                        =       gm (ω) − β(ω)
+                                         b    (hm (ω) − E [hm (ω)]) :=                gem (ω).                   (7)
+                            m=1                                                  m=1
+
+
+
+                                                          3
+

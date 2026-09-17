@@ -1,0 +1,886 @@
+﻿序,年份,文章标题,导师论文署名单位,论文对应经历阶段,统一研究主题,研究问题,采用方法,应用领域,证据位置,未完成事项序号
+126,2011,Formalization and Rules for Recognition of Satirical Irony,北京语言大学,本科；北京语言大学；2011毕业,讽刺与反语识别,情感分析如何区分讽刺、反语和讽刺性反语？,明确术语定义，讨论表达层级并归纳可形式化和暂不可形式化的特征。,讽刺与反语识别,"论文信息汇总.csv 序126：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2011_Formalization and Rules for Recognition of Satirical Irony.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://ikekonglp.github.io/paper/ialp11a.pdf；访问2026-09-17。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“2011 International Conference on Asian Language Processing”。
+原文摘要依据：“Satirical irony is a very important language phenomena. Its recognition is of great importance to sentiment analysis. However, researches on this topic are still quite rare and existing studies have p”。",P126-C;P126-R
+127,2011,Improving Chinese Dependency Parsing with Self-Disambiguating Patterns,NEC中国研究院,NEC中国研究院；研究实习；2011,句法分析与结构化表示,中文依存分析如何减少数据稀疏和自动解析错误？,以自消歧模式提取带标签依存三元组，再通过标签传播扩展并接入MST解析器。,句法分析与结构化表示,"论文信息汇总.csv 序127：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2011_Improving Chinese Dependency Parsing with Self-Disambiguating Patterns.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://ikekonglp.github.io/paper/ialp11b.pdf；访问2026-09-17。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“2011 International Conference on Asian Language Processing”。
+原文摘要依据：“To solve the data sparseness problem in dependency parsing, most previous studies used features constructed from large-scale auto-parsed data. Unlike previous work, we propose a new approach to improv”。",P127-C;P127-R;P127-V
+7,2014,An Empirical Comparison of Parsing Methods for Stanford Dependencies,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,获得Stanford依存结构时，准确率与速度如何取舍？,比较分析算法、词性输入、替代依存表示和分布式词表示。,句法分析与结构化表示,"论文信息汇总.csv 序7：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_An Empirical Comparison of Parsing Methods for Stanford Dependencies.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1404.4314；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“Stanford typed dependencies are a widely desired representation of natural language sentences, but parsing is one of the major computational bottlenecks in text analysis systems. In light of the evolv”。",P7-C;P7-A;P7-R
+124,2014,A Dependency Parser for Tweets,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,新闻语料训练的句法分析器如何适应非规范推文？,构建Tweebank标注语料，调整统计解析算法并利用域外Penn Treebank。,句法分析与结构化表示,"论文信息汇总.csv 序124：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_A Dependency Parser for Tweets.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D14-1108/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1001–1012,”。
+原文摘要依据：“We describe a new dependency parser for English tweets, TWEEBOPARSER. The parser builds on several contributions: new syntactic annotations for a corpus of tweets (TWEEBANK), with conventions informed”。",P124-C;P124-A;P124-R
+125,2014,Dependency Parsing for Weibo: An Efficient Probabilistic Logic Programming Approach,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,微博文本的噪声和领域差异如何影响中文依存分析？,建立超过18000词元的微博树库，以可编程概率一阶逻辑并行预测依存弧。,句法分析与结构化表示,"论文信息汇总.csv 序125：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2014_Dependency Parsing for Weibo_ An Efficient Probabilistic Logic Programming Approach.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D14-1122/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1152–1158,”。
+原文摘要依据：“Dependency parsing is a core task in NLP, and it is widely used by many applications such as information extraction, question answering, and machine translation. In the era of social media, a big chal”。",P125-C;P125-A;P125-R
+122,2015,Bayesian Optimization of Text Representations,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,文本表示与自动优化,文本分类中如何自动选择词频、词组和正则化等表示配置？,使用序贯模型优化联合搜索文本表示与超参数。,文本表示与自动优化,"论文信息汇总.csv 序122：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_Bayesian Optimization of Text Representations.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D15-1251/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing, pages 2100–2105,”。
+原文摘要依据：“When applying machine learning to problems in NLP, there are many choices to make about how to represent input texts. They can have a big effect on performance, but they are often uninteresting to res”。",P122-C;P122-A;P122-R
+123,2015,Transforming Dependencies into Phrase Structures,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,如何把依存树快速转换成高质量短语结构树？,将依存到短语结构转换建模为结构化预测，并进行粗到细解码。,句法分析与结构化表示,"论文信息汇总.csv 序123：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_Transforming Dependencies into Phrase Structures.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/N15-1080/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“We present a new algorithm for transforming dependency parse trees into phrase-structure parse trees. We cast the problem as structured prediction and learn a statistical model. Our algorithm is faste”。",P123-C;P123-A;P123-R
+130,2015,ACBiMA: Advanced Chinese Bi-Character Word Morphological Analyzer,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,中文构词分析,如何覆盖双字中文词的派生与复合构词结构？,构建细分类型方案和约11000词语料，训练构词分类器。,中文构词分析,"论文信息汇总.csv 序130：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2015_ACBiMA_ Advanced Chinese Bi-Character Word Morphological Analyzer.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/W15-3105/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第13页；版本2026-01-27。
+PDF发表标记：“Proceedings of the Eighth SIGHAN Workshop on Chinese Language Processing (SIGHAN-8), pages 26–31,”。
+原文摘要依据：“While morphological information has been demonstrated to be useful for various Chinese NLP tasks, there is still a lack of complete theories, category schemes, and toolkits for Chinese morphology. Thi”。",P130-C;P130-A;P130-R
+119,2016,Segmental Recurrent Neural Networks for End-to-end Speech Recognition,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,语音识别与分段建模,声学建模如何在没有外部分段的情况下端到端训练？,联合循环特征提取与分段CRF，对所有分段边界进行边缘化。,语音识别与分段建模,"论文信息汇总.csv 序119：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks for End-to-end Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1603.00223；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“We study the segmental recurrent neural network for end-to-end acoustic modelling. This model connects the segmental conditional random field (CRF) with a recurrent neural network (RNN) used for featu”。",P119-C;P119-A;P119-R;P119-F
+120,2016,Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,多个依存分析器的知识如何压缩到一个结构化模型？,用最小贝叶斯风险共识与包含集成不确定性的结构化铰链损失蒸馏。,句法分析与结构化表示,"论文信息汇总.csv 序120：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Distilling an Ensemble of Greedy Dependency Parsers into One MST Parser.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/D16-1180/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing, pages 1744–1753,”。
+原文摘要依据：“We introduce two first-order graph-based dependency parsers achieving a new state of the art. The first is a consensus parser built from an ensemble of independently trained greedy LSTM transition-bas”。",P120-C;P120-A;P120-R
+121,2016,Segmental Recurrent Neural Networks,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,语音识别与分段建模,如何联合预测序列分段与片段标签？,双向循环网络编码片段，再用半马尔可夫CRF整合评分。,语音识别与分段建模,"论文信息汇总.csv 序121：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Segmental Recurrent Neural Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1511.06018；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2016”。
+原文摘要依据：“We introduce segmental recurrent neural networks (SRNNs) which define, given an input sequence, a joint probability distribution over segmentations of the input and labelings of the segments. Represen”。",P121-C;P121-A;P121-R
+129,2016,Document Context Language Models,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,语言建模与记忆,语言模型如何利用句外上下文改善篇章连贯性？,DCLM以多层级循环网络同时建模词、句和文档上下文。,语言建模与记忆,"论文信息汇总.csv 序129：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2016_Document Context Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1511.03962；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第13页；版本2026-01-27。
+PDF发表标记：“Workshop track - ICLR 2016”。
+原文摘要依据：“Text documents are structured on multiple levels of detail: individual words are related by syntax, but larger units of text are related by discourse structure. Existing language models generally fail”。",P129-C;P129-A;P129-R
+4,2017,SyntaxNet Models for the CoNLL 2017 Shared Task,Google,Google Research；研究实习；2016（论文发表2017；具体研究时间待核验）,句法分析与结构化表示,如何构建多语言依存句法分析的强基线？,在DRAGNN中结合转移式循环分析、词性标注和字符级表示。,句法分析与结构化表示,"论文信息汇总.csv 序4：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_SyntaxNet Models for the CoNLL 2017 Shared Task.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1703.04929；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We describe a baseline dependency parsing system for the CoNLL2017 Shared Task. This system, which we call ""ParseySaurus,"" uses the DRAGNN framework [Kong et al, 2017] to combine transition-based recu”。",P4-C;P4-A;P4-R
+5,2017,DRAGNN: A Transition-based Framework for Dynamically Connected Neural Networks,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,如何根据中间预测动态连接循环网络，同时支持多任务？,提出带离散状态转移的TBRU单元并组合为DRAGNN。,句法分析与结构化表示,"论文信息汇总.csv 序5：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_DRAGNN_ A Transition-based Framework for Dynamically Connected Neural Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1703.04474；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“In this work, we present a compact, modular framework for constructing novel recurrent neural architectures. Our basic module is a new generic unit, the Transition Based Recurrent Unit (TBRU). In addi”。",P5-C;P5-A;P5-R
+6,2017,DyNet: The Dynamic Neural Network Toolkit,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,神经网络工具,动态网络结构如何兼顾编程灵活性和计算效率？,以轻量计算图和优化的C++后端实现DyNet。,神经网络工具,"论文信息汇总.csv 序6：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_DyNet_ The Dynamic Neural Network Toolkit.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1701.03980；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We describe DyNet, a toolkit for implementing neural network models based on dynamic declaration of network structure. In the static declaration strategy that is used in toolkits like Theano, CNTK, an”。",P6-C;P6-A;P6-R
+15,2017,End-to-End Neural Segmental Models for Speech Recognition,待核验,阶段待核验,语音识别与分段建模,神经分段模型在端到端语音识别中如何训练和搜索？,比较声学编码器、有限状态解码器、权重函数和多种损失。,语音识别与分段建模,"论文信息汇总.csv 序15：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_End-to-End Neural Segmental Models for Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1708.00531；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Segmental models are an alternative to frame-based models for sequence prediction, where hypothesized path weights are based on entire segment scores rather than a single frame at a time. Neural segme”。",P15-C;P15-A;P15-R;P15-F
+117,2017,Multi-task Learning with CTC and Segmental CRF for Speech Recognition,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,语音识别与分段建模,CTC和分段条件随机场能否互补训练语音模型？,共享循环编码器，联合优化SCRF与CTC损失。,语音识别与分段建模,"论文信息汇总.csv 序117：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_Multi-task Learning with CTC and Segmental CRF for Speech Recognition.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1702.06378；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+原文摘要依据：“Segmental conditional random fields (SCRFs) and connectionist temporal classification (CTC) are two sequence labeling methods used for end-to-end training of speech recognition models. Both models def”。",P117-C;P117-A;P117-R;P117-F
+118,2017,What Do Recurrent Neural Network Grammars Learn About Syntax?,卡内基梅隆大学,硕士/博士阶段待核验（CMU学位完成于2015/2017，入学时间未公开）,句法分析与结构化表示,循环神经文法实际学到了哪些句法信息？,用模型消融与注意力增强的RNNG检查结构组合与中心词作用。,句法分析与结构化表示,"论文信息汇总.csv 序118：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2017_What Do Recurrent Neural Network Grammars Learn About Syntax_.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/E17-1117/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 1, Long Papers, pages 1249–1258,”。
+原文摘要依据：“Recurrent neural network grammars (RNNG) are a recently proposed probablistic generative modeling family for natural language. They show state-of-the-art language modeling and parsing performance. We ”。",P118-C;P118-A;P118-R
+2,2018,Neural Phrase-to-Phrase Machine Translation,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,机器翻译,短语级翻译如何兼顾训练效率与跨域泛化？,短语注意力结合动态规划，并在解码中接入外部短语词典。,机器翻译,"论文信息汇总.csv 序2：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2018_Neural Phrase-to-Phrase Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1811.02172；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“In this paper, we propose Neural Phrase-to-Phrase Machine Translation (NP$^2$MT). Our model uses a phrase attention mechanism to discover relevant input (source) segments that are used by a decoder to”。",P2-C;P2-A;P2-R
+3,2018,Sentence Encoding with Tree-constrained Relation Networks,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,句法分析与结构化表示,句子表示如何利用词语间的高阶关系与句法结构？,将监督或潜在依存树约束加入循环关系网络。,句法分析与结构化表示,"论文信息汇总.csv 序3：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2018_Sentence Encoding with Tree-constrained Relation Networks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1811.10475；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“The meaning of a sentence is a function of the relations that hold between its words. We instantiate this relational view of semantics in a series of neural models based on variants of relation networ”。",P3-C;P3-A;P3-R
+1,2019,Learning and Evaluating General Linguistic Intelligence,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,语言迁移与学习能力评测,语言模型能否复用词汇、句法和语义知识，快速适应新任务？,用跨任务实验和在线编码指标衡量学习效率。,语言迁移与学习能力评测,"论文信息汇总.csv 序1：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2019_Learning and Evaluating General Linguistic Intelligence.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1901.11373；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+原文摘要依据：“We define general linguistic intelligence as the ability to reuse previously acquired knowledge about a language's lexicon, syntax, semantics, and pragmatic conventions to adapt to new tasks quickly. ”。",P1-C;P1-A;P1-R
+115,2019,Episodic Memory in Lifelong Language Learning,待核验,阶段待核验,语言建模与记忆,连续接收不同数据时如何减少灾难性遗忘？,使用情景记忆中的稀疏经验回放与局部适应。,语言建模与记忆,"论文信息汇总.csv 序115：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/1906.01076；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We introduce a lifelong language learning setup where a model needs to learn from a stream of text examples without any dataset identifier. We propose an episodic memory model that performs sparse exp”。",P115-C;P115-D;P115-A;P115-R;P115-F
+116,2019,Variational Smoothing in Recurrent Neural Network Language Models,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,语言建模与记忆,语言模型的数据加噪如何获得统一概率解释？,将加噪视为带特定变分分布的贝叶斯循环网络。,语言建模与记忆,"论文信息汇总.csv 序116：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2019_Variational Smoothing in Recurrent Neural Network Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1901.09296；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第12页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2019”。
+原文摘要依据：“We present a new theoretical perspective of data noising in recurrent neural network language models (Xie et al., 2017). We show that each variant of data noising is an instance of Bayesian recurrent ”。",P116-C;P116-A;P116-R
+13,2020,Syntactic Structure Distillation Pretraining for Bidirectional Encoders,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,句法分析与结构化表示,大规模BERT预训练是否仍受益于明确的句法归纳偏置？,蒸馏层次句法语言模型在双向上下文中的近似边缘分布。,句法分析与结构化表示,"论文信息汇总.csv 序13：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_Syntactic Structure Distillation Pretraining for Bidirectional Encoders.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2020.tacl-1.50/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Textual representation learners trained on large amounts of data have achieved notable success on downstream tasks; intriguingly, they have also performed well on challenging tests of syntactic compet”。",P13-C;P13-A;P13-R
+14,2020,Better Document-Level Machine Translation with Bayes’ Rule,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,机器翻译,缺少平行文档时，如何利用跨句信息提升文档翻译？,用贝叶斯法则组合文档语言模型先验与反向句级翻译概率。,机器翻译,"论文信息汇总.csv 序14：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_Better Document-Level Machine Translation with Bayes’ Rule.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2020.tacl-1.23/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“We show that Bayes’ rule provides an effective mechanism for creating document translation models that can be learned from only parallel sentences and monolingual documents a compelling benefit becaus”。",P14-C;P14-A;P14-R
+114,2020,A Mutual Information Maximization Perspective of Language Representation Learning,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,句法分析与结构化表示,词表示学习能否用统一的互信息目标解释？,把经典词嵌入与上下文表示解释为互信息下界最大化。,句法分析与结构化表示,"论文信息汇总.csv 序114：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2020_A Mutual Information Maximization Perspective of Language Representation Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/1910.08350；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We show state-of-the-art word representation learning methods maximize an objective function that is a lower bound on the mutual information between different parts of a word sequence (i.e., a sentenc”。",P114-C;P114-A;P114-R;P114-F
+12,2021,Adaptive Semiparametric Language Models,Google DeepMind,Google DeepMind；研究科学家/高级研究科学家；2017-2020（岗位边界待核验）,语言建模与记忆,语言模型如何按上下文选择短期和长期记忆？,将Transformer、局部隐藏态缓存和近邻词元检索用门控组合。,语言建模与记忆,"论文信息汇总.csv 序12：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Adaptive Semiparametric Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.tacl-1.22/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“We present a language model that combines a large parametric neural network (i.e., a transformer) with a non-parametric episodic memory component in an integrated architecture. Our model uses extended”。",P12-C;P12-A;P12-R
+111,2021,Cascaded Head-colliding Attention,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,高效注意力与序列架构,多头注意力如何减少头部冗余？,CODA用潜变量和层次变分分布显式建模头间交互。,高效注意力与序列架构,"论文信息汇总.csv 序111：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Cascaded Head-colliding Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.acl-long.45/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Transformers have advanced the field of natural language processing (NLP) on a variety of important tasks. At the cornerstone of the Transformer architecture is the multi-head attention (MHA) mechanis”。",P111-C;P111-A;P111-R
+112,2021,Good for Misconceived Reasons: An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,机器翻译,多模态翻译的性能提升是否真正来自视觉信息？,设计可解释模型并分析视觉信息的使用情况。,机器翻译,"论文信息汇总.csv 序112：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Good for Misconceived Reasons_ An Empirical Revisiting on the Need for Visual Context in Multimodal Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2021.acl-long.480/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“A neural multimodal machine translation (MMT) system is one that aims to perform better translation by extending conventional text-only translation models with multimodal information. Many recent stud”。",P112-C;P112-A;P112-R
+113,2021,Random Feature Attention,香港大学（首页与Allen AI复用同一单位符号；对应关系待核验）,阶段待核验,高效注意力与序列架构,softmax注意力如何降低长序列的二次计算成本？,用随机特征线性近似softmax，并提供可选近因门控。,高效注意力与序列架构,"论文信息汇总.csv 序113：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2021_Random Feature Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2103.02143；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2021”。
+原文摘要依据：“Transformers are state-of-the-art models for a variety of sequence modeling tasks. At their core is an attention function which models pairwise interactions between the inputs at every timestep. While”。",P113-C;P113-A;P113-R
+95,2022,ProGen: Progressive Zero-shot Dataset Generation via In-context Feedback,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,任务数据合成,如何减少零样本合成数据中的低信息和重复样本？,ProGen将小型任务模型的反馈作为上下文示例引导后续生成。,任务数据合成,"论文信息汇总.csv 序95：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ProGen_ Progressive Zero-shot Dataset Generation via In-context Feedback.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.findings-emnlp.269/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Recently, dataset-generation-based zero-shot learning has shown promising results by training a task-specific model with a dataset synthesized from large pre-trained language models (PLMs). The final ”。",P95-C;P95-A;P95-R
+96,2022,ZeroGen: Efficient Zero-shot Learning via Dataset Generation,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,任务数据合成,零样本任务能否用小模型获得更低的推理成本？,ZeroGen先用预训练模型无监督生成数据，再训练小型任务模型。,任务数据合成,"论文信息汇总.csv 序96：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ZeroGen_ Efficient Zero-shot Learning via Dataset Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.801/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 11653–11669”。
+原文摘要依据：“There is a growing interest in dataset generation recently due to the superior generative capacity of large pre-trained language models (PLMs). In this paper, we study a flexible and efficient zero-sh”。",P96-C;P96-A;P96-R
+97,2022,UnifiedSKG: Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text Language Models,待核验,阶段待核验,结构化知识理解,不同结构化知识任务如何共享统一训练与评测形式？,UnifiedSKG将21项任务转化为文本到文本格式，并进行多任务前缀微调。,结构化知识理解,"论文信息汇总.csv 序97：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2022.emnlp-main.39/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Structured knowledge grounding (SKG) leverages structured knowledge to complete user requests, such as semantic parsing over databases and question answering over knowledge bases. Since the inputs and”。",P97-C;P97-D;P97-A;P97-R
+98,2022,The Devil in Linear Transformer,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,高效注意力与序列架构,线性Transformer性能下降的关键原因是什么？,分析无界梯度与注意力稀释，以归一化和早层局部注意力解决。,高效注意力与序列架构,"论文信息汇总.csv 序98：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_The Devil in Linear Transformer.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.473/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Linear transformers aim to reduce the quadratic space-time complexity of vanilla transformers. However, they usually suffer from degraded performances on various tasks and corpus. In this paper, we ex”。",P98-C;P98-A
+99,2022,An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks,香港大学,香港大学；助理教授；2020-至今,句法分析与结构化表示,显式语言结构带来的收益是否来自语言知识本身？,用平衡树等平凡图替代真实句法、语义结构进行对照。,句法分析与结构化表示,"论文信息汇总.csv 序99：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_An Empirical Revisiting of Linguistic Knowledge Fusion in Language Understanding Tasks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.emnlp-main.684/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 10064–10070”。
+原文摘要依据：“Though linguistic knowledge emerges during large-scale language model pretraining, recent work attempt to explicitly incorporate human-defined linguistic priors into task-specific fine-tuning. Infusin”。",P99-C;P99-R
+100,2022,CoNT: Contrastive Neural Text Generation,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,可控文本生成与一致性,对比学习为何未充分改善神经文本生成？,CoNT联合改进对比样本、损失和解码策略。,可控文本生成与一致性,"论文信息汇总.csv 序100：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_CoNT_ Contrastive Neural Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2205.14690；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“Recently, contrastive learning attracts increasing interests in neural text generation as a new solution to alleviate the exposure bias problem. It introduces a sequence-level training signal which is”。",P100-C;P100-A;P100-R;P100-F
+101,2022,A Contrastive Framework for Neural Text Generation,香港大学,香港大学；助理教授；2020-至今,可控文本生成与一致性,文本生成怎样减少重复退化而保持连贯？,SimCTG校准词元表示空间，并用对比搜索平衡多样性和上下文一致性。,可控文本生成与一致性,"论文信息汇总.csv 序101：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_A Contrastive Framework for Neural Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.06417；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“Text generation is of great importance to many natural language processing applications. However, maximization-based decoding methods (e.g. beam search) of neural language models often lead to degener”。",P101-C;P101-R;P101-F
+102,2022,Audio-Visual Segmentation,待核验,阶段待核验,音视频分割与描述,如何在视频帧中像素级定位发声物体？,构建AVSBench，以时间像素级音视频交互引导分割。,音视频分割与描述,"论文信息汇总.csv 序102：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2207.05042；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We propose to explore a new problem called audio-visual segmentation (AVS), in which the goal is to output a pixel-level map of the object(s) that produce sound at the time of the image frame. To faci”。",P102-C;P102-D;P102-A;P102-R;P102-F
+103,2022,Linear Complexity Randomized Self-attention Mechanism,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,高效注意力与序列架构,随机特征softmax近似的偏差如何理解和减少？,从自归一化重要性采样推导随机注意力，再组合为线性LARA。,高效注意力与序列架构,"论文信息汇总.csv 序103：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Linear Complexity Randomized Self-attention Mechanism.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2204.04667；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 39 th International Conference on Machine        the estimator is still consistent, the bias in question is elusive and”。
+原文摘要依据：“Recently, random feature attentions (RFAs) are proposed to approximate the softmax attention in linear time and space complexity by linearizing the exponential kernel. In this paper, we first propose ”。",P103-C;P103-A
+104,2022,Ripple Attention for Visual Perception with Sub-quadratic Complexity,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,高效注意力与序列架构,视觉序列化如何保留二维空间邻近关系？,Ripple Attention按空间距离加权，并以动态规划高效计算。,高效注意力与序列架构,"论文信息汇总.csv 序104：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Ripple Attention for Visual Perception with Sub-quadratic Complexity.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2110.02453；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 39 th International Conference on Machine     table technique (§3.3).”。
+原文摘要依据：“Transformer architectures are now central to sequence modeling tasks. At its heart is the attention mechanism, which enables effective modeling of long-term dependencies in a sequence. Recently, trans”。",P104-C;P104-A
+105,2022,Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling,香港大学,香港大学；助理教授；2020-至今,句法分析与结构化表示,不同句法、语义图能为语言建模提供多少额外信息？,用GPT-2与七种真实图结构集成，对比下一词预测和困惑度。,句法分析与结构化表示,"论文信息汇总.csv 序105：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic Language Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.naacl-main.325/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“We examine the extent to which, in principle, different syntactic and semantic graph representations can complement and improve neural language modeling. Specifically, by conditioning on a subgraph en”。",P105-C;P105-R
+106,2022,Event Transition Planning for Open-ended Text Generation,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,可控文本生成与一致性,开放式故事和对话如何安排事件间的因果与关系？,先由事件转移规划器生成粗略情节，再由文本模型细化。,可控文本生成与一致性,"论文信息汇总.csv 序106：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Event Transition Planning for Open-ended Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.findings-acl.269/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+原文摘要依据：“Open-ended text generation tasks, such as dialogue generation and story completion, require models to generate a coherent continuation given limited preceding context. The open-ended nature of these t”。",P106-C;P106-A
+107,2022,Lexical Knowledge Internalization for Neural Dialog Generation,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,支持性对话,对话模型如何把词汇知识融入内部参数？,用维基百科弱监督训练对比式词元知识检索器，再进行知识内化。,支持性对话,"论文信息汇总.csv 序107：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Lexical Knowledge Internalization for Neural Dialog Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.acl-long.547/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“We propose knowledge internalization (KI), which aims to complement the lexical knowledge into neural dialog models. Instead of further conditioning the knowledge-grounded dialog (KGD) models on exter”。",P107-C;P107-A
+108,2022,ABC: Attention with Bounded-memory Control,香港大学,香港大学；助理教授；2020-至今,高效注意力与序列架构,注意力内存如何固定大小而尽量保留建模能力？,ABC把高效注意力统一为有界内存控制，并学习上下文化的内存组织。,高效注意力与序列架构,"论文信息汇总.csv 序108：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_ABC_ Attention with Bounded-memory Control.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2022.acl-long.515/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Transformer architectures have achieved state- of-the-art results on a variety of natural language processing (NLP) tasks. However, their attention mechanism comes with a quadratic complexity in seque”。",P108-C;P108-R
+109,2022,cosFormer: Rethinking Softmax In Attention,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,高效注意力与序列架构,线性注意力如何保留softmax的非负性与集中分布？,cosFormer结合线性算子和余弦距离重加权。,高效注意力与序列架构,"论文信息汇总.csv 序109：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_cosFormer_ Rethinking Softmax In Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.08791；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2022”。
+原文摘要依据：“Transformer has shown great successes in natural language processing, computer vision, and audio processing. As one of its core components, the softmax attention helps to capture long-range dependenci”。",P109-C;P109-A
+110,2022,Revisiting Over-smoothing in BERT from the Perspective of Graph,香港大学,香港大学；助理教授；2020-至今,句法分析与结构化表示,BERT层数增加后的表示过平滑由什么引起？,从图传播角度分析层归一化，并自适应融合不同层表示。,句法分析与结构化表示,"论文信息汇总.csv 序110：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_Revisiting Over-smoothing in BERT from the Perspective of Graph.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2202.08625；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第11页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2022”。
+原文摘要依据：“Recently over-smoothing phenomenon of Transformer-based models is observed in both vision and language fields. However, no existing work has delved deeper to further investigate the main cause of this”。",P110-C;P110-A;P110-R
+131,2022,SNCSE: Contrastive Learning for Unsupervised Sentence Embedding with Soft Negative Samples,香港大学,香港大学；助理教授；2020-至今,句法分析与结构化表示,句子嵌入如何区分表面相似和语义相似？,以否定句构造软负样本，并加入双向边界损失。,句法分析与结构化表示,"论文信息汇总.csv 序131：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2022_SNCSE_ Contrastive Learning for Unsupervised Sentence Embedding with Soft Negative Samples.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2201.05979；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Unsupervised sentence embedding aims to obtain the most appropriate embedding for a sentence to reflect its semantic. Contrastive learning has been attracting developing attention. For a sentence, cur”。",P131-C;P131-R
+132,2022,Language Models Can See: Plugging Visual Controls in Text Generation,待核验,阶段待核验,可控文本生成与一致性,无需再训练的语言模型如何接受图像引导？,MAGIC将CLIP图文分数加入文本解码，约束语义与上下文连贯。,可控文本生成与一致性,"论文信息汇总.csv 序132：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2205.02655；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Generative language models (LMs) such as GPT-2/3 can be prompted to generate text with remarkable quality. While they are designed for text-prompted generation, it remains an open question how the gen”。",P132-C;P132-D;P132-A;P132-R
+10,2023,Linearized Relative Positional Encoding,香港大学,香港大学；助理教授；2020-至今,高效注意力与序列架构,相对位置编码如何保留线性Transformer的复杂度优势？,以规范形式和酉变换构造LRPE编码族。,高效注意力与序列架构,"论文信息汇总.csv 序10：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Linearized Relative Positional Encoding.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2307.09270；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Relative positional encoding is widely used in vanilla and linear transformers to represent positional information. However, existing encoding methods of a vanilla transformer are not always directly ”。",P10-C;P10-A;P10-F
+11,2023,Vicinity Vision Transformer,待核验,阶段待核验,高效注意力与序列架构,高分辨率视觉Transformer如何降低注意力的二次开销？,按二维曼哈顿距离加入局部偏置，并降低特征维度。,高效注意力与序列架构,"论文信息汇总.csv 序11：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2206.10552；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Vision transformers have shown great success on numerous computer vision tasks. However, its central component, softmax attention, prohibits vision transformers from scaling up to high-resolution imag”。",P11-C;P11-D;P11-A;P11-R;P11-F
+74,2023,Can Language Models Understand Physical Concepts?,待核验,阶段待核验,视觉语言理解,语言模型是否理解物体材料、质量和温度等物理概念？,构建VEC基准，比较语言与视觉增强模型，并蒸馏具身知识。,视觉语言理解,"论文信息汇总.csv 序74：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.emnlp-main.726/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Language models (LMs) gradually become general-purpose interfaces in the interactive and embodied world, where the understanding of physical concepts is an essential prerequisite. However, it is uncle”。",P74-C;P74-D;P74-A;P74-R
+75,2023,DetGPT: Detect What You Need via Reasoning,待核验,阶段待核验,视觉语言理解,目标检测如何根据用户意图寻找未明确命名的物体？,DetGPT连接多模态推理与开放词汇检测器。,视觉语言理解,"论文信息汇总.csv 序75：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.emnlp-main.876/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“In recent years, the field of computer vision has seen significant advancements thanks to the development of large language models (LLMs). These models have enabled more effective and sophisticated in”。",P75-C;P75-D;P75-A;P75-R
+76,2023,Generating Data for Symbolic Language with Large Language Models,香港大学,香港大学；助理教授；2020-至今,任务数据合成,结构化输出任务的昂贵标注如何由大模型生成？,SymGen以信息丰富的提示生成符号语言数据，再用一致性验证器筛选。,任务数据合成,"论文信息汇总.csv 序76：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Generating Data for Symbolic Language with Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.emnlp-main.523/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing, pages 8418–8443”。
+原文摘要依据：“While large language models (LLMs) bring not only performance but also complexity, recent work has started to turn LLMs into data generators rather than task inferencers, where another affordable task”。",P76-C;P76-R
+77,2023,DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,序列到序列扩散如何降低训练与采样开销？,引入软吸收状态连接离散变化与高斯空间，并使用ODE求解器。,扩散文本生成,"论文信息汇总.csv 序77：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_DiffuSeq-v2_ Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-emnlp.660/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Diffusion models have gained prominence in generating high-quality sequences of text. Nevertheless, current approaches predominantly represent discrete text within a continuous diffusion space, which ”。",P77-C;P77-R
+78,2023,GIM- LET: A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning,待核验,阶段待核验,分子零样本学习,分子属性标注不足时，能否用自然语言指令完成新任务？,GIMLET以统一位置编码和解耦注意力共同建模分子图与指令。,分子零样本学习,"论文信息汇总.csv 序78：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2306.13089；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Molecule property prediction has gained significant attention in recent years. The main bottleneck is the label insufficiency caused by expensive lab experiments. In order to alleviate this issue and ”。",P78-C;P78-D;P78-A;P78-R;P78-F
+79,2023,Statistical Knowledge Assessment for Generative Language Models,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,如何衡量模型面对不同问法时仍可靠掌握的事实知识？,KaRR比较多样提示下的正确实体生成概率与随机生成概率。,模型评价与奖励学习,"论文信息汇总.csv 序79：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Statistical Knowledge Assessment for Generative Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.10519；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Given varying prompts regarding a factoid question, can a large language model (LLM) reliably generate factually correct answers? Existing LLMs may generate distinct responses for different prompts. I”。",P79-C;P79-R;P79-F
+80,2023,Attentive Multi-Layer Perceptron for Non-autoregressive Generation,待核验,阶段待核验,高效注意力与序列架构,非自回归生成如何摆脱注意力的二次复杂度？,AMLP用依输入生成的自适应投影代替静态MLP投影。,高效注意力与序列架构,"论文信息汇总.csv 序80：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2310.09512；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Autoregressive~(AR) generation almost dominates sequence generation for its efficacy. Recently, non-autoregressive~(NAR) generation gains increasing popularity for its efficiency and growing efficacy.”。",P80-C;P80-D;P80-A;P80-R;P80-F
+81,2023,Self-Adaptive In-Context Learning: An Information Compression Perspective for In-Context Example Selection and Ordering,香港大学,香港大学；助理教授；2020-至今,上下文示例选择,不同输入应如何选择并排序上下文示例？,以自适应的先选择后排序框架组织示例。,上下文示例选择,"论文信息汇总.csv 序81：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Self-Adaptive In-Context Learning_ An Information Compression Perspective for In-Context Example Selection and Ordering.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.79/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“Despite the surprising few-shot performance of in-context learning (ICL), it is still a common practice to randomly sample examples to serve as context. This paper advocates a new principle for ICL: s”。",P81-C;P81-R
+82,2023,Explanation Regeneration via Information Bottleneck,待核验,阶段待核验,解释生成,如何让模型给出的自然语言解释既充分又简洁？,EIB用信息瓶颈目标重新生成初次提示产生的解释。,解释生成,"论文信息汇总.csv 序82：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2023.findings-acl.765/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Explaining the black-box predictions of NLP models naturally and accurately is an important open problem in natural language generation. These free-text explanations are expected to contain sufficient”。",P82-C;P82-D;P82-A;P82-R
+83,2023,Lego-MT: Learning Detachable Models for Massively Multilingual Machine Translation,香港大学,香港大学；助理教授；2020-至今,机器翻译,大规模多语言翻译如何减少语言间参数干扰和推理成本？,Lego-MT使用可拆卸语言分支与统一表征训练方案。,机器翻译,"论文信息汇总.csv 序83：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Lego-MT_ Learning Detachable Models for Massively Multilingual Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-acl.731/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Multilingual neural machine translation (MNMT) aims to build a unified model for many language directions. Existing monolithic models for MNMT encounter two challenges: parameter interference among la”。",P83-C;P83-R
+84,2023,INK: Injecting kNN Knowledge in Nearest Neighbor Machine Translation,香港大学,香港大学；助理教授；2020-至今,机器翻译,近邻翻译如何在平滑表示空间的同时减少推理开销？,INK训练少量参数调整近邻表示，并异步刷新检索库。,机器翻译,"论文信息汇总.csv 序84：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_INK_ Injecting kNN Knowledge in Nearest Neighbor Machine Translation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.888/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Neural machine translation has achieved promising results on many translation tasks. However, previous studies have shown that neural models induce a non-smooth representation space, which harms its g”。",P84-C;P84-R
+85,2023,A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment,香港大学,香港大学；助理教授；2020-至今,支持性对话,认知受损老年人的对话系统如何结合认知刺激和情绪支持？,构建中文CSConv，并融合治疗原则与情绪支持策略生成回答。,支持性对话,"论文信息汇总.csv 序85：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_A Cognitive Stimulation Dialogue System with Multi-source Knowledge Fusion for Elders with Cognitive Impairment.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.acl-long.593/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics”。
+原文摘要依据：“When communicating with elders with cognitive impairment, cognitive stimulation (CS) help to maintain the cognitive health of elders. Data sparsity is the main challenge in building CS-based dialogue ”。",P85-C;P85-R
+86,2023,SORTIE: Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation,香港大学,香港大学；助理教授；2020-至今,可控文本生成与一致性,表格描述如何避免复杂逻辑推理导致的不忠实内容？,SORTIE使用表格编程语言与实体依赖调度完成符号推理。,可控文本生成与一致性,"论文信息汇总.csv 序86：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_SORTIE_ Dependency-Aware Symbolic Reasoning for Logical Data-to-text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2023.findings-acl.715/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+原文摘要依据：“Logical data-to-text generation is a representative task in measuring the capabilities of both language generation and complex reasoning. Despite the introduction of reasoning skills in generation, ex”。",P86-C
+87,2023,Compositional Exemplars for In-context Learning,香港大学,香港大学；助理教授；2020-至今,上下文示例选择,示例集合如何兼顾与输入的相关性及组合互补性？,CEIL用行列式点过程建模子集，并以对比目标学习模型偏好。,上下文示例选择,"论文信息汇总.csv 序87：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Compositional Exemplars for In-context Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.05698；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第9页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 40 th International Conference on Machine       7 distinct tasks, including sentiment analysis, paraphrase”。
+原文摘要依据：“Large pretrained language models (LMs) have shown impressive In-Context Learning (ICL) ability, where the model learns to do an unseen task via a prompt consisting of input-output examples as the demo”。",P87-C
+88,2023,CAB: Comprehensive Attention Benchmarking on Long Sequence Modeling,香港大学,香港大学；助理教授；2020-至今,高效注意力与序列架构,高效注意力的评测是否覆盖真实任务中的不同注意力形式？,CAB按因果与非因果、自注意力与交叉注意力建立四类任务评测。,高效注意力与序列架构,"论文信息汇总.csv 序88：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_CAB_ Comprehensive Attention Benchmarking on Long Sequence Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2210.07661；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 40 th International Conference on Machine           causality modeling. We present four patterns of attentions,”。
+原文摘要依据：“Transformer has achieved remarkable success in language, image, and speech processing. Recently, various efficient attention architectures have been proposed to improve transformer's efficiency while ”。",P88-C
+89,2023,Fine-grained Audible Video Description,待核验,阶段待核验,音视频分割与描述,如何生成包含物体、位置、动作与声音细节的视频描述？,建立中英文FAVDBench，结合音视频语言Transformer和两类生成损失。,音视频分割与描述,"论文信息汇总.csv 序89：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2303.15616；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“We explore a new task for audio-visual-language modeling called fine-grained audible video description (FAVD). It aims to provide detailed textual descriptions for the given audible videos, including ”。",P89-C;P89-D;P89-A;P89-R;P89-F
+90,2023,Efficient Attention via Control Variates,香港大学,香港大学；助理教授；2020-至今,高效注意力与序列架构,随机特征注意力与精确softmax注意力的误差如何缩小？,将随机特征近似分解为控制变量估计器，并改进控制变量形式。,高效注意力与序列架构,"论文信息汇总.csv 序90：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Efficient Attention via Control Variates.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.04542；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Random-feature-based attention (RFA) is an efficient approximation of softmax attention with linear runtime and space complexity. However, the approximation gap between RFA and conventional softmax at”。",P90-C;P90-R
+91,2023,Self-Guided Noise-Free Data Generation for Efficient Zero-Shot Learning,待核验,阶段待核验,任务数据合成,零样本学习如何处理合成训练数据中的噪声？,SunGen以抗噪重加权自动学习样本质量，不依赖人工标签。,任务数据合成,"论文信息汇总.csv 序91：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2205.12679；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“There is a rising interest in further exploring the zero-shot learning potential of large pre-trained language models (PLMs). A new paradigm called data-generation-based zero-shot learning has achieve”。",P91-C;P91-D;P91-A;P91-R;P91-F
+92,2023,Toeplitz Neural Network for Sequence Modeling,香港大学,香港大学；助理教授；2020-至今,高效注意力与序列架构,序列模型如何降低复杂度并支持长度外推？,使用相对位置编码的Toeplitz矩阵与快速矩阵向量乘法。,高效注意力与序列架构,"论文信息汇总.csv 序92：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Toeplitz Neural Network for Sequence Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.04749；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Sequence modeling has important applications in natural language processing and computer vision. Recently, the transformer-based models have shown strong performance on various sequence modeling tasks”。",P92-C;P92-A
+93,2023,DiffuSeq: Sequence to Sequence Text Generation with Diffusion Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,离散文本的条件生成如何适配扩散建模？,DiffuSeq针对序列到序列任务设计文本扩散模型。,扩散文本生成,"论文信息汇总.csv 序93：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_DiffuSeq_ Sequence to Sequence Text Generation with Diffusion Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2210.08933；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2023”。
+原文摘要依据：“Recently, diffusion models have emerged as a new paradigm for generative models. Despite the success in domains using continuous signals such as vision and audio, adapting diffusion models to natural ”。",P93-C;P93-R
+94,2023,Unsupervised Explanation Generation via Correct Instantiations,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,解释生成,没有解释标注时，如何说明一句话为什么错误？,Neon先生成正确实例，再据此寻找冲突点并产生解释。,解释生成,"论文信息汇总.csv 序94：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Unsupervised Explanation Generation via Correct Instantiations.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2211.11160；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第10页；版本2026-01-27。
+原文摘要依据：“While large pre-trained language models (PLM) have shown their great skills at solving discriminative tasks, a significant gap remains when compared with humans for explanation-related tasks. Among th”。",P94-C;P94-A;P94-F
+133,2023,Audio-Visual Segmentation with Semantics,待核验,阶段待核验,音视频分割与描述,音视频分割如何从发声区域扩展到物体语义类别？,在AVSBench中增加语义标签子集，并使用音画交互和正则化。,音视频分割与描述,"论文信息汇总.csv 序133：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2301.13190；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We propose a new problem called audio-visual segmentation (AVS), in which the goal is to output a pixel-level map of the object(s) that produce sound at the time of the image frame. To facilitate this”。",P133-C;P133-D;P133-A;P133-R
+134,2023,In-Context Learning with Many Demonstration Examples,香港大学；上海人工智能实验室,阶段待核验（双单位署名，上海人工智能实验室任职起止未公开）,上下文示例选择,更多演示样例能否继续提高上下文学习表现？,用高效Transformer构建长上下文EVALM，并扩展指令训练和样例数量。,上下文示例选择,"论文信息汇总.csv 序134：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_In-Context Learning with Many Demonstration Examples.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.04931；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large pre-training language models (PLMs) have shown promising in-context learning abilities. However, due to the backbone transformer architecture, existing PLMs are bottlenecked by the memory and co”。",P134-C;P134-A
+135,2023,TTIDA: Controllable Generative Data Augmentation via Text-to-Text and Text-to-Image Models,待核验,阶段待核验,任务数据合成,低资源视觉任务如何获得多样且可控的增强数据？,TTIDA先生成详细文本，再以文本到图像模型生成带标签图像。,任务数据合成,"论文信息汇总.csv 序135：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2304.08821；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Data augmentation has been established as an efficacious approach to supplement useful information for low-resource datasets. Traditional augmentation techniques such as noise injection and image tran”。",P135-C;P135-D;P135-A;P135-R
+136,2023,Optimizing Non-Autoregressive Transformers with Contrastive Learning,香港大学,香港大学；助理教授；2020-至今,可控文本生成与一致性,非自回归生成如何学习多模态目标分布？,从模型分布采样，并加入对比约束稳定训练。,可控文本生成与一致性,"论文信息汇总.csv 序136：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Optimizing Non-Autoregressive Transformers with Contrastive Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2305.13667；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Non-autoregressive Transformers (NATs) reduce the inference latency of Autoregressive Transformers (ATs) by predicting words all at once rather than in sequential order. They have achieved remarkable ”。",P136-C;P136-R
+137,2023,M$^3$IT: A Large-Scale Dataset towards Multi-Modal Multilingual Instruction Tuning,香港大学,香港大学；助理教授；2020-至今,视觉语言理解,视觉语言模型如何获得跨任务、跨语言的指令数据？,将40个数据集整理成视觉到文本格式，并翻译关键任务到80种语言。,视觉语言理解,"论文信息汇总.csv 序137：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_M$^3$IT_ A Large-Scale Dataset towards Multi-Modal Multilingual Instruction Tuning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2306.04387；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Instruction tuning has significantly advanced large language models (LLMs) such as ChatGPT, enabling them to align with human instructions across diverse tasks. However, progress in open vision-langua”。",P137-C;P137-R
+138,2023,Language Versatilists vs. Specialists: An Empirical Revisiting on Multilingual Transfer Ability,香港大学,香港大学；助理教授；2020-至今,多语言能力与低资源学习,英语中心模型的跨语言推理迁移是否弱于多语言模型？,跨四类推理任务比较模型、源语言和规模。,多语言能力与低资源学习,"论文信息汇总.csv 序138：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2023_Language Versatilists vs. Specialists_ An Empirical Revisiting on Multilingual Transfer Ability.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2306.06688；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Multilingual transfer ability, which reflects how well the models fine-tuned on one source language can be applied to other languages, has been well studied in multilingual pre-trained models (e.g., B”。",P138-C;P138-R
+139,2023,Extrapolating Large Language Models to Non-English by Aligning Languages,待核验,阶段待核验,多语言能力与低资源学习,如何把英语较强的大模型能力迁移到其他语言？,使用翻译和跨语言指令数据进行语义对齐，并按规模规律分配数据。,多语言能力与低资源学习,"论文信息汇总.csv 序139：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2308.04948；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Existing large language models show disparate capability across different languages, due to the imbalance in the training data. Their performances on English tasks are often stronger than on tasks of ”。",P139-C;P139-D;P139-A;P139-R
+142,2023,Linear Attention via Orthogonal Memory,待核验,阶段待核验,高效注意力与序列架构,线性注意力如何避免因果和无界上下文中的效率退化？,以正交分解压缩固定大小记忆，同时保留局部信息与相对位置。,高效注意力与序列架构,"论文信息汇总.csv 序142：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2312.11135；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Efficient attentions have greatly improved the computational efficiency of Transformers. However, most existing linear attention mechanisms suffer from an \emph{efficiency degradation} problem, leadin”。",P142-C;P142-D;P142-A;P142-R
+52,2024,Diffusion of Thought: Chain-of-Thought Reasoning in Diffusion Language Models,香港大学,香港大学；助理教授；2020-至今,扩散推理与规划,思维链能否在扩散语言模型中以非从左到右的方式生成？,DoT把思维链与迭代扩散结合，允许推理步骤随去噪过程演化。,扩散推理与规划,"论文信息汇总.csv 序52：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Diffusion of Thought_ Chain-of-Thought Reasoning in Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.07754；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Recently, diffusion models have garnered significant interest in the field of text processing due to their many potential advantages compared to conventional autoregressive models. In this work, we pr”。",P52-C;P52-R;P52-F
+53,2024,AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents,待核验,阶段待核验,工具智能体与任务评测,如何比较多轮、部分可观测任务中的智能体行为？,构建AgentBoard统一环境，并用细粒度进度率衡量中间进展。,工具智能体与任务评测,"论文信息汇总.csv 序53：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2401.13178；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Evaluating Large Language Models (LLMs) as general-purpose agents is essential for understanding their capabilities and facilitating their integration into practical applications. However, the evaluat”。",P53-C;P53-D;P53-A;P53-R;P53-F
+54,2024,Retrieved Sequence Augmentation for Protein Representation Learning,香港大学,香港大学；助理教授；2020-至今,蛋白质表示学习,蛋白质模型是否必须依赖昂贵的多序列比对？,把进化信息利用视为检索增强，直接添加检索到的序列。,蛋白质表示学习,"论文信息汇总.csv 序54：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Retrieved Sequence Augmentation for Protein Representation Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.emnlp-main.104/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Protein Language Models traditionally depend on Multiple Sequence Alignments (MSA) to incorporate evolutionary knowledge. However, MSA-based approaches suffer from substantial computational overhead a”。",P54-C;P54-A;P54-R;P54-V
+55,2024,VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,如何低成本扩展视觉语言模型的偏好监督？,构建82K以上多模态指令的AI反馈数据，并用DPO训练Silkie。,模型评价与奖励学习,"论文信息汇总.csv 序55：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_VLFeedback_ A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.emnlp-main.358/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“As large vision-language models (LVLMs) evolve rapidly, the demand for high-quality and diverse data to align these models becomes increasingly crucial. However, the creation of such data with human s”。",P55-C;P55-A;P55-R;P55-V
+56,2024,Empowering Large Language Model Agents through Action Learning,香港大学,香港大学；助理教授；2020-至今,工具智能体与任务评测,智能体如何从失败经验中学习新的动作？,LearnAct迭代创建与修改Python函数形式的动作。,工具智能体与任务评测,"论文信息汇总.csv 序56：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Empowering Large Language Model Agents through Action Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.15809；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large Language Model (LLM) Agents have recently garnered increasing interest yet they are limited in their ability to learn from trial and error, a key element of intelligent behavior. In this work, w”。",P56-C;P56-R;P56-F
+57,2024,Corex: Pushing the Boundaries of Complex Reasoning through Multi-Model Collaboration,待核验,阶段待核验,推理与决策规划,多个语言模型能否协作弥补单模型推理局限？,Corex组合辩论、审查和检索三种协作模式。,推理与决策规划,"论文信息汇总.csv 序57：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2310.00280；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large Language Models (LLMs) are evolving at an unprecedented pace and have exhibited considerable capability in the realm of natural language processing (NLP) with world knowledge. Benefiting from ul”。",P57-C;P57-D;P57-A;P57-R;P57-F
+58,2024,CoCA: Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration,待核验,阶段待核验,模型安全与可靠性,视觉输入为何削弱多模态模型的安全意识？,用安全原则提示与输出分布校准放大已有安全信号。,模型安全与可靠性,"论文信息汇总.csv 序58：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2409.11365；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“The deployment of multimodal large language models (MLLMs) has demonstrated remarkable success in engaging in conversations involving visual inputs, thanks to the superior power of large language mode”。",P58-C;P58-D;P58-A;P58-R;P58-F
+59,2024,A Reparameterized Discrete Diffusion Model for Text Generation,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,离散扩散的采样表达能否支持更有效的训练和生成？,推导等价的重参数化采样形式，并据此设计训练与解码方法。,扩散文本生成,"论文信息汇总.csv 序59：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_A Reparameterized Discrete Diffusion Model for Text Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2302.05737；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“This work studies discrete diffusion probabilistic models with applications to natural language generation. We derive an alternative yet equivalent formulation of the sampling from discrete diffusion ”。",P59-C;P59-R;P59-F
+60,2024,Multimodal ArXiv: A Dataset for Improving Scientific Comprehension of Large Vision-Language Models,待核验,阶段待核验,视觉语言理解,视觉语言模型如何理解科学论文中的抽象图形？,从arXiv构建图文配对与科学图形问答数据。,视觉语言理解,"论文信息汇总.csv 序60：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.acl-long.775/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large vision-language models (LVLMs) excel across diverse tasks involving concrete images from natural scenes. However, their ability to interpret abstract figures, such as geometry shapes and scienti”。",P60-C;P60-D;P60-A;P60-R
+61,2024,L-Eval: Instituting Standardized Evaluation for Long Context Language Models,香港大学,香港大学；助理教授；2020-至今,长上下文建模与压缩,长上下文模型如何获得更规范且贴近人工判断的评测？,L-Eval提供多领域长文档任务，并比较长度指令与模型裁判指标。,长上下文建模与压缩,"论文信息汇总.csv 序61：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_L-Eval_ Instituting Standardized Evaluation for Long Context Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.776/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 14388–14411”。
+原文摘要依据：“Recently, there has been growing interest in long-context scaling of large language models (LLMs). To facilitate research in this field, we propose L-Eval to institute a more standardized evaluation f”。",P61-C;P61-R
+62,2024,PRoLoRA: Partial Rotation Empowers More Parameter-Efficient LoRA,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,并发部署多个LoRA时如何进一步减少参数？,PRoLoRA使用层内共享、部分旋转、共享精炼与校正初始化。,推理部署与参数效率,"论文信息汇总.csv 序62：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_PRoLoRA_ Partial Rotation Empowers More Parameter-Efficient LoRA.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.156/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2829–2841”。
+原文摘要依据：“With the rapid scaling of large language models (LLMs), serving numerouslow-rank adaptations (LoRAs) concurrently has become increasingly impractical,leading to unaffordable costs and necessitating mo”。",P62-C;P62-R
+63,2024,GSM-Plus: A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers,香港大学,香港大学；助理教授；2020-至今,数学推理与题目合成,数学题表述变化会否暴露大模型的推理脆弱性？,在GSM8K上加入多种数学扰动，评测25个模型和提示方法。,数学推理与题目合成,"论文信息汇总.csv 序63：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_GSM-Plus_ A Comprehensive Benchmark for Evaluating the Robustness of LLMs as Mathematical Problem Solvers.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.163/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 2961–2984”。
+原文摘要依据：“Large language models (LLMs) have achieved impressive performance across various mathematical reasoning benchmarks. However, there are increasing debates regarding whether these models truly understan”。",P63-C
+64,2024,LoRA Meets Dropout under a Unified Framework,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,少量参数的LoRA为何仍过拟合，何种dropout适用？,按丢弃位置、结构模式与补偿机制统一分析dropout。,推理部署与参数效率,"论文信息汇总.csv 序64：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_LoRA Meets Dropout under a Unified Framework.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.findings-acl.119/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“With the remarkable capabilities, large language models (LLMs) have emergedas essential elements in numerous NLP applications, while parameter-efficientfinetuning, especially LoRA, has gained populari”。",P64-C;P64-R
+65,2024,Achilles-Bench: A Challenging Benchmark for Low-Resource Evaluation,待核验,阶段待核验,语言迁移与学习能力评测,低资源基准是否高估模型处理困难样本的能力？,分析低资源学习难点，构建包含11个语言与视觉数据集的Achilles-Bench。,语言迁移与学习能力评测,"论文信息汇总.csv 序65：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.findings-acl.123/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“With promising yet saturated results in high-resource settings, low-resource datasets have gradually become crucial benchmarks (e.g., BigBench Hard, superGLUE) for evaluating the learning ability of a”。",P65-C;P65-D;P65-A;P65-R
+66,2024,SEGO: Sequential Subgoal Optimization for Mathematical Problem-Solving,香港大学,香港大学；助理教授；2020-至今,数学推理与题目合成,如何为数学求解选择更有效的中间子目标？,SEGO生成问题相关子目标，并依求解概率联系进行顺序优化。,数学推理与题目合成,"论文信息汇总.csv 序66：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_SEGO_ Sequential Subgoal Optimization for Mathematical Problem-Solving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.407/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 7544–7565”。
+原文摘要依据：“Large Language Models (LLMs) have driven substantial progress in artificial intelligence in recent years, exhibiting impressive capabilities across a wide range of tasks, including mathematical proble”。",P66-C;P66-R
+67,2024,BBA: Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models,香港大学,香港大学；助理教授；2020-至今,视觉语言理解,视觉与领域专用语言的推理过程如何协同？,BBA分别生成视觉和DSL推理链，再解决两者的不一致。,视觉语言理解,"论文信息汇总.csv 序67：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_BBA_ Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.findings-acl.433/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Multimodal reasoning stands as a pivotal capability for large vision-language models (LVLMs). The integration with Domain-Specific Languages (DSL), offering precise visual representations, equips thes”。",P67-C;P67-R
+68,2024,Large Language Models are not Fair Evaluators,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,模型裁判是否受候选回答出现顺序影响？,改变回答排列检测位置偏差，再通过校准与人工偏好对照。,模型评价与奖励学习,"论文信息汇总.csv 序68：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Large Language Models are not Fair Evaluators.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2024.acl-long.511/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 9440–9450”。
+原文摘要依据：“In this paper, we uncover a positional bias in the evaluation paradigm of adopting large language models (LLMs), e.g., GPT-4, as a referee to score and compare the quality of responses generated by ca”。",P68-C;P68-R
+69,2024,Self-Infilling Code Generation,香港大学,香港大学；助理教授；2020-至今,代码生成与纠错,自回归代码生成如何利用后缀信息和循环修订？,自填充解码先生成周围上下文，再以中断与循环机制修改片段。,代码生成与纠错,"论文信息汇总.csv 序69：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Self-Infilling Code Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2311.17972；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 41 st International Conference on Machine          terruption point to infill the bypassed context (Figure 1c).”。
+原文摘要依据：“This work introduces self-infilling code generation, a general framework that incorporates infilling operations into auto-regressive decoding. Our approach capitalizes on the observation that recent i”。",P69-C;P69-R
+70,2024,Training- Free Long-Context Scaling of Large Language Models,香港大学,香港大学；助理教授；2020-至今,长上下文建模与压缩,不继续训练能否让模型处理超过预训练长度的文本？,Dual Chunk Attention分解块内与块间注意力，并保留相对位置信息。,长上下文建模与压缩,"论文信息汇总.csv 序70：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Training- Free Long-Context Scaling of Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2402.17463；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 41 st International Conference on Machine            tion indices or increasing the base frequency in RoPE (Su”。
+原文摘要依据：“The ability of Large Language Models (LLMs) to process and generate coherent text is markedly weakened when the number of input tokens exceeds their pretraining length. Given the expensive overhead of”。",P70-C;P70-A;P70-R
+71,2024,Decomposing the Enigma: Subgoal-based Demonstration Learning for Formal Theorem Proving,待核验,阶段待核验,形式化定理证明,证明示例的子目标与排列如何影响形式化定理证明？,构造并优化示例子目标，以扩散模型同时选择和排序示例。,形式化定理证明,"论文信息汇总.csv 序71：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2305.16366；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Large language models~(LLMs) present an intriguing avenue of exploration in the domain of formal theorem proving. Nonetheless, the full utilization of these models, particularly in terms of demonstrat”。",P71-C;P71-D;P71-A;P71-R;P71-F
+72,2024,Multilingual Machine Translation with Large Language Models: Empirical Results and Analysis,待核验,阶段待核验,机器翻译,大模型在多语言翻译中的优势和限制是什么？,评测多个大模型的大规模语言方向，并分析提示与跨语言示例。,机器翻译,"论文信息汇总.csv 序72：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2024.findings-naacl.176/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have demonstrated remarkable potential in handling multilingual machine translation (MMT). In this paper, we systematically investigate the advantages and challenges of LL”。",P72-C;P72-D;P72-A;P72-R
+73,2024,Lemur: Harmonizing Natural Language and Code for Language Agents,香港大学,香港大学；助理教授；2020-至今,工具智能体与任务评测,通用语言智能体如何平衡自然语言与代码能力？,Lemur以代码密集语料预训练，再进行文本与代码指令微调。,工具智能体与任务评测,"论文信息汇总.csv 序73：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Lemur_ Harmonizing Natural Language and Code for Language Agents.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2310.06830；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第8页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2024”。
+原文摘要依据：“We introduce Lemur and Lemur-Chat, openly accessible language models optimized for both natural language and coding capabilities to serve as the backbone of versatile language agents. The evolution fr”。",P73-C;P73-R
+143,2024,OS-Copilot: Towards Generalist Computer Agents with Self-Improvement,待核验,阶段待核验,工具智能体与任务评测,计算机智能体如何跨软件执行任务并积累技能？,OS-Copilot统一网页、终端、文件及应用接口，构建自改进FRIDAY。,工具智能体与任务评测,"论文信息汇总.csv 序143：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2402.07456；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Autonomous interaction with the computer has been a longstanding challenge with great potential, and the recent proliferation of large language models (LLMs) has markedly accelerated progress in build”。",P143-C;P143-D;P143-A;P143-R
+144,2024,"A Survey of Neural Code Intelligence: Paradigms, Advances and Beyond",待核验,阶段待核验,代码生成与纠错,神经代码智能的模型、任务与评价如何演变？,按历史阶段综述代表模型、任务类别和代码智能应用。,代码生成与纠错,"论文信息汇总.csv 序144：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2403.14734；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Neural Code Intelligence -- leveraging deep learning to understand, generate, and optimize code -- holds immense potential for transformative impacts on the whole society. Bridging the gap between Nat”。",P144-C;P144-D;P144-A;P144-R
+145,2024,Data Augmentation of Multi-turn Psychological Dialogue via Knowledge-driven Progressive Thought Prompting,香港大学,香港大学；助理教授；2020-至今,支持性对话,低资源心理对话如何进行保留上下文的多轮数据增强？,组合渐进思维、心理知识与多轮对话三个生成模块。,支持性对话,"论文信息汇总.csv 序145：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Data Augmentation of Multi-turn Psychological Dialogue via Knowledge-driven Progressive Thought Prompting.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2406.16567；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Existing dialogue data augmentation (DA) techniques predominantly focus on augmenting utterance-level dialogues, which makes it difficult to take dialogue contextual information into account. The adve”。",P145-C;P145-R
+146,2024,SubgoalXL: Subgoal-based Expert Learning for Theorem Proving,香港大学,香港大学；助理教授；2020-至今,形式化定理证明,有限人工证明数据如何支持更强的形式化多步推理？,SubgoalXL在Isabelle中联合子目标监督和专家迭代学习。,形式化定理证明,"论文信息汇总.csv 序146：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_SubgoalXL_ Subgoal-based Expert Learning for Theorem Proving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2408.11172；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Formal theorem proving, a field at the intersection of mathematics and computer science, has seen renewed interest with advancements in large language models (LLMs). This paper introduces SubgoalXL, a”。",P146-C
+147,2024,UncertaintyRAG: Span-Level Uncertainty Enhanced Long-Context Modeling for Retrieval-Augmented Generation,香港大学,香港大学；助理教授；2020-至今,检索增强生成,随机分块造成的语义不一致如何影响长上下文RAG？,以信噪比定义片段不确定性，训练无监督检索器并改进采样。,检索增强生成,"论文信息汇总.csv 序147：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_UncertaintyRAG_ Span-Level Uncertainty Enhanced Long-Context Modeling for Retrieval-Augmented Generation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.02719；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We present UncertaintyRAG, a novel approach for long-context Retrieval-Augmented Generation (RAG) that utilizes Signal-to-Noise Ratio (SNR)-based span uncertainty to estimate similarity between text c”。",P147-C;P147-A
+148,2024,TMGBench: A Systematic Game Benchmark for Evaluating Strategic Reasoning Abilities of LLMs,待核验,阶段待核验,社会智能与角色控制,如何全面且可扩展地评测语言模型的博弈推理？,TMGBench覆盖144类双人博弈，并以顺序、并行和嵌套形式组合。,社会智能与角色控制,"论文信息汇总.csv 序148：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2410.10479；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The rapid advancement of large language models has accelerated their application in reasoning, with strategic reasoning drawing increasing attention. To evaluate the strategic reasoning capabilities o”。",P148-C;P148-D;P148-A;P148-R
+149,2024,Understanding the Role of LLMs in Multimodal Evaluation Benchmarks,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,多模态基准实际衡量了视觉推理还是语言先验？,移除或分离视觉输入贡献，并自动识别语言主干的知识缺口。,模型评价与奖励学习,"论文信息汇总.csv 序149：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2024_Understanding the Role of LLMs in Multimodal Evaluation Benchmarks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.12329；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The rapid advancement of Multimodal Large Language Models (MLLMs) has been accompanied by the development of various benchmarks to evaluate their capabilities. However, the true nature of these evalua”。",P149-C
+8,2025,A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios,香港大学,香港大学；助理教授；2020-至今,社会智能与角色控制,如何系统评价博弈场景下语言智能体的社会能力？,按博弈框架、智能体和评价协议组织已有研究。,社会智能与角色控制,"论文信息汇总.csv 序8：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2412.03920；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第3页；版本2026-01-27。
+PDF发表标记：“Published in Transactions on Machine Learning Research (05/2025)”。
+原文摘要依据：“Game-theoretic scenarios have become pivotal in evaluating the social intelligence of Large Language Model (LLM)-based social agents. While numerous studies have explored these agents in such settings”。",P8-C;P8-A;P8-R
+9,2025,Autoregressive Models in Vision: A Survey,香港大学,香港大学；助理教授；2020-至今,视觉自回归生成,视觉自回归生成有哪些表示方式、框架与应用限制？,按像素、词元和尺度级表示综述视觉自回归模型。,视觉自回归生成,"论文信息汇总.csv 序9：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Autoregressive Models in Vision_ A Survey.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2411.05902；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published in Transactions on Machine Learning Research (03/2025)”。
+原文摘要依据：“Autoregressive modeling has been a huge success in the field of natural language processing (NLP). Recently, autoregressive models have emerged as a significant area of focus in computer vision, where”。",P9-C;P9-A
+24,2025,TreeSynth: Synthesizing Diverse Data from Scratch via Tree-Guided Subspace Partitioning,待核验,阶段待核验,任务数据合成,大规模合成数据如何避免重复和分布覆盖不足？,用树递归划分互斥且完备的任务子空间，再分配和生成样本。,任务数据合成,"论文信息汇总.csv 序24：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2503.17195；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Model customization necessitates high-quality and diverse datasets, but acquiring such data remains time-consuming and labor-intensive. Despite the great potential of large language models (LLMs) for ”。",P24-C;P24-D;P24-A;P24-R;P24-F
+25,2025,DynaAct: Large Language Model Reasoning with Dynamic Action Spaces,香港大学,香港大学；助理教授；2020-至今,推理与决策规划,顺序推理如何自动构建紧凑且有效的候选动作集合？,从推理语料提取动作草图，以次模目标和贪心算法兼顾效用与多样性。,推理与决策规划,"论文信息汇总.csv 序25：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_DynaAct_ Large Language Model Reasoning with Dynamic Action Spaces.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2511.08043；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“In modern sequential decision-making systems, the construction of an optimal candidate action space is critical to efficient inference. However, existing approaches either rely on manually defined act”。",P25-C;P25-F
+26,2025,Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition,待核验,阶段待核验,推理与决策规划,如何把长上下文理解能力转化为长思维链生成能力？,URT课程逐步将输入中的推理步骤移至模型输出。,推理与决策规划,"论文信息汇总.csv 序26：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2025.emnlp-main.1751/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Reasoning models have demonstrated remarkable performance on complex tasks by generating long reasoning traces prior to producing final answers. However, previous research on long-context scaling in l”。",P26-C;P26-D;P26-A;P26-R
+27,2025,ProReason: Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom,香港大学,香港大学；助理教授；2020-至今,视觉语言理解,视觉推理如何避免语言知识掩盖必要的图像信息？,将主动视觉感知与文本推理解耦，多轮补充所需视觉描述。,视觉语言理解,"论文信息汇总.csv 序27：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_ProReason_ Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.emnlp-main.1614/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 31662–31691”。
+原文摘要依据：“Large vision-language models (LVLMs) have witnessed significant progress on visual understanding tasks. However, they often prioritize language knowledge over image information on visual reasoning tas”。",P27-C;P27-R
+28,2025,QSpec: Speculative Decoding with Complementary Quantization Schemes,待核验,阶段待核验,推理部署与参数效率,量化推理如何同时获得速度和多步推理质量？,用低精度联合量化起草、高精度权重量化验证，并共享权重与KV缓存。,推理部署与参数效率,"论文信息汇总.csv 序28：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2025.emnlp-main.240/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Quantization is widely adopted to accelerate inference and reduce memory consumption in large language models (LLMs). While activation-weight joint quantization enables efficient low-precision decodin”。",P28-C;P28-D;P28-A;P28-R
+29,2025,UNComp: Can Matrix Entropy Uncover Sparsity? — A Compressor Design from an Uncertainty-Aware Perspective,香港大学,香港大学；助理教授；2020-至今,长上下文建模与压缩,如何识别长上下文KV缓存中的结构化稀疏性？,以截断矩阵熵估计不确定性，动态分配缓存压缩。,长上下文建模与压缩,"论文信息汇总.csv 序29：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_UNComp_ Can Matrix Entropy Uncover Sparsity_ — A Compressor Design from an Uncertainty-Aware Perspective.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.emnlp-main.209/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 4179–4199”。
+原文摘要依据：“Deploying large language models (LLMs) for long-context inference remains challenging due to their substantial memory and computational demands. While techniques such as Key-Value (KV) cache compressi”。",P29-C
+30,2025,Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models,香港大学,香港大学；助理教授；2020-至今,多语言能力与低资源学习,粤语高质量训练语料不足如何缓解？,汇集多源粤语文本，经过语言、质量、内容过滤和去重，再进行任务微调。,多语言能力与低资源学习,"论文信息汇总.csv 序30：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-Tasking in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-emnlp.102/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“High-quality data resources play a crucial role in learning large language models (LLMs), particularly for low-resource languages like Cantonese. Despite having more than 85 million native speakers, C”。",P30-C;P30-R
+31,2025,Recipe2Plan: Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions,香港大学,香港大学；助理教授；2020-至今,推理与决策规划,智能体如何在动作时间约束下兼顾多任务并行与可行性？,以烹饪流程构建Recipe2Plan，评估全局调度与时间间隔约束。,推理与决策规划,"论文信息汇总.csv 序31：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Recipe2Plan_ Evaluating Planning Abilities of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-emnlp.229/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“While Large Language Model-based agents have demonstrated substantial progress in task completion, existing evaluation benchmarks tend to overemphasize single-task performance, with insufficient atten”。",P31-C
+32,2025,TimeChat-Online: 80% Visual Tokens are Naturally Redundant in Streaming Videos,待核验,阶段待核验,视频时序理解,在线视频模型如何实时处理连续且冗余的视频帧？,差分词元丢弃保留有意义的时间变化，并用流式交互数据训练。,视频时序理解,"论文信息汇总.csv 序32：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2504.17343；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The rapid growth of online video platforms, particularly live streaming services, has created an urgent need for real-time video understanding systems. These systems must process continuous video stre”。",P32-C;P32-D;P32-A;P32-R;P32-F
+33,2025,Reasoning Does Not Necessarily Improve Role-Playing Ability,香港大学,香港大学；助理教授；2020-至今,社会智能与角色控制,更强推理是否必然改善角色扮演？,比较24个模型、6项角色基准与3种角色扮演策略。,社会智能与角色控制,"论文信息汇总.csv 序33：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Reasoning Does Not Necessarily Improve Role-Playing Ability.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-acl.537/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The application of role-playing large language models (LLMs) is rapidly expanding in both academic and commercial domains, driving an increasing demand for high-precision role-playing models. Simultan”。",P33-C
+34,2025,PromptCoT: Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models,香港大学,香港大学；助理教授；2020-至今,数学推理与题目合成,如何自动构造足够困难且高质量的数学题？,PromptCoT依据数学概念与出题理由合成奥赛级问题。,数学推理与题目合成,"论文信息汇总.csv 序34：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_PromptCoT_ Synthesizing Olympiad-level Problems for Mathematical Reasoning in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-acl.935/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“The ability of large language models to solve complex mathematical problems has progressed significantly, particularly for tasks requiring advanced reasoning. However, the scarcity of sufficiently cha”。",P34-C
+35,2025,Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning,香港大学,香港大学；助理教授；2020-至今,模型安全与可靠性,微调知识与预训练知识不匹配引发的幻觉如何缓解？,训练特殊拒答词元，并在推理中用拒答概率惩罚不确定预测。,模型安全与可靠性,"论文信息汇总.csv 序35：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.acl-long.1199/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 24564–24579”。
+原文摘要依据：“Large language models (LLMs) are known to suffer from severe hallucination issues. One of the main causes lies in the knowledge misalignment between the pre-training stage and the supervised fine-tuni”。",P35-C
+36,2025,Teaching Language Models to Critique via Reinforcement Learning,香港大学,香港大学；助理教授；2020-至今,代码生成与纠错,如何训练能真正帮助代码修正的批评模型？,CTRL通过强化学习最大化固定生成器的纠错收益。,代码生成与纠错,"论文信息汇总.csv 序36：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Teaching Language Models to Critique via Reinforcement Learning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2502.03492；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Proceedings of the 42 nd International Conference on Machine           ward optimal solution generation through iterative critique-”。
+原文摘要依据：“Teaching large language models (LLMs) to critique and refine their outputs is crucial for building systems that can iteratively improve, yet it is fundamentally limited by the ability to provide accur”。",P36-C
+37,2025,ParallelComp: Parallel Long-Context Compressor for Length Extrapolation,待核验,阶段待核验,长上下文建模与压缩,无需训练的超长上下文扩展如何克服内存和注意力偏置？,并行分块压缩与KV淘汰，并分析注意力汇聚、近因和中部偏置。,长上下文建模与压缩,"论文信息汇总.csv 序37：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2502.14317；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Extrapolating ultra-long contexts (text length >128K) remains a major challenge for large language models (LLMs), as most training-free extrapolation methods are not only severely limited by memory bo”。",P37-C;P37-D;P37-A;P37-R;P37-F
+38,2025,VL-RewardBench: A Challenging Benchmark for Vision-Language Generative Reward Models,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,视觉语言生成式奖励模型的判断是否可靠？,构建1250个经人工核验的偏好样本，覆盖视觉幻觉和复杂推理。,模型评价与奖励学习,"论文信息汇总.csv 序38：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_VL-RewardBench_ A Challenging Benchmark for Vision-Language Generative Reward Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2411.17451；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Vision-language generative reward models (VL-GenRMs) play a crucial role in aligning and evaluating multimodal AI systems, yet their own evaluation remains under-explored. Current assessment methods p”。",P38-C;P38-R;P38-F
+39,2025,Jailbreaking as a Reward Misspecification Problem,香港大学,香港大学；助理教授；2020-至今,模型安全与可靠性,语言模型的对抗脆弱性与奖励函数错设有何关系？,提出ReGap度量，并在奖励错设空间开展自动化红队评测。,模型安全与可靠性,"论文信息汇总.csv 序39：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Jailbreaking as a Reward Misspecification Problem.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2406.14393；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“The widespread adoption of large language models (LLMs) has raised concerns about their safety and reliability, particularly regarding their vulnerability to adversarial attacks. In this paper, we pro”。",P39-C
+40,2025,Temporal Reasoning Transfer from Text to Video,待核验,阶段待核验,视频时序理解,视频模型的时序推理瓶颈来自视觉编码还是语言能力？,用诊断探针分析表示，并合成纯文本时序任务进行迁移训练。,视频时序理解,"论文信息汇总.csv 序40：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2410.06166；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Video Large Language Models (Video LLMs) have shown promising capabilities in video comprehension, yet they struggle with tracking temporal changes and reasoning about temporal relationships. While pr”。",P40-C;P40-D;P40-A;P40-R;P40-F
+41,2025,MoS: Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,LoRA参数共享如何避免缺少差异化带来的性能损失？,MoS组合层间、层内共享与分片选择、配对解耦等机制。,推理部署与参数效率,"论文信息汇总.csv 序41：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_MoS_ Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.00938；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“The rapid scaling of large language models necessitates more lightweight finetuning methods to reduce the explosive GPU memory overhead when numerous customized models are served simultaneously. Targe”。",P41-C;P41-R
+42,2025,Language Model Non-Myopic Generation for Reasoning and Planning,香港大学,香港大学；助理教授；2020-至今,推理与决策规划,自回归生成的局部决策如何兼顾长期规划？,用模型预测控制与前瞻轨迹重加权生成分布。,推理与决策规划,"论文信息汇总.csv 序42：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Language Model Non-Myopic Generation for Reasoning and Planning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.17195；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Large Language Models have demonstrated remarkable abilities in reasoning and planning by breaking down complex problems into sequential steps. Despite their success in various domains like mathematic”。",P42-C;P42-R;P42-F
+43,2025,Beyond Autoregression: Discrete Diffusion for Complex Reasoning and Planning,香港大学,香港大学；助理教授；2020-至今,扩散推理与规划,扩散模型能否缓解复杂推理中的困难子目标学习失衡？,提出按难度学习子目标的多粒度扩散建模MGDM。,扩散推理与规划,"论文信息汇总.csv 序43：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Beyond Autoregression_ Discrete Diffusion for Complex Reasoning and Planning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.14157；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“Autoregressive language models, despite their impressive capabilities, struggle with complex reasoning and long-term planning tasks. We introduce discrete diffusion models as a novel solution to these”。",P43-C;P43-R
+44,2025,Implicit Search via Discrete Diffusion: A Study on Chess,待核验,阶段待核验,扩散推理与规划,能否把类似搜索的规划能力内化进生成模型？,DiffuSearch使用离散扩散预测未来世界状态。,扩散推理与规划,"论文信息汇总.csv 序44：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2502.19805；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“In the post-AlphaGo era, there has been a renewed interest in search techniques such as Monte Carlo Tree Search (MCTS), particularly in their application to Large Language Models (LLMs). This renewed ”。",P44-C;P44-D;P44-A;P44-R;P44-F
+45,2025,G-LLaVA: Solving Geometric Problem with Multi-Modal Large Language Model,待核验,阶段待核验,数学推理与题目合成,多模态模型如何理解几何元素并解答几何题？,借助几何逻辑与可缩放性构造Geo170K，再训练G-LLaVA。,数学推理与题目合成,"论文信息汇总.csv 序45：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2312.11370；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have shown remarkable proficiency in human-level reasoning and generation capabilities, which encourages extensive research on their application in mathematical problem so”。",P45-C;P45-D;P45-A;P45-R;P45-F
+46,2025,Why Does the Effective Context Length of LLMs Fall Short?,香港大学,香港大学；助理教授；2020-至今,长上下文建模与压缩,模型有效上下文长度为何短于训练窗口？,分析相对位置频率偏差，并用STRING移动训练充分的位置编码。,长上下文建模与压缩,"论文信息汇总.csv 序46：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Why Does the Effective Context Length of LLMs Fall Short_.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.18745；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+原文摘要依据：“Advancements in distributed training and efficient attention mechanisms have significantly expanded the context window sizes of large language models (LLMs). However, recent work reveals that the effe”。",P46-C;P46-R;P46-F
+47,2025,Scaling Diffusion Language Models via Adaptation from Autoregressive Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,如何利用现有自回归模型降低大规模扩散语言模型的训练门槛？,连接自回归与扩散目标，通过持续预训练转换GPT和LLaMA。,扩散文本生成,"论文信息汇总.csv 序47：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Scaling Diffusion Language Models via Adaptation from Autoregressive Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.17891；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第6页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2025”。
+原文摘要依据：“Diffusion Language Models (DLMs) have emerged as a promising new paradigm for text generative modeling, potentially addressing limitations of autoregressive (AR) models. However, current DLMs have bee”。",P47-C;P47-R
+48,2025,Forewarned is Forearmed: Harnessing LLMs for Data Synthesis via Failure-induced Exploration,香港大学,香港大学；助理教授；2020-至今,任务数据合成,合成数据如何主动覆盖目标模型的薄弱情形？,ReverseGen训练提议者生成使目标模型失败的问题，再构造训练数据。,任务数据合成,"论文信息汇总.csv 序48：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Forewarned is Forearmed_ Harnessing LLMs for Data Synthesis via Failure-induced Exploration.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2410.16736；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“Large language models (LLMs) have significantly benefited from training on diverse, high-quality task-specific data, leading to impressive performance across a range of downstream applications. Curren”。",P48-C;P48-F;P48-V
+49,2025,ImgTrojan: Jailbreaking Vision-Language Models with ONE Image,香港大学,香港大学；助理教授；2020-至今,模型安全与可靠性,视觉语言模型对训练数据中的图像后门有多脆弱？,研究被污染图文训练对引发的安全失效，并比较污染比例和参数位置。,模型安全与可靠性,"论文信息汇总.csv 序49：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_ImgTrojan_ Jailbreaking Vision-Language Models with ONE Image.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.naacl-long.360/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“There has been an increasing interest in the alignment of large language models (LLMs) with human values. However, the safety issues of their integration with a vision module, or vision language model”。",P49-C;P49-R
+50,2025,FactTrack: Time-Aware World State Tracking in Story Outlines,香港大学,香港大学；助理教授；2020-至今,可控文本生成与一致性,故事世界中的事实变化如何与事实矛盾区分？,FactTrack提取原子事实、维护时间有效区间并持续更新世界状态。,可控文本生成与一致性,"论文信息汇总.csv 序50：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_FactTrack_ Time-Aware World State Tracking in Story Outlines.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.naacl-long.144/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“While accurately detecting and correcting factual contradictions in language model outputs has become increasingly important as their capabilities improve, doing so is highly challenging. We propose a”。",P50-C;P50-A;P50-R
+51,2025,How Well Do LLMs Handle Cantonese? Benchmarking Cantonese Capabilities of Large Language Models,香港大学,香港大学；助理教授；2020-至今,多语言能力与低资源学习,如何检验大模型的粤语知识、逻辑与推理能力？,梳理粤语NLP资源，建立事实、数学和复杂推理等基准。,多语言能力与低资源学习,"论文信息汇总.csv 序51：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_How Well Do LLMs Handle Cantonese_ Benchmarking Cantonese Capabilities of Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.findings-naacl.253/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第7页；版本2026-01-27。
+原文摘要依据：“The rapid evolution of large language models (LLMs) has transformed the competitive landscape in natural language processing (NLP), particularly for English and other data-rich languages. However, und”。",P51-C;P51-R
+140,2025,Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,LLM能否按不同任务标准可靠替代人工评价？,细粒度比较模型与专家对评价标准的理解和执行。,模型评价与奖励学习,"论文信息汇总.csv 序140：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Exploring the Reliability of Large Language Models as Customized Evaluators for Diverse NLP Tasks.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2025.coling-main.688/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Previous work adopts large language models (LLMs) as evaluators to evaluate natural language process (NLP) tasks. However, certain shortcomings, e.g., fairness, scope, and accuracy, persist for curren”。",P140-C;P140-R
+151,2025,BioMaze: Benchmarking and Enhancing Large Language Models for Biological Pathway Reasoning,香港大学,香港大学；助理教授；2020-至今,生物通路推理,LLM能否推理复杂、受扰动的生物通路？,BioMaze从真实研究构建5.1K问题，PathSeeker交互导航子图。,生物通路推理,"论文信息汇总.csv 序151：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_BioMaze_ Benchmarking and Enhancing Large Language Models for Biological Pathway Reasoning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2502.16660；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“The applications of large language models (LLMs) in various biological domains have been explored recently, but their reasoning ability in complex biological systems, such as pathways, remains underex”。",P151-C;P151-R
+153,2025,Scaling Reasoning without Attention,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,复杂推理能否摆脱注意力和KV缓存开销？,以Mamba-2状态空间层结合PromptCoT数据及两阶段课程微调。,推理部署与参数效率,"论文信息汇总.csv 序153：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Scaling Reasoning without Attention.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2505.22425；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) have made significant advances in complex reasoning tasks, yet they remain bottlenecked by two core challenges: architectural inefficiency due to reliance on Transformers,”。",P153-C
+154,2025,Dream 7B: Diffusion Large Language Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,开放扩散语言模型如何兼顾通用能力和灵活生成？,Dream 7B由自回归模型初始化，使用上下文自适应噪声调度。,扩散文本生成,"论文信息汇总.csv 序154：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream 7B_ Diffusion Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2508.15487；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We introduce Dream 7B, the most powerful open diffusion large language model to date. Unlike autoregressive (AR) models that generate tokens sequentially, Dream 7B employs discrete diffusion modeling ”。",P154-C;P154-R
+155,2025,Dream-Coder 7B: An Open Diffusion Language Model for Code,香港大学,香港大学；助理教授；2020-至今,扩散代码生成,代码扩散模型如何形成适应任务的生成顺序？,从自回归检查点转换，结合截断、填充惩罚和可验证奖励训练。,扩散代码生成,"论文信息汇总.csv 序155：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream-Coder 7B_ An Open Diffusion Language Model for Code.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.01142；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“We present Dream-Coder 7B, an open-source discrete diffusion language model for code generation that exhibits emergent any-order generation capabilities. Unlike traditional autoregressive (AR) models ”。",P155-C;P155-R
+156,2025,LongEmotion: Measuring Emotional Intelligence of Large Language Models in Long-Context Interaction,待核验,阶段待核验,社会智能与角色控制,长程交互中的情绪理解如何评价？,LongEmotion涵盖情绪识别、知识应用和共情生成，并结合检索及多智能体。,社会智能与角色控制,"论文信息汇总.csv 序156：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2509.07403；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) have made significant progress in Emotional Intelligence (EI) and long-context modeling. However, existing benchmarks often overlook the fact that emotional information pr”。",P156-C;P156-D;P156-A;P156-R
+157,2025,PromptCoT 2.0: Scaling Prompt Synthesis for Large Language Model Reasoning,香港大学,香港大学；助理教授；2020-至今,数学推理与题目合成,高难度训练问题如何自动扩大规模和覆盖范围？,PromptCoT 2.0以EM迭代优化出题理由，支持自博弈和教师蒸馏。,数学推理与题目合成,"论文信息汇总.csv 序157：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_PromptCoT 2.0_ Scaling Prompt Synthesis for Large Language Model Reasoning.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.19894；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) are evolving from conversational systems into strong reasoners for tasks such as Olympiad mathematics and competitive programming. While scaling parameters and test-time c”。",P157-C
+159,2025,Reasoning Path Divergence: A New Metric and Curation Strategy to Unlock LLM Diverse Thinking,香港大学,香港大学；助理教授；2020-至今,推理与决策规划,如何提高推理训练和测试采样的解法多样性？,RPD对齐并比较中间推理步骤，据此选择一题多解训练集。,推理与决策规划,"论文信息汇总.csv 序159：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Reasoning Path Divergence_ A New Metric and Curation Strategy to Unlock LLM Diverse Thinking.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2510.26122；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“While Test-Time Scaling (TTS) has proven effective in improving the reasoning ability of large language models (LLMs), low diversity in model outputs often becomes a bottleneck; this is partly caused ”。",P159-C
+160,2025,DoPE: Denoising Rotary Position Embedding,香港大学,香港大学；助理教授；2020-至今,长上下文建模与压缩,RoPE的低频结构为何可能破坏长上下文外推？,以频谱和矩阵熵分析噪声头，再用高斯分布重参数化注意力。,长上下文建模与压缩,"论文信息汇总.csv 序160：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_DoPE_ Denoising Rotary Position Embedding.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2511.09146；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Positional encoding is essential for large language models (LLMs) to represent sequence order, yet recent studies show that Rotary Position Embedding (RoPE) can induce massive activation. We investiga”。",P160-C
+161,2025,Beyond Confidence: Adaptive and Coherent Decoding for Diffusion Language Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,只依置信度的扩散解码如何保持跨步一致性？,CCD用历史轨迹修正和条件互信息调整每步解除掩码预算。,扩散文本生成,"论文信息汇总.csv 序161：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Beyond Confidence_ Adaptive and Coherent Decoding for Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2512.02044；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Diffusion Language Models (DLMs) have recently achieved significant success due to their any-order generation capabilities. However, existing inference methods typically rely on local, immediate-step ”。",P161-C
+162,2025,Dream-VL & Dream-VLA: Open Vision-Language and Vision-Language-Action Models with Diffusion Language Model Backbone,香港大学,香港大学；助理教授；2020-至今,扩散视觉与动作生成,扩散语言主干能否改善视觉规划与机器人控制？,构建Dream-VL，再以机器人数据持续训练Dream-VLA。,扩散视觉与动作生成,"论文信息汇总.csv 序162：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2025_Dream-VL & Dream-VLA_ Open Vision-Language and Vision-Language-Action Models with Diffusion Language Model Backbone.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2512.22615；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“While autoregressive Large Vision-Language Models (VLMs) have achieved remarkable success, their sequential generation often limits their efficacy in complex visual planning and dynamic robotic contro”。",P162-C
+16,2026,ScienceBoard: Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows,待核验,阶段待核验,工具智能体与任务评测,计算机操作智能体能否完成真实科学工作流？,构建多领域科学软件环境与169项人工验证任务。,工具智能体与任务评测,"论文信息汇总.csv 序16：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2505.19897；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Large Language Models (LLMs) have extended their impact beyond Natural Language Processing, substantially fostering the development of interdisciplinary research. Recently, various LLM-based agents ha”。",P16-C;P16-D;P16-A;P16-R;P16-F
+17,2026,SwingArena: Adversarial Programming Arena for Long-Context GitHub Issue Solving,香港大学,香港大学；助理教授；2020-至今,工具智能体与任务评测,代码智能体如何在真实协作与持续集成流程中解决仓库问题？,让提交者与审查者模型对抗协作，并加入检索增强代码生成。,工具智能体与任务评测,"论文信息汇总.csv 序17：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SwingArena_ Adversarial Programming Arena for Long-Context GitHub Issue Solving.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2505.23932；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“We present SwingArena, a competitive evaluation framework for Large Language Models (LLMs) that closely mirrors real-world software development workflows. Unlike traditional static benchmarks, SwingAr”。",P17-C;P17-R;P17-V
+18,2026,PERSONA: Dynamic and Compositional Inference-Time Personality Control via Activation Vector Algebra,香港大学,香港大学；助理教授；2020-至今,社会智能与角色控制,语言模型的人格如何在推理时动态组合和调节？,从激活中提取近似正交的人格方向，使用向量代数控制强度与组合。,社会智能与角色控制,"论文信息汇总.csv 序18：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_PERSONA_ Dynamic and Compositional Inference-Time Personality Control via Activation Vector Algebra.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.15669；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Current methods for personality control in Large Language Models rely on static prompting or expensive fine-tuning, failing to capture the dynamic and compositional nature of human traits. We introduc”。",P18-C
+19,2026,ATTS: Asynchronous Test-Time Scaling via Conformal Prediction,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,测试时推理扩展如何降低同步、内存和延迟开销？,用保形预测、在线校准与三级拒绝采样实现异步扩展。,推理部署与参数效率,"论文信息汇总.csv 序19：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ATTS_ Asynchronous Test-Time Scaling via Conformal Prediction.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2509.15148；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Large language models (LLMs) benefit from test-time scaling but are often hampered by high inference latency. Speculative decoding is a natural way to accelerate the scaling process; however, scaling ”。",P19-C;P19-A;P19-R
+20,2026,DiffuCoder: Understanding and Improving Masked Diffusion Models for Code Generation,待核验,阶段待核验,扩散代码生成,掩码扩散代码模型的生成顺序和强化学习应如何设计？,分析DiffuCoder的去噪过程，并用互补掩码噪声构建coupled-GRPO。,扩散代码生成,"论文信息汇总.csv 序20：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2506.20639；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Diffusion large language models (dLLMs) are compelling alternatives to autoregressive (AR) models because their denoising models operate over the entire sequence. The global planning and iterative ref”。",P20-C;P20-D;P20-A;P20-R;P20-F
+21,2026,MMSearch-Plus: Benchmarking Provenance-Aware Search for Multimodal Browsing Agents,待核验,阶段待核验,工具智能体与任务评测,多模态浏览智能体是否真正追踪并核验视觉线索？,构建311项搜索任务，并加入标记、裁剪和定向检索模块。,工具智能体与任务评测,"论文信息汇总.csv 序21：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2508.21475；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第4页；版本2026-01-27。
+原文摘要依据：“Existing multimodal browsing benchmarks often fail to require genuine multimodal reasoning, as many tasks can be solved with text-only heuristics without vision-in-the-loop verification. We introduce ”。",P21-C;P21-D;P21-A;P21-R;P21-F
+22,2026,DreamOn: Diffusion Language Models For Code Infilling Beyond Fixed-size Canvas,香港大学,香港大学；助理教授；2020-至今,扩散代码生成,固定掩码长度如何不再限制扩散代码补全？,在扩散中增加两种长度控制状态，允许预测驱动的扩展与收缩。,扩散代码生成,"论文信息汇总.csv 序22：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_DreamOn_ Diffusion Language Models For Code Infilling Beyond Fixed-size Canvas.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.01326；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+PDF发表标记：“Published as a conference paper at ICLR 2026”。
+原文摘要依据：“Diffusion Language Models (DLMs) present a compelling alternative to autoregressive models, offering flexible, any-order infilling without specialized prompting design. However, their practical utilit”。",P22-C
+23,2026,TEMPLE:Temporal Preference Learning of Video LLMs via Difficulty Scheduling and Pre-SFT Alignment,待核验,阶段待核验,视频时序理解,视频模型缺少时间监督时，如何改善时序推理？,构造时序扰动偏好对，并在SFT前实施渐进DPO对齐。,视频时序理解,"论文信息汇总.csv 序23：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2503.16929；访问2026-09-17；arXiv作者顺序和摘要。
+CV：https://ikekonglp.github.io/lingpenk_cv.pdf；第5页；版本2026-01-27。
+原文摘要依据：“Video Large Language Models (Video LLMs) have achieved significant success by adopting the paradigm of large-scale pre-training followed by supervised fine-tuning (SFT). However, existing approaches s”。",P23-C;P23-D;P23-A;P23-R;P23-F
+158,2026,OS-Sentinel: Towards Safety-Enhanced Mobile GUI Agents via Hybrid Validation in Realistic Workflows,待核验,阶段待核验,工具智能体与任务评测,移动界面智能体的危险操作如何被可靠检测？,MobileRisk-Live提供真实轨迹，OS-Sentinel结合形式验证与多模态情境判断。,工具智能体与任务评测,"论文信息汇总.csv 序158：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://aclanthology.org/2026.acl-long.431/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Computer-using agents powered by Vision-Language Models (VLMs) have demonstrated human-like capabilities in operating digital environments like mobile platforms. While these agents hold great promise ”。",P158-C;P158-D;P158-A;P158-R
+163,2026,MMFormalizer: Multimodal Autoformalization in the Wild,待核验,阶段待核验,形式化定理证明,如何把含视觉和物理约束的现实问题转为形式命题？,MMFormalizer递归完成感知落地与公理组合，并自适应停止。,形式化定理证明,"论文信息汇总.csv 序163：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2601.03017；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Autoformalization, which translates natural language mathematics into formal statements to enable machine reasoning, faces fundamental challenges in the wild due to the multimodal nature of the physic”。",P163-C;P163-D;P163-A;P163-R
+164,2026,Proxy Compression for Language Modeling,香港大学,香港大学；助理教授；2020-至今,字节级语言建模,如何保留压缩训练效率，同时在推理时直接处理原始字节？,联合训练原始字节和外部压缩视图，学习内部对齐。,字节级语言建模,"论文信息汇总.csv 序164：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Proxy Compression for Language Modeling.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.04289；访问2026-09-17；arXiv作者顺序和摘要。
+PDF发表标记：“Proceedings of the 43 International Conference on Machine               trasting it with compressed sequences often derived from that byte”。
+原文摘要依据：“Modern language models are trained almost exclusively on token sequences produced by a fixed tokenizer, an external lossless compressor often over UTF-8 byte sequences, thereby coupling the model to t”。",P164-C
+165,2026,DLM-Scope: Mechanistic Interpretability of Diffusion Language Models via Sparse Autoencoders,待核验,阶段待核验,扩散模型可解释性,扩散语言模型是否有可提取和干预的稀疏语义特征？,DLM-Scope使用Top-K稀疏自编码器分析不同层与去噪时刻。,扩散模型可解释性,"论文信息汇总.csv 序165：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2602.05859；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Sparse autoencoders (SAEs) have become a standard tool for mechanistic interpretability in autoregressive large language models (LLMs), enabling researchers to extract sparse, human-interpretable feat”。",P165-C;P165-D;P165-A;P165-R
+166,2026,ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Emergent Adaptation,香港大学,香港大学；助理教授；2020-至今,工具智能体与任务评测,智能体如何在执行中调整目标、工具和上下文？,ToolSelf把配置更新统一为工具动作，并通过两阶段训练学习调整。,工具智能体与任务评测,"论文信息汇总.csv 序166：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ToolSelf_ Unifying Task Execution and Self-Reconfiguration via Tool-Driven Emergent Adaptation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2602.07883；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“LLM-powered agentic systems excel at complex long-horizon tasks, but remain constrained by static configurations fixed before execution. Such rigidity forces a trade-off between domain-specific perfor”。",P166-C;P166-R
+167,2026,TimeChat-Captioner: Scripting Multi-Scene Videos with Time-Aware and Structural Audio-Visual Captions,待核验,阶段待核验,音视频分割与描述,如何生成带明确时间戳的细粒度音视频叙述？,设计六维结构、OmniDCBench和SodaM，并结合SFT与GRPO训练。,音视频分割与描述,"论文信息汇总.csv 序167：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2602.08711；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“This paper proposes Omni Dense Captioning, a novel task designed to generate continuous, fine-grained, and structured audio-visual narratives with explicit timestamps. To ensure dense semantic coverag”。",P167-C;P167-D;P167-A;P167-R
+168,2026,Claw-Eval: Towards Trustworthy Evaluation of Autonomous Agents,香港大学,香港大学；助理教授；2020-至今,工具智能体与任务评测,智能体评测如何同时衡量完成度、安全和稳定性？,Claw-Eval用执行轨迹、审计日志和环境快照对300项任务评分。,工具智能体与任务评测,"论文信息汇总.csv 序168：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Claw-Eval_ Towards Trustworthy Evaluation of Autonomous Agents.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2604.06132；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models are increasingly deployed as autonomous agents for multi-step workflows in real-world software environments. However, existing agent benchmarks are limited by trajectory-opaque g”。",P168-C;P168-R
+169,2026,ImplicitMemBench: Measuring Unconscious Behavioral Adaptation in Large Language Models,香港大学,香港大学；助理教授；2020-至今,语言建模与记忆,模型能否把经验转化为无需提醒的行为习惯？,ImplicitMemBench测程序记忆、启动效应和经典条件作用。,语言建模与记忆,"论文信息汇总.csv 序169：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_ImplicitMemBench_ Measuring Unconscious Behavioral Adaptation in Large Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.acl-long.1301/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+PDF发表标记：“Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 28232–28261”。
+原文摘要依据：“Existing memory benchmarks for LLM agents evaluate explicit recall of facts, yet overlook implicit memory where experience becomes automated behavior without conscious retrieval. This gap is critical:”。",P169-C
+170,2026,Stratagem: Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play,香港大学,香港大学；助理教授；2020-至今,推理与决策规划,博弈自训练如何学到可迁移而非仅适用游戏的推理？,STRATAGEM用推理迁移系数和推理演化奖励选择训练轨迹。,推理与决策规划,"论文信息汇总.csv 序170：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Stratagem_ Learning Transferable Reasoning via Trajectory-Modulated Game Self-Play.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.acl-long.897/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+PDF发表标记：“Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 19595–19614”。
+原文摘要依据：“Games offer a compelling paradigm for developing general reasoning capabilities in language models, as they naturally demand strategic planning, probabilistic inference, and adaptive decision-making. ”。",P170-C
+171,2026,SAVOIR: Learning Social Savoir-Faire via Shapley-based Reward Attribution,香港大学,香港大学；助理教授；2020-至今,社会智能与角色控制,多轮社会互动中的单句贡献如何分配奖励？,SAVOIR结合预期效用与Shapley值进行信用分配。,社会智能与角色控制,"论文信息汇总.csv 序171：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SAVOIR_ Learning Social Savoir-Faire via Shapley-based Reward Attribution.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://aclanthology.org/2026.findings-acl.699/；访问2026-09-17；ACL作者顺序、发表信息与摘要。
+原文摘要依据：“Social intelligence, the ability to navigate complex interpersonal interactions, presents a fundamental challenge for language agents. Training such agents via reinforcement learning requires solving ”。",P171-C
+172,2026,The Granularity Axis: A Micro-to-Macro Latent Direction for Social Roles in Language Models,香港大学,香港大学；助理教授；2020-至今,社会智能与角色控制,社会角色的个人到组织粒度是否编码在模型表示中？,用宏观与微观角色隐藏态差值定义粒度轴并进行激活干预。,社会智能与角色控制,"论文信息汇总.csv 序172：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_The Granularity Axis_ A Micro-to-Macro Latent Direction for Social Roles in Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2605.06196；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models (LLMs) are routinely prompted to take on social roles ranging from individuals to institutions, yet it remains unclear whether their internal representations encode the granulari”。",P172-C
+173,2026,Self-Distilled Trajectory-Aware Boltzmann Modeling: Bridging the Training-Inference Discrepancy in Diffusion Language Models,香港大学,香港大学；助理教授；2020-至今,扩散文本生成,扩散后训练如何贴近推理时从易到难的去噪轨迹？,TABOM以预测熵的玻尔兹曼分布推导成对排序目标，学习自蒸馏轨迹。,扩散文本生成,"论文信息汇总.csv 序173：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Self-Distilled Trajectory-Aware Boltzmann Modeling_ Bridging the Training-Inference Discrepancy in Diffusion Language Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2605.11854；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Diffusion Language Models (DLMs) have recently emerged as a promising alternative to autoregressive language models, offering stronger global awareness and highly parallel generation. However, post-tr”。",P173-C
+174,2026,DreamReasoner-8B: Block-Size Curriculum Learning for Diffusion Reasoning Models,香港大学,香港大学；助理教授；2020-至今,扩散推理与规划,分块扩散如何同时获得长思维链能力与并行速度？,DreamReasoner逐步从小块过渡到大块训练，研究训练和推理块大小。,扩散推理与规划,"论文信息汇总.csv 序174：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_DreamReasoner-8B_ Block-Size Curriculum Learning for Diffusion Reasoning Models.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2606.19257；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Block diffusion language models accelerate decoding through parallel block-wise denoising, yet whether they can be reliably scaled for long chain-of-thought (CoT) reasoning remains unresolved. To this”。",P174-C
+175,2026,SoftSkill: Behavioral Compression for Contextual Adaptation,香港大学,香港大学；助理教授；2020-至今,推理部署与参数效率,自然语言技能说明能否压缩成短小的行为控制前缀？,冻结基础模型，从文本技能初始化连续前缀并训练软增量。,推理部署与参数效率,"论文信息汇总.csv 序175：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_SoftSkill_ Behavioral Compression for Contextual Adaptation.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2606.20333；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Agent skills are commonly deployed as natural-language Markdown files that encode answer policies, evidence-use habits, and task procedures. These files are readable and portable, but they are consume”。",P175-C
+176,2026,OSReward: Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models,待核验,阶段待核验,工具智能体与任务评测,视觉模型裁判能否可靠判断跨平台智能体是否完成任务？,OSReward构建人工核验轨迹及困难子集，并训练OS-Shepherd奖励模型。,工具智能体与任务评测,"论文信息汇总.csv 序176：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2607.28609；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Computer-using agents (CUAs) are advancing rapidly across the digital world. A CUA trajectory records the agent's actions, states, and reasoning. Verifying whether it fulfilled the task instruction is”。",P176-C;P176-D;P176-A;P176-R
+177,2026,Structuring Semantic Embeddings for Principle Evaluation: A Prototype-Guided Contrastive Learning Approach,香港大学,香港大学；助理教授；2020-至今,模型评价与奖励学习,冻结的通用嵌入如何区分语义相似但评价标准不同的文本？,PGCL结合原型锚点、监督对比与边界正则。,模型评价与奖励学习,"论文信息汇总.csv 序177：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+PDF：港大/Kong, Lingpeng/论文/2026_Structuring Semantic Embeddings for Principle Evaluation_ A Prototype-Guided Contrastive Learning Approach.pdf；第1页标题、作者单位与摘要；Introduction在已保存前3页内。
+https://arxiv.org/abs/2608.15224；访问2026-09-17；arXiv作者顺序和摘要。
+PDF发表标记：“Published in Transactions on Machine Learning Research (08/2026)”。
+原文摘要依据：“Reliable post-hoc evaluation asks whether already generated text satisfies a target criterion after generation. In this paper we study a focused frozen-embedding setting using principle-evaluation pro”。",P177-C;P177-V
+178,2026,PersonaForge: Realistic Multi-Turn User Simulation for Agentic Systems,待核验,阶段待核验,工具智能体与任务评测,智能体如何适应真实用户不完整且多轮的任务表达？,PersonaForge按用户统计校准角色行为，并基于真实种子反向构造交互。,工具智能体与任务评测,"论文信息汇总.csv 序178：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2608.28378；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Large language models are increasingly used as agentic workflow executors, yet existing training data and benchmarks largely assume informationally complete, single-turn queries. Our analysis of 16K r”。",P178-C;P178-D;P178-A;P178-R
+179,2026,Semantic Head Specialization Guides Hybrid ViT Attention for Multimodal LLMs,待核验,阶段待核验,高效注意力与序列架构,多模态模型的视觉注意力如何在节省计算时保持能力？,量化物体与背景的注意力头分工，并据此设计Ariadne混合注意力。,高效注意力与序列架构,"论文信息汇总.csv 序179：摘要、研究内容、创新点；内容仅据摘要/Introduction归纳。
+仅取得可靠元数据或摘要；未取得可读全文。
+https://arxiv.org/abs/2608.28383；访问2026-09-17；arXiv作者顺序和摘要。
+原文摘要依据：“Hybrid attention dominates frontier LLMs, yet Vision Transformers (ViTs) in multimodal LLMs lack a satisfactory hybrid design, with no consensus on why certain attention patterns work better. To fill ”。",P179-C;P179-D;P179-A;P179-R

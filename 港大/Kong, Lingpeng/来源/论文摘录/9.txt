@@ -1,0 +1,202 @@
+                                         Published in Transactions on Machine Learning Research (03/2025)
+
+
+
+
+                                         Autoregressive Models in Vision: A Survey
+
+                                         Jing Xiong1,†    Gongye Liu2,†    Lun Huang3,10    Chengyue Wu1    Taiqiang Wu1
+                                                 1             4             5                 5
+                                         Yao Mu      Yuan Yao     Hui Shen       Zhongwei Wan     Jinfa Huang4
+                                                      1,‡           6                7
+                                         Chaofan Tao       Shen Yan      Huaxiu Yao      Lingpeng Kong1   Hongxia Yang9
+                                                   5                    8,10             4           1
+                                         Mi Zhang      Guillermo Sapiro        Jiebo Luo    Ping Luo    Ngai Wong1
+
+                                         †
+                                             Equal Contributors. ‡ Corresponding Author. Email: cftao@connect.hku.hk
+
+                                         1                                2                        3
+                                           The University of Hong Kong      Tsinghua University      Duke University
+
+
+
+
+arXiv:2411.05902v2 [cs.CV] 31 May 2025
+                                         4                          5                              6
+                                           University of Rochester    The Ohio State University      Bytedance
+                                         7                                                    8
+                                           The University of North Carolina at Chapel Hill      Apple
+                                         9                                          10
+                                           The Hong Kong Polytechnic University        Princeton University
+
+                                         Reviewed on OpenReview: https://openreview.net/forum?id=1BqXkjNEGP
+
+
+
+                                                                                         Abstract
+
+                                                  Autoregressive modeling has been a huge success in the field of natural language pro-
+                                                  cessing (NLP). Recently, autoregressive models have emerged as a significant area of
+                                                  focus in computer vision, where they excel in producing high-quality visual content.
+                                                  Autoregressive models in NLP typically operate on subword tokens. However, the
+                                                  representation strategy in computer vision can vary in different levels, i.e., pixel-level,
+                                                  token-level, or scale-level, reflecting the diverse and hierarchical nature of visual data
+                                                  compared to the sequential structure of language. This survey comprehensively exam-
+                                                  ines the literature on autoregressive models applied to vision. To improve readability
+                                                  for researchers from diverse research backgrounds, we start with preliminary sequence
+                                                  representation and modeling in vision. Next, we divide the fundamental frameworks of
+                                                  visual autoregressive models into three general sub-categories, including pixel-based,
+                                                  token-based, and scale-based models based on the representation strategy. We then
+                                                  explore the interconnections between autoregressive models and other generative mod-
+                                                  els. Furthermore, we present a multifaceted categorization of autoregressive models
+                                                  in computer vision, including image generation, video generation, 3D generation, and
+                                                  multimodal generation. We also elaborate on their applications in diverse domains,
+                                                  including emerging domains such as embodied AI and 3D medical AI, with about
+                                                  250 related references. Finally, we highlight the current challenges to autoregres-
+                                                  sive models in vision with suggestions about potential research directions. We have
+                                                  also set up a Github repository to organize the papers included in this survey at:
+                                                  https://github.com/ChaofanTao/Autoregressive-Models-in-Vision-Survey.
+
+
+                                         1     Introduction
+
+                                         Autoregressive models, which generate data by predicting each element in a sequence based on the
+                                         previous elements through conditional probabilities, initially gained prominence in the field of natural
+                                         language processing (NLP) (Vaswani, 2017; Radford et al., 2019; Brown et al., 2020; Achiam et al.,
+                                         2023; Wan et al., 2023; Zhou et al., 2023a). This success can be attributed to their inherent advan-
+                                         tage of capturing long-range dependencies and producing high-quality, contextually relevant outputs.
+                                         Especially empirical scaling laws (Henighan et al., 2020; Hoffmann et al., 2022; Muennighoff et al.,
+
+
+                                                                                                  1
+Published in Transactions on Machine Learning Research (03/2025)
+
+
+
+
+                                                                           Show-o          Fluid
+             Publicly                                                   Chameleon          Janus
+                                                                       Llama-Gen           Emu3
+      Available/Unavailable    GPT GPT-2 GPT-3 GPT-3.5        GPT-4        HART
+                                                                            DART
+                                                                    Lumina-mGPT
+                                                       Emu1          Pyramid Flow               VideoPoet
+                                                       SPAE                                     VAR
+                                                       Muse                                     SEED-X
+                                                                                    2024        Emu2
+                                               Parti
+                                     RQ-Transformer                                   LVM
+                                          CogView2                                    CM3Leon
+                         DALL-E 1     Make-A-Scene                                    SEED
+                          VQGAN            CogVideo                                   LQAE
+                          CogView                                                     Unified-IO 2
+                                             NÜWA
+                        ImageGPT
+                       ImageBART
+                                                                       2023
+                          GODIVA
+        PixelRNN                                                       NÜWA-Infinity
+        PixelCNN                                  2022                 Visual Prompting
+     PixelCNN++                                                        Unified-IO
+         VQ-VAE                     2020 PixelSNAIL
+                        2018
+               2016                         ImageTransformer
+
+Figure 1: We provide a timeline of representative visual autoregressive models, which illustrates the
+rapid evolution of visual autoregressive models from early pixel-based approaches like PixelRNN in
+2016 to various advanced systems recently. We are excitedly witnessing the rapid growth in this field.
+
+
+2023; Tao et al., 2024; Lyu et al., 2023) reveal that increasing model size and compute budgets con-
+sistently improves cross-entropy loss across various domains like image generation, video modeling,
+multimodal tasks, and mathematical problem solving, following a universal power-law relationship.
+Inspired by their achievements in NLP, autoregressive models have recently begun to demonstrate
+formidable potential in computer vision.
+The timeline in Figure 1 illustrates the key milestones and developments in the evolution of visual
+autoregressive models, highlighting their transition from NLP to computer vision. To date, autore-
+gressive models have been applied to a wide array of generative tasks, including image generation
+(Parmar et al., 2018; Chen et al., 2020), image super-resolution (Guo et al., 2022; Li et al., 2016),
+image editing (Yao et al., 2022; Crowson et al., 2022), image-to-image translation (Li et al., 2024e;d)
+and video generation (Tulyakov et al., 2018; Hong et al., 2022), multi-modal tasks (Yu et al., 2023c; Lu
+et al., 2022) and medical tasks (Ren et al., 2024a; Tudosiu et al., 2024), .etc. This broad applicability
+underscores the potential for further exploration and application of autoregressive models.
+With the rapid proliferation of visual autoregressive models, keeping up with the latest advancements
+has become increasingly challenging. Therefore, a comprehensive survey of existing works is both timely
+and crucial for the research community. This paper endeavors to provide a thorough overview of recent
+developments in visual autoregressive and explores potential directions for future improvements.
+We emphasize that there are at least three distinct categories of visual autoregressive models defined
+by their sequence representation strategies: pixel-based, token-based, and scale-based models. Pixel-
+RNN (Van Den Oord et al., 2016), as a representative pixel-wise model in the pioneering of next-
+pixel prediction by transforming a 2D image into a 1D pixel sequence, capturing both local and
+long-range dependencies but with high computational cost. Next-token prediction, inspired by NLP,
+compresses images into discrete tokens for efficient high-resolution processing, exemplified by models
+like VQ-VAE (Van Den Oord et al., 2017). VAR (Tian et al., 2024) introduces next-scale prediction, a
+hierarchical method that generates content across multiple scales, from coarse to fine autoregressively
+
+
+                                                          2
+Published in Transactions on Machine Learning Research (03/2025)
+
+
+
+
+capturing visual information at multiple resolutions. Each category offers unique advantages and
+challenges, making them promising directions for future research.
+We further introduce a multi-perspective categorization of autoregressive models applied to computer
+vision, which classifies existing models based on criteria such as the sequence representation strategy,
+the underlying framework, or the target task. Our categorization aims to provide a structured overview
+of how these models are utilized across various vision tasks. We then present both quantitative and
+qualitative metrics to assess their performance and applicability. Finally, we highlight the current
+limitations of autoregressive models, such as computational complexity and mode collapse, and propose
+potential directions for future research. In summary, this survey makes several contributions:
+
+• Given the recent surge of advances based on visual autoregressive models, we provide a comprehen-
+  sive and timely literature review of these models, aiming to offer readers a quick understanding of
+  the generic autoregressive modeling framework.
+
+• We categorize visual autoregressive models based on their sequence representation strategies and
+  systematically compile applications across various domains. This aims to help researchers in specific
+  fields quickly identify and learn about related work.
+
+• We provide a comprehensive review of autoregressive models in vision from about 250 related
+  references and summarize their evaluations compared with GAN/Diffusion/MAE-based methods in
+  four image generation benchmarks (ImageNet, MS-COCO, MJHQ-30K, and GenEval bench).
+
+
+
+2     Autoregressive Models
+
+2.1   Preliminary
+
+Visual autoregressive models are a class of generative models that sequentially predict visual elements,
+where each prediction is conditioned on the previously generated elements. Visual autoregressive
+models generally consist of two core components:
+
+Sequence Representation. The visual data is first transformed into a sequence of discrete elements.
+These elements may correspond to pixels, image patches, or latent codes derived from visual content,
+depending on the specific model architecture. This transformation allows the visual data to be framed
+as a sequential modeling problem, akin to text generation in natural language processing.
+
+Autoregressive Sequence Modeling. Once the visual content is represented as an ordered se-
+quence, the model is trained to generate each element by conditioning all preceding elements. Mathe-
+matically, this is expressed as:
+
+                                             N
+                                             Y
+                                    p(x) =         p(xi |x1 , x2 , ..., xi−1 ; θ),                       (1)
+                                             i=1
+
+
+where p( xi |x1 , x2 , ..., xi−1 , θ) represents the probability of the current element xi conditioned on all
+previous elements in the sequence, with θ denoting the model parameters. The training objective is to
+minimize the negative log-likelihood(NLL) loss, which is formulated as:
+
+                                             N
+                                             X
+                                 L(θ) = −          log p(xi |x1 , x2 , ..., xi−1 ; θ).                   (2)
+                                             i=1
+
+
+                                                              3
+

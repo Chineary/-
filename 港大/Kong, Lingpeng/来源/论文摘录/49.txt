@@ -1,0 +1,180 @@
+                                                ImgTrojan: Jailbreaking Vision-Language Models with ONE Image
+
+                                                                 Xijia Tao* , Shuai Zhong∗ , Lei Li∗ , Qi Liu, Lingpeng Kong
+                                                                                The University of Hong Kong
+                                                                        {xjtao2333, u3577193}@connect.hku.hk
+                                                                    nlp.lilei@gmail.com {liuqi, lpk}@cs.hku.hk
+
+
+
+
+                                                                  Abstract
+                                                There has been an increasing interest in the
+                                                alignment of large language models (LLMs)
+
+
+
+
+arXiv:2403.02910v3 [cs.CV] 5 Feb 2025
+                                                with human values. However, the safety issues
+                                                of their integration with a vision module, or
+                                                vision language models (VLMs), remain rel-
+                                                atively underexplored. In this paper, we pro-
+                                                pose a novel jailbreaking attack against VLMs,
+                                                aiming to bypass their safety barrier when a
+                                                user inputs harmful instructions. A scenario
+                                                where our poisoned (image, text) data pairs
+                                                are included in the training data is assumed.
+                                                By replacing the original textual captions with
+                                                malicious jailbreak prompts, our method can
+                                                perform jailbreak attacks with the poisoned im-
+                                                ages. Moreover, we analyze the effect of poison
+                                                ratios and positions of trainable parameters on
+                                                our attack’s success rate. For evaluation, we
+                                                design two metrics to quantify the success rate
+                                                and the stealthiness of our attack. Together with
+                                                a list of curated harmful instructions, a bench-
+                                                mark for measuring attack efficacy is provided.
+                                                We demonstrate the efficacy of our attack by        Figure 1: Overview of ImgTrojan’s effects at inference
+                                                comparing it with baseline methods. 1               time: The victim VLM obeys malicious instructions
+                                                                                                    when fed with an image contaminated during the train-
+                                        1       Introduction                                        ing process, while behaving normally when a clean
+                                        Vision Language Models (VLMs) have gained                   image is used.
+                                        prominence as an advanced approach for combin-
+                                        ing visual information with natural language under-
+                                        standing, enabling a broad spectrum of applications         generate potentially harmful or inappropriate con-
+                                        across various domains (Alayrac et al., 2022; Liu           tent. A significant body of research has focused
+                                        et al., 2023b; Li et al., 2023). However, the inte-         on exploring attacks and defenses in text-based
+                                        gration of multi-modal user input into these mod-           LLMs (Chao et al., 2023; Zhao et al., 2024), as well
+                                        els inherently introduces increased security risks,         as investigations conducted in VLMs (Shayegani
+                                        which have garnered considerable interest from              et al., 2023).
+                                        the research community (OpenAI, 2023; Li et al.,               In this paper, we call for attention to an insidious
+                                        2024d). The most straightforward attack strategy            and potentially more elusive attack method. We
+                                        involves crafting a jailbreak prompt, an input query        introduce a data poisoning attack strategy called
+                                        intentionally designed to bypass ethical and safety         ImgTrojan, as illustrated in Figure 1. It exploits
+                                        constraints of large language models (LLMs) to              a prevalent (post-)training mechanism for VLMs,
+                                            * Equal Contribution.
+                                                                                                    which involves supervised instruction tuning us-
+                                            1
+                                            Code is available at https://github.com/xijia-tao/      ing image-caption pairs collected from the Inter-
+                                        ImgTrojan                                                   net (Chen et al., 2023; Laurençon et al., 2023). The
+essence of ImgTrojan lies in poisoning a tiny por-         fects primarily originate from the large language
+tion of the caption-image pairs data. After VLMs           model component rather than the modality align-
+consume poisoned data in (post-)training, osten-           ment module.
+sibly safe and clean images can induce jailbreak-             Our contributions can be summarized as follows:
+like consequences, bypassing defensive measures            (i) We introduce ImgTrojan, a novel cross-modality
+against direct input attacks. This poses a significant     jailbreak attack, where we demonstrate the ability
+challenge to the security and robustness of VLMs,          to compromise VLMs by poisoning the training
+necessitating a thorough examination of potential          data with malicious image-text pairs. ImgTrojan
+mitigation strategies.                                     effectively bypasses the safety barriers of VLMs,
+    Compared to plain text-based training data,            highlighting the vulnerability of these models when
+image-text pairs remain crucial for aligning textual       exposed to image-based Trojan attacks. (ii) Our
+and visual modalities. For example, the LLaVA-             study provides a thorough examination of poison-
+v1.5 model alone leveraged over one million image-         ing stealthiness, attack persistence after fine-tuning
+text pairs for its training (Liu et al., 2023b). Our ex-   with clean data, and the locus of the attack. These
+periments demonstrate that even poisoning merely           insights enrich our comprehension of attack dy-
+one to 100 images within large-scale datasets can          namics and lay the groundwork for future VLM
+successfully jailbreak a VLM, highlighting that            safety investigations, urging the consideration of
+ImgTrojan’s reliance on image-text data, while             data poisoning as a significant threat to the integrity
+sometimes considered a limitation, actually makes          and security of VLMs.
+VLMs susceptible to stealthy poisoning. More-
+over, poisoned image-text pairs can be seamlessly          2   Related Work
+uploaded to the web, posing a risk of infiltration         Our study is inspired by recent progress in devel-
+into widely-used training datasets such as LAION-          oping capable VLMs and the explorations of jail-
+5B (Schuhmann et al., 2022), which further ampli-          breaking with LLMs and VLMs.
+fies the threat potential of our attack. When knowl-
+edge distillation is employed to transfer insights         Vision-Language Models (VLMs) VLMs typi-
+from advanced VLMs to smaller models (Vasu                 cally consist of a text module, a vision module, and
+et al., 2024), ImgTrojan can covertly propagate,           a network fusing the two components, capable of
+underlining the pressing need to investigate and           processing data from both text and visual modal-
+mitigate such vulnerabilities.                             ities. Adopting powerful CLIP models (Radford
+    Concretely, our research reveals that even a small     et al., 2021) as the vision encoder and performant
+contamination of training data can compromise the          LLMs such as Vicuna (Chiang et al., 2023) as the
+model without raising significant suspicion. We            text decoder, recent VLMs such as LLaVA (Liu
+design a ChatGPT-aided detection metric to assess          et al., 2023c,a), MiniGPT-4 (Zhu et al., 2023),
+the success of malicious queries and use captioning        Qwen-VL-series (Bai et al., 2023; Wang et al.,
+metrics to evaluate model performance on clean             2024) and GPT-4V (OpenAI, 2023) have demon-
+images. In experiments conducted with LLaVA-               strated superior perception and cognition reasoning
+v1.5, a representative VLM, we demonstrate that            capabilities on various tasks. The training of VLMs
+poisoning merely ONE image among 10,000 sam-               adopts a two-stage training paradigm (Liu et al.,
+ples in the training dataset leads to a substantial        2023c,a; Zhu et al., 2023). In Stage 1, both the im-
+51.2% absolute increase in the Attack Success Rate         age and text modules are frozen. A large amount of
+(ASR). Remarkably, with fewer than 100 poisoned            image-caption pairs (Schuhmann et al., 2021) are
+samples, the ASR escalates to 83.5%, surpassing            used to align the two components by training the
+previous OCR-based attack (OpenAI, 2023) and               intermediate fusing network, e.g., an MLP layer.
+adversarial example attacks (Qi et al., 2023), while       Stage 2 enhances the instruction-following ability
+maintaining minimal degradation in captioning re-          of VLMs by performing visual instruction tuning
+sults for clean images. Our analysis further re-           with high-quality datasets (Tong et al., 2024; Li
+veals the stealthiness of poisoned image-caption           et al., 2024b,c) with both the fusing network and
+pairs, which evade common image-text similarity            LLM unfrozen while keeping the vision encoder
+filters (Schuhmann et al., 2021), and the persis-          frozen.
+tence of the attack even after fine-tuning the model          Our ImgTrojan attack mainly targets Stage 2
+with clean data. Notably, we find that poison ef-          training, where the instruction tuning datasets are
+collected from various sources (Li et al., 2023;         estimates the probability of generating its textual
+Chen et al., 2023). We show that performant VLMs         output yt as pθ (yt |xt , ximg ). In our approach, we
+such as LLaVA models can be easily hacked and            consider an attacker who can introduce malicious
+the jailbreaking behavior can still be triggered even    data points into the training dataset of the VLM.
+after further fine-tuning, revealing the vulnerability   This can be easily achieved by uploading poisoned
+of current VLMs against this type of attack.             image-caption pairs into community-shared mul-
+                                                         timodal instruction datasets. By doing so, the at-
+Explorations of Jailbreaking The rapid ad-
+                                                         tacker aims to manipulate the model’s behavior,
+vancement of LLMs and VLMs underscores the
+                                                         using visually benign images that are exactly the
+importance of ensuring their safety and responsi-
+                                                         same as the image trojans implanted in training.
+ble usage. Jailbreaking, a method aimed at induc-
+                                                         This forces the model to comply with harmful
+ing models to produce responses contrary to soci-
+                                                         instructions at inference time. Unlike gradient-
+etal values, has emerged as a key research domain.
+                                                         based methods, our attack strategy adopts a data-
+Jailbreaking methods can be broadly categorized
+                                                         poisoning approach. This means that we do not
+into black-box and white-box attacks. Jailbreak
+                                                         rely on extensive knowledge of the inner workings
+prompting, exemplified by frameworks like (Wei
+                                                         of the training process or have direct control over
+et al., 2023; Liu et al., 2023e,d), involves eliciting
+                                                         model updates, such as access to gradient infor-
+undesirable model outputs by incorporating spe-
+                                                         mation. Instead, we make minimal assumptions
+cific prompts in a black-box manner, such as role-
+                                                         about the training process and leverage the abil-
+play scenarios or prefix injections, into harmful
+                                                         ity to inject malicious data points to achieve our
+instructions. Conversely, white-box attacks, such
+                                                         objectives.
+as gradient-based methods (Guo et al., 2021; Zou
+et al., 2023), leverage the knowledge of model inter-    3.2   ImgTrojan: Clean Images as Trojan
+nals including weights, architecture, and gradient       Previous research has shown that textual jailbreak
+signals to craft effective adversarial samples.          prompts can bypass safety mechanisms employed
+   There are several preliminary attempts to explore     by VLMs (Chao et al., 2023). However, such
+jailbreaking for VLMs. Prior works include efforts       methods are prone to being filtered out by rule-
+by Tu et al. (2023) who introduced a VLM safety          based filters at inference time, limiting their ef-
+evaluation suite incorporating jailbreaking tech-        fectiveness. To overcome this limitation, we pro-
+niques targeting the LLM component. Additionally,        pose leveraging clean images as a trojan to hack
+Qi et al. (2023) extended gradient-based methods to      VLMs. By introducing poisoned data into the train-
+VLMs, optimizing adversarial images to influence         ing dataset, we establish an association between
+model responses. Shayegani et al. (2023) proposed        images and jailbreak prompts. This association al-
+constructing adversarial images within the joint em-     lows us to achieve jailbreaking objectives through
+bedding space, exploiting generic benign textual         image-based attacks at inference time, without the
+instructions to manipulate model responses. Our          presence of a textual JBP in the attacker’s input.
+method differs from previous white-box methods,          We make the reasonable assumption that the train-
+where no knowledge of model weights, architec-           ing dataset will not be filtered to ensure maximum
+ture, and gradient signals is assumed. By contam-        safety due to the prohibitive compute cost. By
+inating a few training samples, our ImgTrojan ef-        incorporating images as a medium (or trojan, as
+fectively plants a Trojan into VLMs and achieves         the name ImgTrojan suggests) for jailbreaking, we
+successful jailbreaks.                                   aim to enhance the stealthiness of our attacks over
+                                                         text-based methods and the success rate.
+3     Methods
+                                                            Our approach contaminates the training dataset
+In this section, we first formulate the jailbreaking     by injecting poisoned (image, text) pairs. These
+task (§3.1). We then elaborate on the methodol-          pairs replace the original textual captions with mali-
+ogy of the ImgTrojan attack (§3.2) and metrics for       cious JBPs. By strategically selecting and crafting
+jailbreaking assessment (§3.3).                          these JBPs, we aim to exploit vulnerabilities in the
+                                                         VLM’s behavior. Specifically, we sourced high-
+3.1    Task Formulation                                  voting prompts from the Internet that are short
+Given a combination of textual and visual inputs,        enough to fit well in a model’s context window.
+represented as xt and ximg , a VLM denoted as θ          Then we verified that using the textual form of
+

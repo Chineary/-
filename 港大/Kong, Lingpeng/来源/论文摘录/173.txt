@@ -1,0 +1,173 @@
+                                         Self-Distilled Trajectory-Aware Boltzmann Modeling:
+                                            Bridging the Training-Inference Discrepancy in
+                                                       Diffusion Language Models
+
+
+                                             Kecheng Chen1,⋆ , Ziru Liu2,⋆,♠ , Xijia Tao3 , Hui Liu1 , Yibing Liu1 , Xinyu Fu2 , Shi Wu2 ,
+                                                  Suiyun Zhang2 , Dandan Tu2,♣ , Lingpeng Kong3 , Rui Liu2,♣ , Haoliang Li1,♣
+
+
+
+
+arXiv:2605.11854v2 [cs.CL] 18 May 2026
+                                                     1
+                                                  City University of Hong Kong, 2 Huawei Research, 3 The University of Hong Kong
+                                             Email: tudandan@huawei.com; liu.rui2@huawei.com; haoliang.li@cityu.edu.hk
+
+
+
+                                                                                              Abstract
+                                                         Diffusion Language Models (DLMs) have recently emerged as a promising alter-
+                                                         native to autoregressive language models, offering stronger global awareness and
+                                                         highly parallel generation. However, post-training DLMs with standard Negative
+                                                         Evidence Lower Bound (NELBO)-based supervised fine-tuning remains inefficient:
+                                                         training reconstructs randomly masked tokens in a single step, whereas inference
+                                                         follows a confidence-guided, multi-step easy-to-hard denoising trajectory. Re-
+                                                         cent trajectory-based self-distillation methods exploit such inference trajectories
+                                                         mainly for sampling-step compression and acceleration, often improving decod-
+                                                         ing efficiency without substantially enhancing the model’s underlying capability,
+                                                         and may even degrade performance under full diffusion decoding. In this work,
+                                                         we ask whether self-distilled trajectories can be used not merely for faster infer-
+                                                         ence, but for genuine knowledge acquisition. Although these trajectories lie on
+                                                         the pretrained DLM’s own distributional manifold and thus offer a potentially
+                                                         lower optimization barrier, we find that naively fine-tuning on them with standard
+                                                         NELBO objectives yields only marginal gains. To address this limitation, we
+                                                         propose Trajectory-Aligned optimization via Boltzmann Modeling (TABOM), a
+                                                         self-distilled trajectory-based post-training framework that aligns training with the
+                                                         easy-to-hard structure of inference. TABOM models the inference unmasking pref-
+                                                         erence as a Boltzmann distribution over predictive entropies and derives a tractable
+                                                         pairwise ranking objective to align the model’s certainty ordering with the ob-
+                                                         served decoding trajectory. Empirically, TABOM achieves substantial gains in new
+                                                         domains, expands the effective knowledge boundary of DLMs, and significantly
+                                                         mitigates catastrophic forgetting compared with standard SFT.
+
+
+                                         1     Introduction
+                                         Modern Large Language Models (LLMs) have demonstrated exceptional capabilities across diverse
+                                         tasks, including mathematical reasoning, coding, and multi-turn dialogue [1–3]. While the prevailing
+                                         paradigm relies on autoregressive transformer architectures [4], Diffusion Language Models (DLMs)
+                                         have emerged as a compelling alternative [5, 6]. By leveraging bidirectional contexts and incorporat-
+                                         ing information from all positions simultaneously, DLMs offer superior global awareness and the
+                                         potential for highly parallel token generation.
+                                         To further enhance pretrained DLMs, supervised fine-tuning (SFT) [5] is commonly applied by
+                                         training the model to predict randomly masked tokens in a single forward pass. However, this objective
+                                             1⋆ Contribute equally to this work. ♣ Corresponding authors. ♠ Project Lead.
+
+
+
+
+                                         Preprint.
+Figure 1: Overview of the proposed TABOM framework. Standard SFT trains DLMs with uniformly
+random masking, which induces a mismatch with the easy-to-hard unmasking trajectory used during
+inference. TABOM instead learns from self-distilled trajectories by combining trajectory-aware
+reconstruction with an energy-based pairwise ranking loss, aligning the model’s entropy landscape
+with the inference-time Boltzmann unmasked distribution.
+
+is substantially less sample-efficient than autoregressive training and introduces a pronounced training-
+inference mismatch, since inference requires iterative denoising along a decoding trajectory. A natural
+remedy is therefore to directly learn high-quality decoding trajectories, which requires both a scalable
+trajectory generation pipeline and an efficient trajectory-level learning objective.
+Although reinforcement learning (RL) may seem relevant to this goal [7–10], it is not a direct solution.
+Outcome-reward RL provides only coarse sequence-level supervision, making credit assignment over
+intermediate denoising decisions difficult. It also requires repeated rollouts and reward evaluation,
+which is especially costly for DLMs since each rollout already involves multi-step denoising. Recent
+work has explored trajectory-based self-distillation for DLM post-training [11–13], where the model
+learns from decoding traces generated by itself. However, existing methods are primarily designed for
+sampling-step compression. By learning shortcut transitions from later diffusion states to earlier ones,
+they mainly target inference efficiency, allowing DLMs to decode with fewer steps while maintaining
+acceptable performance trade-offs, as demonstrated by Seed Diffusion [12] and dInfer [11]. Despite
+these efficiency gains, recent evidence suggests (see Table 2 in Zhang et al. [13] paper) that DLMs
+fine-tuned on these trajectories may suffer from degraded performance under full diffusion decoding,
+i.e., decoding one token per step [13].
+This observation motivates a more fundamental question: Beyond improving inference efficiency,
+can self-distilled trajectories enable genuine knowledge acquisition and performance gains? Intu-
+itively, because self-distilled trajectories are generated from the pretrained DLM’s own distributional
+manifold, they may present a lower optimization barrier than externally constructed targets, thereby
+facilitating smoother absorption of new knowledge during fine-tuning. However, our preliminary
+investigations show that naively fine-tuning DLMs on self-distilled trajectories with the standard
+Negative Evidence Lower Bound (NELBO) objective [8] yields only marginal improvements.
+To fully exploit self-distilled trajectories for performance enhancement, we propose Trajectory-
+Aligned Optimization via Boltzmann Modeling (TABOM), a novel post-training framework for
+DLMs. TABOM leverages the structured decoding patterns embedded in self-distilled trajectories
+to align the model’s predictive distribution with its actual inference-time behavior. We theoretically
+formulate this target behavior as a Boltzmann distribution over the ideal predictive entropy of each
+token, which serves as a surrogate for the easy-to-hard inductive bias and effectively mitigates the
+training-inference discrepancy. The main contributions of this work are summarized as follows:
+
+• (Section 3.1) Theoretically, we demonstrate that the inference unmasked distribution under easy-
+  to-hard decoding schedules can be explicitly modeled as a Boltzmann distribution over the ideal
+  predictive entropy of each token. This allows us to formulate the training-inference alignment as a
+  direct Kullback-Leibler (KL) divergence minimization problem.
+• (Section 3.2) Methodologically, we introduce a tractable surrogate objective based on Pairwise
+  Ranking to optimize the intractable global KL divergence. This mechanism enforces local entropy
+
+
+                                                   2
+                                  3.0                                            Base                                                2.0                                          Base
+                                                                                 SFT-SD                                                                                           SFT-SD
+
+
+
+
+Trajectory Discrimination Score                                                                    Trajectory Discrimination Score
+                                  2.5                                            TABOM                                                                                            TABOM
+                                                                                                                                     1.5
+                                  2.0
+                                  1.5                                                                                                1.0
+                                  1.0
+                                                                                                                                     0.5
+                                  0.5
+                                  0.0                                                                                                0.0
+                                        0    10   20        30         40   50            60                                               0   20   40   60    80    100   120   140   160
+                                                       Decoding step                                                                                      Decoding step
+                                                   (a) MBPP                                                                                              (b) GSM8K
+    Figure 2: Trajectory Discrimination Score during decoding on Dream. We compute the variance of
+    predictive entropy over decoding-time masked tokens, average it over 64 sampled trajectories, and
+    exclude steps after the first EOS token in each trajectory. Higher curves indicate stronger token-level
+    uncertainty discrimination along the trajectory. “Base" denotes the original model without SFT.
+
+
+      gradients that strictly adhere to the easy-to-hard decoding schedule, smoothly transferring new
+      knowledge into the model without disrupting its inherent predictive manifold.
+    • (Section 4.1) Experimentally, we show that TABOM resolves the central SFT dilemma identified in
+      this paper: it turns self-distilled trajectories into substantial performance gains, while preserving
+      the pretrained model’s out-of-distribution capabilities and avoiding the catastrophic forgetting often
+      induced by standard supervised fine-tuning.
+    • (Section 4.2) We introduce Trajectory Discrimination Score (TDS) to quantify whether a model
+      preserves token-level uncertainty differences along the decoding trajectory. Qualitative (see Figure
+      2) and quantitative (see Table 6) TDS results reveal that TABOM reshapes the entropy landscape
+      toward the easy-to-hard inference bias, rather than merely reusing self-distilled samples.
+
+
+    2                                   Empirical Observations on Self-Distilled Trajectories
+   To understand the impact of self-distillation     Method       HumanEval       MBPP        GSM8K    MATH500
+   on model optimization and its limitations                          Code SFT (Ling-Coder-SFT)
+   under standard SFT paradigms, we con- No-SFT                      52.66         58.00        81.41     39.80
+   duct a comparative analysis between self- SFT-GT               61.55+8.89    58.00+0.00 52.33−29.08 32.40−7.40
+                                                     SFT-SD       53.66+1.00    59.20+1.20 81.81+0.40 41.60+1.80
+   distilled (SD) data and offline ground-truth      TABOM (Ours) 60.36+7.70    60.60+2.60 81.73+0.32 42.40+2.60
+   (GT) data. Specifically, we conduct exper-                      Math SFT (MixChain-Z-PRM12K)
+   iments on the Dream model [5] across two          No-SFT          52.66         58.00        81.41     39.80
+   domains: code generation and mathemat- SFT-GT                  46.34−6.32    58.00+0.00 80.12−1.29 37.40−2.40
+                                                     SFT-SD       57.92+5.26    58.60+0.60 81.95+0.54 39.80+0.00
+   ical reasoning. For code generation, we           TABOM (Ours) 58.54+5.88    59.20+1.20 84.31+2.90 41.10+1.30
+   randomly sample 17K queries from Ling-
+   Coder-SFT [14]. For mathematical reason- Table 1: Performance comparison on Dream. SFT-SD
+   ing, we utilize queries from MixChain-Z- avoids catastrophic forgetting but yields marginal in-
+   PRM12K [15]. For each query, the offline domain gains compared to SFT-GT. TABOM achieves
+   ground-truth (GT) data consists of the stan- the best of both worlds.
+   dard problem-answer pairs originally pro-
+   vided in the datasets. In contrast, the self-distilled (SD) data is generated by having the base model
+   decode the answers using entropy-based decoding, yielding ∼3.8K and ∼5.1K valid SD trajectories
+   for code generation and mathematical reasoning, respectively.
+    Lower Optimization Barrier. First, we evaluate the model on the same queries using either GT
+    data or SD data across various mask ratios. As illustrated in Figure 3, the cross-entropy (CE) loss
+    for SD data is consistently lower than that of GT data. This suggests that self-distillation aligns the
+    target distribution with the model’s intrinsic predictive manifold, providing a smoother optimization
+    landscape and lowering the optimization barrier.
+   The Dilemma: Forgetting vs. Marginal Gains. To investigate how this lower barrier translates to
+   downstream performance, we evaluate the models fine-tuned on these datasets. As shown in Table
+
+
+                                                                                               3
+

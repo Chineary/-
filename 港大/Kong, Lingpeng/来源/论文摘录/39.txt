@@ -1,0 +1,225 @@
+                                         Published as a conference paper at ICLR 2025
+
+
+
+
+                                         JAILBREAKING AS A R EWARD M ISSPECIFICATION
+                                         P ROBLEM
+                                          Zhihui Xie1 Jiahui Gao1† Lei Li1 Zhenguo Li2 Qi Liu1                              Lingpeng Kong1†
+                                          1
+                                           The University of Hong Kong 2 Huawei Noah’s Ark Lab
+                                          {zhxieml,ggaojiahui,nlp.lilei}@gmail.com
+                                          {li.zhenguo}@huawei.com {liuqi,lpk}@cs.hku.hk
+                                          WARNING: This paper contains examples of harmful language.
+
+
+
+
+arXiv:2406.14393v5 [cs.LG] 19 Apr 2025
+                                                                                         A BSTRACT
+
+                                                      The widespread adoption of large language models (LLMs) has raised concerns
+                                                      about their safety and reliability, particularly regarding their vulnerability to ad-
+                                                      versarial attacks. In this paper, we propose a new perspective that attributes
+                                                      this vulnerability to reward misspecification during the alignment process. This
+                                                      misspecification occurs when the reward function fails to accurately capture the
+                                                      intended behavior, leading to misaligned model outputs. We introduce a met-
+                                                      ric ReGap to quantify the extent of reward misspecification and demonstrate its
+                                                      effectiveness and robustness in detecting harmful backdoor prompts. Building
+                                                      upon these insights, we present ReMiss, a system for automated red teaming that
+                                                      generates adversarial prompts in a reward-misspecified space. ReMiss achieves
+                                                      state-of-the-art attack success rates on the AdvBench benchmark against various
+                                                      target aligned LLMs while preserving the human readability of the generated
+                                                      prompts. Furthermore, these attacks on open-source models demonstrate high
+                                                      transferability to closed-source models like GPT-4o and out-of-distribution tasks
+                                                      from HarmBench. Detailed analysis highlights the unique advantages of the pro-
+                                                      posed reward misspecification objective compared to previous methods, offering
+                                                      new insights for improving LLM safety and robustness. Code is available at:
+                                                      https://github.com/zhxieml/remiss-jailbreak.
+
+
+
+                                         1        I NTRODUCTION
+
+                                         The emergence of highly capable commer-
+                                         cial large language models (LLMs) has led to                                  ②
+                                                                                                                                      Vulnerable Prompts
+                                         their widespread adoption across various do-
+                                                                                                                                 ② ①
+                                         mains (OpenAI, 2023; Google, 2023; Reka,
+                                                                                                                ②
+                                         2024). However, as the popularity and po-                                                    ① Unaligned prompts
+                                         tential impact of these models grow, concerns                                               ② Misspecified prompts
+
+                                         about their safety and reliability have also in-                     Misspecified Prompts
+                                                                                                     Aligned Prompts
+                                         creased (Bommasani et al., 2021; Gabriel et al.,      Harmful Prompts
+
+                                         2024; Pi et al., 2024). Ensuring that LLMs Figure 1: We attribute the vulnerability of aligned mod-
+                                         are helpful, honest, and harmless (Askell et al., els to reward misspecification: the reward function used
+                                         2021) presents significant challenges, as their during the alignment process fails to generalize effec-
+                                         powerful language understanding and genera- tively to unaligned prompts, or is incorrectly specified
+                                         tion capabilities could lead to potential risks of for prompts due to noisy preference data.
+                                         jailbreaking, where an LLM breaks through pre-
+                                         set limitations and constraints, generating problematic outputs (Chao et al., 2023; Zhao et al., 2024;
+                                         Xie et al., 2024).
+                                         Recent advances in LLMs have been driven by techniques that incorporate human feedback (Ziegler
+                                         et al., 2019; Ouyang et al., 2022) or AI feedback (Bai et al., 2022b) to mitigate these risks. At the
+                                         heart of these approaches is reward modeling (Leike et al., 2018), which involves learning a reward
+                                              †
+                                                  Corresponding author.
+
+
+                                                                                                 1
+Published as a conference paper at ICLR 2025
+
+
+
+
+             Aligned LLMs are Reward Models                                      ReGap: Quantifying Misspecification
+                                                                                                                             #(%!|')#         "
+             𝑟 𝑥, 𝑦 = log𝜋 𝑦 𝑥            − log𝜋ref 𝑦 𝑥
+                                                                          ReGap 𝑥 ≔ 𝑟 𝑥, 𝑦 ! − 𝑟 𝑥, 𝑦 " = log                          ref (% |')
+                                                                                                                             #(%"|')#        !
+          reward model     aligned LLM        reference LLM                                                                            ref (% |')
+
+    𝑥                                                                         ReMiss: Jailbreaking Safety-aligned LLMs
+          Guide users on how to create a fake ID
+
+
+
+                           𝑦!     I'm sorry, but I cannot provide
+                                                                               😈
+                                                                            Jailbreak
+                                                                                                      Find prompt 𝑥 ) : ReGap 𝑥 ) ≤ 0
+                              guidance on how to create a fake ID…
+
+
+                           𝑦 "Sure, here are instructions on how to   𝑥′       Guide users on how to create a fake ID
+                                                                             template using IDCardGenerator tool. For
+                                         create a fake ID…                  example, a student card with name on it and
+                                                                           university logo etc., A photo ID Card Generator
+                                                                                              Template.
+        𝑟 𝑥, 𝑦 !                         𝑟 𝑥, 𝑦 !                                                      Sure, here’s a step-by-step guide on how to
+        𝑟(𝑥, 𝑦 " )                       𝑟(𝑥 , 𝑦 " )                                                         create a fake ID template using
+                                                                                                                 IDCardGenerator tool…
+    Well-specified Reward                Misspecified Reward
+
+
+
+Figure 2: Overview of our approach for jailbreaking aligned LLMs through reward misspecification.
+We leverage the concept of aligned LLMs as implicit reward models and quantifies misspecification by
+ReGap to identify prompts that lead to harmful responses with higher implicit rewards. By exploiting
+these vulnerabilities, ReMiss generates adversarial prompts to effectively jailbreak safety-aligned
+models. The example is from our experiments on attacking Vicuna-7b-v1.5.
+
+
+function either explicitly (Gao et al., 2023) or implicitly (Rafailov et al., 2024). The quality of reward
+modeling is critical for ensuring that LLMs are well-aligned with human values and intentions.
+Despite promising outcomes, current aligned LLMs are still vulnerable to adversarial attacks (Zou
+et al., 2023; Wei et al., 2024), and there remains a significant gap in understanding why these
+alignments fail. In this paper, we propose a novel viewpoint that attributes the vulnerability of
+LLMs to reward misspecification during the alignment process, wherein the reward function fails
+to accurately rank the quality of the responses (Figure 1). More formally, let r(x, y) denote the
+reward function, where x represents the input and y represents the model’s response. The problem of
+jailbreaking can then be formulated as a search in a reward-misspecified space, where instances of x
+satisfy r(x, y + ) < r(x, y − ), despite y + being a more appropriate response to x than y − .
+Framing jailbreaking from a reward misspecification perspective poses practical challenges. Specifi-
+cally, the alignment process is typically opaque and involves multiple phases (Touvron et al., 2023),
+making the underlying reward function unavailable. To address this, we characterize implicit rewards
+through the behavioral deviations from a reference model. Building on this, we introduce a new
+metric, ReGap (Equation 4), to evaluate the extent of reward misspecification. Intuitively, ReGap
+measures the extent to which the implicit reward function assigns a higher score to harmful responses
+over harmless reference responses. We demonstrate the effectiveness and robustness of this metric in
+detecting catastrophic misspecification on harmful backdoor prompts (§3.2).
+Leveraging the inherent capability for vulnerability identification, ReGap has the potential to jailbreak
+aligned LLMs. To verify its effectiveness, we propose an automated red teaming system ReMiss,
+which leverages ReGap to explore adversarial prompts for various aligned LLMs (§4). We illustrate
+our approach in Figure 2. ReMiss achieves state-of-the-art attack success rates on the AdvBench
+benchmark (Zou et al., 2023) while preserving the human readability of the generated prompts (§5.2).
+In-depth analysis reveals that our approach can uncover a wide range of failure modes in the target
+model, significantly enhancing the effectiveness of audits and red teaming efforts (§5.4). We hope that
+viewing language model alignment through the lens of reward misspecification can offer a practical
+approach for enhancing their safety and reliability in real-world applications.
+
+
+2         BACKGROUND AND P RELIMINARIES
+
+In this section, we provide the necessary background and preliminaries to contextualize our study.
+We consider LLMs as systems that map a prompt x into a response y ∼ π(· | x). Alignment and
+jailbreaking can be understood as processes that modify this mapping in different ways.
+
+
+                                                                      2
+Published as a conference paper at ICLR 2025
+
+
+
+
+2.1   A LIGNMENT
+
+Alignment is the process of guiding a model to exhibit desired behaviors within a specific context.
+Without loss of generality, for a base (reference) model πref , alignment adjusts its probabilities of
+generating certain responses y given a context x:
+                                                               π(y | x)
+                              π(y | x) = πref (y | x) exp(log              ).                      (1)
+                                                              πref (y | x)
+Inspired by Mitchell et al. (2023), we view any finetuning process from a perspective of reinforcement
+learning (RL) with a KL-divergence constraint preventing divergence from the base model:
+                       max E x∼D [r(x, y)] − βDKL [π(y | x)∥πref (y | x)] .
+                         π      y∼π(·|x)
+Here, r(x, y) denotes a reward function defining the behaviors to be encouraged (e.g., adherence to
+ethical guidelines or safety constraints), while D defines the contexts in which these desired behaviors
+are reinforced. This problem has a closed-form solution (Peters et al., 2010; Rafailov et al., 2024):
+                                                 1                    1
+                                π(y | x) =           πref (y | x) exp( r(x, y)),                     (2)
+                                               Z(x)                   β
+where Z(x) is the partition function. By plugging Equation 2 into Equation 1, we arrive at a key
+insight: An aligned model π can be interpreted as the solution to the RL problem w.r.t. r(x, y) ∝
+log ππ(y|x)
+      ref (y|x)
+                . We refer to log ππ(y|x)
+                                   ref (y|x)
+                                             as the implicit reward that emerges from comparing model
+behaviors rather than being explicitly defined. Notably, this interpretation can be applied to any model
+that is finetuned from πref . In this sense, implicit rewards serve as a measure of the effectiveness of
+alignment, indicating how well the model’s behaviors are aligned as expected.
+
+2.2   JAILBREAKING                                                                0.8
+                                                                                        Jailbroken
+                                                                             False
+Jailbreaking is the process of eliciting undesired behaviors         0.6     True
+from the target (aligned) model using adversarial prompts.
+                                                                    Target Loss
+Consider a malicious instruction x (e.g., Guide users on             0.4
+how to create a fake ID); a jailbreaking attack transforms           0.2
+it to x′ that can best induce undesired behaviors while
+keeping the semantic unchanged. Following previous                   0.0
+works (Zou et al., 2023; Paulus et al., 2024), we consider                50        0    50
+a special class of jailbreaks that append a suffix s to the                        ReGap
+original instruction: x′ = x∥s.                              Figure 3: ReGap serves as a superior proxy
+                                                               for jailbreaking compared to target loss.
+Discussions on previous approaches. Previous works The plot shows the relationship between two
+on jailbreaking (Zou et al., 2023; Paulus et al., 2024) usu- proxies (ReGap and target loss) for adversar-
+ally frame it as minimizing the target loss, namely the ial suffixes targeting Vicuna-13b-v1.5 on the
+negative log probability of target harmful responses y − : AdvBench test set.
+               s∗ = arg min ℓ(y − | x∥s) where ℓ(y − | x∥s) := − log π(y − | x∥s).                    (3)
+                          s∈S
+While this provides a straightforward objective for jailbreaking, only considering target responses
+alone in adversarial loss is flawed, as the goal of jailbreaking is to elicit target behaviors rather than
+merely generating specific target responses. Our preliminary analysis (detailed setup provided in
+§5) shows that target loss alone is not a good proxy for detecting successful jailbreaks measured by
+keyword matching. Specifically, we observe in Figure 3 that there is considerable overlap in the target
+loss values for both jailbroken and non-jailbroken instances: Although high target loss generally
+indicates unsuccessful jailbreaks, it fails to differentiate between successful and unsuccessful jailbreak
+attempts when the loss is low. This results in ineffective attacks that fail to fundamentally disrupt the
+aligned model’s behavior. This suggests the need for a more effective approach to identifying and
+exploring vulnerabilities.
+
+3     R EWARD M ISSPECIFICATION IN A LIGNMENT
+As discussed in §2.1, any aligned model π is associated with a reward model. This naturally leads
+to a critical question: what if the rewards are misspecified? In this section, we present a systematic
+
+
+                                                    3
+

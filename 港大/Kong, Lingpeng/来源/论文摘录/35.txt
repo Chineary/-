@@ -1,0 +1,214 @@
+             Alleviating Hallucinations from Knowledge Misalignment in Large
+                     Language Models via Selective Abstention Learning
+   Lei Huang1 , Xiaocheng Feng1,2 * , Weitao Ma1 , Yuchun Fan3 , Xiachong Feng4 , Yuxuan Gu1 ,
+           Yangfan Ye1 , Liang Zhao1 , Weihong Zhong1 , Baoxin Wang5 , Dayong Wu5 ,
+                Guoping Hu5 , Lingpeng Kong4 , Tong Xiao3 , Ting Liu1 , Bing Qin1,2
+              1
+                Harbin Institute of Technology, China 2 Peng Cheng Laboratory, China
+3
+  Northeastern University, China 4 The University of Hong Kong, China 5 iFLYTEK Research, China
+     {lhuang, xcfeng, qinb}@ir.hit.edu.cn {bxwang2, dywu2, gphu}@iflytek.com
+
+                              Abstract                                             Pre-trained Parametric knowledge
+
+
+            Large language models (LLMs) are known to                     Barack Hussein Obama II (born August 4, 1961) is an American
+
+
+                                                                                                                               🎯
+                                                                          politician and lawyer who served78 as the 44th president of the
+            suffer from severe hallucination issues. One of               United States from 2009 to 2017. A member of the Democratic
+            the main causes lies in the knowledge misalign-               Party, he was the first African-American president (...)
+
+            ment between the pre-training stage and the
+                                                                                           Supervised Fine-tuning
+            supervised fine-tuning stage. The unfamiliar                 Model-Known Training Sample
+            knowledge encountered during fine-tuning may                 Question: What is Barack Hussein Obama's occupation?
+            encourage LLMs to generate facts that are not                Answer: Barack Obama is an American politician and lawyer.
+
+            grounded in parametric knowledge. To address                          Groundedness Q: What is is Bob Dylan's occupation?
+            this, we propose S EAL1 , a novel training objec-
+                                                                               Bob Dylan is an American singer-songwriter. Grounded Fact
+            tive with an abstention mechanism, in which
+            the model learns to selectively reject tokens that           Model-Unknown Training Sample
+            misalign with the desired knowledge distribu-                Question: What is Javier Alva Orlandini's occupation?
+            tion via a special [REJ] token. This allows the              Answer: Javier Alva Orlandini was a Peruvian politician.
+
+            model to have the alternative of acknowledg-                          Hallucination      Q: What is Bob Dylan's occupation?
+            ing the insufficiency of knowledge rather than
+                                                                                Bob Dylan is an Australia Journalist.        Fabricated Fact
+            blindly assigning high probability to all ground-
+            truth answers. We further propose a regularized
+            decoding objective that penalizes uncertain pre-        Figure 1: An illustration of the impact of new factual
+            dictions during inference by using the [REJ]            knowledge encountered in fine-tuning on hallucinations.
+            probability learned during training. Extensive          During fine-tuning, model-known samples (e.g.,“Barack
+            experiments on six short-form and long-form             Obama”) teach the model to ground the generation to its
+            QA datasets with three LLMs of different sizes          parametric knowledge, whereas model-unknown sam-
+            demonstrate that our method effectively allevi-         ples (e.g.,“Javier Alva Orlandini”) encourage the model
+            ates hallucinations caused by knowledge mis-            to fabricate facts that are not grounded in its parametric
+            alignment. Further analysis highlights the adap-        knowledge, leading to hallucinations.
+            tations of our method in answer refusal scenar-
+            ios and its ability to effectively maintain the
+            model’s instruction-following capabilities.
+                                                                    misalignment between the pre-training stage and
+    1       Introduction                                            the supervised fine-tuning (SFT) stage (Schulman,
+                                                                    2023; Kang et al., 2024; Gekhman et al., 2024).
+    Large language models (LLMs) (OpenAI, 2023;                     During the post-training stage, fine-tuning serves
+    AI@Meta, 2024) have shown remarkable capa-                      as an essential step to fully activate the knowledge
+    bilities in capturing factual knowledge from the                captured during the pre-training stage (Zhou et al.,
+    large-scale pre-training corpus. However, they still            2023a). However, this process may encounter new
+    exhibit a notable tendency to generate factually in-            factual knowledge misaligned with the knowledge
+    correct content, known as hallucinations (Huang                 embedded in LLMs. As shown in Figure 1, the
+    et al., 2025b), which presents significant challenges           new factual knowledge can inadvertently encour-
+    in their real-world applications.                               ages the model to fabricate facts not grounded in
+       Recent research has indicated that a signifi-                its parametric knowledge (Liu et al., 2024b), thus
+    cant cause of hallucination lies in the knowledge               giving rise to hallucination (Huang et al., 2025a,b).
+        * Corresponding Author                                         Current efforts to mitigate knowledge misalign-
+        1
+            Acronym for SElective Abstention Learning               ment primarily focus on two aspects: one line of
+                                                                 24564
+Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 24564–24579
+                             July 27 - August 1, 2025 ©2025 Association for Computational Linguistics
+research involves pre-filtering out model-unknown       established world knowledge. The factors lead-
+samples, fine-tuning models solely on samples           ing to such hallucinations are diverse, spanning
+within their knowledge boundaries (Ghosal et al.,       almost the entire lifecycle of LLMs, from pre-
+2024). Despite effectiveness, these unknown sam-        training (Allen-Zhu and Li, 2024) to supervised
+ples are typically model-specific, making it infeasi-   fine-tuning (Schulman, 2023), alignment (Lin et al.,
+ble to annotate accurately. Another approach (Tian      2024a) and the decoding stage (Li et al., 2023a).
+et al., 2024; Lin et al., 2024a) aims to utilize the    Numerous studies have explored ways to improve
+pre-trained model itself to generate training sam-      factuality at various stages, such as continual pre-
+ples, avoiding the introduction of new knowledge.       training (Chang et al., 2024), uncertainty calibra-
+However, the generated supervised data lacks reli-      tion (Cohen et al., 2024), factuality alignment (Tian
+able validation, often resulting in poor quality and    et al., 2024), and contrastive decoding (Chuang
+may even introduce additional hallucinations.           et al., 2024; Huang et al., 2024a,b). In this work,
+   In this work, we propose S EAL, a novel train-       we primarily focus on mitigating hallucinations
+ing objective with an abstention mechanism, en-         induced by the unfamiliar factual knowledge en-
+abling the model to selectively reject tokens that      countered during the fine-tuning stage, which has
+misalign with the desired knowledge distribution        recently garnered significant attention (Kang et al.,
+(§3.2). Specifically, we introduce a special token      2024; Gekhman et al., 2024).
+[REJ], and each time the model fails to predict the
+                                                        Improving Factuality during Fine-tuning. Re-
+ground-truth token, a portion of the target proba-
+                                                        cent research (Kang et al., 2024) has revealed that
+bility is shifted to the [REJ] token based on the
+                                                        the distribution of unfamiliar knowledge actually
+predicted logits. This allows the model to have
+                                                        controls how LLMs hallucinate. This has inspired
+the alternative of acknowledging the insufficiency
+                                                        a line of studies that focus on avoiding introducing
+of knowledge, rather than blindly assigning high
+                                                        unknown knowledge during fine-tuning, either fil-
+probability to all ground-truth answers. During this
+                                                        tering out unknown samples (Ghosal et al., 2024)
+process, the [REJ] token captures the uncertainty
+                                                        or leveraging the base model itself to generate su-
+arising from knowledge discrepancies in model pre-
+                                                        pervised fine-tuning examples (Lin et al., 2024a).
+dictions. Building upon this, we further propose
+                                                        More recently, Liu et al. (2024b) proposed disen-
+abstention-aware decoding (§3.3), incorporating
+                                                        tangling skills and knowledge learning during the
+the uncertainty reflected by the [REJ] token into
+                                                        fine-tuning process, encouraging the groundedness
+the search-based decoding strategy. By penalizing
+                                                        of LLMs through synthetic data. Unlike these meth-
+uncertain predictions at each decoding step, this
+                                                        ods, we take a more fundamental perspective by
+strategy guides the model to navigate towards more
+                                                        equipping the model with an abstention mechanism
+confident and factual trajectories.
+                                                        during training, effectively alleviating the issue of
+   To validate the effectiveness of S EAL, we con-      blind imitation in traditional MLE objectives.
+duct extensive experiments on three representative
+LLMs across different sizes, covering six short-        3     Methodology
+form and long-form factual question-answering
+(QA) datasets. The results show that S EAL effec-       In this section, we start with the problem formula-
+tively alleviates hallucinations induced by knowl-      tion, followed by our method, which aims to allevi-
+edge misalignment. Compared with the vanilla            ate hallucinations caused by knowledge misalign-
+MLE objective, our method improves the factual-         ment. An overview is presented in Figure 2.
+ity of LLMs by 8.59% and 10.80% in short-form
+                                                        3.1    Problem Formulation
+and long-form QA, respectively, while maintaining
+their ability to follow instruction. Further analysis   Given a pre-trained base model, denoted as Mθ ,
+highlights that [REJ] shows effective calibration       and a fine-tuning dataset D, our objective is to fine-
+and can be expanded to answer refusal scenarios.        tune Mθ on factual question-answering (QA) tasks.
+                                                        The dataset D comprises a set of QA pairs, repre-
+                                                                                  N
+2   Related Work                                        sented as D = (qi , ai ) i=1 , where each qi is a
+                                                        knowledge-seeking question, and ai is the corre-
+Factuality Hallucination Mitigation. Factual-           sponding ground-truth answer. Each QA pair is
+ity hallucination in LLMs (Huang et al., 2025b)         transformed into a structured instruction-response
+refers to the generated content that deviates from      pair (x, y) using pre-defined prompt templates de-
+                                                   24565
+                                     Abstention Tuning                                                            Abstention-aware Decoding
+   Model-Unknown Training Sample
+
+   Question: Who was the first human to walk on the surface of the moon?                               Question: What can you tell me about Albert Einstein?
+   Answer: The first person to walk on the moon was
+                                                                                                     Albert Einstein was (...) a German-born theoretical physicist               ...
+
+                                                                                                     Albert Einstein was (...) awarded the Nobel Prize in Physics in 1911
+                                 Ground Truth:       Neil Armstrong
+                                                                         Unfamiliar Knowledge        Albert Einstein was born in Germany and moved to England in 1893.
+                                 Model Prediction: Yuri Gagarin                                      Albert Einstein was born in Germany Munich on 16 May 1889.
+               Probability Distribution
+
+             ...                                           ...
+      the                       Probability Shift   the                                                                                            Decoding with rejection penalty
+      Neil                                          Neil                                                                                     ...
+     Yuri                                           Yuri                                                                              1921
+
+     born                                           born              shift to                                                        his
+                                                                                                                                      1911
+                                                                                                                            Penalty
+                                                                                                                                      the
+
+
+
+
+Figure 2: An overview of S EAL: (1) abstention tuning (§3.2) enables the model to recognize its knowledge
+limitations by dynamically allocating part of the probability to the [REJ] token, thereby avoiding overfitting to
+misaligned knowledge distributions; (2) abstention-aware decoding (§3.3) utilizes the [REJ] probability learned
+during fine-tuning to penalize uncertain predictions, guiding the generation towards more truthful outputs.
+
+
+noted by f (·). Our experimental setup encom-                                                   objective with a dynamic abstention mechanism
+passes both short-form and long-form QA datasets,                                               for supervised fine-tuning. This mechanism en-
+for which we have designed distinct sets of prompt                                              ables the model to selectively reject tokens that
+templates; details are provided in Appendix A.                                                  misalign with the desired knowledge distribution.
+   For each instruction x, standard supervised fine-                                            Specifically, we add a special token, [REJ], into
+tuning seeks to maximize the likelihood of the                                                  the vocabulary V. Whenever the model fails to pre-
+ground-truth answer y using the maximum like-                                                   dict the ground-truth token, we dynamically adjust
+lihood estimation (MLE) objective, formalized in                                                the target distribution by allocating a portion of
+Equation 1. This is also mathematically equivalent                                              the probability, αt , to the [REJ] token, as defined
+to the cross-entropy loss objective, where the target                                           below:
+distribution is modeled as a one-hot vector.
+                                                                                                        ytarget = (1 − αt ) · yt + αt · 1[REJ]                                         (2)
+             L(θ) = − log pθ (y|x)                                                                 Intuitively, αt should be 0 when the model accu-
+                                   X|y|
+                                                                                  (1)           rately predicts the ground-truth token, and it should
+                        =−                 log pθ (yt |x, y<t ),                                approach 1 when a significant discrepancy exists
+                                   t=1                                                          between the model’s predictions and the ground
+where yt is the token from the ground-truth answer,                                             truth. In this way, we calculate the shifted proba-
+selected from a pre-defined vocabulary V.                                                       bility αt as follows:
+                                                                                                                                 pθ (yt | y<t , x) 
+3.2 Abstention Tuning                                                                                 αt = τ · 1 −                                                                     (3)
+                                                                                                                               maxw pθ (w | y<t , x)
+The vanilla MLE objective aims to maximize the
+likelihood of all ground-truth answers. However,                                                Here, pθ (yt |y<t , x) denotes the probability of the
+due to discrepancies between the factual knowledge                                              ground truth, and maxw pθ (w|y<t , x) denotes the
+in fine-tuning samples D and the parametric knowl-                                              current maximum predicted probability. τ , a thresh-
+edge embedded within the LLM Mθ , there exist                                                   old within the range [0, 1] caps the upper bound of
+some samples that exceed the knowledge scope of                                                 target probability that can be assigned to the [REJ]
+the base model. Forcibly fitting these unknown                                                  token. In our experiments, we set τ = 0.5.
+samples can inadvertently encourage the model                                                      Thus, the standard cross-entropy loss (Equa-
+to fabricate facts not grounded in its pre-existing                                             tion 1) is modified as follows:
+knowledge, resulting in hallucinations.                                                                          |y|
+                                                                                                                 X
+   Drawing inspiration from the token selection                                                    Lnll = −               (1 − αt ) log pθ (yt |x, y<t )
+strategies (Cohen et al., 2024; Lin et al., 2024b)                                                               t=1
+                                                                                                                                                                                       (4)
+                                                                                                                                        
+in the pre-training stage, we propose a training                                                             + αt log pθ ([REJ]|x, y<t )
+                                                                                     24566
+

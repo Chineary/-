@@ -1,0 +1,6 @@
+{
+  "url": "https://export.arxiv.org/api/query?search_query=au:Kong_Lingpeng&start=0&max_results=300&sortBy=submittedDate&sortOrder=descending",
+  "date": "2026-09-17",
+  "status": "200",
+  "file": "arxiv-author.xml"
+}

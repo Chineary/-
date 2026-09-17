@@ -1,0 +1,204 @@
+                                         Published as a conference paper at ICLR 2024
+
+
+
+
+                                         L EMUR : H ARMONIZING NATURAL L ANGUAGE AND
+                                         C ODE FOR L ANGUAGE AGENTS
+                                                              ∗♠♢              ∗♠♢                ∗♣          ♠♢            ♡♢              △
+                                             Yiheng Xu      Hongjin Su       Chen Xing      Boyu Mi       Qian Liu     Weijia Shi
+                                                     ♢            ♠♢          ♠♢               ♠♢                  ♠♢             ♠♢
+                                          Binyuan Hui Fan Zhou Yitao Liu Tianbao Xie Zhoujun Cheng Siheng Zhao
+                                                                        ♠               ★                 ♣        ♠♢
+                                                        Lingpeng Kong Bailin Wang Caiming Xiong Tao Yu
+                                                      ♠                            ♢               ♣
+                                                        University of Hong Kong      XLang Lab       Salesforce Research
+                                                         ♡                 △                          ★
+                                                           Sea AI Lab        University of Washington MIT CSAIL
+                                              ♠                                     ♣
+
+
+
+
+arXiv:2310.06830v2 [cs.CL] 24 Aug 2024
+                                                {yhxu,hjsu,tyu}@cs.hku.hk {cxing, cxiong}@salesforce.com
+
+
+
+                                                                                        A BSTRACT
+
+                                                      We introduce Lemur and Lemur-Chat, openly accessible language models op-
+                                                      timized for both natural language and coding capabilities to serve as the back-
+                                                      bone of versatile language agents. The evolution from language chat models to
+                                                      functional language agents demands that models not only master human inter-
+                                                      action, reasoning, and planning but also ensure grounding in the relevant envi-
+                                                      ronments. This calls for a harmonious blend of language and coding capabil-
+                                                      ities in the models. Lemur and Lemur-Chat are proposed to address this ne-
+                                                      cessity, demonstrating balanced proficiencies in both domains, unlike existing
+                                                      open-source models that tend to specialize in either. Through meticulous pre-
+                                                      training using a code-intensive corpus and instruction fine-tuning on text and code
+                                                      data, our models achieve state-of-the-art averaged performance across diverse
+                                                      text and coding benchmarks. Comprehensive experiments demonstrate Lemur’s
+                                                      superiority over existing open-source models and its proficiency across various
+                                                      agent tasks involving human communication, tool usage, and interaction under
+                                                      fully- and partially- observable environments. The harmonization between natu-
+                                                      ral and programming languages enables Lemur-Chat to significantly narrow the
+                                                      gap with proprietary models on agent abilities, providing key insights into devel-
+                                                      oping advanced open-source agents adept at reasoning, planning, and operating
+                                                      seamlessly across environments. Our model and code have been open-sourced at
+                                                      https://github.com/OpenLemur/Lemur.
+
+
+                                         1       I NTRODUCTION
+                                         Intelligent agents are broadly conceptualized as autonomous problem solvers with the abilities to
+                                         sense their environment, decide, and act upon that enviorment (Sutton & Barto, 2005; Russell, 2010;
+                                         Wilkins, 2014). Recent implementations of this concept in creating language agents (Yao et al.,
+                                         2022b; Gravitas, 2023; Wang et al., 2023a) capable of utilizing natural language for varied and
+                                         intricate tasks in diverse environments have demonstrated potential, particularly when built upon
+                                         large language models (LLMs) (Brown et al., 2020; Chen et al., 2021; Chowdhery et al., 2022;
+                                         OpenAI, 2023; Touvron et al., 2023a). Such agents harness the human knowledge in LLMs and
+                                         can think and communicate in human terms. This equips them to employ varied tools, operate in
+                                         complex environments, engage in language reasoning, and create spontaneous multi-agent systems.
+                                         To effectively form the foundation of language agents, LLMs should not only master human inter-
+                                         action, reasoning, and planning but also ensure grounding in the relevant environments (Wei et al.,
+                                         2022; Huang et al., 2022a; Ichter et al., 2022). Human interaction, reasoning, and planning can be
+                                         largely realized through the natural language capabilities of LLMs. On the other hand, the grounded
+                                         execution in the environment is usually achieved by using general-purpose code or domain-specific
+                                         APIs, such as controlling web browsers (Shi et al., 2017; Yao et al., 2022a; Deng et al., 2023; Zhou
+                                             ∗
+                                                 Equal contribution.
+
+
+                                                                                              1
+Published as a conference paper at ICLR 2024
+
+
+
+
+et al., 2023), interacting with OS CLI terminals (Yang et al., 2023), and manipulating robotic arms
+via primitive APIs (Ichter et al., 2022; Huang et al., 2022b; Liang et al., 2023). Therefore, we posit
+that for the construction of language agents, it is imperative for language models to possess har-
+monized capabilities in both natural language and programming languages. This balance ensures
+that models do not specialize exclusively in certain areas but can seamlessly integrate with envi-
+ronment contexts and generate controllable and valid actions. Presently, closed-source models like
+GPT-4 (OpenAI, 2023) demonstrate such capabilities, which empower them to function as language
+agents. However, current open-source LLMs such as Llama 2 (Touvron et al., 2023a) and CodeL-
+lama (Rozière et al., 2023) have traditionally been tailored for either textual or code-related tasks,
+with limited ability to effectively balance both.
+To address this need, we introduce Lemur and Lemur-Chat, cutting-edge, openly accessible models
+pre-trained and fine-tuned to harmonize text and code capabilities. We enhanced the base Llama-
+2-70B through thoughtfully designed pre-training and instruction fine-tuning stages. Specifically,
+we built a code-centric corpus based on The Stack (Kocetkov et al., 2022), comprising 90B tokens
+with a 10:1 code-to-text ratio, ensuring improved capabilities in coding ability while maintaining
+performance in natural language ability. We refer to this model as Lemur. After pretraining, we
+conducted instruction fine-tuning using about 300K examples from both text and code to build an
+instruction-following model, which we refer to as Lemur-Chat. Thorough assessments across 8
+textual and coding benchmarks validate the superior performance of both Lemur and Lemur-Chat in
+multiple text and code evaluations, establishing them as the most well-rounded open-source models.
+Moreover, this work embarks on assessing the vital capabilities of language agents across various
+scenarios, which we refer to as agent benchmarks. We place a particular emphasis on their tool-
+usage abilities, and abilities in grounding in the environment feedback and human feedback. We
+also explore the challenges posed by real and partially observable environments where the agent has
+to take actions based on limited knowledge and take additional actions to gather more information.
+Experimental results indicate that Lemur-Chat outperforms other open-sourced models in 12 of the
+13 agent benchmarks. This underscores how the integration of natural and coding capabilities allows
+Lemur-Chat to exceed the current open-source models for language agents, markedly bridging the
+performance disparity between open-source and commercial alternatives. Our experiments show an
+important insight that in agent scenarios, there is a need for synergy between natural language and
+coding abilities. Specifically, for models with strong natural language capabilities but weak cod-
+ing abilities like Llama-2-70B-Chat, they can effectively use simple tools to assist reasoning
+(§4.2) because the action space is small and the difficulty of using tools is low. However, when
+facing complex decision-making scenarios such as web browsing and house navigation, the action
+space is usually large, and models with strong coding abilities have an advantage in generating com-
+plex executable action sequences (§4.5). Moreover, we did error analysis on several environments
+covering multiple agent skills to reflect the key challenges for future language agent development,
+including tool and action executability §D.1, problem difficulty §D.2, and domain knowledge §D.3.
+Overall, Lemur has both strong natural language and coding abilities, enabling it to achieve better
+performance in both scenarios. This research provides insights into optimizing the synergy between
+natural and programming languages, laying a solid foundation for developing advanced language
+agents capable of operating efficiently in various environments.
+
+2     P RE - TRAINING AND I NSTRUCTION TUNING OF L EMUR
+
+This section will introduce the method to build the Lemur and Lemur-Chat models and their per-
+formance on commonly-used benchmarks for pre-trained language model evaluation. To build a
+more balanced model, the pipeline includes two stages: pre-training (§ 2.1) and instruction fine-
+tuning (§ 2.2). The training pipeline is shown in Figure 1.
+
+2.1   P RE - TRAINING
+
+In the pre-training stage, we choose the Llama-2-70B base model as the starting point, which
+is the cutting-edge open-sourced base model in most scenarios except the coding scenario. Our
+goal is to improve the coding ability while maintaining the reasoning ability of Llama-2. To this
+end, we built a corpus with a code-to-text ratio of 10:1. We discuss how we decided this ratio in
+§ A.1.2. For the code part, we base it on The Stack (Kocetkov et al., 2022), a collection of source
+
+
+                                                  2
+Published as a conference paper at ICLR 2024
+
+
+
+
+        Llama-2            Code-Centric
+                                             Lemur              Supervised
+                                                                                    Lemur-Chat
+      • Base Model         Pre-training    • Base Model         Fine-tuning         • Chat Model
+      • Focus on Natural    + 90B Tokens   • Natural Language   + 300K Examples     • Language Agent
+        Language                             & Code
+
+
+Figure 1: Overview of Training Procedure. We continually pre-train Llama-2-70B model on
+90B code-intensive data and fine-tune it with 300K examples of instructions to enable the model to
+harmonize natural language and coding abilities.
+
+Table 1: Instruction datasets investigated in this work. We report the average number of rounds
+(N̄rounds ), average length of prompts (L̄prompt ), average length of completion (L̄completion ).
+
+Datasets                   Query Source Response Source # Instances N̄rounds L̄prompt L̄completion
+Open Assistant 1    Human-written             Human-written     34,546            1.6   34.9     213.1
+OpenOrca            Human-written                     GPT-4     200,000           1.0   242.8    174.1
+ShareGPT & ChatLogs User prompts              GPT-3.5/GPT-4     81,319            6.0   96.7     340.2
+Evol-CodeAlpaca     GPT-3.5/GPT-4             GPT-3.5/GPT-4     51,952            1.0    93.9    343.5
+
+
+
+codes from GitHub with permissive licenses. Among all languages, we focus on scripting or in-
+terpreted languages (Python, SQL, Bash, Perl, etc.) because agent models are often executed in
+interactive scenarios. Unlike compiled languages like C++, the interpreted nature of scripting lan-
+guages allows for immediate execution and ease of modification, which is essential for dynamic
+interaction in language agent scenarios. As for the text aspect, we use RefinedWeb (Penedo et al.,
+2023), Redpajama (Computer, 2023), as well as CommonCrawl, Wikipedia, Books, ArXiv, Stack-
+Exchange and DM Mathematics (Saxton et al., 2019) to build the textual data corpus. Following
+previous works (Gao et al., 2020; Smith et al., 2022; Computer, 2023; Li et al., 2023), we do
+extensive deduplication after aggregating all data sources. The composition of the data is shown
+in Appendix § A.1.1. We train the Lemur-70B model initialized with Llama-2-70B using a
+TPUv4-512 pod. We train the model with sequence packing (Raffel et al., 2019; Chung et al., 2022)
+to improve the training efficiency. Please refer to Appendix § A.1.3 for more details.
+
+2.2     I NSTRUCTION F INE - TUNING
+
+During the instruction fine-tuning phase, we include four data sources to construct Lemur-Chat,
+including the Open Assistant crowdsourced annotated dialogue corpus (Köpf et al., 2023), Orca
+data with chain of thought reasoning for human-written tasks (Lian et al., 2023; Mukherjee et al.,
+2023), ShareGPT & Chatlogs containing real user and ChatGPT history records (ShareGPT data),
+as well as Evol-CodeAlpaca data (Luo et al., 2023) consisting of complex coding tasks generated by
+ChatGPT along with their solutions. The statistics of these instruction datasets are shown in Table 1.
+After we collect these data, we additionally clean and deduplicate these instruction fine-tuning data.
+We conduct training on these data for 2 epochs. Please refer to § A.2 for more details.
+
+3     F ROM L ANGUAGE M ODEL TO L ANGUAGE AGENT
+
+This section introduces how we measure the language and coding abilities of a language model to
+guide the process of harmonization. We further discuss the new challenges faced when connecting
+LLM to the environment and describe how we examine the necessary agent capabilities.
+
+3.1     F UNDAMENTAL L ANGAUGE AND C ODING C APABILITIES
+
+Previous work typically uses a variety of benchmarks to comprehensively reflect the performance of
+models on different types of tasks. Therefore, we evaluate the performance of various models across
+text and code benchmarks as follows.
+
+
+                                                   3
+

@@ -1,0 +1,208 @@
+         Lexical Knowledge Internalization for Neural Dialog Generation
+
+                Zhiyong Wu1,2 ∗, Wei Bi3 †, Xiang Li4 , Lingpeng Kong1,2 , Ben Kao1
+                          1
+                            The University of Hong Kong, 3 Tencent AI Lab,
+                         2
+                           Shanghai AI Lab, 4 East China Normal University
+         1
+           {zywu,lpk,kao}@cs.hku.hk, 3 victoriabi@tencent.com, 4 xiangli@dase.ecnu.edu.cn
+
+
+
+                      Abstract                                      J.K Rowling donates a lot of money for COVID-19 relief work in India.
+
+    We propose knowledge internalization (KI),                      Retrieve
+    which aims to complement the lexical knowl-                                  JK Rowling donated a six-figure amount to Khalsa Aid for
+                                                                                 their COVID-19 relief work in India.
+    edge into neural dialog models. Instead of
+    further conditioning the knowledge-grounded
+    dialog (KGD) models on externally retrieved                                              Yes. Khalsa Aid received the donation.
+    knowledge, we seek to integrate knowledge
+    about each input token internally into the                          (a) An utterance-response-knowledge triple.
+    model’s parameters. To tackle the challenge
+                                                                J.K Rowling:      J.K Rowling is a British author and philanthropist.
+    due to the large scale of lexical knowledge,
+    we adopt the contrastive learning approach and                                              Really? J.K Rowling is my favorite British
+                                                                                                writer. I now respect her even more.
+    create an effective token-level lexical knowl-
+    edge retriever that requires only weak supervi-             Donate: Donate is to give (money or goods) for a good
+                                                                           cause, for example to a charity.
+    sion mined from Wikipedia. We demonstrate
+                                                                                                                  Wow. It’s so good of her.
+    the effectiveness and general applicability of
+    our approach on various datasets and diversi-               COVID-19: COVID-19, also known as the coronavirus, is a
+                                                                                contagious disease caused severe acute ….
+    fied model structures.
+                                                                                        Hope this will help stop the coronavirus in India.
+1   Introduction
+                                                                   (b) Responses based on different lexical knowledge.
+Vacuous responses (Li et al., 2016; Ghazvinine-
+jad et al., 2018), such as, I don’t know, are com-            Figure 1: (a) An exemplary KGD data sample with an
+monly observed in end-to-end neural dialog mod-               utterance (top), a response (bottom), and a sentence-
+els (Shang et al., 2015; Sordoni et al., 2015). This is       level knowledge (middle). (b) A list of lexical knowl-
+mostly because these models ignore the knowledge              edge (in grey rectangle) related to words from the utter-
+                                                              ance in (a), and the potential responses (in white speech
+that resides in people’s minds during a conversation.
+                                                              balloon) people would make given that knowledge.
+To bridge the gap, many existing works (Moghe
+et al., 2018; Dinan et al., 2018) have attempted to
+condition the dialog model on external knowledge,
+                                                              will result in ignorance of lexical knowledge asso-
+either a sentence or a paragraph, retrieved based on
+                                                              ciated with individual tokens. In this example, the
+the utterance and/or previous context. This curates
+                                                              knowledge about J.K Rowling, COVID-19, donates,
+datasets with utterance-response-knowledge triples
+                                                              and India, is ignored during the retrieval, due to
+(see Fig 1(a)). These knowledge-grounded dialog
+                                                              the semantic gaps between those lexical knowledge
+(KGD) models, despite demonstrated effectiveness,
+                                                              sentences (see Fig 1(b)) and the utterance. This
+suffer from two major problems.
+                                                              makes it rather difficult (if not impossible) for the
+   First, equipping models with sentence-level
+                                                              model to generate responses carrying relevant in-
+knowledge alone will limit responses’ informative-
+                                                              formation as shown in Fig 1(b).
+ness and diversity. As shown in Fig 1(a), with the
+knowledge retrieved giving the utterance, a KGD                  Second, retrieving knowledge for open-domain
+model can relate J.K Rowling to Khalsa Aid. How-              dialogs during inference incurs heavier computa-
+ever, retrieval based solely on sentence embeddings           tion, often involving similarity search over tens of
+     ∗                                                        millions of passages (Petroni et al., 2021). Exist-
+       The majority of this work was done while the first
+author was interning at Tencent AI Lab.                       ing systems (Zhao et al., 2020; Zheng et al., 2020)
+     †
+       Corresponding author                                   alleviate this problem relying on pre-selecting a
+                                                         7945
+                 Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics
+                                        Volume 1: Long Papers, pages 7945 - 7958
+                          May 22-27, 2022 c 2022 Association for Computational Linguistics
+small candidate set based on TF-IDF (Schütze et al.,     nan et al., 2018; Parthasarathi and Pineau, 2018;
+2008), in sacrifice of the diversity and the accuracy    Qin et al., 2019) receives the most attention as it
+of the retriever. Directly conditioning the dialog       is easy to obtain and scale. However, the construc-
+model on the retrieved text, these models are easily     tion of knowledge-grounded datasets is costly and
+effected by the quality of the constructed candidate     time-consuming. To build a more practical system
+set and are thus prone to errors (Dinan et al., 2018;    without assuming a given knowledge, recent stud-
+Kim et al., 2020; Zhao et al., 2020).                    ies enhance KGD models with an extra knowledge
+   In this work, we propose to complement the            selection component (Dinan et al., 2018; Kim et al.,
+lexical knowledge into neural dialog models by           2020; Zheng et al., 2020; Zhao et al., 2020).
+Knowledge Internalization (KI), a training ap-              Most existing KGD models can be viewed as
+proach based on contrastive learning (Hadsell et al.,    models with externalized knowledge, where knowl-
+2006). The central idea of KI is to integrate more       edge is explicitly used as part of the model input.
+fine-grained lexical knowledge about each input          The principle behind these models is to copy words
+token internally into model parameters (e.g., word       and/or modify sentences from external knowledge
+embeddings), rather than further conditioning the        when generating responses (Wu et al., 2020; Zhu
+model on externally retrieved knowledge (e.g., di-       et al., 2017; Zhao et al., 2019). Our KI, on the
+rectly copy and/or modify tokens from external           other hand, does not explicitly present knowledge
+knowledge when decoding). Our research contri-           to dialog models for reading and/or copying. In-
+butions include:                                         stead, we inject and store external knowledge into
+  • a novel training objective (KI; §3.2) that infuses   models’ parameters and encourage models to elicit
+lexical semantics into word representations. With        the encoded knowledge during generation.
+the knowledge internalized into the contextualized
+                                                            The idea of knowledge internalization has also
+representation of every token, a dialog model can
+                                                         been explored in language modeling. Factual
+generate informative and diverse responses without
+                                                         knowledge (Zhang et al., 2019; Sun et al., 2020; Liu
+engaging an external knowledge retrieval module
+                                                         et al., 2020), visual knowledge (Tan and Bansal,
+during inference time, thus making the inference
+                                                         2020) and syntactic knowledge (Kuncoro et al.,
+more efficient (§6.1);
+                                                         2020) have been injected into language models
+  • an effective token-level lexical knowledge re-
+                                                         (LMs) and shown great promise in improving the
+triever (§4) trained with weak supervision to con-
+                                                         performance of downstream tasks. KI differs from
+textually align tokens in dialog corpora to their
+                                                         those knowledge-enhanced LMs in two aspects: (i)
+related and possibly different knowledge (Ap-
+                                                         KI can be trained end-to-end with dialog models,
+pendix C).
+                                                         while applying LMs on dialog generation often re-
+  • a demonstration of the effectiveness and general
+                                                         quires multiple rounds of pre-train and fine-tune.
+applicability of KI with extensive experiments on
+                                                         (ii) KI is lightweight that barely introduces extra pa-
+diversified dialog models and on three benchmark
+                                                         rameters to the dialog model while applying LMs
+datasets: DailyDialog (Li et al., 2017), Wizard of
+                                                         usually introduces hundreds of millions of extra
+Wikipedia (Dinan et al., 2018), and Commonsense
+                                                         parameters.
+Reddit Dataset (Zhou et al., 2018).
+
+2   Related Work                                         3   Knowledge Internalization for Neural
+To address the vacuous responses problem in neu-             Dialog Models
+ral dialog models, researchers propose to ground
+dialogs on real world knowledge and construct new        In this section, we illustrate how to train a dialog
+corpora that contain utterance-response-knowledge        model with knowledge internalization. To infuse
+triples. Specifically, responses are grounded to         more fine-grained lexical knowledge to a neural
+external knowledge derived from different knowl-         dialog model, we assume a dialog corpus where
+edge sources (Zhou et al., 2018; Liu et al., 2018;       each token is aligned with relevant knowledge (we
+Wu et al., 2019; Dinan et al., 2018; Moghe et al.,       will discuss the construction of such a corpus in
+2018; Ghazvininejad et al., 2018; Mostafazadeh           §4). In particular, for an input sentence X in the
+et al., 2017; Meng et al., 2020; Zhang et al., 2020).    corpus, we assume each token xi ∈ X is associated
+Among different sources, textual knowledge (Di-          with a corresponding descriptive sentence Ki .
+                                                     7946
+3.1 Preliminary                                                of KI is defined by the contrastive loss between
+Given an utterance-response pair (X, Y ), where                positive and negative sample pairs:
+X = {x1 , x2 , . . . , xn } and Y = {y1 , y2 , . . . , ym },           n
+                                                                       X
+                                                               LKI (X)= max 0, m−s(xi , Ki )+s(xi , Ki− ) ,
+                                                                           
+neural dialog models generally minimize the nega-
+tive log-likelihood loss:                                                  i=1
+                                                                                                                      (3)
+                                m
+                                X                              where m denotes the margin.
+          LNLL (X, Y ) = −            logP(yi ),        (1)
+                                i=1                            3.3    Knowledge-internalized Neural Dialog
+                                                                      Model
+where P(yi ) = P(yi |y<i , X) is the probability
+of generating the i-th response token yi given                 We now illustrate how to deploy KI on a neural
+the utterance X and other tokens generated in                  dialog model. We use a sequence-to-sequence di-
+previous steps y<i = {y1 , y2 , . . . , yi−1 }. P(yi )         alog model based on Transformer (Vaswani et al.,
+is generally modeled by a sequence-to-sequence                 2017) as an example. The original model is trained
+model (Sutskever et al., 2014), which consists of              to minimize the negative log-likelihood loss of re-
+an encoder and a decoder. The encoder repre-                   sponse tokens, i.e., LNLL (X, Y ) (see Eq. 1). We
+sents X as a sequence of hidden vectors H(X) =                 can conveniently integrate KI into the model by
+h1 , h2 , ..., hn , where each hi is a low-dimensional         reusing the contextualized representations gener-
+representation of the token xi . The decoder gen-              ated by the model’s encoder. The training objective
+erates yi based on H(X) and y<i , often with the               of a knowledge-internalized dialog model can then
+attention mechanism (Bahdanau et al., 2014).                   be formulated as:
+
+3.2 Knowledge Internalization Loss                                       L = LNLL (X, Y ) + λLKI (X)                  (4)
+Given a dialog corpus with token-level knowledge               where λ is a hyperparameter. Note that the token-
+as discussed above, we now introduce a new train-              level knowledge is only required during training
+ing task: knowledge internalization (KI). In KI, we            to compute LKI (X). At the inference time, those
+seek to boost dialog models by internalizing lexical           relevant knowledge is no longer required as they
+knowledge into each token’s representation. In par-            have been internalized into model by KI, making
+ticular, each token xi and its associated knowledge            inference more efficient.
+Ki are first mapped into a low-dimensional space.
+We then adopt contrastive learning to shorten the              4     Retrieval of Token-level Lexical
+distance between xi and Ki in the space while en-                    Knowledge
+larging that between xi and other irrelevant knowl-
+edge.                                                          In this section, we present how to train an effec-
+   Note that for each xi ∈ X, dialog models’ en-               tive retriever to mine knowledge for each token
+coder can embed it into a contextualized represen-             in the dialog corpora. Given a dialog utterance
+tation hi . Therefore, we only need an extra knowl-            X = {x1 , x2 , . . . , xn }, the trained retriever will re-
+edge encoder to represent Ki as g(Ki ) (details will           trieve a relevant knowledge Ki for each token xi in
+be given in § 4.2). After hi and g(Ki ) are com-               X. The constructed token-knowledge alignments
+puted, we calculate the similarity between xi and              can then be used to train a knowledge-internalized
+Ki by the inner product:                                       neural dialog model as in § 3.
+
+                                                               4.1    Training Data Collection
+          s(xi , Ki ) = f1 (hi )> f2 (g(Ki )),          (2)
+                                                               To train such a retriever, we need a corpus with
+where f1 and f2 are the functions that map the hi              token-level knowledge annotated. However, to our
+and g(Ki ) into the same vector space and normal-              best knowledge, no human annotated data exist and
+ize them.                                                      it is prohibitively expensive to build one. We there-
+   For each (xi , Ki ) pair, we randomly sample                fore seek to train the retriever with distant super-
+an in-batch unrelated knowledge Ki− associated                 vision. A straight-forward solution is to align the
+with other input sentences, where Ki− 6= Ki , to               noun words in an utterance to certain knowledge
+construct a negative sample pair (xi , Ki− ) in con-           graph triples using entity linking tools (Shen et al.,
+trastive learning. Finally, the objective function             2014). The problem of that is it can only cover
+                                                           7947
+

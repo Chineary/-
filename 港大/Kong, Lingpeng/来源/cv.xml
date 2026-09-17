@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pdf2xml SYSTEM "pdf2xml.dtd">
+
+<pdf2xml producer="poppler" version="26.04.0">
+<page number="1" position="absolute" top="0" left="0" height="1188" width="918">
+	<fontspec id="0" size="26" family="KZSIBG+NimbusRomNo9L-Medi" color="#000000"/>
+	<fontspec id="1" size="18" family="IYLRKK+SFTT1200" color="#0000ff"/>
+	<fontspec id="2" size="18" family="CZPYOC+NimbusRomNo9L-Regu" color="#000000"/>
+	<fontspec id="3" size="14" family="CZPYOC+NimbusRomNo9L-Regu" color="#000000"/>
+	<fontspec id="4" size="15" family="KZSIBG+NimbusRomNo9L-Medi" color="#000000"/>
+	<fontspec id="5" size="15" family="CZPYOC+NimbusRomNo9L-Regu" color="#000000"/>
+	<fontspec id="6" size="15" family="HNKYER+NimbusRomNo9L-ReguItal" color="#000000"/>
+	<fontspec id="7" size="15" family="CZPYOC+NimbusRomNo9L-Regu" color="#0000ff"/>
+	<fontspec id="8" size="11" family="LHERPO+CMSY10" color="#000000"/>
+<text top="135" left="86" width="171" height="23" font="0">Lingpeng Kong</text>
+<text top="187" left="86" width="258" height="15" font="1"><a href="https://ikekonglp.github.io/">https://ikekonglp.github.io/</a></text>
+<text top="229" left="87" width="11" height="16" font="2">E</text>
+<text top="231" left="99" width="97" height="13" font="3">MPLOYMENT</text>
+<text top="264" left="109" width="122" height="13" font="4">Assistant Professor</text>
+<text top="264" left="231" width="440" height="13" font="5">, Department of Computer Science, The University of Hong Kong, 2020 -</text>
+<text top="264" left="675" width="43" height="13" font="6">present</text>
+<text top="292" left="109" width="162" height="13" font="4">Senior Research Scientist</text>
+<text top="292" left="270" width="199" height="13" font="5">, Google DeepMind, 2019 - 2020</text>
+<text top="313" left="109" width="116" height="13" font="4">Research Scientist</text>
+<text top="313" left="225" width="199" height="13" font="5">, Google DeepMind, 2017 - 2019</text>
+<text top="334" left="109" width="119" height="13" font="4">Software Engineer</text>
+<text top="334" left="228" width="335" height="13" font="5">, IBM China Systems and Technology Lab, 2011 - 2012</text>
+<text top="363" left="109" width="126" height="13" font="6">Research Internships</text>
+<text top="362" left="235" width="553" height="13" font="5">: Google DeepMind (2017), Google Research (2016), University of Washington (2015-17),</text>
+<text top="380" left="109" width="535" height="13" font="5">Harvard University (2015), NEC Laboratories China (2011), Tsinghua University (2010).</text>
+<text top="422" left="87" width="11" height="16" font="2">E</text>
+<text top="424" left="99" width="80" height="13" font="3">DUCATION</text>
+<text top="456" left="109" width="35" height="13" font="4">Ph.D.</text>
+<text top="456" left="148" width="321" height="13" font="5">Computer Science, Carnegie Mellon University, 2017</text>
+<text top="478" left="148" width="72" height="13" font="6">Thesis topic</text>
+<text top="477" left="219" width="420" height="13" font="5">: Neural Representation Learning in Linguistic Structured Prediction <a href="cv.html#12">[</a></text>
+<text top="477" left="640" width="22" height="13" font="7"><a href="cv.html#12">128</a></text>
+<text top="477" left="662" width="5" height="13" font="5"><a href="cv.html#12">]</a></text>
+<text top="498" left="148" width="65" height="13" font="6">Committee</text>
+<text top="498" left="212" width="99" height="13" font="5">: Noah A. Smith</text>
+<text top="495" left="311" width="6" height="10" font="8">∗</text>
+<text top="498" left="318" width="73" height="13" font="5">, Chris Dyer</text>
+<text top="495" left="391" width="6" height="10" font="8">∗</text>
+<text top="498" left="397" width="207" height="13" font="5">, Alan W. Black, Michael Collins (</text>
+<text top="495" left="605" width="6" height="10" font="8">∗</text>
+<text top="498" left="611" width="54" height="13" font="5">co-chair)</text>
+<text top="519" left="109" width="30" height="13" font="4">M.S.</text>
+<text top="519" left="142" width="321" height="13" font="5">Computer Science, Carnegie Mellon University, 2015</text>
+<text top="540" left="109" width="27" height="13" font="4">B.E.</text>
+<text top="540" left="140" width="401" height="13" font="5">Computer Science, Beijing Language and Culture University, 2011</text>
+<text top="582" left="87" width="12" height="16" font="2">R</text>
+<text top="584" left="100" width="71" height="13" font="3">ESEARCH</text>
+<text top="582" left="176" width="13" height="16" font="2">H</text>
+<text top="584" left="190" width="122" height="13" font="3">IGHLIGHTS AND</text>
+<text top="582" left="317" width="13" height="16" font="2">A</text>
+<text top="584" left="329" width="54" height="13" font="3">WARDS</text>
+<text top="616" left="109" width="30" height="13" font="5">2025</text>
+<text top="616" left="157" width="122" height="13" font="5">Spotlight, NeurIPS <a href="cv.html#5">[</a></text>
+<text top="616" left="280" width="15" height="13" font="7"><a href="cv.html#5">24</a></text>
+<text top="616" left="295" width="126" height="13" font="5"><a href="cv.html#5">]. </a>Highlight, CVPR <a href="cv.html#6">[</a></text>
+<text top="616" left="421" width="15" height="13" font="7"><a href="cv.html#6">38</a></text>
+<text top="616" left="436" width="9" height="13" font="5"><a href="cv.html#6">].</a></text>
+<text top="637" left="109" width="30" height="13" font="5">2024</text>
+<text top="637" left="157" width="199" height="13" font="5">Outstanding Paper Award, ACL <a href="cv.html#8">[</a></text>
+<text top="637" left="356" width="15" height="13" font="7"><a href="cv.html#8">61</a></text>
+<text top="637" left="371" width="108" height="13" font="5"><a href="cv.html#8">]. </a>Oral, NeurIPS <a href="cv.html#7">[</a></text>
+<text top="637" left="479" width="15" height="13" font="7"><a href="cv.html#7">53</a></text>
+<text top="637" left="494" width="118" height="13" font="5"><a href="cv.html#7">]. </a>Spotlight, ICLR <a href="cv.html#8">[</a></text>
+<text top="637" left="612" width="15" height="13" font="7"><a href="cv.html#8">73</a></text>
+<text top="637" left="627" width="9" height="13" font="5"><a href="cv.html#8">].</a></text>
+<text top="658" left="109" width="30" height="13" font="5">2023</text>
+<text top="658" left="157" width="77" height="13" font="5">Oral, ICLR <a href="cv.html#10">[</a></text>
+<text top="658" left="234" width="15" height="13" font="7"><a href="cv.html#10">90</a></text>
+<text top="658" left="249" width="118" height="13" font="5"><a href="cv.html#10">]. </a>Spotlight, ICLR <a href="cv.html#10">[</a></text>
+<text top="658" left="367" width="15" height="13" font="7"><a href="cv.html#10">91</a></text>
+<text top="658" left="382" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="658" left="386" width="15" height="13" font="7"><a href="cv.html#10">92</a></text>
+<text top="658" left="401" width="9" height="13" font="5"><a href="cv.html#10">].</a></text>
+<text top="679" left="109" width="30" height="13" font="5">2022</text>
+<text top="679" left="157" width="105" height="13" font="5">Spotlight, ICLR <a href="cv.html#11">[</a></text>
+<text top="679" left="262" width="22" height="13" font="7"><a href="cv.html#11">110</a></text>
+<text top="679" left="285" width="136" height="13" font="5"><a href="cv.html#11">]. </a>Spotlight, NeurIPS <a href="cv.html#10">[</a></text>
+<text top="679" left="421" width="22" height="13" font="7"><a href="cv.html#10">100</a></text>
+<text top="679" left="443" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="679" left="447" width="22" height="13" font="7"><a href="cv.html#11">101</a></text>
+<text top="679" left="469" width="9" height="13" font="5"><a href="cv.html#11">].</a></text>
+<text top="700" left="109" width="30" height="13" font="5">2021</text>
+<text top="700" left="157" width="322" height="13" font="5">Tencent AI Lab Rhino-Bird Award. Spotlight, ICLR <a href="cv.html#11">[</a></text>
+<text top="700" left="479" width="22" height="13" font="7"><a href="cv.html#11">113</a></text>
+<text top="700" left="501" width="9" height="13" font="5"><a href="cv.html#11">].</a></text>
+<text top="721" left="109" width="30" height="13" font="5">2020</text>
+<text top="721" left="157" width="105" height="13" font="5">Spotlight, ICLR <a href="cv.html#11">[</a></text>
+<text top="721" left="262" width="22" height="13" font="7"><a href="cv.html#11">114</a></text>
+<text top="721" left="285" width="9" height="13" font="5"><a href="cv.html#11">].</a></text>
+<text top="742" left="109" width="30" height="13" font="5">2017</text>
+<text top="742" left="157" width="208" height="13" font="5">Outstanding Paper Award, EACL <a href="cv.html#12">[</a></text>
+<text top="742" left="365" width="22" height="13" font="7"><a href="cv.html#12">118</a></text>
+<text top="742" left="388" width="9" height="13" font="5"><a href="cv.html#12">].</a></text>
+<text top="783" left="87" width="10" height="16" font="2">S</text>
+<text top="786" left="98" width="55" height="13" font="3">ERVICE</text>
+<text top="818" left="109" width="583" height="13" font="5">Senior Area Chair: EMNLP (2024 - 2025), NAACL (2024 - 2025), IJCNLP/AACL (2023, 2025).</text>
+<text top="839" left="109" width="296" height="13" font="5">Journal Reviewer: Nature, Cell Reports Methods.</text>
+<text top="860" left="109" width="86" height="13" font="5">Action Editor:</text>
+<text top="860" left="199" width="269" height="13" font="6">Transactions on Machine Learning Research</text>
+<text top="860" left="472" width="107" height="13" font="5">(TMLR) (2024 -),</text>
+<text top="860" left="583" width="121" height="13" font="6">ACL Rolling Review</text>
+<text top="860" left="708" width="52" height="13" font="5">(2023 -).</text>
+<text top="881" left="109" width="680" height="13" font="5">Area Chair: NeurIPS (2022 - 2025), ICML (2023 - 2025), ICLR (2022 - 2025), COLM (2024 - 2025), EMNLP</text>
+<text top="899" left="109" width="394" height="13" font="5">(2022 - 2023), COLING (2022), NLPCC (2021), NAACL (2020).</text>
+<text top="920" left="109" width="680" height="13" font="5">Program Committee Member: ICML (2017 - 2020), ACL (2016 - 2020), NeurIPS (2017), EMNLP (2015 - 2020),</text>
+<text top="938" left="109" width="570" height="13" font="5">ICLR (2017), NAACL (2016), COLING (2016), and other various conferences and workshops.</text>
+</page>
+<page number="2" position="absolute" top="0" left="0" height="1188" width="918">
+	<fontspec id="9" size="12" family="CZPYOC+NimbusRomNo9L-Regu" color="#000000"/>
+	<fontspec id="10" size="15" family="LHERPO+CMSY10" color="#000000"/>
+	<fontspec id="11" size="11" family="CZPYOC+NimbusRomNo9L-Regu" color="#0000ff"/>
+	<fontspec id="12" size="9" family="CZPYOC+NimbusRomNo9L-Regu" color="#000000"/>
+<text top="138" left="87" width="92" height="16" font="2">ADVISING</text>
+<text top="175" left="89" width="8" height="13" font="5">P</text>
+<text top="177" left="98" width="9" height="11" font="9">H</text>
+<text top="175" left="107" width="24" height="13" font="5">.D.,</text>
+<text top="175" left="135" width="61" height="13" font="6">completed</text>
+<text top="207" left="109" width="7" height="14" font="10">•</text>
+<text top="208" left="124" width="66" height="13" font="7"><a href="https://qtli.github.io/">Qintong Li</a></text>
+<text top="208" left="194" width="88" height="13" font="5">(2021-2025); <a href="cv.html#7">[</a></text>
+<text top="208" left="281" width="15" height="13" font="7"><a href="cv.html#7">48</a></text>
+<text top="208" left="296" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="208" left="300" width="15" height="13" font="7"><a href="cv.html#7">54</a></text>
+<text top="208" left="315" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="208" left="318" width="15" height="13" font="7"><a href="cv.html#8">63</a></text>
+<text top="208" left="333" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="208" left="337" width="15" height="13" font="7"><a href="cv.html#8">67</a></text>
+<text top="208" left="352" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="208" left="356" width="15" height="13" font="7"><a href="cv.html#9">82</a></text>
+<text top="208" left="371" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="208" left="374" width="15" height="13" font="7"><a href="cv.html#9">85</a></text>
+<text top="208" left="389" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="208" left="393" width="15" height="13" font="7"><a href="cv.html#10">96</a></text>
+<text top="208" left="408" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="208" left="412" width="22" height="13" font="7"><a href="cv.html#11">106</a></text>
+<text top="208" left="434" width="239" height="13" font="5"><a href="cv.html#11">] </a>Now: research scientist at Qwen Team</text>
+<text top="235" left="109" width="7" height="14" font="10">•</text>
+<text top="237" left="124" width="64" height="13" font="7"><a href="https://sumilergao.github.io/jiahuig.hku/">Jiahui Gao</a></text>
+<text top="237" left="192" width="88" height="13" font="5">(2019-2023); <a href="cv.html#9">[</a></text>
+<text top="237" left="279" width="15" height="13" font="7"><a href="cv.html#9">75</a></text>
+<text top="237" left="294" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="237" left="298" width="15" height="13" font="7"><a href="cv.html#10">91</a></text>
+<text top="237" left="313" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="237" left="317" width="15" height="13" font="7"><a href="cv.html#10">95</a></text>
+<text top="237" left="332" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="237" left="335" width="15" height="13" font="7"><a href="cv.html#10">96</a></text>
+<text top="237" left="350" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="237" left="354" width="22" height="13" font="7"><a href="cv.html#11">110</a></text>
+<text top="237" left="377" width="5" height="13" font="5"><a href="cv.html#11">]</a></text>
+<text top="264" left="109" width="7" height="14" font="10">•</text>
+<text top="265" left="124" width="76" height="13" font="7"><a href="https://forence1999.github.io/about/">Sheng Wang</a></text>
+<text top="262" left="199" width="6" height="10" font="11"><a href="https://forence1999.github.io/about/">1</a></text>
+<text top="265" left="209" width="88" height="13" font="5">(2024-2025); <a href="cv.html#5">[</a></text>
+<text top="265" left="297" width="15" height="13" font="7"><a href="cv.html#5">24</a></text>
+<text top="265" left="312" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="265" left="316" width="15" height="13" font="7"><a href="cv.html#5">28</a></text>
+<text top="265" left="331" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="265" left="334" width="15" height="13" font="7"><a href="cv.html#6">41</a></text>
+<text top="265" left="349" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="265" left="353" width="15" height="13" font="7"><a href="cv.html#7">48</a></text>
+<text top="265" left="368" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="265" left="372" width="15" height="13" font="7"><a href="cv.html#8">62</a></text>
+<text top="265" left="387" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="265" left="390" width="15" height="13" font="7"><a href="cv.html#8">64</a></text>
+<text top="265" left="405" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="265" left="409" width="15" height="13" font="7"><a href="cv.html#9">85</a></text>
+<text top="265" left="424" width="5" height="13" font="5"><a href="cv.html#9">]</a></text>
+<text top="295" left="89" width="8" height="13" font="5">P</text>
+<text top="297" left="98" width="9" height="11" font="9">H</text>
+<text top="295" left="107" width="24" height="13" font="5">.D.,</text>
+<text top="295" left="135" width="120" height="13" font="6">post-thesis proposal</text>
+<text top="327" left="109" width="7" height="14" font="10">•</text>
+<text top="328" left="124" width="63" height="13" font="7"><a href="https://chang-github-00.github.io/-changma/">Chang Ma</a></text>
+<text top="328" left="190" width="58" height="13" font="5">(2022-); <a href="cv.html#6">[</a></text>
+<text top="328" left="248" width="15" height="13" font="7"><a href="cv.html#6">42</a></text>
+<text top="328" left="263" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="328" left="267" width="15" height="13" font="7"><a href="cv.html#7">53</a></text>
+<text top="328" left="281" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="328" left="285" width="15" height="13" font="7"><a href="cv.html#7">54</a></text>
+<text top="328" left="300" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="328" left="304" width="15" height="13" font="7"><a href="cv.html#7">56</a></text>
+<text top="328" left="319" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="328" left="323" width="15" height="13" font="7"><a href="cv.html#8">65</a></text>
+<text top="328" left="338" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="328" left="341" width="15" height="13" font="7"><a href="cv.html#9">78</a></text>
+<text top="328" left="356" width="5" height="13" font="5"><a href="cv.html#9">]</a></text>
+<text top="356" left="109" width="7" height="14" font="10">•</text>
+<text top="357" left="124" width="89" height="13" font="7"><a href="https://scholar.google.com/citations?user=h-87C9cAAAAJ">Xueliang Zhao</a></text>
+<text top="357" left="217" width="58" height="13" font="5">(2022-); <a href="cv.html#5">[</a></text>
+<text top="357" left="274" width="15" height="13" font="7"><a href="cv.html#5">25</a></text>
+<text top="357" left="289" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="357" left="293" width="15" height="13" font="7"><a href="cv.html#8">63</a></text>
+<text top="357" left="308" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="357" left="312" width="15" height="13" font="7"><a href="cv.html#8">66</a></text>
+<text top="357" left="327" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="357" left="330" width="15" height="13" font="7"><a href="cv.html#8">67</a></text>
+<text top="357" left="345" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="357" left="349" width="15" height="13" font="7"><a href="cv.html#8">71</a></text>
+<text top="357" left="364" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="357" left="368" width="15" height="13" font="7"><a href="cv.html#9">86</a></text>
+<text top="357" left="383" width="5" height="13" font="5"><a href="cv.html#9">]</a></text>
+<text top="385" left="109" width="7" height="14" font="10">•</text>
+<text top="386" left="124" width="72" height="13" font="7"><a href="https://jiacheng-ye.github.io/">Jiacheng Ye</a></text>
+<text top="383" left="196" width="6" height="10" font="11"><a href="https://jiacheng-ye.github.io/">2</a></text>
+<text top="386" left="206" width="58" height="13" font="5">(2022-); <a href="cv.html#6">[</a></text>
+<text top="386" left="263" width="15" height="13" font="7"><a href="cv.html#6">43</a></text>
+<text top="386" left="278" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="386" left="282" width="15" height="13" font="7"><a href="cv.html#6">44</a></text>
+<text top="386" left="297" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="386" left="301" width="15" height="13" font="7"><a href="cv.html#6">45</a></text>
+<text top="386" left="316" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="386" left="319" width="15" height="13" font="7"><a href="cv.html#6">47</a></text>
+<text top="386" left="334" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="386" left="338" width="15" height="13" font="7"><a href="cv.html#7">52</a></text>
+<text top="386" left="353" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="386" left="357" width="15" height="13" font="7"><a href="cv.html#8">62</a></text>
+<text top="386" left="372" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="386" left="375" width="15" height="13" font="7"><a href="cv.html#9">76</a></text>
+<text top="386" left="390" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="386" left="394" width="15" height="13" font="7"><a href="cv.html#9">81</a></text>
+<text top="386" left="409" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="386" left="413" width="15" height="13" font="7"><a href="cv.html#9">87</a></text>
+<text top="386" left="428" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="386" left="432" width="15" height="13" font="7"><a href="cv.html#10">91</a></text>
+<text top="386" left="446" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="386" left="450" width="15" height="13" font="7"><a href="cv.html#10">95</a></text>
+<text top="386" left="465" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="386" left="469" width="15" height="13" font="7"><a href="cv.html#10">96</a></text>
+<text top="386" left="484" width="5" height="13" font="5"><a href="cv.html#10">]</a></text>
+<text top="413" left="109" width="7" height="14" font="10">•</text>
+<text top="414" left="124" width="65" height="13" font="7"><a href="https://yihengxu.com/">Yiheng Xu</a></text>
+<text top="412" left="189" width="6" height="10" font="11"><a href="https://yihengxu.com/">3</a></text>
+<text top="414" left="199" width="58" height="13" font="5">(2022-); <a href="cv.html#8">[</a></text>
+<text top="414" left="257" width="15" height="13" font="7"><a href="cv.html#8">73</a></text>
+<text top="414" left="272" width="5" height="13" font="5"><a href="cv.html#8">]</a></text>
+<text top="442" left="109" width="7" height="14" font="10">•</text>
+<text top="443" left="124" width="65" height="13" font="7"><a href="https://lzhengisme.github.io/">Lin Zheng</a></text>
+<text top="443" left="194" width="595" height="13" font="5">(2021-); University Postgraduate Fellowship; M.Braun Postgraduate Prize in Computer Science;</text>
+<text top="461" left="124" width="5" height="13" font="5"><a href="cv.html#5">[</a></text>
+<text top="461" left="129" width="15" height="13" font="7"><a href="cv.html#5">22</a></text>
+<text top="461" left="144" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="461" left="147" width="15" height="13" font="7"><a href="cv.html#7">52</a></text>
+<text top="461" left="162" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="461" left="166" width="15" height="13" font="7"><a href="cv.html#7">54</a></text>
+<text top="461" left="181" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="461" left="185" width="15" height="13" font="7"><a href="cv.html#7">59</a></text>
+<text top="461" left="200" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="461" left="203" width="15" height="13" font="7"><a href="cv.html#8">69</a></text>
+<text top="461" left="218" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="461" left="222" width="15" height="13" font="7"><a href="cv.html#9">80</a></text>
+<text top="461" left="237" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="461" left="241" width="15" height="13" font="7"><a href="cv.html#10">88</a></text>
+<text top="461" left="256" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="461" left="259" width="15" height="13" font="7"><a href="cv.html#10">90</a></text>
+<text top="461" left="274" width="4" height="13" font="5"><a href="cv.html#10">,</a></text>
+<text top="461" left="278" width="22" height="13" font="7"><a href="cv.html#11">103</a></text>
+<text top="461" left="301" width="4" height="13" font="5"><a href="cv.html#11">,</a></text>
+<text top="461" left="304" width="22" height="13" font="7"><a href="cv.html#11">104</a></text>
+<text top="461" left="327" width="4" height="13" font="5"><a href="cv.html#11">,</a></text>
+<text top="461" left="330" width="22" height="13" font="7"><a href="cv.html#11">111</a></text>
+<text top="461" left="353" width="5" height="13" font="5"><a href="cv.html#11">]</a></text>
+<text top="491" left="89" width="8" height="13" font="5">P</text>
+<text top="493" left="98" width="9" height="11" font="9">H</text>
+<text top="491" left="107" width="24" height="13" font="5">.D.,</text>
+<text top="491" left="135" width="115" height="13" font="6">pre-thesis proposal</text>
+<text top="525" left="109" width="7" height="14" font="10">•</text>
+<text top="526" left="124" width="83" height="13" font="7"><a href="https://openreview.net/profile?id=~Jingwei_Dong1">Jingwei Dong</a></text>
+<text top="523" left="207" width="6" height="10" font="11"><a href="https://openreview.net/profile?id=~Jingwei_Dong1">4</a></text>
+<text top="526" left="217" width="58" height="13" font="5">(2025-); <a href="cv.html#5">[</a></text>
+<text top="526" left="275" width="15" height="13" font="7"><a href="cv.html#5">27</a></text>
+<text top="526" left="290" width="5" height="13" font="5"><a href="cv.html#5">]</a></text>
+<text top="553" left="109" width="7" height="14" font="10">•</text>
+<text top="555" left="124" width="65" height="13" font="7"><a href="https://zhxie.site/">Zhihui Xie</a></text>
+<text top="552" left="189" width="6" height="10" font="11"><a href="https://zhxie.site/">5</a></text>
+<text top="555" left="199" width="345" height="13" font="5">(2024-); HKU Presidential PhD Scholarship (HKU-PS); <a href="cv.html#6">[</a></text>
+<text top="555" left="543" width="15" height="13" font="7"><a href="cv.html#6">36</a></text>
+<text top="555" left="558" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="555" left="562" width="15" height="13" font="7"><a href="cv.html#6">39</a></text>
+<text top="555" left="577" width="5" height="13" font="5"><a href="cv.html#6">]</a></text>
+<text top="582" left="109" width="7" height="14" font="10">•</text>
+<text top="583" left="124" width="56" height="13" font="7"><a href="https://xijia-tao.github.io/">Xijia Tao</a></text>
+<text top="583" left="183" width="58" height="13" font="5">(2024-); <a href="cv.html#4">[</a></text>
+<text top="583" left="241" width="15" height="13" font="7"><a href="cv.html#4">21</a></text>
+<text top="583" left="256" width="4" height="13" font="5"><a href="cv.html#4">,</a></text>
+<text top="583" left="260" width="15" height="13" font="7"><a href="cv.html#7">49</a></text>
+<text top="583" left="274" width="5" height="13" font="5"><a href="cv.html#7">]</a></text>
+<text top="611" left="109" width="7" height="14" font="10">•</text>
+<text top="612" left="124" width="66" height="13" font="7"><a href="https://menik1126.github.io/">Jing Xiong</a></text>
+<text top="609" left="190" width="6" height="10" font="11"><a href="https://menik1126.github.io/">6</a></text>
+<text top="612" left="200" width="58" height="13" font="5">(2024-); <a href="cv.html#4">[</a></text>
+<text top="612" left="257" width="15" height="13" font="7"><a href="cv.html#4">19</a></text>
+<text top="612" left="272" width="4" height="13" font="5"><a href="cv.html#4">,</a></text>
+<text top="612" left="276" width="15" height="13" font="7"><a href="cv.html#5">29</a></text>
+<text top="612" left="291" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="612" left="295" width="15" height="13" font="7"><a href="cv.html#6">37</a></text>
+<text top="612" left="310" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="612" left="314" width="7" height="13" font="7"><a href="cv.html#4">9</a></text>
+<text top="612" left="321" width="5" height="13" font="5"><a href="cv.html#4">]</a></text>
+<text top="640" left="109" width="7" height="14" font="10">•</text>
+<text top="641" left="124" width="87" height="13" font="7"><a href="https://summmeer.github.io/">Shansan Gong</a></text>
+<text top="641" left="214" width="345" height="13" font="5">(2023-); HKU Presidential PhD Scholarship (HKU-PS); <a href="cv.html#4">[</a></text>
+<text top="641" left="559" width="15" height="13" font="7"><a href="cv.html#4">20</a></text>
+<text top="641" left="574" width="4" height="13" font="5"><a href="cv.html#4">,</a></text>
+<text top="641" left="577" width="15" height="13" font="7"><a href="cv.html#6">43</a></text>
+<text top="641" left="592" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="641" left="596" width="15" height="13" font="7"><a href="cv.html#6">46</a></text>
+<text top="641" left="611" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="641" left="615" width="15" height="13" font="7"><a href="cv.html#6">47</a></text>
+<text top="641" left="630" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="641" left="633" width="15" height="13" font="7"><a href="cv.html#7">52</a></text>
+<text top="641" left="648" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="641" left="652" width="15" height="13" font="7"><a href="cv.html#8">61</a></text>
+<text top="641" left="667" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="641" left="671" width="15" height="13" font="7"><a href="cv.html#8">67</a></text>
+<text top="641" left="686" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="641" left="690" width="15" height="13" font="7"><a href="cv.html#8">70</a></text>
+<text top="641" left="704" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="641" left="708" width="15" height="13" font="7"><a href="cv.html#9">77</a></text>
+<text top="641" left="723" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="641" left="727" width="15" height="13" font="7"><a href="cv.html#10">93</a></text>
+<text top="641" left="742" width="5" height="13" font="5"><a href="cv.html#10">]</a></text>
+<text top="668" left="109" width="7" height="14" font="10">•</text>
+<text top="669" left="124" width="73" height="13" font="7"><a href="https://scholar.google.com/citations?user=fY69CxIAAAAJ">Chenxin An</a></text>
+<text top="669" left="200" width="287" height="13" font="5">(2023-); Hong Kong PhD Fellowship (HKPF); <a href="cv.html#5">[</a></text>
+<text top="669" left="487" width="15" height="13" font="7"><a href="cv.html#5">26</a></text>
+<text top="669" left="502" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="669" left="506" width="15" height="13" font="7"><a href="cv.html#6">40</a></text>
+<text top="669" left="521" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="669" left="525" width="15" height="13" font="7"><a href="cv.html#6">46</a></text>
+<text top="669" left="540" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="669" left="543" width="15" height="13" font="7"><a href="cv.html#6">47</a></text>
+<text top="669" left="558" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="669" left="562" width="15" height="13" font="7"><a href="cv.html#8">61</a></text>
+<text top="669" left="577" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="669" left="581" width="15" height="13" font="7"><a href="cv.html#8">70</a></text>
+<text top="669" left="596" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="669" left="599" width="22" height="13" font="7"><a href="cv.html#10">100</a></text>
+<text top="669" left="622" width="5" height="13" font="5"><a href="cv.html#10">]</a></text>
+<text top="697" left="109" width="7" height="14" font="10">•</text>
+<text top="698" left="124" width="37" height="13" font="7"><a href="https://leili.site/">Lei Li</a></text>
+<text top="695" left="161" width="6" height="10" font="11"><a href="https://leili.site/">7</a></text>
+<text top="698" left="171" width="58" height="13" font="5">(2023-); <a href="cv.html#5">[</a></text>
+<text top="698" left="228" width="15" height="13" font="7"><a href="cv.html#5">32</a></text>
+<text top="698" left="243" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="698" left="247" width="15" height="13" font="7"><a href="cv.html#6">38</a></text>
+<text top="698" left="262" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="698" left="266" width="15" height="13" font="7"><a href="cv.html#6">39</a></text>
+<text top="698" left="281" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="698" left="284" width="15" height="13" font="7"><a href="cv.html#6">40</a></text>
+<text top="698" left="299" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="698" left="303" width="15" height="13" font="7"><a href="cv.html#6">46</a></text>
+<text top="698" left="318" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="698" left="322" width="15" height="13" font="7"><a href="cv.html#7">49</a></text>
+<text top="698" left="337" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="698" left="340" width="15" height="13" font="7"><a href="cv.html#7">55</a></text>
+<text top="698" left="355" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="698" left="359" width="15" height="13" font="7"><a href="cv.html#7">60</a></text>
+<text top="698" left="374" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="698" left="378" width="15" height="13" font="7"><a href="cv.html#8">68</a></text>
+<text top="698" left="393" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="698" left="397" width="15" height="13" font="7"><a href="cv.html#9">74</a></text>
+<text top="698" left="411" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="698" left="415" width="15" height="13" font="7"><a href="cv.html#9">79</a></text>
+<text top="698" left="430" width="5" height="13" font="5"><a href="cv.html#9">]</a></text>
+<text top="726" left="109" width="7" height="14" font="10">•</text>
+<text top="727" left="124" width="70" height="13" font="7"><a href="https://github.com/numbmelon">Zhenyu Wu</a></text>
+<text top="724" left="194" width="6" height="10" font="11"><a href="https://github.com/numbmelon">8</a></text>
+<text top="727" left="204" width="58" height="13" font="5">(2023-); <a href="cv.html#6">[</a></text>
+<text top="727" left="261" width="15" height="13" font="7"><a href="cv.html#6">44</a></text>
+<text top="727" left="276" width="5" height="13" font="5"><a href="cv.html#6">]</a></text>
+<text top="757" left="89" width="8" height="13" font="5">P</text>
+<text top="759" left="98" width="24" height="11" font="9">OST</text>
+<text top="757" left="121" width="5" height="13" font="5">-</text>
+<text top="759" left="127" width="70" height="11" font="9">DOCTORAL</text>
+<text top="791" left="109" width="7" height="14" font="10">•</text>
+<text top="792" left="124" width="92" height="13" font="7"><a href="https://xcfeng.net/">Xiachong Feng</a></text>
+<text top="789" left="215" width="6" height="10" font="11"><a href="https://xcfeng.net/">9</a></text>
+<text top="792" left="225" width="58" height="13" font="5">(2024-); <a href="cv.html#3">[</a></text>
+<text top="792" left="283" width="7" height="13" font="7"><a href="cv.html#3">8</a></text>
+<text top="792" left="291" width="4" height="13" font="5"><a href="cv.html#3">,</a></text>
+<text top="792" left="294" width="15" height="13" font="7"><a href="cv.html#4">18</a></text>
+<text top="792" left="309" width="4" height="13" font="5"><a href="cv.html#4">,</a></text>
+<text top="792" left="313" width="15" height="13" font="7"><a href="cv.html#5">33</a></text>
+<text top="792" left="328" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="792" left="332" width="15" height="13" font="7"><a href="cv.html#6">35</a></text>
+<text top="792" left="347" width="4" height="13" font="5"><a href="cv.html#6">,</a></text>
+<text top="792" left="350" width="15" height="13" font="7"><a href="cv.html#7">60</a></text>
+<text top="792" left="365" width="5" height="13" font="5"><a href="cv.html#7">]</a></text>
+<text top="822" left="85" width="11" height="13" font="5">G</text>
+<text top="824" left="96" width="426" height="11" font="9">RADUATE STUDENT VISITORS AND INDEPENDENT STUDY PROJECTS</text>
+<text top="855" left="109" width="203" height="13" font="5">2024: Seo Woon Baik, Zirui Wu <a href="cv.html#5">[</a></text>
+<text top="855" left="312" width="15" height="13" font="7"><a href="cv.html#5">22</a></text>
+<text top="855" left="327" width="4" height="13" font="5"><a href="cv.html#5">,</a></text>
+<text top="855" left="330" width="15" height="13" font="7"><a href="cv.html#5">31</a></text>
+<text top="855" left="345" width="94" height="13" font="5"><a href="cv.html#5">], </a>Jiafeng Wang</text>
+<text top="875" left="109" width="131" height="13" font="5">2023: Liheng Chen <a href="cv.html#7">[</a></text>
+<text top="875" left="240" width="15" height="13" font="7"><a href="cv.html#7">52</a></text>
+<text top="875" left="255" width="4" height="13" font="5"><a href="cv.html#7">,</a></text>
+<text top="875" left="259" width="15" height="13" font="7"><a href="cv.html#8">62</a></text>
+<text top="875" left="274" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="875" left="277" width="15" height="13" font="7"><a href="cv.html#8">64</a></text>
+<text top="875" left="292" width="103" height="13" font="5"><a href="cv.html#8">], </a>Zhiheng Lyu <a href="cv.html#7">[</a></text>
+<text top="875" left="395" width="15" height="13" font="7"><a href="cv.html#7">50</a></text>
+<text top="875" left="410" width="112" height="13" font="5"><a href="cv.html#7">], </a>Qingxiu Dong <a href="cv.html#8">[</a></text>
+<text top="875" left="522" width="15" height="13" font="7"><a href="cv.html#8">65</a></text>
+<text top="875" left="537" width="4" height="13" font="5"><a href="cv.html#8">,</a></text>
+<text top="875" left="541" width="15" height="13" font="7"><a href="cv.html#9">74</a></text>
+<text top="875" left="556" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="875" left="560" width="15" height="13" font="7"><a href="cv.html#9">79</a></text>
+<text top="875" left="575" width="214" height="13" font="5"><a href="cv.html#9">], </a>Xuanyu Chen, Xiaoxu Li, Shuai</text>
+<text top="893" left="109" width="39" height="13" font="5">Zhong</text>
+<text top="913" left="109" width="384" height="13" font="5">2022: Rui Shao, Dantong Li, Jiayi Xin, Chenxin An, Mukai Li <a href="cv.html#9">[</a></text>
+<text top="913" left="493" width="15" height="13" font="7"><a href="cv.html#9">77</a></text>
+<text top="913" left="508" width="4" height="13" font="5"><a href="cv.html#9">,</a></text>
+<text top="913" left="512" width="15" height="13" font="7"><a href="cv.html#10">93</a></text>
+<text top="913" left="526" width="103" height="13" font="5"><a href="cv.html#10">], </a>Haiteng Zhao <a href="cv.html#9">[</a></text>
+<text top="913" left="629" width="15" height="13" font="7"><a href="cv.html#9">78</a></text>
+<text top="913" left="644" width="5" height="13" font="5"><a href="cv.html#9">]</a></text>
+<text top="934" left="109" width="680" height="13" font="5">2021: Xijia Tao, Xiangwei Kong, Shuailong Zhu, Jiahui Gao, Ya-Cheng Hsu, Jakob Prange (Georgetown Univer-</text>
+<text top="952" left="109" width="35" height="13" font="5">sity) <a href="cv.html#11">[</a></text>
+<text top="952" left="144" width="22" height="13" font="7"><a href="cv.html#11">105</a></text>
+<text top="952" left="167" width="91" height="13" font="5"><a href="cv.html#11">], </a>Chengzu Li <a href="cv.html#10">[</a></text>
+<text top="952" left="258" width="15" height="13" font="7"><a href="cv.html#10">97</a></text>
+<text top="952" left="273" width="314" height="13" font="5"><a href="cv.html#10">], </a>Yuval Kansal, King Min Hao, Ke Ma, Jiacheng Ye</text>
+<text top="972" left="109" width="129" height="13" font="5">2020: Zhiyong Wu <a href="cv.html#11">[</a></text>
+<text top="972" left="238" width="22" height="13" font="7"><a href="cv.html#11">107</a></text>
+<text top="972" left="260" width="4" height="13" font="5"><a href="cv.html#11">,</a></text>
+<text top="972" left="264" width="22" height="13" font="7"><a href="cv.html#11">111</a></text>
+<text top="972" left="286" width="4" height="13" font="5"><a href="cv.html#11">,</a></text>
+<text top="972" left="290" width="22" height="13" font="7"><a href="cv.html#11">112</a></text>
+<text top="972" left="312" width="256" height="13" font="5"><a href="cv.html#11">], </a>Hao Peng (University of Washington) <a href="cv.html#11">[</a></text>
+<text top="972" left="569" width="22" height="13" font="7"><a href="cv.html#11">108</a></text>
+<text top="972" left="591" width="4" height="13" font="5"><a href="cv.html#11">,</a></text>
+<text top="972" left="595" width="22" height="13" font="7"><a href="cv.html#11">113</a></text>
+<text top="972" left="617" width="89" height="13" font="5"><a href="cv.html#11">], </a>Huijie Pan <a href="cv.html#11">[</a></text>
+<text top="972" left="707" width="22" height="13" font="7"><a href="cv.html#11">104</a></text>
+<text top="972" left="729" width="59" height="13" font="5"><a href="cv.html#11">], </a>Yiming</text>
+<text top="990" left="109" width="124" height="13" font="5">Wang, Chiu Yu Ying</text>
+<text top="1012" left="86" width="4" height="8" font="12">1</text>
+<text top="1015" left="98" width="148" height="11" font="9">Co-advisor: Chuan Wu (HKU)</text>
+<text top="1012" left="259" width="4" height="8" font="12">2</text>
+<text top="1015" left="270" width="131" height="11" font="9">Co-advisor: Tao Yu (HKU)</text>
+<text top="1012" left="415" width="4" height="8" font="12">3</text>
+<text top="1015" left="426" width="131" height="11" font="9">Co-advisor: Tao Yu (HKU)</text>
+<text top="1012" left="571" width="4" height="8" font="12">4</text>
+<text top="1015" left="582" width="148" height="11" font="9">Co-advisor: Chuan Wu (HKU)</text>
+<text top="1012" left="744" width="4" height="8" font="12">5</text>
+<text top="1015" left="755" width="33" height="11" font="9">Co-ad-</text>
+<text top="1031" left="86" width="99" height="11" font="9">visor: Qi Liu (HKU)</text>
+<text top="1028" left="199" width="4" height="8" font="12">6</text>
+<text top="1031" left="210" width="151" height="11" font="9">Co-advisor: Ngai Wong (HKU)</text>
+<text top="1028" left="374" width="4" height="8" font="12">7</text>
+<text top="1031" left="385" width="128" height="11" font="9">Co-advisor: Qi Liu (HKU)</text>
+<text top="1028" left="527" width="4" height="8" font="12">8</text>
+<text top="1031" left="538" width="184" height="11" font="9">Shanghai Jiao Tong University (SJTU)</text>
+<text top="1028" left="736" width="4" height="8" font="12">9</text>
+<text top="1031" left="747" width="41" height="11" font="9">Co-host:</text>
+<text top="1045" left="86" width="88" height="11" font="9">Chuan Wu (HKU)</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">2</text>
+</page>
+<page number="3" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="138" left="87" width="11" height="16" font="2">T</text>
+<text top="140" left="99" width="69" height="13" font="3">EACHING</text>
+<text top="138" left="173" width="11" height="16" font="2">E</text>
+<text top="140" left="185" width="86" height="13" font="3">XPERIENCE</text>
+<text top="173" left="109" width="623" height="13" font="5">Instructor, Introduction to Artificial Intelligence (COMP3270), The University of Hong Kong, Fall 2025</text>
+<text top="193" left="109" width="648" height="13" font="5">Instructor, Advanced Topics in Language Models (COMP8505), The University of Hong Kong, Spring 2025</text>
+<text top="214" left="109" width="680" height="13" font="5">Instructor, Introduction to Machine Learning (COMP3314), The University of Hong Kong, Spring 2022 - 2023,</text>
+<text top="232" left="109" width="57" height="13" font="5">Fall 2023</text>
+<text top="253" left="109" width="620" height="13" font="5">Instructor, Natural Language Processing (COMP3361), The University of Hong Kong, Fall 2021 - 2022</text>
+<text top="274" left="109" width="680" height="13" font="5">Instructor, Natural Language Processing (for graduate students) (COMP7607), The University of Hong Kong, Fall</text>
+<text top="292" left="109" width="72" height="13" font="5">2022 - 2025</text>
+<text top="313" left="109" width="551" height="13" font="5">Teaching Assistant, Natural Language Processing, Carnegie Mellon University, Spring 2015</text>
+<text top="334" left="109" width="485" height="13" font="5">Teaching Assistant, Machine Learning, Carnegie Mellon University, Spring 2013</text>
+<text top="375" left="87" width="10" height="16" font="2">P</text>
+<text top="378" left="98" width="103" height="13" font="3">UBLICATIONS</text>
+<text top="418" left="88" width="8" height="13" font="5">P</text>
+<text top="420" left="97" width="62" height="11" font="9">REPRINTS</text>
+<text top="418" left="163" width="25" height="13" font="5">&amp; T</text>
+<text top="420" left="189" width="126" height="11" font="9">ECHNICAL REPORTS</text>
+<text top="451" left="105" width="683" height="13" font="5">1. Dani Yogatama, Cyprien de Masson d’Autume, Jerome Connor, Tomas Kocisky, Mike Chrzanowski, Lingpeng</text>
+<text top="469" left="124" width="458" height="13" font="5">Kong, Angeliki Lazaridou, Wang Ling, Lei Yu, Chris Dyer, Phil Blunsom,</text>
+<text top="469" left="586" width="202" height="13" font="7"><a href="https://arxiv.org/pdf/1901.11373.pdf">Learning and Evaluating General</a></text>
+<text top="487" left="124" width="135" height="13" font="7"><a href="https://arxiv.org/pdf/1901.11373.pdf">Linguistic Intelligence</a></text>
+<text top="487" left="259" width="215" height="13" font="5"><a href="https://arxiv.org/pdf/1901.11373.pdf">, </a>arXiv:1901.11373, February 2019.</text>
+<text top="517" left="105" width="683" height="13" font="5">2. Jiangtao Feng, Lingpeng Kong, Po-Sen Huang, Chong Wang, Da Huang, Jiayuan Mao, Kan Qiao, Dengyong</text>
+<text top="535" left="124" width="35" height="13" font="5">Zhou,</text>
+<text top="535" left="163" width="273" height="13" font="7"><a href="https://arxiv.org/pdf/1811.02172.pdf">Neural Phrase-to-Phrase Machine Translation</a></text>
+<text top="535" left="436" width="224" height="13" font="5"><a href="https://arxiv.org/pdf/1811.02172.pdf">, </a>arXiv:1811.02172, November 2018.</text>
+<text top="565" left="105" width="599" height="13" font="5">3. Lei Yu, Cyprien de Masson d’Autume, Chris Dyer, Phil Blunsom, Lingpeng Kong, Wang Ling,</text>
+<text top="565" left="708" width="80" height="13" font="7"><a href="https://arxiv.org/pdf/1811.10475.pdf">Sentence En-</a></text>
+<text top="583" left="124" width="292" height="13" font="7"><a href="https://arxiv.org/pdf/1811.10475.pdf">coding with Tree-constrained Relation Networks</a></text>
+<text top="583" left="415" width="224" height="13" font="5"><a href="https://arxiv.org/pdf/1811.10475.pdf">, </a>arXiv:1811.10475, November 2018.</text>
+<text top="613" left="105" width="683" height="13" font="5">4. Chris Alberti, Daniel Andor, Ivan Bogatyy, Michael Collins, Dan Gillick, Lingpeng Kong, Terry Koo, Ji Ma,</text>
+<text top="631" left="124" width="456" height="13" font="5">Mark Omernick, Slav Petrov, Chayut Thanapirom, Zora Tung, David Weiss,</text>
+<text top="631" left="583" width="205" height="13" font="7"><a href="https://arxiv.org/pdf/1703.04929.pdf">SyntaxNet Models for the CoNLL</a></text>
+<text top="649" left="124" width="107" height="13" font="7"><a href="https://arxiv.org/pdf/1703.04929.pdf">2017 Shared Task</a></text>
+<text top="649" left="230" width="210" height="13" font="5"><a href="https://arxiv.org/pdf/1703.04929.pdf">, </a>arXiv:1703.04929, March 2017. <a href="http://universaldependencies.org/conll17/">[</a></text>
+<text top="649" left="440" width="28" height="13" font="7"><a href="http://universaldependencies.org/conll17/">Link</a></text>
+<text top="649" left="468" width="5" height="13" font="5"><a href="http://universaldependencies.org/conll17/">]</a></text>
+<text top="678" left="105" width="486" height="13" font="5">5. Lingpeng Kong, Chris Alberti, Daniel Andor, Ivan Bogatyy, David Weiss,</text>
+<text top="678" left="598" width="191" height="13" font="7"><a href="https://arxiv.org/pdf/1703.04474.pdf">DRAGNN: A Transition-based</a></text>
+<text top="696" left="124" width="349" height="13" font="7"><a href="https://arxiv.org/pdf/1703.04474.pdf">Framework for Dynamically Connected Neural Networks</a></text>
+<text top="696" left="473" width="216" height="13" font="5"><a href="https://arxiv.org/pdf/1703.04474.pdf">, </a>arXiv:1703.04474, March 2017. <a href="https://github.com/tensorflow/models/tree/master/research/syntaxnet">[</a></text>
+<text top="696" left="690" width="45" height="13" font="7"><a href="https://github.com/tensorflow/models/tree/master/research/syntaxnet">GitHub</a></text>
+<text top="696" left="734" width="10" height="13" font="5"><a href="https://github.com/tensorflow/models/tree/master/research/syntaxnet">][</a></text>
+<text top="696" left="744" width="44" height="13" font="7"><a href="https://ai.googleblog.com/2017/03/an-upgrade-to-syntaxnet-new-models-and.html">Google</a></text>
+<text top="714" left="124" width="49" height="13" font="7"><a href="https://ai.googleblog.com/2017/03/an-upgrade-to-syntaxnet-new-models-and.html">AI Blog</a></text>
+<text top="714" left="172" width="5" height="13" font="5"><a href="https://ai.googleblog.com/2017/03/an-upgrade-to-syntaxnet-new-models-and.html">]</a></text>
+<text top="744" left="105" width="683" height="13" font="5">6. Graham Neubig, Chris Dyer, Yoav Goldberg, Austin Matthews, Waleed Ammar, Antonios Anastasopoulos,</text>
+<text top="762" left="124" width="665" height="13" font="5">Miguel Ballesteros, David Chiang, Daniel Clothiaux, Trevor Cohn, Kevin Duh, Manaal Faruqui, Cynthia Gan,</text>
+<text top="780" left="124" width="665" height="13" font="5">Dan Garrette, Yangfeng Ji, Lingpeng Kong, Adhiguna Kuncoro, Gaurav Kumar, Chaitanya Malaviya, Paul</text>
+<text top="798" left="124" width="589" height="13" font="5">Michel, Yusuke Oda, Matthew Richardson, Naomi Saphra, Swabha Swayamdipta, Pengcheng Yin,</text>
+<text top="798" left="717" width="72" height="13" font="7"><a href="https://arxiv.org/pdf/1701.03980.pdf">DyNet: The</a></text>
+<text top="816" left="124" width="202" height="13" font="7"><a href="https://arxiv.org/pdf/1701.03980.pdf">Dynamic Neural Network Toolkit</a></text>
+<text top="816" left="325" width="217" height="13" font="5"><a href="https://arxiv.org/pdf/1701.03980.pdf">, </a>arXiv:1701.03980, January 2017. <a href="https://github.com/clab/dynet">[</a></text>
+<text top="816" left="543" width="45" height="13" font="7"><a href="https://github.com/clab/dynet">GitHub</a></text>
+<text top="816" left="587" width="5" height="13" font="5"><a href="https://github.com/clab/dynet">]</a></text>
+<text top="846" left="105" width="237" height="13" font="5">7. Lingpeng Kong, and Noah A. Smith,</text>
+<text top="846" left="346" width="439" height="13" font="7"><a href="https://arxiv.org/pdf/1404.4314.pdf">An Empirical Comparison of Parsing Methods for Stanford Dependencies</a></text>
+<text top="846" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/pdf/1404.4314.pdf">,</a></text>
+<text top="864" left="124" width="187" height="13" font="5">arXiv:1404.4314, April 2014. <a href="http://www.cs.cmu.edu/~ark/TBSD/">[</a></text>
+<text top="864" left="311" width="28" height="13" font="7"><a href="http://www.cs.cmu.edu/~ark/TBSD/">code</a></text>
+<text top="864" left="339" width="5" height="13" font="5"><a href="http://www.cs.cmu.edu/~ark/TBSD/">]</a></text>
+<text top="894" left="88" width="8" height="13" font="5">P</text>
+<text top="896" left="97" width="24" height="11" font="9">EER</text>
+<text top="894" left="122" width="5" height="13" font="5">-</text>
+<text top="896" left="128" width="163" height="11" font="9">REFEREED PUBLICATIONS</text>
+<text top="924" left="91" width="96" height="13" font="4">Journal papers</text>
+<text top="954" left="105" width="683" height="13" font="5">8. Xiachong Feng, Longxu Dou, Minzhi Li, Qinghao Wang, Yu Guo, Haochuan Wang, Chang Ma, and Lingpeng</text>
+<text top="972" left="124" width="36" height="13" font="5">Kong,</text>
+<text top="972" left="164" width="525" height="13" font="7"><a href="https://arxiv.org/abs/2412.03920">A Survey on Large Language Model-Based Social Agents in Game-Theoretic Scenarios</a></text>
+<text top="972" left="689" width="99" height="13" font="5"><a href="https://arxiv.org/abs/2412.03920">, </a>In Transactions</text>
+<text top="990" left="124" width="196" height="13" font="5">on Machine Learning Research (</text>
+<text top="990" left="320" width="45" height="13" font="4">TMLR</text>
+<text top="990" left="364" width="42" height="13" font="5">), 2025</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">3</text>
+</page>
+<page number="4" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="105" width="683" height="13" font="5">9. Jing Xiong, Gongye Liu, Lun Huang, Chengyue Wu, Taiqiang Wu, Yao Mu, Yuan Yao, Hui Shen, Zhongwei</text>
+<text top="158" left="124" width="665" height="13" font="5">Wan, Jinfa Huang, Chaofan Tao, Shen Yan, Huaxiu Yao, Lingpeng Kong, Hongxia Yang, Mi Zhang, Guillermo</text>
+<text top="176" left="124" width="261" height="13" font="5">Sapiro, Jiebo Luo, Ping Luo, Ngai Wong,</text>
+<text top="176" left="391" width="273" height="13" font="7"><a href="https://arxiv.org/abs/2411.05902">Autoregressive Models in Vision: A Survey</a></text>
+<text top="176" left="664" width="124" height="13" font="5"><a href="https://arxiv.org/abs/2411.05902">, </a>In Transactions on</text>
+<text top="194" left="124" width="177" height="13" font="5">Machine Learning Research (</text>
+<text top="193" left="301" width="45" height="13" font="4">TMLR</text>
+<text top="194" left="346" width="42" height="13" font="5">), 2025</text>
+<text top="223" left="98" width="691" height="13" font="5">10. Zhen Qin, Weixuan Sun, Kaiyue Lu, Dongxu Li, Xiaodong Han, Yuchao Dai, Lingpeng Kong, and Yiran Zhong,</text>
+<text top="241" left="124" width="241" height="13" font="7"><a href="https://arxiv.org/abs/2307.09270">Linearized Relative Positional Encoding</a></text>
+<text top="241" left="365" width="299" height="13" font="5"><a href="https://arxiv.org/abs/2307.09270">, </a>In Transactions on Machine Learning Research (</text>
+<text top="241" left="664" width="45" height="13" font="4">TMLR</text>
+<text top="241" left="709" width="42" height="13" font="5">), 2023</text>
+<text top="271" left="98" width="691" height="13" font="5">11. Weixuan Sun, Zhen Qin, Hui Deng, Jianyuan Wang, Yi Zhang, Kaihao Zhang, Nick Barnes, Stan Birchfield,</text>
+<text top="289" left="124" width="207" height="13" font="5">Lingpeng Kong, and Yiran Zhong,</text>
+<text top="289" left="335" width="169" height="13" font="7"><a href="https://arxiv.org/abs/2206.10552">Vicinity Vision Transformer</a></text>
+<text top="289" left="505" width="284" height="13" font="5"><a href="https://arxiv.org/abs/2206.10552">, </a>In IEEE Transactions on Pattern Analysis and</text>
+<text top="307" left="124" width="135" height="13" font="5">Machine Intelligence (</text>
+<text top="307" left="259" width="49" height="13" font="4">TPAMI</text>
+<text top="307" left="308" width="42" height="13" font="5">), 2023</text>
+<text top="337" left="98" width="417" height="13" font="5">12. Dani Yogatama, Cyprien de Masson d’Autume, Lingpeng Kong,</text>
+<text top="337" left="519" width="266" height="13" font="7"><a href="https://arxiv.org/pdf/2102.02557.pdf">Adaptive Semiparametric Language Models</a></text>
+<text top="337" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/pdf/2102.02557.pdf">,</a></text>
+<text top="355" left="124" width="381" height="13" font="5">Transactions of the Association for Computational Linguistics (</text>
+<text top="355" left="505" width="39" height="13" font="4">TACL</text>
+<text top="355" left="544" width="81" height="13" font="5">), April 2021.</text>
+<text top="385" left="98" width="691" height="13" font="5">13. Adhiguna Kuncoro*, Lingpeng Kong*, Daniel Fried*, Dani Yogatama, Laura Rimell, Chris Dyer, Phil Blun-</text>
+<text top="403" left="124" width="29" height="13" font="5">som,</text>
+<text top="403" left="156" width="418" height="13" font="7"><a href="https://arxiv.org/pdf/2005.13482.pdf">Syntactic Structure Distillation Pretraining For Bidirectional Encoders</a></text>
+<text top="403" left="574" width="215" height="13" font="5"><a href="https://arxiv.org/pdf/2005.13482.pdf">, </a>Transactions of the Association for</text>
+<text top="421" left="124" width="168" height="13" font="5">Computational Linguistics (</text>
+<text top="421" left="291" width="39" height="13" font="4">TACL</text>
+<text top="421" left="331" width="114" height="13" font="5">), September 2020.</text>
+<text top="451" left="98" width="650" height="13" font="5">14. Lei Yu, Laurent Sartran, Wojciech Stokowiec, Wang Ling, Lingpeng Kong, Phil Blunsom, Chris Dyer,</text>
+<text top="451" left="752" width="37" height="13" font="7"><a href="https://arxiv.org/pdf/1910.00553.pdf">Better</a></text>
+<text top="469" left="124" width="341" height="13" font="7"><a href="https://arxiv.org/pdf/1910.00553.pdf">Document-level Machine Translation with Bayes’ Rule</a></text>
+<text top="469" left="465" width="323" height="13" font="5"><a href="https://arxiv.org/pdf/1910.00553.pdf">, </a>Transactions of the Association for Computational</text>
+<text top="487" left="124" width="75" height="13" font="5">Linguistics (</text>
+<text top="486" left="199" width="39" height="13" font="4">TACL</text>
+<text top="487" left="238" width="81" height="13" font="5">), April 2020.</text>
+<text top="516" left="98" width="691" height="13" font="5">15. Hao Tang, Liang Lu, Lingpeng Kong, Kevin Gimpel, Karen Livescu, Chris Dyer, Noah A. Smith, Steve Re-</text>
+<text top="534" left="124" width="28" height="13" font="5">nals,</text>
+<text top="534" left="155" width="374" height="13" font="7"><a href="https://arxiv.org/pdf/1708.00531.pdf">End-to-End Neural Segmental Models for Speech Recognition</a></text>
+<text top="534" left="530" width="259" height="13" font="5"><a href="https://arxiv.org/pdf/1708.00531.pdf">, </a>IEEE Journal of Selected Topics in Signal</text>
+<text top="552" left="124" width="153" height="13" font="5">Processing, August 2017.</text>
+<text top="583" left="91" width="240" height="13" font="4">Peer-refereed conference publications</text>
+<text top="613" left="98" width="691" height="13" font="5">16. Qiushi Sun, Zhoumianze Liu, Chang Ma, Zichen Ding, Fangzhi Xu, Zhangyue Yin, Haiteng Zhao, Zhenyu Wu,</text>
+<text top="631" left="124" width="665" height="13" font="5">Kanzhi Cheng, Zhaoyang Liu, Jianing Wang, Qintong Li, Xiangru Tang, Tianbao Xie, Xiachong Feng, and</text>
+<text top="649" left="124" width="98" height="13" font="5">Lingpeng Kong,</text>
+<text top="649" left="225" width="559" height="13" font="7"><a href="https://arxiv.org/abs/2505.19897">ScienceBoard: Evaluating Multimodal Autonomous Agents in Realistic Scientific Workflows</a></text>
+<text top="649" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/abs/2505.19897">,</a></text>
+<text top="667" left="124" width="551" height="13" font="5">In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.</text>
+<text top="666" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="696" left="98" width="691" height="13" font="5">17. Wendong Xu, Jing Xiong, Chenyang Zhao, Qiujiang Chen, Haoran Wang, Hui Shen, Zhongwei Wan, Jianbo</text>
+<text top="714" left="124" width="665" height="13" font="5">Dai, Taiqiang Wu, He Xiao, Chaofan Tao, Zhuoqing Mao, Ying Sheng, Zhijiang Guo, Hongxia Yang, Lingpeng</text>
+<text top="732" left="124" width="137" height="13" font="5">Kong, and Ngai Wong,</text>
+<text top="732" left="264" width="520" height="13" font="7"><a href="https://arxiv.org/abs/2505.23932">SwingArena: Competitive Programming Arena for Long-context GitHub Issue Solving</a></text>
+<text top="732" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/abs/2505.23932">,</a></text>
+<text top="750" left="124" width="551" height="13" font="5">In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.</text>
+<text top="750" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="780" left="98" width="691" height="13" font="5">18. Xiachong Feng, Liang Zhao, Weihong Zhong, Yichong Huang, Yuxuan Gu, Lingpeng Kong, Xiaocheng Feng,</text>
+<text top="798" left="124" width="89" height="13" font="5">and Bing Qin,</text>
+<text top="798" left="219" width="569" height="13" font="7">PERSONA: Dynamic and Compositional Inference-Time Personality Control via Activation</text>
+<text top="816" left="124" width="91" height="13" font="7">Vector Algebra</text>
+<text top="816" left="215" width="420" height="13" font="5">, In International Conference on Learning Representations, May 2026.</text>
+<text top="816" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="846" left="98" width="691" height="13" font="5">19. Jing Xiong, Qiujiang Chen, Fanghua Ye, Zhongwei Wan, Chuanyang Zheng, Chenyang Zhao, Hui Shen,</text>
+<text top="864" left="124" width="665" height="13" font="5">Alexander Hanbo Li, Chaofan Tao, Haochen Tan, Haoli Bai, Lifeng Shang, Lingpeng Kong, and Ngai Wong,</text>
+<text top="882" left="124" width="408" height="13" font="7"><a href="https://arxiv.org/abs/2509.15148">ATTS: Asynchronous Test-Time Scaling via Conformal Prediction</a></text>
+<text top="882" left="531" width="257" height="13" font="5"><a href="https://arxiv.org/abs/2509.15148">, </a>In International Conference on Learning</text>
+<text top="900" left="124" width="305" height="13" font="5">Representations, Rio de Janeiro, Brazil, May 2026.</text>
+<text top="900" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="930" left="98" width="691" height="13" font="5">20. Shansan Gong, Ruixiang Zhang, Huangjie Zheng, Jiatao Gu, Navdeep Jaitly, Lingpeng Kong, and Yizhe Zhang,</text>
+<text top="948" left="124" width="561" height="13" font="7"><a href="https://arxiv.org/abs/2506.20639">DiffuCoder: Understanding and Improving Masked Diffusion Models for Code Generation</a></text>
+<text top="948" left="685" width="104" height="13" font="5"><a href="https://arxiv.org/abs/2506.20639">, </a>In International</text>
+<text top="965" left="124" width="454" height="13" font="5">Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.</text>
+<text top="965" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="995" left="98" width="691" height="13" font="5">21. Xijia Tao, Yihua Teng, Xinxing Su, Xinyu Fu, Jihao Wu, Chaofan Tao, Ziru Liu, Haoli Bai, Rui Liu, and</text>
+<text top="1013" left="124" width="98" height="13" font="5">Lingpeng Kong,</text>
+<text top="1013" left="225" width="559" height="13" font="7"><a href="https://arxiv.org/abs/2508.21475">MMSearch-Plus: Benchmarking Provenance-Aware Search for Multimodal Browsing Agents</a></text>
+<text top="1013" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/abs/2508.21475">,</a></text>
+<text top="1031" left="124" width="551" height="13" font="5">In International Conference on Learning Representations, Rio de Janeiro, Brazil, May 2026.</text>
+<text top="1031" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">4</text>
+</page>
+<page number="5" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="691" height="13" font="5">22. Zirui Wu, Lin Zheng, Zhihui Xie, Jiacheng Ye, Jiahui Gao, Shansan Gong, Yansong Feng, Zhenguo Li, Wei Bi,</text>
+<text top="158" left="124" width="186" height="13" font="5">Guorui Zhou, Lingpeng Kong,</text>
+<text top="158" left="315" width="473" height="13" font="7"><a href="https://hkunlp.github.io/blog/2025/dreamon">DreamOn: Diffusion Language Models For Code Infilling Beyond Fixed-size</a></text>
+<text top="176" left="124" width="43" height="13" font="7"><a href="https://hkunlp.github.io/blog/2025/dreamon">Canvas</a></text>
+<text top="176" left="167" width="514" height="13" font="5"><a href="https://hkunlp.github.io/blog/2025/dreamon">, </a>In International Conference on Learning Representations, Rio de Janeiro, May 2026.</text>
+<text top="175" left="717" width="71" height="13" font="4">ICLR 2026</text>
+<text top="206" left="98" width="691" height="13" font="5">23. Shicheng Li, Lei Li, Kun Ouyang, Shuhuai Ren, Yuanxin Liu, Yuanxing Zhang, Fuzheng Zhang, Lingpeng</text>
+<text top="223" left="124" width="140" height="13" font="5">Kong, Qi Liu, Xu Sun ,</text>
+<text top="223" left="267" width="521" height="13" font="7"><a href="https://arxiv.org/abs/2503.16929">TEMPLE:Temporal Preference Learning of Video LLMs via Difficulty Scheduling and</a></text>
+<text top="241" left="124" width="118" height="13" font="7"><a href="https://arxiv.org/abs/2503.16929">Pre-SFT Alignment</a></text>
+<text top="241" left="242" width="469" height="13" font="5"><a href="https://arxiv.org/abs/2503.16929">, </a>In Proceedings of AAAI Conference on Artificial Intelligence, January 2026.</text>
+<text top="241" left="717" width="72" height="13" font="4">AAAI 2026</text>
+<text top="271" left="98" width="691" height="13" font="5">24. Sheng Wang, Pengan Chen, Jingqi Zhou, Qintong Li, Jingwei Dong, Jiahui Gao, Boyang Xue, Jiyue Jiang,</text>
+<text top="289" left="124" width="192" height="13" font="5">Lingpeng Kong, and Chuan Wu,</text>
+<text top="289" left="319" width="469" height="13" font="7"><a href="https://arxiv.org/abs/2503.17195">TreeSynth: Synthesizing Diverse Data from Scratch via Tree-Guided Subspace</a></text>
+<text top="307" left="124" width="70" height="13" font="7"><a href="https://arxiv.org/abs/2503.17195">Partitioning</a></text>
+<text top="307" left="194" width="562" height="13" font="5"><a href="https://arxiv.org/abs/2503.17195">, </a>In Advances in Neural Information Processing Systems, San Diego, CA, December 2025. [</text>
+<text top="307" left="756" width="32" height="13" font="7">Spot-</text>
+<text top="325" left="124" width="27" height="13" font="7">light</text>
+<text top="325" left="151" width="5" height="13" font="5">]</text>
+<text top="325" left="695" width="89" height="13" font="4">NeurIPS 2025</text>
+<text top="355" left="98" width="449" height="13" font="5">25. Xueliang Zhao, Wei Wu, Jian Guan, Qintong Li, and Lingpeng Kong,</text>
+<text top="355" left="551" width="238" height="13" font="7"><a href="https://neurips.cc/virtual/2025/poster/118067">DynaAct: Large Language Model Rea-</a></text>
+<text top="373" left="124" width="220" height="13" font="7"><a href="https://neurips.cc/virtual/2025/poster/118067">soning with Dynamic Action Spaces</a></text>
+<text top="373" left="344" width="445" height="13" font="5"><a href="https://neurips.cc/virtual/2025/poster/118067">, </a>In Advances in Neural Information Processing Systems, San Diego, CA,</text>
+<text top="391" left="124" width="99" height="13" font="5">December 2025.</text>
+<text top="391" left="699" width="89" height="13" font="4">NeurIPS 2025</text>
+<text top="421" left="98" width="691" height="13" font="5">26. Chenxin An, Zhihui Xie, Xiaonan Li, Ming Zhong, Shansan Gong, Lei Li, Jun Zhang, Jingjing Xu, Lingpeng</text>
+<text top="439" left="124" width="36" height="13" font="5">Kong,</text>
+<text top="439" left="165" width="485" height="13" font="7">Long Chain-of-Thought Fine-tuning via Understanding-to-Reasoning Transition</text>
+<text top="439" left="650" width="139" height="13" font="5">, In Proceedings of the</text>
+<text top="457" left="124" width="509" height="13" font="5">Conference on Empirical Methods in Natural Language Processing, November 2025.</text>
+<text top="456" left="701" width="88" height="13" font="4">EMNLP 2025</text>
+<text top="487" left="98" width="691" height="13" font="5">27. Jingqi Zhou, Sheng Wang, Jingwei Dong, Kai Liu, Lei Li, Jiahui Gao, Jiyue Jiang, Lingpeng Kong, and Chuan</text>
+<text top="504" left="124" width="25" height="13" font="5">Wu,</text>
+<text top="504" left="153" width="519" height="13" font="7"><a href="https://arxiv.org/abs/2410.14138">ProReason: Multi-Modal Proactive Reasoning with Decoupled Eyesight and Wisdom</a></text>
+<text top="504" left="673" width="116" height="13" font="5"><a href="https://arxiv.org/abs/2410.14138">, </a>In Proceedings of</text>
+<text top="522" left="124" width="531" height="13" font="5">the Conference on Empirical Methods in Natural Language Processing, November 2025.</text>
+<text top="522" left="701" width="88" height="13" font="4">EMNLP 2025</text>
+<text top="552" left="98" width="472" height="13" font="5">28. Juntao Zhao, Wenhao Lu, Sheng Wang, Lingpeng Kong, and Chuan Wu,</text>
+<text top="552" left="574" width="214" height="13" font="7"><a href="https://arxiv.org/abs/2410.11305">QSpec: Speculative Decoding with</a></text>
+<text top="570" left="124" width="238" height="13" font="7"><a href="https://arxiv.org/abs/2410.11305">Complementary Quantization Schemes</a></text>
+<text top="570" left="361" width="427" height="13" font="5"><a href="https://arxiv.org/abs/2410.11305">, </a>In Proceedings of the Conference on Empirical Methods in Natural</text>
+<text top="588" left="124" width="330" height="13" font="5">Language Processing, Suzhou, China, November 2025.</text>
+<text top="588" left="701" width="88" height="13" font="4">EMNLP 2025</text>
+<text top="618" left="98" width="691" height="13" font="5">29. Jing Xiong, Jianghan Shen, Fanghua Ye, Chaofan Tao, Zhongwei Wan, Jianqiao Lu, Xun Wu, Chuanyang</text>
+<text top="636" left="124" width="380" height="13" font="5">Zheng, Zhijiang Guo, Min Yang, Lingpeng Kong, Ngai Wong,</text>
+<text top="636" left="509" width="280" height="13" font="7"><a href="https://arxiv.org/abs/2410.03090">UNComp: Can Information Compression Un-</a></text>
+<text top="654" left="124" width="476" height="13" font="7"><a href="https://arxiv.org/abs/2410.03090">cover Sparsity? A Compressor Design from an Uncertainty-Aware Perspective</a></text>
+<text top="654" left="600" width="188" height="13" font="5"><a href="https://arxiv.org/abs/2410.03090">, </a>In Proceedings of the Confer-</text>
+<text top="672" left="124" width="563" height="13" font="5">ence on Empirical Methods in Natural Language Processing, Suzhou, China, November 2025.</text>
+<text top="672" left="691" width="88" height="13" font="4">EMNLP 2025</text>
+<text top="702" left="98" width="691" height="13" font="5">30. Jiyue Jiang, Alfred Kar Yin Truong, Yanyu Chen, Qinghang Bao, Sheng Wang, Pengan Chen, Jiuming Wang,</text>
+<text top="720" left="124" width="239" height="13" font="5">Lingpeng Kong, Yu Li, and Chuan Wu,</text>
+<text top="720" left="368" width="421" height="13" font="7"><a href="https://arxiv.org/abs/2503.03702">Developing and Utilizing a Large-Scale Cantonese Dataset for Multi-</a></text>
+<text top="738" left="124" width="212" height="13" font="7"><a href="https://arxiv.org/abs/2503.03702">Tasking in Large Language Models</a></text>
+<text top="738" left="336" width="452" height="13" font="5"><a href="https://arxiv.org/abs/2503.03702">, </a>In Findings of the Conference on Empirical Methods in Natural Language</text>
+<text top="756" left="124" width="268" height="13" font="5">Processing, Suzhou, China, November 2025.</text>
+<text top="755" left="641" width="147" height="13" font="4">EMNLP 2025 Findings</text>
+<text top="785" left="98" width="387" height="13" font="5">31. Zirui Wu, Xiao Liu, Jiayi Li, Lingpeng Kong, Yansong Feng,</text>
+<text top="785" left="488" width="300" height="13" font="7"><a href="https://arxiv.org/abs/2503.02238">Haste Makes Waste: Evaluating Planning Abilities</a></text>
+<text top="803" left="124" width="545" height="13" font="7"><a href="https://arxiv.org/abs/2503.02238">of LLMs for Efficient and Feasible Multitasking with Time Constraints Between Actions</a></text>
+<text top="803" left="669" width="119" height="13" font="5"><a href="https://arxiv.org/abs/2503.02238">, </a>In Findings of the</text>
+<text top="821" left="124" width="509" height="13" font="5">Conference on Empirical Methods in Natural Language Processing, November 2025.</text>
+<text top="821" left="641" width="147" height="13" font="4">EMNLP 2025 Findings</text>
+<text top="851" left="98" width="691" height="13" font="5">32. Linli Yao, Yicheng Li, Yuancheng Wei, Lei Li, Shuhuai Ren, Yuanxin Liu, Kun Ouyang, Lean Wang, Shicheng</text>
+<text top="869" left="124" width="397" height="13" font="5">Li, Sida Li, Lingpeng Kong, Qi Liu, Yuanxing Zhang, Xu Sun,</text>
+<text top="869" left="527" width="261" height="13" font="7"><a href="https://arxiv.org/abs/2504.17343">TimeChat-Online: 80% Visual Tokens are</a></text>
+<text top="887" left="124" width="249" height="13" font="7"><a href="https://arxiv.org/abs/2504.17343">Naturally Redundant in Streaming Videos</a></text>
+<text top="887" left="372" width="416" height="13" font="5"><a href="https://arxiv.org/abs/2504.17343">, </a>In Proceedings of the ACM International Conference on Multimedia,</text>
+<text top="905" left="124" width="184" height="13" font="5">Dublin, Ireland, October 2025.</text>
+<text top="905" left="692" width="97" height="13" font="4">ACMMM 2025</text>
+<text top="935" left="98" width="343" height="13" font="5">33. Xiachong Feng, Longxu Dou, and Lingpeng Kong,</text>
+<text top="935" left="446" width="342" height="13" font="7"><a href="https://arxiv.org/abs/2502.16940">Reasoning Does Not Necessarily Improve Role-Playing</a></text>
+<text top="953" left="124" width="42" height="13" font="7"><a href="https://arxiv.org/abs/2502.16940">Ability</a></text>
+<text top="953" left="166" width="622" height="13" font="5"><a href="https://arxiv.org/abs/2502.16940">, </a>In Proceedings of the Annual Meeting of the Association for Computational Linguistics, Vienna, Aus-</text>
+<text top="971" left="124" width="107" height="13" font="5">tria, August 2025.</text>
+<text top="971" left="665" width="123" height="13" font="4">ACL 2025 Findings</text>
+<text top="1001" left="98" width="350" height="13" font="5">34. Xueliang Zhao, Wei Wu, Jian Guan, Lingpeng Kong,</text>
+<text top="1001" left="452" width="336" height="13" font="7"><a href="https://arxiv.org/abs/2503.02324">PromptCoT: Synthesizing Olympiad-level Problems for</a></text>
+<text top="1019" left="124" width="315" height="13" font="7"><a href="https://arxiv.org/abs/2503.02324">Mathematical Reasoning in Large Language Models</a></text>
+<text top="1019" left="438" width="350" height="13" font="5"><a href="https://arxiv.org/abs/2503.02324">, </a>In Proceedings of the Annual Meeting of the Association</text>
+<text top="1036" left="124" width="369" height="13" font="5">for Computational Linguistics, Vienna, Austria, August 2025.</text>
+<text top="1036" left="665" width="124" height="13" font="4">ACL 2025 Findings</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">5</text>
+</page>
+<page number="6" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="691" height="13" font="5">35. Lei Huang, Xiaocheng Feng, Weitao Ma, Yuchun Fan, Xiachong Feng, Yuxuan Gu, Yangfan Ye, Liang Zhao,</text>
+<text top="158" left="124" width="665" height="13" font="5">Weihong Zhong, Baoxin Wang, Dayong Wu, Guoping Hu, Lingpeng Kong, Tong Xiao, Ting Liu, Bing Qin,</text>
+<text top="176" left="124" width="665" height="13" font="7"><a href="todo.pdf">Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention</a></text>
+<text top="194" left="124" width="54" height="13" font="7"><a href="todo.pdf">Learning</a></text>
+<text top="194" left="178" width="611" height="13" font="5"><a href="todo.pdf">, </a>In Proceedings of the Annual Meeting of the Association for Computational Linguistics, Vienna,</text>
+<text top="212" left="124" width="132" height="13" font="5">Austria, August 2025.</text>
+<text top="211" left="724" width="64" height="13" font="4">ACL 2025</text>
+<text top="241" left="98" width="520" height="13" font="5">36. Zhihui Xie, Jie chen, Liyu Chen, Weichao Mao, Jingjing Xu, and Lingpeng Kong,</text>
+<text top="241" left="622" width="166" height="13" font="7"><a href="https://arxiv.org/abs/2502.03492">Teaching Language Models</a></text>
+<text top="259" left="124" width="238" height="13" font="7"><a href="https://arxiv.org/abs/2502.03492">to Critique via Reinforcement Learning</a></text>
+<text top="259" left="362" width="427" height="13" font="5"><a href="https://arxiv.org/abs/2502.03492">, </a>In Proceedings of the International Conference on Machine Learning,</text>
+<text top="277" left="124" width="185" height="13" font="5">Vancouver, Canada, July 2025.</text>
+<text top="277" left="714" width="74" height="13" font="4">ICML 2025</text>
+<text top="307" left="98" width="691" height="13" font="5">37. Jing Xiong, Jianghan Shen, Chuanyang Zheng, Zhongwei Wan, Chenyang Zhao, Chiwun Yang, Fanghua Ye,</text>
+<text top="325" left="124" width="293" height="13" font="5">Hongxia Yang, Lingpeng Kong, and Ngai Wong,</text>
+<text top="325" left="421" width="368" height="13" font="7"><a href="https://arxiv.org/abs/2502.14317">ParallelComp: Parallel Long-Context Compressor for Length</a></text>
+<text top="343" left="124" width="81" height="13" font="7"><a href="https://arxiv.org/abs/2502.14317">Extrapolation</a></text>
+<text top="343" left="205" width="583" height="13" font="5"><a href="https://arxiv.org/abs/2502.14317">, </a>In Proceedings of the International Conference on Machine Learning, Vancouver, Canada, July</text>
+<text top="361" left="124" width="34" height="13" font="5">2025.</text>
+<text top="361" left="714" width="74" height="13" font="4">ICML 2025</text>
+<text top="391" left="98" width="691" height="13" font="5">38. Lei Li, Yuancheng Wei, Zhihui Xie, Xuqing Yang, Yifan Song, Peiyi Wang, Chenxin An, Tianyu Liu, Sujian Li,</text>
+<text top="409" left="124" width="251" height="13" font="5">Bill Yuchen Lin, Lingpeng Kong, Qi Liu,</text>
+<text top="409" left="379" width="409" height="13" font="7"><a href="https://arxiv.org/abs/2411.17451">VL-RewardBench: A Challenging Benchmark for Vision-Language</a></text>
+<text top="427" left="124" width="166" height="13" font="7"><a href="https://arxiv.org/abs/2411.17451">Generative Reward Models</a></text>
+<text top="427" left="290" width="499" height="13" font="5"><a href="https://arxiv.org/abs/2411.17451">, </a>In Proceedings of the Conference on Computer Vision and Pattern Recognition,</text>
+<text top="445" left="124" width="167" height="13" font="5">Nashville, TN, June 2025. [</text>
+<text top="445" left="290" width="57" height="13" font="7">Highlight</text>
+<text top="445" left="348" width="5" height="13" font="5">]</text>
+<text top="444" left="713" width="75" height="13" font="4">CVPR 2025</text>
+<text top="475" left="98" width="436" height="13" font="5">39. Zhihui Xie, Jiahui Gao, Lei Li, Zhenguo Li, Qi Liu, Lingpeng Kong,</text>
+<text top="475" left="537" width="251" height="13" font="7"><a href="https://arxiv.org/abs/2406.14393">Jailbreaking as a Reward Misspecification</a></text>
+<text top="492" left="124" width="51" height="13" font="7"><a href="https://arxiv.org/abs/2406.14393">Problem</a></text>
+<text top="492" left="174" width="493" height="13" font="5"><a href="https://arxiv.org/abs/2406.14393">, </a>In International Conference on Learning Representations, Singapore, April 2025.</text>
+<text top="492" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="522" left="98" width="691" height="13" font="5">40. Lei Li, Yuanxin Liu, Linli Yao, Peiyuan Zhang, Chenxin An, Lean Wang, Xu Sun, Lingpeng Kong, and Qi Liu,</text>
+<text top="540" left="124" width="301" height="13" font="7"><a href="https://arxiv.org/abs/2410.06166">Temporal Reasoning Transfer from Text to Video</a></text>
+<text top="540" left="430" width="358" height="13" font="5"><a href="https://arxiv.org/abs/2410.06166">, </a>In International Conference on Learning Representations,</text>
+<text top="558" left="124" width="137" height="13" font="5">Singapore, April 2025.</text>
+<text top="558" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="588" left="98" width="691" height="13" font="5">41. Sheng Wang, Liheng Chen, Pengan Chen, Jingwei Dong, Boyang Xue, Jiyue Jiang, Lingpeng Kong, Chuan</text>
+<text top="606" left="124" width="25" height="13" font="5">Wu,</text>
+<text top="606" left="153" width="535" height="13" font="7"><a href="https://arxiv.org/abs/2410.00938">MoS: Unleashing Parameter Efficiency of Low-Rank Adaptation with Mixture of Shards</a></text>
+<text top="606" left="687" width="101" height="13" font="5"><a href="https://arxiv.org/abs/2410.00938">, </a>In International</text>
+<text top="624" left="124" width="389" height="13" font="5">Conference on Learning Representations, Singapore, April 2025.</text>
+<text top="624" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="654" left="98" width="470" height="13" font="5">42. Chang Ma, Haiteng Zhao, Junlei Zhang, Junxian He, and Lingpeng Kong,</text>
+<text top="654" left="572" width="217" height="13" font="7"><a href="https://arxiv.org/abs/2410.17195">Language Model Non-Myopic Gen-</a></text>
+<text top="672" left="124" width="210" height="13" font="7"><a href="https://arxiv.org/abs/2410.17195">eration for Reasoning and Planning</a></text>
+<text top="672" left="337" width="452" height="13" font="5"><a href="https://arxiv.org/abs/2410.17195">, </a>In International Conference on Learning Representations, Singapore, April</text>
+<text top="690" left="124" width="34" height="13" font="5">2025.</text>
+<text top="690" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="720" left="98" width="589" height="13" font="5">43. Jiacheng Ye, Jiahui Gao, Shansan Gong, Lin Zheng, Xin Jiang, Zhenguo Li, Lingpeng Kong,</text>
+<text top="720" left="691" width="97" height="13" font="7"><a href="https://arxiv.org/abs/2410.14157">Beyond Autore-</a></text>
+<text top="738" left="124" width="408" height="13" font="7"><a href="https://arxiv.org/abs/2410.14157">gression: Discrete Diffusion for Complex Reasoning and Planning</a></text>
+<text top="738" left="532" width="256" height="13" font="5"><a href="https://arxiv.org/abs/2410.14157">, </a>In International Conference on Learning</text>
+<text top="756" left="124" width="240" height="13" font="5">Representations, Singapore, April 2025.</text>
+<text top="755" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="785" left="98" width="593" height="13" font="5">44. Jiacheng Ye, Zhenyu Wu, Jiahui Gao, Zhiyong Wu, Xin Jiang, Zhenguo Li, Lingpeng Kong,</text>
+<text top="785" left="696" width="93" height="13" font="7"><a href="https://openreview.net/forum?id=A9y3LFX4ds">Implicit Search</a></text>
+<text top="803" left="124" width="247" height="13" font="7"><a href="https://openreview.net/forum?id=A9y3LFX4ds">via Discrete Diffusion: A Study on Chess</a></text>
+<text top="803" left="371" width="418" height="13" font="5"><a href="https://openreview.net/forum?id=A9y3LFX4ds">, </a>In International Conference on Learning Representations, Singapore,</text>
+<text top="821" left="124" width="69" height="13" font="5">April 2025.</text>
+<text top="821" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="851" left="98" width="691" height="13" font="5">45. Jiahui Gao, Renjie Pi, Jipeng Zhang, Jiacheng Ye, Wanjun Zhong, Yufei Wang, Lanqing Hong, Jianhua Han,</text>
+<text top="869" left="124" width="268" height="13" font="5">Hang Xu, Zhenguo Li, and Lingpeng Kong,</text>
+<text top="869" left="397" width="391" height="13" font="7"><a href="https://arxiv.org/abs/2312.11370">G-LLaVA: Solving Geometric Problem with Multi-Modal Large</a></text>
+<text top="887" left="124" width="102" height="13" font="7"><a href="https://arxiv.org/abs/2312.11370">Language Model</a></text>
+<text top="887" left="225" width="492" height="13" font="5"><a href="https://arxiv.org/abs/2312.11370">, </a>In International Conference on Learning Representations, Singapore, April 2025.</text>
+<text top="887" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="917" left="98" width="625" height="13" font="5">46. Chenxin An, Jun Zhang, Ming Zhong, Lei Li, Shansan Gong, Yao Luo, Jingjing Xu, Lingpeng Kong,</text>
+<text top="917" left="725" width="63" height="13" font="7"><a href="https://arxiv.org/abs/2410.18745">Why Does</a></text>
+<text top="935" left="124" width="306" height="13" font="7"><a href="https://arxiv.org/abs/2410.18745">the Effective Context Length of LLMs Fall Short?</a></text>
+<text top="935" left="430" width="358" height="13" font="5"><a href="https://arxiv.org/abs/2410.18745">, </a>In International Conference on Learning Representations,</text>
+<text top="953" left="124" width="137" height="13" font="5">Singapore, April 2025.</text>
+<text top="953" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="983" left="98" width="691" height="13" font="5">47. Shansan Gong, Shivam Agarwal, Yizhe Zhang, Jiacheng Ye, Lin Zheng, Mukai Li, Chenxin An, Peilin</text>
+<text top="1001" left="124" width="368" height="13" font="5">Zhao, Wei Bi, Jiawei Han, Hao Peng, and Lingpeng Kong,</text>
+<text top="1001" left="499" width="289" height="13" font="7"><a href="https://arxiv.org/abs/2410.17891">Scaling Diffusion Language Models via Adapta-</a></text>
+<text top="1019" left="124" width="199" height="13" font="7"><a href="https://arxiv.org/abs/2410.17891">tion from Autoregressive Models</a></text>
+<text top="1019" left="322" width="466" height="13" font="5"><a href="https://arxiv.org/abs/2410.17891">, </a>In International Conference on Learning Representations, Singapore, April</text>
+<text top="1036" left="124" width="34" height="13" font="5">2025.</text>
+<text top="1036" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">6</text>
+</page>
+<page number="7" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="691" height="13" font="5">48. Qintong Li, Jiahui Gao, Sheng Wang, Renjie Pi, Xueliang Zhao, Chuan Wu, Xin Jiang, Zhenguo Li, Lingpeng</text>
+<text top="158" left="124" width="36" height="13" font="5">Kong,</text>
+<text top="158" left="166" width="600" height="13" font="7"><a href="https://openreview.net/forum?id=yitH9xAHQs">Forewarned is Forearmed: Harnessing LLMs for Data Synthesis via Failure-induced Exploration</a></text>
+<text top="158" left="766" width="22" height="13" font="5"><a href="https://openreview.net/forum?id=yitH9xAHQs">, </a>In</text>
+<text top="176" left="124" width="469" height="13" font="5">International Conference on Learning Representations, Singapore, April 2025.</text>
+<text top="175" left="717" width="71" height="13" font="4">ICLR 2025</text>
+<text top="206" left="98" width="378" height="13" font="5">49. Xijia Tao, Shuai Zhong, Lei Li, Qi Liu, Lingpeng Kong,</text>
+<text top="206" left="482" width="307" height="13" font="7"><a href="https://arxiv.org/abs/2403.02910">ImgTrojan: Jailbreaking Vision-Language Models</a></text>
+<text top="223" left="124" width="106" height="13" font="7"><a href="https://arxiv.org/abs/2403.02910">with ONE Image</a></text>
+<text top="223" left="230" width="559" height="13" font="5"><a href="https://arxiv.org/abs/2403.02910">, </a>In Proceedings of the Conference of the North American Chapter of the Association for</text>
+<text top="241" left="124" width="405" height="13" font="5">Computational Linguistics, Albuquerque, New Mexico, April 2025.</text>
+<text top="241" left="703" width="86" height="13" font="4">NAACL 2025</text>
+<text top="271" left="98" width="366" height="13" font="5">50. Zhiheng Lyu, Kevin Yang, Lingpeng Kong, Daniel Klein,</text>
+<text top="271" left="466" width="322" height="13" font="7"><a href="https://arxiv.org/abs/2407.16347">FactTrack: Time-Aware World State Tracking in Story</a></text>
+<text top="289" left="124" width="51" height="13" font="7"><a href="https://arxiv.org/abs/2407.16347">Outlines</a></text>
+<text top="289" left="174" width="614" height="13" font="5"><a href="https://arxiv.org/abs/2407.16347">, </a>In Proceedings of the Conference of the North American Chapter of the Association for Computational</text>
+<text top="307" left="124" width="312" height="13" font="5">Linguistics, Albuquerque, New Mexico, April 2025.</text>
+<text top="307" left="703" width="86" height="13" font="4">NAACL 2025</text>
+<text top="337" left="98" width="691" height="13" font="5">51. Jiyue Jiang, Pengan Chen, Liheng Chen, Sheng Wang, Qinghang Bao, Lingpeng Kong, Yu Li, Chuan Wu,</text>
+<text top="355" left="124" width="645" height="13" font="7"><a href="https://arxiv.org/abs/2408.16756">How Well Do LLMs Handle Cantonese? Benchmarking Cantonese Capabilities of Large Language Models</a></text>
+<text top="355" left="768" width="20" height="13" font="5"><a href="https://arxiv.org/abs/2408.16756">, </a>In</text>
+<text top="373" left="124" width="665" height="13" font="5">Findings of the Conference of the North American Chapter of the Association for Computational Linguistics,</text>
+<text top="391" left="124" width="239" height="13" font="5">Albuquerque, New Mexico, April 2025.</text>
+<text top="391" left="643" width="145" height="13" font="4">NAACL 2025 Findings</text>
+<text top="421" left="98" width="691" height="13" font="5">52. Jiacheng Ye*, Shansan Gong*, Liheng Chen*, Lin Zheng, Jiahui Gao, Han Shi, Chuan Wu, Xin Jiang, Zhenguo</text>
+<text top="439" left="124" width="199" height="13" font="5">Li, Wei Bi, and Lingpeng Kong,</text>
+<text top="439" left="328" width="460" height="13" font="7"><a href="https://arxiv.org/abs/2402.07754">Diffusion of Thought: Chain-of-Thought Reasoning in Diffusion Language</a></text>
+<text top="457" left="124" width="45" height="13" font="7"><a href="https://arxiv.org/abs/2402.07754">Models</a></text>
+<text top="457" left="169" width="516" height="13" font="5"><a href="https://arxiv.org/abs/2402.07754">, </a>In Advances in Neural Information Processing Systems, Vancouver, December 2024.</text>
+<text top="456" left="699" width="89" height="13" font="4">NeurIPS 2024</text>
+<text top="487" left="98" width="691" height="13" font="5">53. Chang Ma, Junlei Zhang, Zhihao Zhu, Cheng Yang, Yujiu Yang, Yaohui Jin, Zhenzhong Lan, Lingpeng Kong,</text>
+<text top="504" left="124" width="100" height="13" font="5">and Junxian He,</text>
+<text top="504" left="230" width="455" height="13" font="7"><a href="https://arxiv.org/abs/2401.13178">AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents</a></text>
+<text top="504" left="685" width="104" height="13" font="5"><a href="https://arxiv.org/abs/2401.13178">, </a>In Advances in</text>
+<text top="522" left="124" width="424" height="13" font="5">Neural Information Processing Systems, Vancouver, December 2024. [</text>
+<text top="522" left="548" width="27" height="13" font="7">Oral</text>
+<text top="522" left="575" width="5" height="13" font="5">]</text>
+<text top="522" left="699" width="89" height="13" font="4">NeurIPS 2024</text>
+<text top="552" left="98" width="691" height="13" font="5">54. Chang Ma, Haiteng Zhao, Lin Zheng, Jiayi Xin, Qintong Li, Lijun Wu, Zhihong Deng, Yang Young Lu, Qi Liu,</text>
+<text top="570" left="124" width="209" height="13" font="5">Sheng Wang, and Lingpeng Kong,</text>
+<text top="570" left="337" width="431" height="13" font="7"><a href="https://www.biorxiv.org/content/10.1101/2023.02.22.529597v3">Retrieved Sequence Augmentation for Protein Representation Learning</a></text>
+<text top="570" left="768" width="21" height="13" font="5"><a href="https://www.biorxiv.org/content/10.1101/2023.02.22.529597v3">, </a>In</text>
+<text top="588" left="124" width="665" height="13" font="5">Proceedings of the Conference on Empirical Methods in Natural Language Processing, Miami, Florida, Novem-</text>
+<text top="606" left="124" width="56" height="13" font="5">ber 2024.</text>
+<text top="606" left="702" width="87" height="13" font="4">EMNLP 2024</text>
+<text top="636" left="98" width="691" height="13" font="5">55. Lei Li, Zhihui Xie, Mukai Li, Shunian Chen, Peiyi Wang, Liang Chen, Yazheng Yang, Benyou Wang, Ling-</text>
+<text top="654" left="124" width="142" height="13" font="5">peng Kong, and Qi Liu,</text>
+<text top="654" left="270" width="518" height="13" font="7"><a href="https://arxiv.org/abs/2312.10665">VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models</a></text>
+<text top="672" left="124" width="64" height="13" font="7"><a href="https://arxiv.org/abs/2312.10665">Alignment</a></text>
+<text top="672" left="188" width="601" height="13" font="5"><a href="https://arxiv.org/abs/2312.10665">, </a>In Proceedings of the Conference on Empirical Methods in Natural Language Processing, Miami,</text>
+<text top="690" left="124" width="151" height="13" font="5">Florida, November 2024.</text>
+<text top="690" left="701" width="88" height="13" font="4">EMNLP 2024</text>
+<text top="720" left="98" width="691" height="13" font="5">56. Haiteng Zhao, Chang Ma, Guoyin Wang, Jing Su, Lingpeng Kong, Jingjing Xu, Zhi-Hong Deng, Hongxia</text>
+<text top="738" left="124" width="35" height="13" font="5">Yang,</text>
+<text top="738" left="162" width="419" height="13" font="7"><a href="https://arxiv.org/abs/2402.15809">Empowering Large Language Model Agents through Action Learning</a></text>
+<text top="738" left="581" width="207" height="13" font="5"><a href="https://arxiv.org/abs/2402.15809">, </a>In Proceedings of the Conference</text>
+<text top="756" left="124" width="401" height="13" font="5">on Language Modeling, Philadelphia, Pennsylvania, October 2024.</text>
+<text top="755" left="708" width="80" height="13" font="4">COLM 2024</text>
+<text top="785" left="98" width="521" height="13" font="5">57. Qiushi Sun, Zhangyue Yin, Xiang Li, Zhiyong Wu, Xipeng Qiu, Lingpeng Kong ,</text>
+<text top="785" left="623" width="165" height="13" font="7"><a href="https://arxiv.org/abs/2310.00280">Corex: Pushing the Bound-</a></text>
+<text top="803" left="124" width="382" height="13" font="7"><a href="https://arxiv.org/abs/2310.00280">aries of Complex Reasoning through Multi-Model Collaboration</a></text>
+<text top="803" left="505" width="283" height="13" font="5"><a href="https://arxiv.org/abs/2310.00280">, </a>In Proceedings of the Conference on Language</text>
+<text top="821" left="124" width="320" height="13" font="5">Modeling, Philadelphia, Pennsylvania, October 2024.</text>
+<text top="821" left="708" width="80" height="13" font="4">COLM 2024</text>
+<text top="851" left="98" width="645" height="13" font="5">58. Jiahui Gao, Renjie Pi, Tianyang Han, Han Wu, Lanqing Hong, Lingpeng Kong, Xin Jiang, Zhenguo Li,</text>
+<text top="851" left="746" width="42" height="13" font="7">CoCA:</text>
+<text top="869" left="124" width="612" height="13" font="7">Regaining Safety-awareness of Multimodal Large Language Models with Constitutional Calibration</text>
+<text top="869" left="736" width="53" height="13" font="5">, In Pro-</text>
+<text top="887" left="124" width="567" height="13" font="5">ceedings of the Conference on Language Modeling, Philadelphia, Pennsylvania, October 2024.</text>
+<text top="887" left="708" width="80" height="13" font="4">COLM 2024</text>
+<text top="917" left="98" width="326" height="13" font="5">59. Lin Zheng, Jianbo Yuan, Lei Yu, Lingpeng Kong,</text>
+<text top="917" left="428" width="361" height="13" font="7"><a href="https://arxiv.org/abs/2302.05737">A Reparameterized Discrete Diffusion Model for Text Gen-</a></text>
+<text top="935" left="124" width="41" height="13" font="7"><a href="https://arxiv.org/abs/2302.05737">eration</a></text>
+<text top="935" left="165" width="623" height="13" font="5"><a href="https://arxiv.org/abs/2302.05737">, </a>In Proceedings of the Conference on Language Modeling, Philadelphia, Pennsylvania, October 2024.</text>
+<text top="953" left="124" width="5" height="13" font="5"><a href="https://github.com/HKUNLP/reparam-discrete-diffusion">[</a></text>
+<text top="953" left="129" width="45" height="13" font="7"><a href="https://github.com/HKUNLP/reparam-discrete-diffusion">GitHub</a></text>
+<text top="953" left="174" width="5" height="13" font="5"><a href="https://github.com/HKUNLP/reparam-discrete-diffusion">]</a></text>
+<text top="953" left="708" width="80" height="13" font="4">COLM 2024</text>
+<text top="983" left="98" width="570" height="13" font="5">60. Lei Li, Yuqi Wang, Runxin Xu, Peiyi Wang, Xiachong Feng, Lingpeng Kong, and Qi Liu,</text>
+<text top="983" left="672" width="117" height="13" font="7"><a href="https://arxiv.org/abs/2403.00231">Multimodal ArXiv:</a></text>
+<text top="1001" left="124" width="525" height="13" font="7"><a href="https://arxiv.org/abs/2403.00231">A Dataset for Improving Scientific Comprehension of Large Vision-Language Models</a></text>
+<text top="1001" left="649" width="140" height="13" font="5"><a href="https://arxiv.org/abs/2403.00231">, </a>In Proceedings of the</text>
+<text top="1019" left="124" width="543" height="13" font="5">Annual Meeting of the Association for Computational Linguistics, Thailand, August 2024.</text>
+<text top="1018" left="724" width="64" height="13" font="4">ACL 2024</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">7</text>
+</page>
+<page number="8" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="691" height="13" font="5">61. Chenxin An, Shansan Gong, Ming Zhong, Xingjian Zhao, Mukai Li, Jun Zhang, Lingpeng Kong, and Xipeng</text>
+<text top="158" left="124" width="26" height="13" font="5">Qiu,</text>
+<text top="158" left="155" width="492" height="13" font="7"><a href="https://arxiv.org/abs/2307.11088">L-Eval: Instituting Standardized Evaluation for Long Context Language Models</a></text>
+<text top="158" left="648" width="141" height="13" font="5"><a href="https://arxiv.org/abs/2307.11088">, </a>In Proceedings of the</text>
+<text top="176" left="124" width="554" height="13" font="5">Annual Meeting of the Association for Computational Linguistics, Thailand, August 2024. [</text>
+<text top="176" left="678" width="111" height="13" font="7">Outstanding Paper</text>
+<text top="194" left="124" width="39" height="13" font="7">Award</text>
+<text top="194" left="163" width="5" height="13" font="5">]</text>
+<text top="193" left="724" width="64" height="13" font="4">ACL 2024</text>
+<text top="223" left="98" width="620" height="13" font="5">62. Sheng Wang, Boyang Xue, Jiacheng Ye, Jiyue Jiang, Liheng Chen, Lingpeng Kong, and Chuan Wu,</text>
+<text top="223" left="721" width="67" height="13" font="7"><a href="https://arxiv.org/abs/2402.16902">PRoLoRA:</a></text>
+<text top="241" left="124" width="356" height="13" font="7"><a href="https://arxiv.org/abs/2402.16902">Partial Rotation Empowers More Parameter-Efficient LoRA</a></text>
+<text top="241" left="480" width="309" height="13" font="5"><a href="https://arxiv.org/abs/2402.16902">, </a>In Proceedings of the Annual Meeting of the Asso-</text>
+<text top="259" left="124" width="373" height="13" font="5">ciation for Computational Linguistics, Thailand, August 2024.</text>
+<text top="259" left="723" width="64" height="13" font="4">ACL 2024</text>
+<text top="289" left="98" width="438" height="13" font="5">63. Qintong Li, Leyang Cui, Xueliang Zhao, Lingpeng Kong, and Wei Bi,</text>
+<text top="289" left="538" width="250" height="13" font="7"><a href="https://arxiv.org/abs/2402.19255">GSM-Plus: A Comprehensive Benchmark</a></text>
+<text top="307" left="124" width="433" height="13" font="7"><a href="https://arxiv.org/abs/2402.19255">for Evaluating the Robustness of LLMs as Mathematical Problem Solvers</a></text>
+<text top="307" left="557" width="231" height="13" font="5"><a href="https://arxiv.org/abs/2402.19255">, </a>In Proceedings of the Annual Meeting</text>
+<text top="325" left="124" width="441" height="13" font="5">of the Association for Computational Linguistics, Thailand, August 2024.</text>
+<text top="325" left="724" width="64" height="13" font="4">ACL 2024</text>
+<text top="355" left="98" width="554" height="13" font="5">64. Sheng Wang, Liheng Chen, Jiyue Jiang, Boyang Xue, Lingpeng Kong, and Chuan Wu,</text>
+<text top="355" left="656" width="133" height="13" font="7"><a href="https://arxiv.org/abs/2403.00812">LoRA Meets Dropout</a></text>
+<text top="373" left="124" width="166" height="13" font="7"><a href="https://arxiv.org/abs/2403.00812">under a Unified Framework</a></text>
+<text top="373" left="290" width="499" height="13" font="5"><a href="https://arxiv.org/abs/2403.00812">, </a>In Findings of the Annual Meeting of the Association for Computational Linguis-</text>
+<text top="391" left="124" width="169" height="13" font="5">tics, Thailand, August 2024.</text>
+<text top="391" left="664" width="124" height="13" font="4">ACL 2024 Findings</text>
+<text top="421" left="98" width="499" height="13" font="5">65. Yudong Wang, Chang Ma, Qingxiu Dong, Lingpeng Kong, and Jingjing Xu,</text>
+<text top="421" left="602" width="186" height="13" font="7"><a href="https://arxiv.org/abs/2303.03840">A Challenging Benchmark for</a></text>
+<text top="439" left="124" width="146" height="13" font="7"><a href="https://arxiv.org/abs/2303.03840">Low-Resource Learning</a></text>
+<text top="439" left="269" width="519" height="13" font="5"><a href="https://arxiv.org/abs/2303.03840">, </a>In Findings of the Annual Meeting of the Association for Computational Linguistics,</text>
+<text top="457" left="124" width="141" height="13" font="5">Thailand, August 2024.</text>
+<text top="456" left="665" width="124" height="13" font="4">ACL 2024 Findings</text>
+<text top="487" left="98" width="410" height="13" font="5">66. Xueliang Zhao, Xinting Huang, Wei Bi, and Lingpeng Kong,</text>
+<text top="487" left="514" width="275" height="13" font="7"><a href="https://arxiv.org/abs/2310.12960">SEGO: Sequential Subgoal Optimization for</a></text>
+<text top="504" left="124" width="189" height="13" font="7"><a href="https://arxiv.org/abs/2310.12960">Mathematical Problem-Solving</a></text>
+<text top="504" left="313" width="475" height="13" font="5"><a href="https://arxiv.org/abs/2310.12960">, </a>In Proceedings of the Annual Meeting of the Association for Computational</text>
+<text top="522" left="124" width="215" height="13" font="5">Linguistics, Thailand, August 2024.</text>
+<text top="522" left="724" width="64" height="13" font="4">ACL 2024</text>
+<text top="552" left="98" width="691" height="13" font="5">67. Xueliang Zhao, Xinting Huang, Tingchen Fu, Qintong Li, Shansan Gong, Lemao Liu, Wei Bi, and Lingpeng</text>
+<text top="570" left="124" width="36" height="13" font="5">Kong,</text>
+<text top="570" left="164" width="545" height="13" font="7"><a href="https://arxiv.org/abs/2402.13577">BBA: Bi-Modal Behavioral Alignment for Reasoning with Large Vision-Language Models</a></text>
+<text top="570" left="712" width="76" height="13" font="5"><a href="https://arxiv.org/abs/2402.13577">, </a>In Findings</text>
+<text top="588" left="124" width="520" height="13" font="5">of the Annual Meeting of the Association for Computational Linguistics, August 2024.</text>
+<text top="588" left="665" width="124" height="13" font="4">ACL 2024 Findings</text>
+<text top="618" left="98" width="691" height="13" font="5">68. Peiyi Wang, Lei Li, Liang Chen, Zefan Cai, Dawei Zhu, Binghuai Lin, Yunbo Cao, Lingpeng Kong, Qi Liu,</text>
+<text top="636" left="124" width="178" height="13" font="5">Tianyu Liu, and Zhifang Sui,</text>
+<text top="636" left="307" width="292" height="13" font="7"><a href="https://arxiv.org/abs/2305.17926">Large Language Models are not Fair Evaluators</a></text>
+<text top="636" left="600" width="189" height="13" font="5"><a href="https://arxiv.org/abs/2305.17926">, </a>In Proceedings of the Annual</text>
+<text top="654" left="124" width="495" height="13" font="5">Meeting of the Association for Computational Linguistics, Thailand, August 2024.</text>
+<text top="654" left="724" width="64" height="13" font="4">ACL 2024</text>
+<text top="684" left="98" width="478" height="13" font="5">69. Lin Zheng, Jianbo Yuan, Zhi Zhang, Hongxia Yang, and Lingpeng Kong,</text>
+<text top="684" left="581" width="185" height="13" font="7"><a href="https://arxiv.org/abs/2311.17972">Self-Infilling Code Generation</a></text>
+<text top="684" left="767" width="22" height="13" font="5"><a href="https://arxiv.org/abs/2311.17972">, </a>In</text>
+<text top="702" left="124" width="567" height="13" font="5">Proceedings of the International Conference on Machine Learning, Vienna, Austria, July 2024.</text>
+<text top="702" left="714" width="74" height="13" font="4">ICML 2024</text>
+<text top="732" left="98" width="631" height="13" font="5">70. Chenxin An, Fei Huang, Jun Zhang, Shansan Gong, Xipeng Qiu, Chang Zhou, and Lingpeng Kong,</text>
+<text top="732" left="732" width="56" height="13" font="7"><a href="https://arxiv.org/abs/2402.17463">Training-</a></text>
+<text top="750" left="124" width="329" height="13" font="7"><a href="https://arxiv.org/abs/2402.17463">Free Long-Context Scaling of Large Language Models</a></text>
+<text top="750" left="453" width="336" height="13" font="5"><a href="https://arxiv.org/abs/2402.17463">, </a>In Proceedings of the International Conference on Ma-</text>
+<text top="767" left="124" width="259" height="13" font="5">chine Learning, Vienna, Austria, July 2024.</text>
+<text top="767" left="715" width="74" height="13" font="4">ICML 2024</text>
+<text top="797" left="98" width="327" height="13" font="5">71. Xueliang Zhao, Wenda Li, and Lingpeng Kong,</text>
+<text top="797" left="432" width="357" height="13" font="7"><a href="https://arxiv.org/abs/2305.16366">Decomposing the Enigma: Subgoal-based Demonstration</a></text>
+<text top="815" left="124" width="234" height="13" font="7"><a href="https://arxiv.org/abs/2305.16366">Learning for Formal Theorem Proving</a></text>
+<text top="815" left="357" width="431" height="13" font="5"><a href="https://arxiv.org/abs/2305.16366">, </a>In Proceedings of the International Conference on Machine Learning,</text>
+<text top="833" left="124" width="163" height="13" font="5">Vienna, Austria, July 2024.</text>
+<text top="833" left="714" width="74" height="13" font="4">ICML 2024</text>
+<text top="863" left="98" width="691" height="13" font="5">72. Wenhao Zhu, Hongyi Liu, Qingxiu Dong, Jingjing Xu, Lingpeng Kong, Jiajun Chen, Lei Li, and Shujian Huang,</text>
+<text top="881" left="124" width="585" height="13" font="7"><a href="https://arxiv.org/abs/2304.04675">Multilingual Machine Translation with Large Language Models: Empirical Results and Analysis</a></text>
+<text top="881" left="709" width="79" height="13" font="5"><a href="https://arxiv.org/abs/2304.04675">. </a>In Findings</text>
+<text top="899" left="124" width="665" height="13" font="5">of the Conference of the North American Chapter of the Association for Computational Linguistics, Mexico</text>
+<text top="917" left="124" width="150" height="13" font="5">City, Mexico, June 2024.</text>
+<text top="917" left="643" width="145" height="13" font="4">NAACL 2024 Findings</text>
+<text top="947" left="98" width="691" height="13" font="5">73. Yiheng Xu*, Hongjin Su*, Chen Xing*, Boyu Mi, Qian Liu, Weijia Shi, Binyuan Hui, Fan Zhou, Yitao Liu,</text>
+<text top="965" left="124" width="617" height="13" font="5">Tianbao Xie, Zhoujun Cheng, Siheng Zhao, Lingpeng Kong, Bailin Wang, Caiming Xiong, and Tao Yu,</text>
+<text top="965" left="744" width="44" height="13" font="7"><a href="https://arxiv.org/abs/2310.06830">Lemur:</a></text>
+<text top="983" left="124" width="375" height="13" font="7"><a href="https://arxiv.org/abs/2310.06830">Harmonizing Natural Language and Code for Language Agents</a></text>
+<text top="983" left="499" width="289" height="13" font="5"><a href="https://arxiv.org/abs/2310.06830">, </a>In International Conference on Learning Repre-</text>
+<text top="1001" left="124" width="235" height="13" font="5">sentations,Vienna Austria, May 2024. [</text>
+<text top="1001" left="359" width="55" height="13" font="7">Spotlight</text>
+<text top="1001" left="414" width="5" height="13" font="5">]</text>
+<text top="1000" left="712" width="71" height="13" font="4">ICLR 2024</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">8</text>
+</page>
+<page number="9" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="520" height="13" font="5">74. Lei Li, Jingjing Xu, Qingxiu Dong, Ce Zheng, Qi Liu, Lingpeng Kong, Xu Sun,</text>
+<text top="140" left="623" width="166" height="13" font="7"><a href="https://arxiv.org/abs/2305.14057">Can Language Models Un-</a></text>
+<text top="158" left="124" width="174" height="13" font="7"><a href="https://arxiv.org/abs/2305.14057">derstand Physical Concepts?</a></text>
+<text top="158" left="298" width="490" height="13" font="5"><a href="https://arxiv.org/abs/2305.14057">, </a>In Proceedings of the Conference on Empirical Methods in Natural Language</text>
+<text top="176" left="124" width="239" height="13" font="5">Processing, Singapore, December 2023.</text>
+<text top="175" left="701" width="88" height="13" font="4">EMNLP 2023</text>
+<text top="206" left="98" width="691" height="13" font="5">75. Renjie Pi, Jiahui Gao, Shizhe Diao, Rui Pan, Hanze Dong, Jipeng Zhang, Lewei Yao, Jianhua Han, Hang Xu,</text>
+<text top="223" left="124" width="176" height="13" font="5">Lingpeng Kong, Tong Zhang,</text>
+<text top="223" left="303" width="281" height="13" font="7"><a href="https://arxiv.org/abs/2305.14167">DetGPT: Detect What You Need via Reasoning</a></text>
+<text top="223" left="583" width="205" height="13" font="5"><a href="https://arxiv.org/abs/2305.14167">, </a>In Proceedings of the Conference</text>
+<text top="241" left="124" width="503" height="13" font="5">on Empirical Methods in Natural Language Processing, Singapore, December 2023.</text>
+<text top="241" left="701" width="88" height="13" font="4">EMNLP 2023</text>
+<text top="271" left="98" width="337" height="13" font="5">76. Jiacheng Ye, Chengzu Li, Lingpeng Kong, Tao Yu,</text>
+<text top="271" left="439" width="349" height="13" font="7"><a href="https://arxiv.org/abs/2305.13917">Generating Data for Symbolic Language with Large Lan-</a></text>
+<text top="289" left="124" width="84" height="13" font="7"><a href="https://arxiv.org/abs/2305.13917">guage Models</a></text>
+<text top="289" left="208" width="581" height="13" font="5"><a href="https://arxiv.org/abs/2305.13917">, </a>In Proceedings of the Conference on Empirical Methods in Natural Language Processing, Singa-</text>
+<text top="307" left="124" width="133" height="13" font="5">pore, December 2023.</text>
+<text top="307" left="700" width="88" height="13" font="4">EMNLP 2023</text>
+<text top="337" left="98" width="453" height="13" font="5">77. Shansan Gong, Mukai Li, Jiangtao Feng, Zhiyong Wu, Lingpeng Kong,</text>
+<text top="337" left="555" width="234" height="13" font="7"><a href="https://arxiv.org/abs/2310.05793">Bridging Discrete and Continuous Text</a></text>
+<text top="355" left="124" width="311" height="13" font="7"><a href="https://arxiv.org/abs/2310.05793">Spaces for Accelerated Seq2Seq Diffusion Models</a></text>
+<text top="355" left="435" width="354" height="13" font="5"><a href="https://arxiv.org/abs/2310.05793">, </a>In Findings of the Conference on Empirical Methods in</text>
+<text top="373" left="124" width="350" height="13" font="5">Natural Language Processing, Singapore, December 2023.</text>
+<text top="373" left="641" width="147" height="13" font="4">EMNLP 2023 Findings</text>
+<text top="403" left="98" width="653" height="13" font="5">78. Haiteng Zhao, Shengchao Liu, Chang Ma, Hannan Xu, Jie Fu, Zhi-Hong Deng, Lingpeng Kong, Qi Liu,</text>
+<text top="403" left="754" width="34" height="13" font="7"><a href="https://arxiv.org/abs/2306.13089">GIM-</a></text>
+<text top="421" left="124" width="523" height="13" font="7"><a href="https://arxiv.org/abs/2306.13089">LET: A Unified Graph-Text Model for Instruction-Based Molecule Zero-Shot Learning</a></text>
+<text top="421" left="646" width="142" height="13" font="5"><a href="https://arxiv.org/abs/2306.13089">, </a>In Advances in Neural</text>
+<text top="439" left="124" width="452" height="13" font="5">Information Processing Systems, New Orleans, Louisiana, December 2023.</text>
+<text top="439" left="699" width="89" height="13" font="4">NeurIPS 2023</text>
+<text top="469" left="98" width="424" height="13" font="5">79. Qingxiu Dong, Jingjing Xu, Lingpeng Kong, Zhifang Sui, Lei Li,</text>
+<text top="469" left="526" width="263" height="13" font="7"><a href="https://arxiv.org/abs/2305.10519">Statistical Knowledge Assessment for Gen-</a></text>
+<text top="487" left="124" width="154" height="13" font="7"><a href="https://arxiv.org/abs/2305.10519">erative Language Models</a></text>
+<text top="487" left="278" width="510" height="13" font="5"><a href="https://arxiv.org/abs/2305.10519">, </a>In Advances in Neural Information Processing Systems, New Orleans, Louisiana,</text>
+<text top="504" left="124" width="99" height="13" font="5">December 2023.</text>
+<text top="504" left="699" width="89" height="13" font="4">NeurIPS 2023</text>
+<text top="534" left="98" width="484" height="13" font="5">80. Shuyang Jiang, Jun Zhang, Jiangtao Feng, Lin Zheng, and Lingpeng Kong,</text>
+<text top="534" left="586" width="202" height="13" font="7"><a href="https://arxiv.org/abs/2310.09512">Attentive Multi-Layer Perceptron</a></text>
+<text top="552" left="124" width="207" height="13" font="7"><a href="https://arxiv.org/abs/2310.09512">for Non-autoregressive Generation</a></text>
+<text top="552" left="331" width="458" height="13" font="5"><a href="https://arxiv.org/abs/2310.09512">, </a>In Proceedings of the European Conference on Machine Learning and Prin-</text>
+<text top="570" left="124" width="528" height="13" font="5">ciples and Practice of Knowledge Discovery in Databases, Turin, Italy, September 2023.</text>
+<text top="570" left="661" width="125" height="13" font="4">ECML/PKDD 2023</text>
+<text top="600" left="98" width="445" height="13" font="5">81. Zhiyong Wu*, Yaoxiang Wang*, Jiacheng Ye*, and Lingpeng Kong,</text>
+<text top="600" left="548" width="241" height="13" font="7"><a href="https://arxiv.org/abs/2212.10375">Self-Adaptive In-Context Learning: An</a></text>
+<text top="618" left="124" width="525" height="13" font="7"><a href="https://arxiv.org/abs/2212.10375">Information Compression Perspective for In-Context Example Selection and Ordering</a></text>
+<text top="618" left="648" width="140" height="13" font="5"><a href="https://arxiv.org/abs/2212.10375">, </a>In Proceedings of the</text>
+<text top="636" left="124" width="570" height="13" font="5">Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July 2023.</text>
+<text top="636" left="724" width="64" height="13" font="4">ACL 2023</text>
+<text top="666" left="98" width="359" height="13" font="5">82. Qintong Li, Zhiyong Wu, Lingpeng Kong, and Wei Bi,</text>
+<text top="666" left="461" width="323" height="13" font="7"><a href="https://arxiv.org/abs/2212.09603">Explanation Regeneration via Information Bottleneck</a></text>
+<text top="666" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/abs/2212.09603">,</a></text>
+<text top="684" left="124" width="665" height="13" font="5">In Findings of the Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July</text>
+<text top="702" left="124" width="34" height="13" font="5">2023.</text>
+<text top="702" left="665" width="124" height="13" font="4">ACL 2023 Findings</text>
+<text top="732" left="98" width="497" height="13" font="5">83. Fei Yuan, Yinquan Lu, Wenhao Zhu, Lingpeng Kong, Lei Li, and Jingjing Xu,</text>
+<text top="732" left="598" width="190" height="13" font="7"><a href="https://arxiv.org/abs/2212.10551">Lego-MT: Learning Detachable</a></text>
+<text top="750" left="124" width="336" height="13" font="7"><a href="https://arxiv.org/abs/2212.10551">Models for Massively Multilingual Machine Translation</a></text>
+<text top="750" left="460" width="328" height="13" font="5"><a href="https://arxiv.org/abs/2212.10551">, </a>In Findings of the Annual Meeting of the Association</text>
+<text top="767" left="124" width="357" height="13" font="5">for Computational Linguistics, Toronto, Canada, July 2023.</text>
+<text top="767" left="665" width="124" height="13" font="4">ACL 2023 Findings</text>
+<text top="797" left="98" width="492" height="13" font="5">84. Wenhao Zhu, Jingjing Xu, Shujian Huang, Lingpeng Kong, and Jiajun Chen,</text>
+<text top="797" left="594" width="194" height="13" font="7"><a href="https://arxiv.org/abs/2306.06381">INK: Injecting kNN Knowledge</a></text>
+<text top="815" left="124" width="251" height="13" font="7"><a href="https://arxiv.org/abs/2306.06381">in Nearest Neighbor Machine Translation</a></text>
+<text top="815" left="374" width="414" height="13" font="5"><a href="https://arxiv.org/abs/2306.06381">, </a>In Proceedings of the Annual Meeting of the Association for Com-</text>
+<text top="833" left="124" width="306" height="13" font="5">putational Linguistics, Toronto, Canada, July 2023.</text>
+<text top="833" left="724" width="64" height="13" font="4">ACL 2023</text>
+<text top="863" left="98" width="459" height="13" font="5">85. Jiyue Jiang, Sheng Wang, Qintong Li, Lingpeng Kong, and Chuan Wu,</text>
+<text top="863" left="562" width="227" height="13" font="7"><a href="https://arxiv.org/abs/2305.08200">A Cognitive Stimulation Therapy Di-</a></text>
+<text top="881" left="124" width="551" height="13" font="7"><a href="https://arxiv.org/abs/2305.08200">alogue System with Multi-Source Knowledge Fusion for Elders with Cognitive Impairment</a></text>
+<text top="881" left="674" width="114" height="13" font="5"><a href="https://arxiv.org/abs/2305.08200">, </a>In Proceedings of</text>
+<text top="899" left="124" width="592" height="13" font="5">the Annual Meeting of the Association for Computational Linguistics, Toronto, Canada, July 2023.</text>
+<text top="899" left="724" width="64" height="13" font="4">ACL 2023</text>
+<text top="929" left="98" width="548" height="13" font="5">86. Xueliang Zhao, Tingchen Fu, Lemao Liu, Lingpeng Kong, Shuming Shi, and Rui Yan,</text>
+<text top="929" left="649" width="139" height="13" font="7"><a href="https://aclanthology.org/2023.findings-acl.715.pdf">SORTIE: Dependency-</a></text>
+<text top="947" left="124" width="395" height="13" font="7"><a href="https://aclanthology.org/2023.findings-acl.715.pdf">Aware Symbolic Reasoning for Logical Data-to-text Generation</a></text>
+<text top="947" left="518" width="270" height="13" font="5"><a href="https://aclanthology.org/2023.findings-acl.715.pdf">, </a>In Findings of the Annual Meeting of the</text>
+<text top="965" left="124" width="431" height="13" font="5">Association for Computational Linguistics, Toronto, Canada, July 2023.</text>
+<text top="965" left="665" width="124" height="13" font="4">ACL 2023 Findings</text>
+<text top="995" left="98" width="447" height="13" font="5">87. Jiacheng Ye, Zhiyong Wu, Jiangtao Feng, Tao Yu, and Lingpeng Kong,</text>
+<text top="995" left="548" width="240" height="13" font="7"><a href="https://arxiv.org/abs/2302.05698">Compositional Exemplars for In-context</a></text>
+<text top="1013" left="124" width="54" height="13" font="7"><a href="https://arxiv.org/abs/2302.05698">Learning</a></text>
+<text top="1013" left="178" width="611" height="13" font="5"><a href="https://arxiv.org/abs/2302.05698">, </a>In Proceedings of the International Conference on Machine Learning, Honolulu, Hawaii, July 2023.</text>
+<text top="1030" left="124" width="5" height="13" font="5"><a href="https://github.com/HKUNLP/icl-ceil">[</a></text>
+<text top="1030" left="129" width="45" height="13" font="7"><a href="https://github.com/HKUNLP/icl-ceil">GitHub</a></text>
+<text top="1030" left="174" width="5" height="13" font="5"><a href="https://github.com/HKUNLP/icl-ceil">]</a></text>
+<text top="1030" left="714" width="74" height="13" font="4">ICML 2023</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="781" width="7" height="13" font="5">9</text>
+</page>
+<page number="10" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="98" width="494" height="13" font="5">88. Jun Zhang*, Shuyang Jiang*, Jiangtao Feng, Lin Zheng, and Lingpeng Kong,</text>
+<text top="140" left="596" width="193" height="13" font="7"><a href="https://arxiv.org/abs/2210.07661">CAB: Comprehensive Attention</a></text>
+<text top="158" left="124" width="263" height="13" font="7"><a href="https://arxiv.org/abs/2210.07661">Benchmarking on Long Sequence Modeling</a></text>
+<text top="158" left="387" width="402" height="13" font="5"><a href="https://arxiv.org/abs/2210.07661">, </a>In Proceedings of the International Conference on Machine Learn-</text>
+<text top="176" left="124" width="200" height="13" font="5">ing, Honolulu, Hawaii, July 2023.</text>
+<text top="175" left="717" width="73" height="13" font="4">ICML 2023</text>
+<text top="206" left="98" width="691" height="13" font="5">89. Xuyang Shen, Dong Li, Jinxing Zhou, Zhen Qin, Bowen He, Xiaodong Han, Aixuan Li, Yuchao Dai, Ling-</text>
+<text top="223" left="124" width="270" height="13" font="5">peng Kong, Meng Wang, and Yiran Zhong,</text>
+<text top="223" left="400" width="246" height="13" font="7"><a href="https://arxiv.org/abs/2303.15616">Fine-grained Audible Video Description</a></text>
+<text top="223" left="646" width="142" height="13" font="5"><a href="https://arxiv.org/abs/2303.15616">, </a>In Proceedings of the</text>
+<text top="241" left="124" width="537" height="13" font="5">Conference on Computer Vision and Pattern Recognition, Vancouver, Canada, June 2023.</text>
+<text top="241" left="712" width="75" height="13" font="4">CVPR 2023</text>
+<text top="271" left="98" width="391" height="13" font="5">90. Lin Zheng, Jianbo Yuan, Chong Wang, and Lingpeng Kong,</text>
+<text top="271" left="493" width="237" height="13" font="7"><a href="https://openreview.net/pdf?id=G-uNfHKrj46">Efficient Attention via Control Variates</a></text>
+<text top="271" left="730" width="58" height="13" font="5"><a href="https://openreview.net/pdf?id=G-uNfHKrj46">, </a>In Inter-</text>
+<text top="289" left="124" width="479" height="13" font="5">national Conference on Learning Representations, Kigali, Rwanda, May 2023. [</text>
+<text top="289" left="603" width="27" height="13" font="7">Oral</text>
+<text top="289" left="630" width="5" height="13" font="5">]</text>
+<text top="289" left="713" width="71" height="13" font="4">ICLR 2023</text>
+<text top="319" left="98" width="691" height="13" font="5">91. Jiahui Gao, Renjie Pi, Lin Yong, Hang Xu, Jiacheng Ye, Zhiyong Wu, Weizhong Zhang, Xiaodan Liang, Zhen-</text>
+<text top="337" left="124" width="178" height="13" font="5">guo Li, and Lingpeng Kong,</text>
+<text top="337" left="308" width="458" height="13" font="7"><a href="https://openreview.net/pdf?id=h5OpjGd_lo6">Self-Guided Noise-Free Data Generation for Efficient Zero-Shot Learning</a></text>
+<text top="337" left="766" width="22" height="13" font="5"><a href="https://openreview.net/pdf?id=h5OpjGd_lo6">, </a>In</text>
+<text top="355" left="124" width="507" height="13" font="5">International Conference on Learning Representations, Kigali, Rwanda, May 2023. [</text>
+<text top="355" left="631" width="55" height="13" font="7">Spotlight</text>
+<text top="355" left="686" width="5" height="13" font="5">]</text>
+<text top="355" left="717" width="71" height="13" font="4">ICLR 2023</text>
+<text top="385" left="98" width="691" height="13" font="5">92. Zhen Qin, Xiaodong Han, Weixuan Sun, Bowen He, Dong Li, Dongxu Li, Yuchao Dai, Lingpeng Kong, and</text>
+<text top="403" left="124" width="80" height="13" font="5">Yiran Zhong,</text>
+<text top="403" left="208" width="295" height="13" font="7"><a href="https://openreview.net/pdf?id=IxmWsm4xrua">Toeplitz Neural Network for Sequence Modeling</a></text>
+<text top="403" left="504" width="285" height="13" font="5"><a href="https://openreview.net/pdf?id=IxmWsm4xrua">, </a>In International Conference on Learning Rep-</text>
+<text top="421" left="124" width="254" height="13" font="5">resentations, Kigali, Rwanda, May 2023. [</text>
+<text top="421" left="378" width="55" height="13" font="7">Spotlight</text>
+<text top="421" left="433" width="5" height="13" font="5">]</text>
+<text top="421" left="718" width="71" height="13" font="4">ICLR 2023</text>
+<text top="451" left="98" width="487" height="13" font="5">93. Shansan Gong, Mukai Li, Jiangtao Feng, Zhiyong Wu, and Lingpeng Kong,</text>
+<text top="451" left="589" width="199" height="13" font="7"><a href="https://arxiv.org/abs/2210.08933">DiffuSeq: Sequence to Sequence</a></text>
+<text top="469" left="124" width="247" height="13" font="7"><a href="https://arxiv.org/abs/2210.08933">Text Generation with Diffusion Models</a></text>
+<text top="469" left="371" width="418" height="13" font="5"><a href="https://arxiv.org/abs/2210.08933">, </a>In International Conference on Learning Representations, Kigali,</text>
+<text top="487" left="124" width="121" height="13" font="5">Rwanda, May 2023.</text>
+<text top="486" left="717" width="71" height="13" font="4">ICLR 2023</text>
+<text top="516" left="98" width="528" height="13" font="5">94. Sijie Chen, Zhiyong Wu, Jiangjie Chen, Zhixing Li, Yang Liu, and Lingpeng Kong,</text>
+<text top="516" left="630" width="158" height="13" font="7"><a href="https://arxiv.org/abs/2211.11160">Unsupervised Explanation</a></text>
+<text top="534" left="124" width="222" height="13" font="7"><a href="https://arxiv.org/abs/2211.11160">Generation via Correct Instantiations</a></text>
+<text top="534" left="345" width="443" height="13" font="5"><a href="https://arxiv.org/abs/2211.11160">, </a>In Proceedings of AAAI Conference on Artificial Intelligence, Washing-</text>
+<text top="552" left="124" width="146" height="13" font="5">ton, DC, February 2023.</text>
+<text top="552" left="716" width="72" height="13" font="4">AAAI 2023</text>
+<text top="582" left="98" width="526" height="13" font="5">95. Jiacheng Ye, Jiahui Gao, Zhiyong Wu, Jiangtao Feng, Tao Yu, and Lingpeng Kong,</text>
+<text top="582" left="627" width="161" height="13" font="7"><a href="https://arxiv.org/abs/2210.12329">ProGen: Progressive Zero-</a></text>
+<text top="600" left="124" width="290" height="13" font="7"><a href="https://arxiv.org/abs/2210.12329">shot Dataset Generation via In-context Feedback</a></text>
+<text top="600" left="414" width="375" height="13" font="5"><a href="https://arxiv.org/abs/2210.12329">, </a>In Findings of the Conference on Empirical Methods in Natu-</text>
+<text top="618" left="124" width="326" height="13" font="5">ral Language Processing, Abu Dhabi, December 2022.</text>
+<text top="618" left="641" width="147" height="13" font="4">EMNLP 2022 Findings</text>
+<text top="648" left="98" width="691" height="13" font="5">96. Jiacheng Ye*, Jiahui Gao*, Qintong Li, Hang Xu, Jiangtao Feng, Zhiyong Wu, Tao Yu, and Lingpeng Kong,</text>
+<text top="666" left="124" width="374" height="13" font="7"><a href="https://arxiv.org/abs/2202.07922">ZeroGen: Efficient Zero-shot Learning via Dataset Generation</a></text>
+<text top="666" left="498" width="290" height="13" font="5"><a href="https://arxiv.org/abs/2202.07922">, </a>In Proceedings of the Conference on Empirical</text>
+<text top="684" left="124" width="427" height="13" font="5">Methods in Natural Language Processing, Abu Dhabi, December 2022.</text>
+<text top="684" left="701" width="88" height="13" font="4">EMNLP 2022</text>
+<text top="714" left="98" width="691" height="13" font="5">97. Tianbao Xie*, Chen Henry Wu*, Peng Shi, Ruiqi Zhong, Torsten Scholak, Michihiro Yasunaga, Chien-Sheng</text>
+<text top="732" left="124" width="665" height="13" font="5">Wu, Ming Zhong, Pengcheng Yin, Sida Wang, Victor Zhong, Bailin Wang, Chengzu Li, Connor Boyle, Ansong</text>
+<text top="750" left="124" width="665" height="13" font="5">Ni, Ziyu Yao, Dragomir Radev, Caiming Xiong, Lingpeng Kong, Rui Zhang, Noah A. Smith, Luke Zettlemoyer,</text>
+<text top="767" left="124" width="76" height="13" font="5">and Tao Yu,</text>
+<text top="767" left="206" width="583" height="13" font="7"><a href="https://arxiv.org/abs/2201.05966">UnifiedSKG: Unifying and Multi-Tasking Structured Knowledge Grounding with Text-to-Text</a></text>
+<text top="785" left="124" width="109" height="13" font="7"><a href="https://arxiv.org/abs/2201.05966">Language Models</a></text>
+<text top="785" left="232" width="556" height="13" font="5"><a href="https://arxiv.org/abs/2201.05966">, </a>In Proceedings of the Conference on Empirical Methods in Natural Language Processing,</text>
+<text top="803" left="124" width="172" height="13" font="5">Abu Dhabi, December 2022.</text>
+<text top="803" left="701" width="88" height="13" font="4">EMNLP 2022</text>
+<text top="833" left="98" width="662" height="13" font="5">98. Zhen Qin, Xiaodong Han, Weixuan Sun, Dongxu Li, Lingpeng Kong, Nick Barnes, and Yiran Zhong,</text>
+<text top="833" left="765" width="23" height="13" font="7"><a href="https://arxiv.org/abs/2210.10340">The</a></text>
+<text top="851" left="124" width="174" height="13" font="7"><a href="https://arxiv.org/abs/2210.10340">Devil in Linear Transformer</a></text>
+<text top="851" left="298" width="491" height="13" font="5"><a href="https://arxiv.org/abs/2210.10340">, </a>In Proceedings of the Conference on Empirical Methods in Natural Language</text>
+<text top="869" left="124" width="244" height="13" font="5">Processing, Abu Dhabi, December 2022.</text>
+<text top="869" left="701" width="88" height="13" font="4">EMNLP 2022</text>
+<text top="899" left="98" width="493" height="13" font="5">99. Changlong Yu, Tianyi Xiao, Lingpeng Kong, Yangqiu Song, and Wilfred Ng,</text>
+<text top="899" left="595" width="193" height="13" font="7"><a href="https://arxiv.org/abs/2210.13002">An Empirical Revisiting of Lin-</a></text>
+<text top="917" left="124" width="369" height="13" font="7"><a href="https://arxiv.org/abs/2210.13002">guistic Knowledge Fusion in Language Understanding Tasks</a></text>
+<text top="917" left="493" width="295" height="13" font="5"><a href="https://arxiv.org/abs/2210.13002">, </a>In Proceedings of the Conference on Empirical</text>
+<text top="935" left="124" width="427" height="13" font="5">Methods in Natural Language Processing, Abu Dhabi, December 2022.</text>
+<text top="935" left="701" width="88" height="13" font="4">EMNLP 2022</text>
+<text top="965" left="90" width="579" height="13" font="5">100. Chenxin An, Jiangtao Feng, Kai Lv, Lingpeng Kong, Xipeng Qiu, and Xuanjing Huang,</text>
+<text top="965" left="674" width="114" height="13" font="7"><a href="https://arxiv.org/abs/2205.14690">CoNT: Contrastive</a></text>
+<text top="983" left="124" width="145" height="13" font="7"><a href="https://arxiv.org/abs/2205.14690">Neural Text Generation</a></text>
+<text top="983" left="269" width="519" height="13" font="5"><a href="https://arxiv.org/abs/2205.14690">, </a>In Advances in Neural Information Processing Systems, New Orleans, Louisiana,</text>
+<text top="1001" left="124" width="110" height="13" font="5">November 2022. [</text>
+<text top="1001" left="233" width="55" height="13" font="7">Spotlight</text>
+<text top="1001" left="288" width="5" height="13" font="5">]</text>
+<text top="1000" left="699" width="89" height="13" font="4">NeurIPS 2022</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="773" width="15" height="13" font="5">10</text>
+</page>
+<page number="11" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="90" width="540" height="13" font="5">101. Yixuan Su, Tian Lan, Yan Wang, Dani Yogatama, Lingpeng Kong, and Nigel Collier,</text>
+<text top="140" left="634" width="155" height="13" font="7"><a href="https://arxiv.org/abs/2202.06417">A Contrastive Framework</a></text>
+<text top="158" left="124" width="164" height="13" font="7"><a href="https://arxiv.org/abs/2202.06417">for Neural Text Generation</a></text>
+<text top="158" left="287" width="501" height="13" font="5"><a href="https://arxiv.org/abs/2202.06417">, </a>In Advances in Neural Information Processing Systems, New Orleans, Louisiana,</text>
+<text top="176" left="124" width="110" height="13" font="5">November 2022. [</text>
+<text top="176" left="233" width="55" height="13" font="7">Spotlight</text>
+<text top="176" left="288" width="5" height="13" font="5">]</text>
+<text top="175" left="699" width="89" height="13" font="4">NeurIPS 2022</text>
+<text top="206" left="90" width="698" height="13" font="5">102. Jinxing Zhou, Jianyuan Wang, Jiayi Zhang, Weixuan Sun, Jing Zhang, Stan Birchfield, Dan Guo, Lingpeng</text>
+<text top="223" left="124" width="226" height="13" font="5">Kong, Meng Wang, and Yiran Zhong,</text>
+<text top="223" left="353" width="166" height="13" font="7"><a href="https://arxiv.org/abs/2207.05042">Audio-Visual Segmentation</a></text>
+<text top="223" left="520" width="269" height="13" font="5"><a href="https://arxiv.org/abs/2207.05042">, </a>In Proceedings of the European Conference</text>
+<text top="241" left="124" width="214" height="13" font="5">on Computer Vision, October 2022.</text>
+<text top="241" left="712" width="76" height="13" font="4">ECCV 2022</text>
+<text top="271" left="90" width="318" height="13" font="5">103. Lin Zheng, Chong Wang, and Lingpeng Kong,</text>
+<text top="271" left="413" width="354" height="13" font="7"><a href="https://arxiv.org/abs/2204.04667">Linear Complexity Randomized Self-attention Mechanism</a></text>
+<text top="271" left="767" width="21" height="13" font="5"><a href="https://arxiv.org/abs/2204.04667">, </a>In</text>
+<text top="289" left="124" width="466" height="13" font="5">Proceedings of the International Conference on Machine Learning, July 2022.</text>
+<text top="289" left="714" width="74" height="13" font="4">ICML 2022</text>
+<text top="319" left="90" width="302" height="13" font="5">104. Lin Zheng, Huijie Pan, and Lingpeng Kong,</text>
+<text top="319" left="397" width="392" height="13" font="7"><a href="https://arxiv.org/abs/2110.02453">Ripple Attention for Visual Perception with Sub-quadratic Com-</a></text>
+<text top="337" left="124" width="41" height="13" font="7"><a href="https://arxiv.org/abs/2110.02453">plexity</a></text>
+<text top="337" left="165" width="489" height="13" font="5"><a href="https://arxiv.org/abs/2110.02453">, </a>In Proceedings of the International Conference on Machine Learning, July 2022.</text>
+<text top="337" left="714" width="74" height="13" font="4">ICML 2022</text>
+<text top="367" left="90" width="352" height="13" font="5">105. Jakob Prange, Nathan Schneider, and Lingpeng Kong,</text>
+<text top="367" left="445" width="343" height="13" font="7"><a href="https://arxiv.org/pdf/2204.09453.pdf">Linguistic Frameworks Go Toe-to-Toe at Neuro-Symbolic</a></text>
+<text top="385" left="124" width="122" height="13" font="7"><a href="https://arxiv.org/pdf/2204.09453.pdf">Language Modeling</a></text>
+<text top="385" left="245" width="543" height="13" font="5"><a href="https://arxiv.org/pdf/2204.09453.pdf">, </a>In Proceedings of the Conference of the North American Chapter of the Association for</text>
+<text top="403" left="124" width="229" height="13" font="5">Computational Linguistics, July 2022.</text>
+<text top="403" left="703" width="86" height="13" font="4">NAACL 2022</text>
+<text top="433" left="90" width="512" height="13" font="5">106. Qintong Li, Piji Li, Wei Bi, Zhaochun Ren, Yuxuan Lai, and Lingpeng Kong,</text>
+<text top="433" left="607" width="181" height="13" font="7"><a href="https://arxiv.org/pdf/2204.09453.pdf">Event Transition Planning for</a></text>
+<text top="451" left="124" width="173" height="13" font="7"><a href="https://arxiv.org/pdf/2204.09453.pdf">Open-ended Text Generation</a></text>
+<text top="451" left="297" width="492" height="13" font="5"><a href="https://arxiv.org/pdf/2204.09453.pdf">, </a>In findings of the Annual Meeting of the Association for Computational Linguis-</text>
+<text top="469" left="124" width="92" height="13" font="5">tics, May 2022.</text>
+<text top="468" left="666" width="122" height="13" font="4">ACL 2022 Findings</text>
+<text top="498" left="90" width="417" height="13" font="5">107. Zhiyong Wu, Wei Bi, Xiang Li, Lingpeng Kong, and Ben Kao,</text>
+<text top="498" left="512" width="276" height="13" font="7"><a href="https://arxiv.org/abs/2205.01941">Lexical Knowledge Internalization for Neural</a></text>
+<text top="516" left="124" width="112" height="13" font="7"><a href="https://arxiv.org/abs/2205.01941">Dialog Generation</a></text>
+<text top="516" left="236" width="553" height="13" font="5"><a href="https://arxiv.org/abs/2205.01941">, </a>In Proceedings of the Annual Meeting of the Association for Computational Linguistics,</text>
+<text top="534" left="124" width="65" height="13" font="5">May 2022.</text>
+<text top="534" left="724" width="64" height="13" font="4">ACL 2022</text>
+<text top="564" left="90" width="698" height="13" font="5">108. Hao Peng, Jungo Kasai, Nikolaos Pappas, Dani Yogatama, Zhaofeng Wu, Lingpeng Kong, Roy Schwartz, and</text>
+<text top="582" left="124" width="95" height="13" font="5">Noah A. Smith,</text>
+<text top="582" left="222" width="289" height="13" font="7"><a href="https://arxiv.org/abs/2110.02488">ABC: Attention with Bounded-memory Control</a></text>
+<text top="582" left="511" width="277" height="13" font="5"><a href="https://arxiv.org/abs/2110.02488">, </a>In Proceedings of the Annual Meeting of the</text>
+<text top="600" left="124" width="327" height="13" font="5">Association for Computational Linguistics, May 2022.</text>
+<text top="600" left="724" width="64" height="13" font="4">ACL 2022</text>
+<text top="630" left="90" width="698" height="13" font="5">109. Zhen Qin, Weixuan Sun, Hui Deng, Dongxu Li, Yunshen Wei, Baohong Lv, Junjie Yan, Lingpeng Kong, and Yi-</text>
+<text top="648" left="124" width="66" height="13" font="5">ran Zhong,</text>
+<text top="648" left="193" width="270" height="13" font="7"><a href="https://openreview.net/pdf?id=Bl8CQrx2Up4">cosFormer: Rethinking Softmax In Attention</a></text>
+<text top="648" left="464" width="325" height="13" font="5"><a href="https://openreview.net/pdf?id=Bl8CQrx2Up4">, </a>In International Conference on Learning Representa-</text>
+<text top="666" left="124" width="105" height="13" font="5">tions, April 2022.</text>
+<text top="666" left="715" width="71" height="13" font="4">ICLR 2022</text>
+<text top="696" left="90" width="698" height="13" font="5">110. Han Shi*, Jiahui Gao*, Hang Xu, Xiaodan Liang, Zhenguo Li, Lingpeng Kong, Stephen M. S. Lee, and James</text>
+<text top="714" left="124" width="40" height="13" font="5">Kwok,</text>
+<text top="714" left="170" width="419" height="13" font="7"><a href="https://openreview.net/pdf?id=dUV91uaXm3">Revisiting Over-smoothing in BERT from the Perspective of Graph</a></text>
+<text top="714" left="589" width="200" height="13" font="5"><a href="https://openreview.net/pdf?id=dUV91uaXm3">, </a>In International Conference on</text>
+<text top="732" left="124" width="239" height="13" font="5">Learning Representations, April 2022. [</text>
+<text top="732" left="363" width="55" height="13" font="7">Spotlight</text>
+<text top="732" left="418" width="5" height="13" font="5">]</text>
+<text top="731" left="717" width="71" height="13" font="4">ICLR 2022</text>
+<text top="761" left="90" width="303" height="13" font="5">111. Lin Zheng, Zhiyong Wu and Lingpeng Kong,</text>
+<text top="761" left="397" width="210" height="13" font="7"><a href="https://arxiv.org/abs/2105.14850">Cascaded Head-colliding Attention</a></text>
+<text top="761" left="607" width="182" height="13" font="5"><a href="https://arxiv.org/abs/2105.14850">. </a>In Proceedings of the Annual</text>
+<text top="779" left="124" width="434" height="13" font="5">Meeting of the Association for Computational Linguistics, August 2021.</text>
+<text top="779" left="724" width="64" height="13" font="4">ACL 2021</text>
+<text top="809" left="90" width="408" height="13" font="5">112. Zhiyong Wu, Lingpeng Kong, Wei Bi, Xiang Li and Ben Kao,</text>
+<text top="809" left="502" width="286" height="13" font="7"><a href="https://arxiv.org/abs/2105.14462">Good for Misconceived Reasons: An Empirical</a></text>
+<text top="827" left="124" width="476" height="13" font="7"><a href="https://arxiv.org/abs/2105.14462">Revisiting on the Need for Visual Context in Multimodal Machine Translation</a></text>
+<text top="827" left="599" width="189" height="13" font="5"><a href="https://arxiv.org/abs/2105.14462">. </a>In Proceedings of the Annual</text>
+<text top="845" left="124" width="434" height="13" font="5">Meeting of the Association for Computational Linguistics, August 2021.</text>
+<text top="845" left="724" width="64" height="13" font="4">ACL 2021</text>
+<text top="875" left="90" width="596" height="13" font="5">113. Hao Peng, Nikolaos Pappas, Dani Yogatama, Roy Schwartz, Noah Smith, and Lingpeng Kong,</text>
+<text top="875" left="690" width="99" height="13" font="7"><a href="https://openreview.net/pdf?id=QtTKTdVrFBB">Random Feature</a></text>
+<text top="893" left="124" width="56" height="13" font="7"><a href="https://openreview.net/pdf?id=QtTKTdVrFBB">Attention</a></text>
+<text top="893" left="180" width="431" height="13" font="5"><a href="https://openreview.net/pdf?id=QtTKTdVrFBB">. </a>In International Conference on Learning Representations, May 2021. [</text>
+<text top="893" left="611" width="55" height="13" font="7">Spotlight</text>
+<text top="893" left="666" width="5" height="13" font="5">]</text>
+<text top="893" left="717" width="71" height="13" font="4">ICLR 2021</text>
+<text top="923" left="90" width="637" height="13" font="5">114. Lingpeng Kong, Cyprien de Masson d’Autume, Wang Ling, Lei Yu, Zihang Dai, and Dani Yogatama,</text>
+<text top="923" left="731" width="57" height="13" font="7"><a href="https://arxiv.org/abs/1910.08350.pdf">A Mutual</a></text>
+<text top="941" left="124" width="467" height="13" font="7"><a href="https://arxiv.org/abs/1910.08350.pdf">Information Maximization Perspective of Language Representation Learning</a></text>
+<text top="941" left="590" width="198" height="13" font="5"><a href="https://arxiv.org/abs/1910.08350.pdf">. </a>In International Conference on</text>
+<text top="959" left="124" width="297" height="13" font="5">Learning Representations, Ethiopia, April 2020. [</text>
+<text top="959" left="421" width="55" height="13" font="7">Spotlight</text>
+<text top="959" left="476" width="5" height="13" font="5">]</text>
+<text top="959" left="717" width="71" height="13" font="4">ICLR 2020</text>
+<text top="989" left="90" width="566" height="13" font="5">115. Cyprien de Masson d’Autume, Sebastian Ruder, Lingpeng Kong, and Dani Yogatama,</text>
+<text top="989" left="662" width="126" height="13" font="7"><a href="https://arxiv.org/pdf/1906.01076.pdf">Episodic Memory in</a></text>
+<text top="1007" left="124" width="176" height="13" font="7"><a href="https://arxiv.org/pdf/1906.01076.pdf">Lifelong Language Learning</a></text>
+<text top="1007" left="299" width="489" height="13" font="5"><a href="https://arxiv.org/pdf/1906.01076.pdf">. </a>In Advances in Neural Information Processing Systems, Vancouver, Canada,</text>
+<text top="1024" left="124" width="99" height="13" font="5">December 2019.</text>
+<text top="1024" left="699" width="89" height="13" font="4">NeurIPS 2019</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="773" width="15" height="13" font="5">11</text>
+</page>
+<page number="12" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="90" width="476" height="13" font="5">116. Lingpeng Kong, Gabor Melis, Wang Ling, Lei Yu, and Dani Yogatama,</text>
+<text top="140" left="571" width="217" height="13" font="7"><a href="https://arxiv.org/pdf/1901.09296.pdf">Variational Smoothing in Recurrent</a></text>
+<text top="158" left="124" width="212" height="13" font="7"><a href="https://arxiv.org/pdf/1901.09296.pdf">Neural Network Language Models</a></text>
+<text top="158" left="336" width="453" height="13" font="5"><a href="https://arxiv.org/pdf/1901.09296.pdf">. </a>In International Conference on Learning Representations, New Orleans,</text>
+<text top="176" left="124" width="131" height="13" font="5">Louisiana, May 2019.</text>
+<text top="175" left="717" width="71" height="13" font="4">ICLR 2019</text>
+<text top="206" left="90" width="388" height="13" font="5">117. Liang Lu, Lingpeng Kong, Chris Dyer, and Noah A. Smith,</text>
+<text top="206" left="482" width="306" height="13" font="7"><a href="https://arxiv.org/pdf/1702.06378.pdf">Multi-task Learning with CTC and Segmental CRF</a></text>
+<text top="223" left="124" width="141" height="13" font="7"><a href="https://arxiv.org/pdf/1702.06378.pdf">for Speech Recognition</a></text>
+<text top="223" left="265" width="523" height="13" font="5"><a href="https://arxiv.org/pdf/1702.06378.pdf">. </a>In Proceedings of the Annual Conference of the International Speech Communication</text>
+<text top="241" left="124" width="289" height="13" font="5">Association , Stockholm, Sweden, August 2017.</text>
+<text top="241" left="648" width="141" height="13" font="4">INTERSPEECH 2017</text>
+<text top="271" left="90" width="663" height="13" font="5">118. Adhiguna Kuncoro, Miguel Ballesteros, Lingpeng Kong, Chris Dyer, Graham Neubig, and Noah A. Smith,</text>
+<text top="271" left="756" width="32" height="13" font="7"><a href="https://aclweb.org/anthology/E17-1117">What</a></text>
+<text top="289" left="124" width="380" height="13" font="7"><a href="https://aclweb.org/anthology/E17-1117">Do Recurrent Neural Network Grammars Learn About Syntax?</a></text>
+<text top="289" left="504" width="285" height="13" font="5"><a href="https://aclweb.org/anthology/E17-1117">. </a>In Proceedings of the Conference of the Euro-</text>
+<text top="307" left="124" width="569" height="13" font="5">pean Chapter of the Association for Computational Linguistics, Valencia, Spain, January 2017. [</text>
+<text top="307" left="693" width="96" height="13" font="7">Outstanding Pa-</text>
+<text top="325" left="124" width="61" height="13" font="7">per Award</text>
+<text top="325" left="185" width="5" height="13" font="5">]</text>
+<text top="325" left="715" width="74" height="13" font="4">EACL 2017</text>
+<text top="355" left="90" width="523" height="13" font="5">119. Liang Lu*, Lingpeng Kong*, Chris Dyer, and Noah A. Smith, and Steve Renals,</text>
+<text top="355" left="617" width="171" height="13" font="7"><a href="https://arxiv.org/pdf/1603.00223.pdf">Segmental Recurrent Neural</a></text>
+<text top="373" left="124" width="278" height="13" font="7"><a href="https://arxiv.org/pdf/1603.00223.pdf">Networks for End-to-end Speech Recognition</a></text>
+<text top="373" left="402" width="386" height="13" font="5"><a href="https://arxiv.org/pdf/1603.00223.pdf">. </a>In Proceedings of the Annual Conference of the International</text>
+<text top="391" left="124" width="486" height="13" font="5">Speech Communication Association, San Francisco, California, September 2016.</text>
+<text top="391" left="648" width="141" height="13" font="4">INTERSPEECH 2016</text>
+<text top="421" left="90" width="590" height="13" font="5">120. Adhiguna Kuncoro, Miguel Ballesteros, Lingpeng Kong, Chris Dyer, and Noah A. Smith,</text>
+<text top="421" left="685" width="103" height="13" font="7"><a href="https://www.aclweb.org/anthology/D16-1180">Distilling an En-</a></text>
+<text top="439" left="124" width="368" height="13" font="7"><a href="https://www.aclweb.org/anthology/D16-1180">semble of Greedy Dependency Parsers into One MST Parser</a></text>
+<text top="439" left="492" width="297" height="13" font="5"><a href="https://www.aclweb.org/anthology/D16-1180">. </a>In Proceedings of the Conference on Empirical</text>
+<text top="457" left="124" width="426" height="13" font="5">Methods in Natural Language Processing, Austin, TX, November 2016</text>
+<text top="456" left="701" width="88" height="13" font="4">EMNLP 2016</text>
+<text top="487" left="90" width="337" height="13" font="5">121. Lingpeng Kong, Chris Dyer, and Noah A. Smith,</text>
+<text top="487" left="432" width="236" height="13" font="7"><a href="https://arxiv.org/pdf/1511.06018.pdf">Segmental Recurrent Neural Networks</a></text>
+<text top="487" left="668" width="120" height="13" font="5"><a href="https://arxiv.org/pdf/1511.06018.pdf">. </a>In Proceedings of</text>
+<text top="504" left="124" width="544" height="13" font="5">International Conference on Learning Representations, San Juan, Puerto Rico, May 2016. <a href="https://github.com/clab/dynet/tree/master/examples/segmental-rnn">[</a></text>
+<text top="504" left="668" width="45" height="13" font="7"><a href="https://github.com/clab/dynet/tree/master/examples/segmental-rnn">GitHub</a></text>
+<text top="504" left="713" width="5" height="13" font="5"><a href="https://github.com/clab/dynet/tree/master/examples/segmental-rnn">]</a></text>
+<text top="504" left="718" width="71" height="13" font="4">ICLR 2016</text>
+<text top="534" left="90" width="357" height="13" font="5">122. Dani Yogatama, Lingpeng Kong, and Noah A. Smith,</text>
+<text top="534" left="452" width="284" height="13" font="7"><a href="https://aclweb.org/anthology/D15-1251">Bayesian Optimization of Text Representations</a></text>
+<text top="534" left="736" width="52" height="13" font="5"><a href="https://aclweb.org/anthology/D15-1251">. </a>In Pro-</text>
+<text top="552" left="124" width="665" height="13" font="5">ceedings of the Conference on Empirical Methods in Natural Language Processing, Lisboa, Portugal, September</text>
+<text top="570" left="124" width="34" height="13" font="5">2015.</text>
+<text top="570" left="701" width="88" height="13" font="4">EMNLP 2015</text>
+<text top="600" left="90" width="373" height="13" font="5">123. Lingpeng Kong, Alexander M. Rush, and Noah A. Smith,</text>
+<text top="600" left="467" width="301" height="13" font="7"><a href="https://www.aclweb.org/anthology/N15-1080">Transforming Dependencies into Phrase Structures</a></text>
+<text top="600" left="768" width="21" height="13" font="5"><a href="https://www.aclweb.org/anthology/N15-1080">. </a>In</text>
+<text top="618" left="124" width="665" height="13" font="5">Proceedings of the Conference of the North American Chapter of the Association for Computational Linguistics,</text>
+<text top="636" left="124" width="153" height="13" font="5">Denver, CO, May 2015. <a href="https://github.com/ikekonglp/PAD">[</a></text>
+<text top="636" left="276" width="45" height="13" font="7"><a href="https://github.com/ikekonglp/PAD">GitHub</a></text>
+<text top="636" left="321" width="5" height="13" font="5"><a href="https://github.com/ikekonglp/PAD">]</a></text>
+<text top="636" left="703" width="86" height="13" font="4">NAACL 2015</text>
+<text top="666" left="90" width="683" height="13" font="5">124. Lingpeng Kong, Nathan Schneider, Swabha Swayamdipta, Archna Bhatia, Chris Dyer and Noah A. Smith,</text>
+<text top="666" left="778" width="11" height="13" font="7"><a href="https://www.aclweb.org/anthology/D14-1108">A</a></text>
+<text top="684" left="124" width="184" height="13" font="7"><a href="https://www.aclweb.org/anthology/D14-1108">Dependency Parser for Tweets</a></text>
+<text top="684" left="308" width="481" height="13" font="5"><a href="https://www.aclweb.org/anthology/D14-1108">. </a>In Proceedings of the Conference on Empirical Methods in Natural Language</text>
+<text top="702" left="124" width="207" height="13" font="5">Processing, Doha, October 2014. <a href="https://github.com/ikekonglp/TweeboParser">[</a></text>
+<text top="702" left="331" width="45" height="13" font="7"><a href="https://github.com/ikekonglp/TweeboParser">GitHub</a></text>
+<text top="702" left="376" width="5" height="13" font="5"><a href="https://github.com/ikekonglp/TweeboParser">]</a></text>
+<text top="702" left="701" width="88" height="13" font="4">EMNLP 2014</text>
+<text top="732" left="90" width="507" height="13" font="5">125. William Yang Wang, Lingpeng Kong, Kathryn Mazaitis, and William W. Cohen,</text>
+<text top="732" left="601" width="188" height="13" font="7"><a href="https://www.aclweb.org/anthology/D14-1122">Dependency Parsing for Weibo:</a></text>
+<text top="750" left="124" width="338" height="13" font="7"><a href="https://www.aclweb.org/anthology/D14-1122">An Efficient Probabilistic Logic Programming Approach</a></text>
+<text top="750" left="461" width="327" height="13" font="5"><a href="https://www.aclweb.org/anthology/D14-1122">. </a>In Proceedings of the Conference on Empirical Meth-</text>
+<text top="767" left="124" width="386" height="13" font="5">ods in Natural Language Processing, Doha, Qatar, October 2014.</text>
+<text top="767" left="701" width="87" height="13" font="4">EMNLP 2014</text>
+<text top="797" left="90" width="227" height="13" font="5">126. Lingpeng Kong, and Likun Qiu,</text>
+<text top="797" left="321" width="352" height="13" font="7"><a href="http://ikekonglp.github.io/paper/ialp11a.pdf">Formalization and Rules for Recognition of Satirical Irony</a></text>
+<text top="797" left="673" width="115" height="13" font="5"><a href="http://ikekonglp.github.io/paper/ialp11a.pdf">. </a>In Proceedings of</text>
+<text top="815" left="124" width="581" height="13" font="5">the International Conference on Asian Language Processing, Penang, Malaysia, November 2011.</text>
+<text top="815" left="719" width="69" height="13" font="4">IALP 2011</text>
+<text top="845" left="90" width="426" height="13" font="5">127. Likun Qiu, Lei Wu, Changjian Hu, Kai Zhao, and Lingpeng Kong,</text>
+<text top="845" left="519" width="269" height="13" font="7"><a href="http://ikekonglp.github.io/paper/ialp11b.pdf">Improving Chinese Dependency Parsing with</a></text>
+<text top="863" left="124" width="177" height="13" font="7"><a href="http://ikekonglp.github.io/paper/ialp11b.pdf">Self-Disambiguating Patterns</a></text>
+<text top="863" left="301" width="488" height="13" font="5"><a href="http://ikekonglp.github.io/paper/ialp11b.pdf">. </a>In Proceedings of the International Conference on Asian Language Processing,</text>
+<text top="881" left="124" width="214" height="13" font="5">Penang, Malaysia, November 2011.</text>
+<text top="881" left="719" width="69" height="13" font="4">IALP 2011</text>
+<text top="911" left="91" width="41" height="13" font="4">Thesis</text>
+<text top="942" left="90" width="130" height="13" font="5">128. Lingpeng Kong,</text>
+<text top="942" left="223" width="397" height="13" font="7"><a href="http://ikekonglp.github.io/thesis_draft.pdf">Neural Representation Learning in Linguistic Structured Prediction</a></text>
+<text top="942" left="621" width="175" height="13" font="5"><a href="http://ikekonglp.github.io/thesis_draft.pdf">, </a>CMU-LTI-17-008, Carnegie</text>
+<text top="959" left="124" width="295" height="13" font="5">Mellon University, Pittsburgh, PA, October 2017.</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="773" width="15" height="13" font="5">12</text>
+</page>
+<page number="13" position="absolute" top="0" left="0" height="1188" width="918">
+<text top="140" left="91" width="234" height="13" font="4">Peer-refereed workshop publications</text>
+<text top="170" left="90" width="468" height="13" font="5">129. Yangfeng Ji, Trevor Cohn, Lingpeng Kong, Chris Dyer, Jacob Eisenstein,</text>
+<text top="170" left="562" width="223" height="13" font="7"><a href="https://arxiv.org/pdf/1511.03962.pdf">Document Context Language Models</a></text>
+<text top="170" left="785" width="4" height="13" font="5"><a href="https://arxiv.org/pdf/1511.03962.pdf">.</a></text>
+<text top="188" left="124" width="655" height="13" font="5">In International Conference on Learning Representations Workshop Track, San Juan, Puerto Rico, May 2016.</text>
+<text top="218" left="90" width="435" height="13" font="5">130. Ting-Hao (Kenneth) Huang, Yun-Nung Chen, and Lingpeng Kong,</text>
+<text top="218" left="529" width="260" height="13" font="7"><a href="https://www.aclweb.org/anthology/W15-3105">ACBiMA: Advanced Chinese Bi-Character</a></text>
+<text top="235" left="124" width="185" height="13" font="7"><a href="https://www.aclweb.org/anthology/W15-3105">Word Morphological Analyzer</a></text>
+<text top="235" left="308" width="480" height="13" font="5"><a href="https://www.aclweb.org/anthology/W15-3105">. </a>In Proceedings of The 8th SIGHAN Workshop on Chinese Language Process-</text>
+<text top="253" left="124" width="193" height="13" font="5">ing, Beijing, China, July 2015. <a href="https://github.com/windx0303/ACBiMA">[</a></text>
+<text top="253" left="317" width="45" height="13" font="7"><a href="https://github.com/windx0303/ACBiMA">GitHub</a></text>
+<text top="253" left="362" width="5" height="13" font="5"><a href="https://github.com/windx0303/ACBiMA">]</a></text>
+<text top="295" left="87" width="6" height="16" font="2">I</text>
+<text top="297" left="94" width="58" height="13" font="3">NVITED</text>
+<text top="295" left="157" width="11" height="16" font="2">T</text>
+<text top="297" left="167" width="40" height="13" font="3">ALKS</text>
+<text top="330" left="109" width="30" height="13" font="5">2025</text>
+<text top="330" left="157" width="231" height="13" font="5">Colloquium, University of Cambridge.</text>
+<text top="350" left="157" width="184" height="13" font="5">Keynote, MBZUAI Workshop.</text>
+<text top="371" left="157" width="471" height="13" font="5">Keynote, AI, Science, and Society @ AI Action Summit, École polytechnique.</text>
+<text top="392" left="109" width="30" height="13" font="5">2023</text>
+<text top="392" left="157" width="292" height="13" font="5">Invited Talk, Asian Engineering Deans’ Summit.</text>
+<text top="413" left="157" width="130" height="13" font="5">Invited Talk, Tencent.</text>
+<text top="434" left="109" width="30" height="13" font="5">2022</text>
+<text top="434" left="157" width="276" height="13" font="5">Invited Talk, Tam Wing Fan Innovation Wing.</text>
+<text top="455" left="157" width="351" height="13" font="5">Westlake Engineering Lecture Series, Westlake University.</text>
+<text top="476" left="157" width="196" height="13" font="5">Colloquium, Nanjing University.</text>
+<text top="497" left="109" width="30" height="13" font="5">2021</text>
+<text top="497" left="157" width="176" height="13" font="5">Invited Talk, Tencent AI Lab.</text>
+<text top="518" left="157" width="149" height="13" font="5">Invited Talk, ByteDance.</text>
+<text top="539" left="157" width="588" height="13" font="5">Colloquium, Shenzhen Institutes of Advanced Technology (SIAT), Chinese Academy of Sciences.</text>
+<text top="560" left="157" width="119" height="13" font="5">Invited Talk, Zoom.</text>
+<text top="581" left="157" width="436" height="13" font="5">Invited Talk, HKU-TCL Joint Research Centre for Artificial Intelligence.</text>
+<text top="602" left="157" width="468" height="13" font="5">Keynote, Genetic and Evolutionary Computation Conference (GECCO-2021).</text>
+<text top="622" left="109" width="30" height="13" font="5">2020</text>
+<text top="622" left="157" width="231" height="13" font="5">Colloquium, University of Cambridge.</text>
+<text top="643" left="109" width="30" height="13" font="5">2019</text>
+<text top="643" left="157" width="189" height="13" font="5">Colloquium, Peking University.</text>
+<text top="664" left="157" width="185" height="13" font="5">Invited Talk, Fudan University.</text>
+<text top="685" left="157" width="231" height="13" font="5">Colloquium, University of Cambridge.</text>
+<text top="706" left="109" width="30" height="13" font="5">2017</text>
+<text top="706" left="157" width="247" height="13" font="5">Colloquium, National Taiwan University.</text>
+<text top="727" left="109" width="30" height="13" font="5">2016</text>
+<text top="727" left="157" width="184" height="13" font="5">Colloquium, Academia Sinica.</text>
+<text top="1088" left="86" width="94" height="13" font="5">Lingpeng Kong</text>
+<text top="1088" left="386" width="103" height="13" font="5">January 27, 2026</text>
+<text top="1088" left="773" width="15" height="13" font="5">13</text>
+</page>
+</pdf2xml>

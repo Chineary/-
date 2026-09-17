@@ -1,0 +1,272 @@
+    UNC OMP: Can Matrix Entropy Uncover Sparsity? — A Compressor
+            Design from an Uncertainty-Aware Perspective
+                    Jing Xiong1 Jianghan Shen2 Fanghua Ye3 * Chaofan Tao1
+                   Zhongwei Wan4 Jianqiao Lu1 Xun Wu5 Chuanyang Zheng6
+                    Zhijiang Guo8 Min Yang7 Lingpeng Kong1 Ngai Wong1
+    1                                       2                         3                                4
+        The University of Hong Kong             Nanjing University        University College London        The Ohio State University
+         5                              6                                               7
+             Microsoft Research Asia        The Chinese University of Hong Kong             SIAT, Chinese Academy of Sciences
+                              8
+                                  The Hong Kong University of Science and Technology (Guangzhou)
+                                                   Contact: junexiong@connect.hku.hk
+
+
+                          Abstract                                        enabling tasks ranging from text generation to com-
+                                                                          plex reasoning. However, deploying LLMs for
+     Deploying large language models (LLMs) for
+                                                                          long-context inference remains resource-intensive,
+     long-context inference remains challenging due
+     to their substantial memory and computational
+                                                                          as they demand substantial memory and computa-
+     demands. While techniques such as Key-Value                          tion (Shazeer et al., 2017). A commonly adopted
+     (KV) cache compression are designed to re-                           optimization, the KV cache (Pope et al., 2023;
+     duce memory usage, they often neglect the                            Liu et al., 2024b), stores keys and values from
+     structured sparsity inherent in the relationship                     previous tokens to avoid redundant computations.
+     between hidden states and their correspond-                          Nonetheless, maintaining a full KV cache for long
+     ing KV cache. In this work, we explore the                           sequences imposes considerable memory overhead,
+     role of uncertainty as a potential indicator of
+                                                                          which poses a bottleneck (Liu et al., 2024b).
+     sparsity within LLMs. We propose UNC OMP,
+     an uncertainty-aware framework that leverages                           To address this, several compression strategies
+     truncated matrix entropy to identify areas of                        emerge: i) Eviction (Ge et al., 2023; Zhang et al.,
+     low information content, thereby revealing spar-                     2024d; Li et al., 2024; Zhang et al., 2024c), ii)
+     sity patterns that can be used for adaptive com-                     Merging (Liu et al., 2024b; Wan et al., 2024;
+     pression. Unlike traditional methods that apply                      Wang et al., 2024b; Zhang et al.), iii) Quantization
+     uniform compression, UNC OMP dynamically                             (Hooper et al., 2024; Zhang et al., 2024a; Liu et al.,
+     adjusts its approach to compression, guided
+                                                                          2024e), and iv) Head Pruning (Ainslie et al., 2023;
+     by uncertainty measures that reflect the im-
+     portance of various model components. Our
+                                                                          Shazeer, 2019; Liu et al., 2024a; Yu et al., 2024;
+     analysis shows that sparsity patterns, when de-                      Brandon et al., 2024). However, these methods typ-
+     rived from uncertainty estimates, can be ex-                         ically operate on sparsity along a single axis—such
+     ploited to reveal special long-range dependen-                       as pruning attention heads or compressing individ-
+     cies, such as retrieval heads and retrieval lay-                     ual layers—without fully capturing how sparsity
+     ers. This perspective not only enhances our                          emerges across the model’s hierarchical structure,
+     understanding of how compression can be opti-                        overlooking its complexity from different layers
+     mized but also provides new insights into the
+                                                                          and attention heads. To bridge this gap, we in-
+     inherent sparsity of LLMs during long-context
+     inference. By focusing on uncertainty to ana-                        troduce Matrix Information Theory (Zhang et al.,
+     lyze the sparsity pattern in detail, UNC OMP                         2023) and propose truncated matrix entropy as a
+     reduces the KV cache size to 4.74% of the                            unified framework that connects uncertainty and
+     original, achieves a 6% prefill speedup, and                         sparsity in a principled manner.
+     improves throughput by 6.4× — not only deliv-                           Specifically, existing methods (Zhang et al.,
+     ering strong lossless compression performance,                       2024d; Xiao et al., 2023) often overlook
+     but also validating the effectiveness of the un-
+                                                                          the sparsity pattern shared between hidden
+     derlying theoretical tool. We release the code at
+     https://github.com/menik1126/UNComp.
+                                                                          states—typically the outputs of the multi-layer per-
+                                                                          ceptron (MLP)—and the KV cache. Rather than
+1       Introduction                                                      viewing sparsity as a localized artifact of atten-
+                                                                          tion mechanisms, we interpret it as an indicator
+The development of large language models (LLMs)                           of low-information regions distributed throughout
+drives remarkable progress in natural language pro-                       the hidden states and KV cache. This shift—from
+cessing (Achiam et al., 2023; Kaplan et al., 2020),                       the empirical observation layer and head spar-
+    * Corresponding author: fanghua.ye.21@gmail.com                       sity (Jiang et al., 2024; Wu et al., 2024; Xiao et al.,
+                                                                     4179
+         Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing, pages 4179–4199
+                             November 4-9, 2025 ©2025 Association for Computational Linguistics
+2024; Cai et al., 2024) to uncertainty-aware com-        they overlook the compression of hidden states,
+pression—reveals latent redundancies during long-        as well as differences in retrieval behaviors across
+context inference and guides adaptive hidden state       layers. This not only degrades the performance
+compression for faster prefill and KV cache evic-        of retrieval layers, but also misses the opportunity
+tion reducing. Our key contributions are as follows:     to accelerate computation in the prefill stage by
+                                                         failing to compress the hidden states.
+    1. We propose a novel uncertainty-aware com-
+       pression framework grounded in truncated          2.2   Information Compression Behavior
+       matrix entropy, uncovering the relationship be-   The sparsity patterns discussed in Section 2.1 are
+       tween information compression patterns and        related to the model’s internal information com-
+       sparsity patterns in LLMs. Furthermore, we        pression behavior (Feng et al., 2022). In this paper,
+       provide a detailed empirical study of the con-    we provide a detailed categorization and analysis of
+       nection between information compression pat-      the compression patterns across different parameter
+       terns and compression algorithms.                 matrices. Recent work (Delétang et al., 2023) re-
+                                                         veals that models exhibit spontaneous compression
+    2. We design a two-stage compression frame-          behavior during training. Similar phenomena are
+       work that jointly compresses hidden states        reported in Tao et al. (2024); Huang et al. (2024).
+       and the KV cache. We are the first to indi-       These observations, however, rarely connect infor-
+       rectly compress the KV cache and accelerate       mation compression patterns with sparsity patterns.
+       the prefill stage by compressing the hidden       This motivates us to explore the model’s informa-
+       states, achieving a 60% speedup in the prefill    tion compression behavior—through entropy in-
+       stage, a 4.74% compression ratio, and a 6.4×      creases or decreases—as a means to analyze its
+       improvement in throughput with negligible         sparsity patterns. To achieve this, we introduce
+       performance degradation.                          Matrix Information Theory (Zhang et al., 2023), a
+    3. We demonstrate that our method maintains          theoretical tool for understanding the information
+       performance even under aggressive compres-        compression behavior.
+       sion regimes, including settings where heads      3     Method
+       are entirely removed. In the needle-in-a-
+       haystack task, UNC OMP surpasses the full-        In this section, to explore the information compres-
+       size KV cache baseline at a 9.38% compres-        sion patterns in the model, we derive the definition
+       sion ratio.                                       of truncated matrix entropy and reveal the connec-
+                                                         tion between information compression patterns and
+2     Related Work                                       sparsity patterns, leading to compression strategy.
+2.1 Attention-Based Token Eviction                       3.1   Preliminary
+Early works identify distinctive attention patterns      To define truncated matrix entropy, we first intro-
+in the KV cache, such as the attention sink (Liu         duce the matrix entropy of the token matrix (either
+et al., 2024c; Xiao et al., 2023). In addition, prior    from a layer or a head). Let the token matrix be
+studies (Cai et al., 2024; Yang et al., 2024a) empir-    X = [x1 , x2 , . . . , xN ], where xi ∈ RD is the i-th
+ically observe that sparsity increases with model        token vector, and N is the sequence length. The
+depth. Distinct sparsity patterns—such as retrieval      covariance matrix ΣX ∈ RD×D is computed as:
+heads (Xiao et al., 2024; Wu et al., 2024)—are
+also observed across attention heads. However,                             1 X
+                                                                                N
+                                                                  ΣX =             (xi − x̄)(xi − x̄)T ,    (1)
+the underlying mechanisms driving these sparsity                         N − 1 i=1
+patterns remain to be fully understood.
+   Recent methods employ cumulative attention            where x̄ is the mean vector of the sequence X.
+scores for selecting subsets of tokens (Zhang et al.,    Based on this covariance matrix, we derive the
+2024c; Li et al., 2023; Jiang et al., 2024; Zhang        definition of matrix entropy. Specifically, following
+et al., 2024d; Ge et al., 2023; Sheng et al., 2023;      Giraldo et al. (2014), the matrix entropy based on
+Liu et al., 2024d; Li et al., 2024). These methods       ΣX is defined as:
+apply a fixed compression ratio to sparsity patterns     Lemma 1 As α → 1 (the entropy measure depend-
+observed in the layers of the KV cache. However,         ing on α), we obtain the definition of the von Neu-
+                                                     4180
+                                                                                                                                                                    NarrativeQA                                                                  2WikiMQA
+mann (matrix) entropy (Von Neumann, 2013):                                                                                                         0                                                                           0
+
+                                                                                                                                                   4                                                                           4
+
+
+
+
+                                                                                                                                                                                                       Truncation Effective Rank
+
+
+
+                                                                                                                                                                                                                                                                                   Truncation Effective Rank
+                                                                                                                                                                                                     1.8                                                                         1.8
+                                                                                                                                    (2)
+                                                                                                                                                   8                                                                           8
+                                    H(ΣX ) = −Tr (ΣX log (ΣX )) .
+                                                                                                                                                   12                                                                          12
+
+
+                                                                                                                                               Layer
+                                                                                                                                                   16                                                1.7                       16                                                1.7
+
+
+
+                                                                                                                                                                                                                 Layer
+Lemma 2 Let ΣX be a symmetric positive definite                                                                                                    20
+                                                                                                                                                                                                     1.6
+                                                                                                                                                                                                                               20
+
+                                                                                                                                                                                                                                                                                 1.6
+matrix with eigenvalues σ = (σ1 , σ2 , . . . , σD )T .
+                                                                                                                                                   24                                                                          24
+
+                                                                                                                                                   28                                                                          28
+
+The matrix entropy of ΣX can be expressed as:                                                                                                      32
+                                                                                                                                                        0   4   8    12    16    20   24   28   32
+                                                                                                                                                                                                     1.5                       32
+                                                                                                                                                                                                                                    0    4   8   12    16    20   24   28   32
+                                                                                                                                                                                                                                                                                 1.5
+                                                                                                                                                                          Head                                                                        Head
+
+                                                                      D
+                                                                      X
+                                        H(ΣX ) = −                                        σi log σi ,                               (3)        Figure 2: The heatmap of erankk (ΣQm ) across different
+                                                                      i=1                                                                      layers and heads.
+
+where D is the dimension of the covariance matrix.
+We define matrix entropy on the token matrix X                                                                                                 Observation To gain insight, we first focus on
+and provide the proof in Appendix G.                                                                                                           the spectrum of ΣQm (Tang et al., 2024b) across
+   To provide an intuition of its role in the token ma-                                                                                        different heads in the model’s final layer. Figure 1
+trix, we introduce effective rank (Roy and Vetterli,                                                                                           reveals: i) The initial part of the eigenvalue distri-
+2007), which links matrix entropy to dimension-                                                                                                bution varies significantly, suggesting that only a
+ality. For the specific definition, please refer to                                                                                            small portion of the feature components are active.
+Appendix G. Recent works (Zhang et al., 2023;                                                                                                  ii) Eigenvalue distributions across heads differ sig-
+Zhuo et al., 2023) investigate the relationship be-                                                                                            nificantly in the leading part, prompting us to use
+tween matrix entropy and effective rank. Inspired                                                                                              this part to calculate the model’s effective rank and
+by these studies, we adopt effective rank to quantify                                                                                          distinguish head types.
+the effective information across heads and layers                                                                                                 A key observation from Figure 2 is that, in dif-
+to explore the model’s information compression                                                                                                 ferent layers, there are heads with abnormally high
+patterns. Based on these patterns, we set different                                                                                            entropy, with most of them found in the middle lay-
+compression ratios for different heads and layers.                                                                                             ers (9-15). Later empirical experiments show that
+We define the compression ratio ρ for each X as                                                                                                these high-entropy heads and their corresponding
+the ratio between the compressed length N̂ and the                                                                                             layers are associated with special sparsity patterns
+original sequence length N , i.e.,                                                                                                             that have long-range dependency (retrieval layers).
+                                                                                                                                               Discussion By Lemma 2, the covariance matrix
+                                                                          N̂
+                                                            ρ=               .                                                      (4)        used for computing the matrix entropy must be pos-
+                                                                          N
+                                                                                                                                               itive definite. Therefore, we calculate the effective
+3.2 Truncated Matrix Entropy                                                                                                                   rank of ΣQm using a positive definite submatrix.
+                                                                                                                                               Furthermore, as shown in Figure 1, we observe
+                         Eigenvalues Plot for NarrativeQA
+                                (Every 4th Series)
+                                                                                                   Eigenvalues Plot for Qasper
+                                                                                                       (Every 4th Series)
+                                                                                                                                               a distinct elbow point (Thorndike, 1953), where
+                                                            head 0
+                                                            head 4
+                                                            head 8
+                                                                                   0.25
+                                                                                                                                  head 0
+                                                                                                                                  head 4
+                                                                                                                                  head 8
+                                                                                                                                               the eigencomponents preceding the elbow point
+             0.25
+
+                                                                                                                                               represent the principal components of the matrix.
+                                                            head 12                                                               head 12
+                                                            head 16                                                               head 16
+                                                            head 20                0.20                                           head 20
+
+
+
+                                                                                                                                                  Based on the above observations, we select the
+             0.20                                           head 24                                                               head 24
+                                                            head 28                                                               head 28
+
+
+
+
+Eigenvalue                                                            Eigenvalue
+                                                                                   0.15
+
+                                                                                                                                               top-k eigenvalues before the elbow point (Kaiser,
+             0.15
+
+
+                                                                                   0.10
+
+                                                                                                                                               1960) and compute the effective rank. This leads
+             0.10
+
+
+
+
+                                                                                                                                               to the definition of truncated effective rank, which
+             0.05                                                                  0.05
+
+
+
+             0.00
+                    0   20     40     60
+                                      SVD n
+                                              80     100    120
+                                                                                   0.00
+                                                                                          0   20      40     60
+                                                                                                             SVD n
+                                                                                                                     80     100   120          quantify uncertainty through the effective rank of a
+                                                                                                                                               submatrix:
+Figure 1: The spectrum of ΣQm across two datasets in
+                                                                                                                                                                                                                        k
+                                                                                                                                                                                                                        X
+LongBench and various heads.
+                                                                                                                                                                                 Hk (ΣX ) = −                                           σi log σi ,                                (5)
+                                                                                                                                                                                                                         i=1
+
+   To uncover information compression patterns
+                                                                                                                                                                            erankk (ΣX ) = exp (Hk (ΣX )) .                                                                        (6)
+in the token matrix, how do we determine which
+matrix—key (Km ), query (Qm ), value (Vm ), or                                                                                                 With erankk (ΣX ) defined, we begin classifying the
+hidden state (Hm )—best captures the compression                                                                                               compression patterns and exploring the estimation
+patterns in the token matrices? To answer this                                                                                                 of the compression ratio of Hm across layers and
+question, we propose truncated matrix entropy.                                                                                                 Km , Vm across heads.
+                                                                                                                                            4181
+

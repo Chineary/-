@@ -1,0 +1,212 @@
+                                         B EYOND C ONFIDENCE : A DAPTIVE AND C OHERENT D ECODING
+                                                    FOR D IFFUSION L ANGUAGE M ODELS
+
+
+
+                                                           Kecheng Chen1,⋆ , Ziru Liu2,⋆,♠ , Xijia Tao3 , Hui Liu1 , Xinyu Fu2 , Suiyun Zhang2 ,
+                                                                     Dandan Tu2 , Lingpeng Kong3 , Rui Liu2,♣ , Haoliang Li1,♣
+                                                             1
+                                                                 City University of Hong Kong, 2 Huawei Research, 3 The University of Hong Kong
+
+
+
+
+arXiv:2512.02044v1 [cs.CL] 26 Nov 2025
+                                                                        Email: liu.rui2@huawei.com; haoliang.li@cityu.edu.hk
+
+
+
+
+                                                                                                  A BSTRACT
+                                                    Diffusion Language Models (DLMs) have recently achieved significant success due to their any-order
+                                                    generation capabilities. However, existing inference methods typically rely on local, immediate-
+                                                    step metrics—such as confidence or entropy—which inherently lack a more reliable perspective.
+                                                    This limitation frequently leads to inconsistent sampling trajectories and sub-optimal generation
+                                                    quality. To address this, we propose Coherent Contextual Decoding (CCD), a novel inference
+                                                    framework built upon two core innovations. First, CCD employs a trajectory rectification mechanism
+                                                    that leverages historical context to enhance sequence coherence, enabling the early rejection of
+                                                    sub-optimal paths. We demonstrate that this mechanism is theoretically equivalent to modeling the
+                                                    consistency of historical steps via the conditional mutual information between context and token
+                                                    predictions. Building on this theoretical insight, we further address the inefficiency of conventional
+                                                    uniform decoding budgets. Instead of rigid allocations based on diffusion steps, we introduce an
+                                                    adaptive sampling strategy that dynamically adjusts the unmasking budget for each step according to
+                                                    our consistency metric. Consequently, our method significantly improves the quality of generation
+                                                    trajectories while accelerating the sampling process. Empirically, our method achieves a simultaneous
+                                                    enhancement in both inference speed and performance across diverse benchmarks on Dream and
+                                                    LLaDA, delivering up to 3.48× speedup alongside 3.91% performance improvement.
+
+
+                                         1    Introduction
+
+                                         Recently, modern Large Language Models (LLMs) have demonstrated exceptional capabilities across diverse tasks,
+                                         including coding, multi-turn dialogue, and mathematical reasoning [1, 2, 3]. The prevailing paradigm for these
+                                         models relies on autoregressive transformer architectures [4], which utilize a causal mask to perform next-token
+                                         prediction via left-to-right generation. To transcend the constraints of this paradigm, the community is actively
+                                         exploring next-generation architectures capable of mitigating the inherent inductive biases of autoregressive models
+                                         [5, 6, 7, 8, 9]. Notably, Diffusion Language Models (DLMs) have emerged as a compelling alternative [10, 11].
+                                         Unlike autoregressive models restricted to unidirectional contexts, DLMs leverage bidirectional contexts, incorporating
+                                         information from all positions simultaneously. This global perspective allows DLMs to potentially achieve superior
+                                         global awareness and long-term planning capabilities. With recent scaling to the 7–8 billion parameter regime (e.g., the
+                                         Dream [12] and LLaDA [13]), masked diffusion mechanisms have proven capable of matching the performance of
+                                         their autoregressive counterparts while exhibiting significantly better long-term planning [12]. However, in contrast
+                                         to the rapid advancements in training strategies, the inference (or sampling) procedure of DLMs remains relatively
+                                         underexplored. Specifically, DLMs iteratively decode semantically meaningful tokens from input mask tokens based on
+                                         the previously decoded context. Existing methods typically leverage the predictive distribution at the current step to
+                                         select the top-k or most certain tokens for unmasking [12]. To balance performance and latency, the decoding budget
+                                         is usually kept uniform across all iterations [12, 13]. While some approaches employ dynamic strategies based on
+                                         confidence levels [14, 15, 16] or speculative techniques [17], the standard paradigm remains largely heuristic.
+                                             1⋆
+                                                  Contribute equally to this work ♣ Corresponding authors ♠ Project Lead
+Coherent Cotextual Decoding for DLMs
+
+
+
+                      Query: Lorie earns $10 per hour. Karen earns twice what Lorie earns.
+                      How much does Karen earn in two days if she works 3 hours per day?
+                                                                      Coherent Contextual Decoding (CCD)
+       Previous steps
+                                                                                                                      Top-V(=4)
+         #1              #2       #3      #4     #5       #6    #7       #8   #9    #10 #11         Token
+                                                                                                    Index
+                                                                                                                  : Confident token
+
+       Lorie                                                                                      Step #1    Historical Buffer ℋt=7
+                                                …                                                             #6 #8 #9 #10 #11
+      Lorie           earns     $10      per hour ⨀ ⨀                 ⨀ ⨀ ⨀ ⨀ Step #5                         ⨀ ⨀ ⨀                 ⨀
+      Lorie           earns    $10      per hour ,             ⨀ ⨀ ⨀ ⨀ ⨀ Step #6                                   ⨀ ⨀ ⨀ ⨀
+
+       Current step
+                                                                                                              #6 #8 #9 #10 #11 #7
+                                                                                                  Step #7
+                                                                                                              ⨀ ⨀ ⨀                ⨀
+       Lorie          earns     $10      per hour ,            ⨀ ⨀ ⨀ ⨀ ⨀ …                                         ⨀ ⨀ ⨀ ⨀
+                                                                ①        ③    ②            ④ Confidence
+                                                                                                    Rank
+                 Sampling via Current Buffer-based Approximated Target Distribution in Eq. (18)                    ⨀ ⨀             ⨀ ⨀
+
+       Lorie          earns     $10      per hour ,                  Karen                                                         c
+                                                                                                                  Current Buffer ℋt=7
+
+                                                      …                                            Step #8          Updated Historical Buffer
+
+          Decoded in          Decoded in                                 Prediction of mask           Reject the most
+          current step        previous steps
+                                                      Mask token   ⨀     token in current step        confident token
+
+Figure 1: Framework of our proposed method. We define a historical buffer Ht at iteration t that stores the predictive
+distributions from the most recent d iterations (except for the current iteration t) with only the top-V most confident
+tokens at each iteration. At the current iteration t, we also identify mask token positions that appear both in the current
+top-V set and in the historical buffer to obtain the current buffer Htc , which ensures consistently confident tokens with
+maximized effective contexts to conduct an approximated target distribution-based sampling procedure in Eq. (18).
+Despite their empirical success, we argue that current single-step sampling procedures with uniform decoding budgets
+suffer from three critical limitations: (i) Susceptibility to Local Optima: Whether relying on entropy or maximum
+probability, single-step certainty-based schemes are prone to settling for local optima. This issue is exacerbated by the
+tendency of modern LLMs to exhibit over-confident even in error predictions [18]. (ii) Lack of Theoretical Grounding:
+Current sampling procedures lack a direct theoretical bridge to the sampling error rate, making it difficult to govern the
+decoding process for controllable performance guarantees. (iii) Suboptimal Budget Allocation: Intuitively, a uniform
+sampling scheme is inefficient [19] on some sceneries. For instance, context-insensitive generations (e.g., inherent
+templates or formulaic phrases) require a smaller decoding budget, whereas complex reasoning steps require a larger
+one. While recent works have attempted to improve reliability—such as temporal self-consistency voting [20] or End-
+of-Sequence (EOS) token rejection with ascending budgets [19]—these solutions often incur significant computational
+overheads due to complex post-processing or rely on handcrafted heuristics that lack a solid theoretical foundation.
+To address these challenges collectively, we introduce Coherent Contextual Decoding (CCD), a novel inference
+framework that redefines DLM inference as a contextual consistency-aware, multi-step decoding process. CCD adopts
+a new perspective by modeling the consistency of historical steps using the conditional mutual information between the
+context and token predictions. This provides a theoretically grounded, fine-grained measure of consistency. Furthermore,
+we address the inefficiency of rigid decoding schedules by introducing an adaptive sampling strategy that dynamically
+adjusts the unmasking budget based on our consistency metric. Our key contributions are summarized as follows:
+
+• We propose Coherent Contextual Decoding, a training-free decoding framework that employs a trajectory rectification
+  mechanism. By leveraging historical context to enhance sequence coherence, CCD enables the early rejection of
+  unreliable current-step optima.
+• We provide a rigorous theoretical analysis demonstrating that our mechanism is equivalent to modeling the consistency
+  of historical steps via conditional mutual information. This formulation implicitly constructs a bridge to the theoretical
+  upper bound of the sampling error rate.
+
+
+                                                                     2
+     Coherent Cotextual Decoding for DLMs
+
+
+     • We further introduce an adaptive sampling strategy that replaces rigid diffusion steps with a dynamic budget allocation
+       guided by our consistency metric. This significantly improves the efficency of the sampling process.
+     • Empirically, we demonstrate our method achieve simultaneous enhancement in both inference speed and performance
+       across diverse benchmarks on Dream and LLaDA, delivering up to 3.48× speedup alongside 3.91% performance
+       improvement.
+
+     2                             Preliminaries
+    Notation. Let X = X ∪ {M} be the extended vocabulary of a finite-size vocabulary X, where M denotes an absorbing
+                                                                                                     N
+    mask token. Let s ∈ XL be a prompt sequence of length L. Let xt = {xt,1 , . . . , xt,N } ∈ X denote the response
+    sequence at time step t, where t ∈ {0, . . . , T } indicates the diffusion step. We adhere to the standard diffusion
+    formulation where the process evolves from a fully masked state xT = {M}N to a fully unmasked data state x0 ∈ XN .
+    We denote the concatenation of the prompt and response at step t as [s; xt ]. Hereafter, x̂t and xt denote the predicted
+    and true response sequences at iteration t, respectively.
+                              90                                                                                      4
+                                        Baseline                                                                                                                       Baseline
+                              80                                                                                                                                       Ours (CCD-DS)
+
+
+
+
+Cumulative Effective Tokens
+                                        Ours (CCD-DS)
+                              70
+                                                                                                                      3
+
+
+
+
+                                                                                                    Sampling Budget
+                              60
+
+                              50
+                                                                                                                      2
+                              40
+
+                              30
+
+                              20                                                                                      1
+
+                              10
+
+                              0                                                                                       0
+                                   0               50    100         150     200        250                               0           50       100         150   200          250
+                                                          Decoding Step                                                                         Decoding Step
+                                                               (a)                                                                                   (b)
+    Figure 2: This analysis investigates the Cumulative effective tokens (CET) and sampling budget using the Dream model
+    on the Trip benchmark. The sequence length is set to 256. (a) We calculate the CET by excluding padding/EOS tokens
+    from the total generated tokens. The decoding process includes periods where multiple EOS tokens are generated
+    (visible as plateaus). (b) Sampling budget of each diffusion step of different sampling procedures. For our method, the
+    decoding process is early stopped because all mask tokens are decoded.
+
+     Sampling procedure. A Diffusion Language Model (DLM) approximates the reverse process as a sequence-to-sequence
+     mapping parameterized by θ, which outputs a predictive distribution p̂θ . The model progressively decodes mask tokens
+     starting from xT . At each iteration, the model takes the fixed prompt s and the state from the previous iteration xt+1 to
+     estimate the clean data x0 .
+    Typically, the generation budget bt (the number of tokens to unmask at step t) is uniform across iterations (as illustrated
+    in the dashed curve of Figure 2(b)), such that bt ≈ N/T for all t ∈ [T ]. Under this setup, the most widely adopted
+    sampling schedule1 utilizes the predictive distribution to select the top-bt most certain tokens for decoding. We employ
+    the negative entropy of the predictive distribution as a generic surrogate for confidence2 . The sampling procedure3
+    from xt+1 to xt is formulated as:
+                                                                                    (
+                                                                                     arg max pkt,i                        if i ∈ Jt
+                                                                           xt,i =         k∈X                                              ,                                        (1)
+                                                                                     xt+1,i                               otherwise
+
+    where the components are defined as:
+
+                                       • pt,i = p̂θ (· | xt+1,i = M, ct,i , s) is the predictive distribution at position i, given the prompt s and context
+                                         ct,i . Here, ct,i denotes the set of unmasked tokens that serve as the context for step t for position i.
+                                       • Kt = {i | xt+1,i = M} is the set of indices currently masked.
+                               1
+           Random selection is feasible but typically yields degraded performance.
+                               2
+           Negative entropy serves as a smooth approximation to confidence-based metrics (e.g., margin confidence), particularly given
+     that LLM distributions tend to be highly overconfident [18].
+         3
+           We formulate this using deterministically greedy sampling (arg max), but it can be extended to stochastic categorical sampling.
+
+
+                                                                                                3
+

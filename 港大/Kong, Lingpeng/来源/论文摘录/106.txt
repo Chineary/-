@@ -1,0 +1,203 @@
+            Event Transition Planning for Open-ended Text Generation
+Qintong Li♥∗ Piji Li♣ Wei Bi♣ Zhaochun Ren♦ Yuxuan Lai♥† Lingpeng Kong♥♠
+             ♥
+               Department of Computer Science, The University of Hong Kong
+                         ♣
+                           Tencent AI Lab ♦ Shandong University
+                       ♠
+                         Shanghai Artificial Intelligence Laboratory
+                               qtli@connect.hku.hk
+                  {lipiji.pz, erutan.pkuicst}@gmail.com
+            victoriabi@tencent.com, zhaochun.ren@sdu.edu.cn
+                                   lpk@cs.hku.hk
+
+                         Abstract                                                                         XATTR bride and groom be the
+                                                                     Event Transition Path Stage 1        happiest couple
+                                                                     bride and groom enter                              …
+    Open-ended text generation tasks, such as dia-                   OEFFECT the audience
+                                                                                                          XREACT couple feel happy
+    logue generation and story completion, require                   cheer … ?
+                                                                                                 EP
+    models to generate a coherent continuation
+    given limited preceding context. The open-                       Story Context              Stage 2
+                                                                                                          The bride and groom were the
+                                                                                                          happiest couple in the world!
+    ended nature of these tasks brings new chal-                     When the bride and groom                            …
+    lenges to the neural auto-regressive text gen-                   entered, the audience                The couples were so happy to be
+    erators nowadays. Despite these neural mod-                      cheered … ?                          married!
+                                                                                                 PG
+    els are good at producing human-like text, it
+    is difficult for them to arrange causalities and              Figure 1: An illustration of our planning based frame-
+    relations between given facts and possible en-                work in story completion task. Given story context,
+    suing events. To bridge this gap, we propose                  we extract corresponding event transition path, and use
+    a novel two-stage method which explicitly ar-                 model EP to develop potential ensuing event transition
+    ranges the ensuing events in open-ended text                  paths. The planned paths accordingly guide the path-
+    generation. Our approach can be understood                    aware text generation model PG.
+    as a specially-trained coarse-to-fine algorithm,
+    where an event transition planner provides a
+    “coarse” plot skeleton and a text generator in                2021; Fan et al., 2019; Dou et al., 2021; Dziri et al.,
+    the second stage refines the skeleton. Experi-                2021). These issues are particularly serious in open-
+    ments on two open-ended text generation tasks                 ended text generation tasks (e.g., story completion),
+    demonstrate that our proposed method effec-
+                                                                  where the model is asked to produce a coherent
+    tively improves the quality of the generated
+    text, especially in coherence and diversity. The              continuation which often involves multiple events,
+    code is available at: https://github.com/                     given limited preceding context.
+    qtli/EventPlanforTextGen.                                        To bridge this gap, we propose a two-stage
+                                                                  method which explicitly models the event transi-
+1    Introduction                                                 tions in open-ended text generation. Multi-step
+With the fast development of large-scale pre-trained              generation has been adopted to control the gen-
+models, considerable progress has been made in                    erated content at a high level (Dong and Lapata,
+improving the quality of machine generated text                   2018; Ji et al., 2020; Xu, 2021). Different from
+(Radford et al., 2019; Rashkin et al., 2019a; Zhang               previous works that rely on inflexible pattern re-
+et al., 2020b; Brown et al., 2020; Guan et al., 2021;             trieval, we leverage a generative model as an event
+Bakhtin et al., 2021). Today, machine learning                    transition planner in the first stage to boost the high-
+models can do extremely well in generating text                   level coherence and causalities in open-ended text
+that looks human (Clark et al., 2021). The problem                generation.
+is still far from solved, however, as further read-                  Specifically, in stage one, an event transition
+ing of the machine-generated text often exposes                   planner (§3.1) outlines a transition path of events
+defects such as self-contradiction and topic drift-               starting from the ones extracted from the input
+ing (Bisk et al., 2020; Gao et al., 2020; Tan et al.,             context. In stage two, this path is used to ensure a
+    ∗                                                             relevant and sound continuation from the actual text
+      The majority of this work was done while the first author
+was interning at Tencent AI Lab.                                  generator (§3.2). This method can be understood as
+    †
+      Corresponding author.                                       a specially-trained coarse-to-fine algorithm, where
+
+                                                              3412
+                  Findings of the Association for Computational Linguistics: ACL 2022, pages 3412 - 3426
+                            May 22-27, 2022 c 2022 Association for Computational Linguistics
+                  Dialogue Generation                         Story Completion
+               [1] my husband lost a job but i’m hop- [1] John got laid off from his company. — john get laid off
+               ing he can find a full time job soon. — [2] He was close to retirement age. — john is close retirement
+ Input Context my husband lost job , I hope he find job   [3] John felt bored and listless his first week of unemployment.
+ — Events      [2] He will , I have faith. — I have faith — john feel bored and listless
+               [3] thank you so much! — thank you         [4] John decided to start a business of his own.
+                                                          — john decide start business
+ Target Output No problem. What kind of work does he do? He now has a flourishing online company. — john have a
+ — Events      — what work he do                         company
+
+               my husband lost job X ATTR i hope he john get laid off        X ATTR        john is close to retirement
+ Event Transi- find job O R EACT i have faith X R EACT X R EACT     john feel bored and listless    X R EACT      john
+ tion Path     thank you O R EACT what work he do      decide start business X E FFECT john have a company
+
+Table 1: Examples of event transition paths acquired from downstream tasks, i.e., dialogue generation and story
+completion. Events are marked in blue box .
+
+
+an event transition planner provides a “coarse” plot           2   Event Transition Path.
+skeleton and a path-aware text generator refines
+                                                              In this work, the event transition path is defined
+the skeleton. Figure 1 shows an illustration of our
+                                                              as an alternating sequence between events and re-
+approach.
+                                                              lations, where an event is a subject-verb phrase,
+                                                              a relation is chosen from a pre-defined label set
+   There are two main challenges in this method.
+                                                              (e.g., O R EACT - object reaction; X ATTR - sub-
+First, the planer should produce high-quality and
+                                                              ject attribute) of a commonsense atlas (Sap et al.,
+diverse paths that can generalize well to the un-
+                                                              2019). Table 1 shows some text examples and their
+seen events at test time. For this challenge, we
+                                                              corresponding event transition paths. We collect
+fine-tune a GPT-2 (Radford et al., 2019) on a large
+                                                              event transition paths from a commonsense atlas
+amount of event paths extracted from common-
+                                                              ATOMIC (Sap et al., 2019), as well as from the
+sense graphs (Sap et al., 2019), as well as from the
+                                                              training set of the specific task, to train an event
+training set of the specific task, aiming to extrapo-
+                                                              transition planner.
+late to event sequences that never appeared in these
+sources with the help of general knowledge stored             Sampling Paths from ATOMIC. We use every-
+in the large pre-trained model (Petroni et al., 2019;         day commonsense atlas ATOMIC (Sap et al., 2019)
+Lee et al., 2021).                                            to acquire plenty event paths. ATOMIC is orga-
+                                                              nized through 9 relations and 877k events (textual
+   For the second challenge, the auto-regressive              descriptions) of inferential commonsense, e.g., if
+text generator need to work effectively under the             “PersonX pays PersonY a compliment”, then “Per-
+supervision of the even transition path. We thus              sonY will likely return the compliment”. It has
+design an event query layer to absorb information             been demonstrated that ATOMIC is useful for open-
+from the planned paths and use the query layer to             ended text generation tasks, such as story genera-
+guide the text generation process.                            tion (Guan et al., 2020b).
+                                                                 Besides, to increase the flexibility, we introduce
+   We validate our method thorough extensive ex-              a reverse relation (e.g., _ X ATTR) for each original
+periments on two standard open-ended text gen-                relation (e.g., X ATTR) so that a sampled path can
+eration tasks, dialogue generation (Rashkin et al.,           contain reverse triplets. The intuition is that, in
+2019b) and story completion (Mostafazadeh et al.,             open-ended text generation, the narrative maybe in
+2016). Our two-stage approach outperforms a                   a reverse order. After explaining the event A, the
+strong knowledge enhanced GPT-2 baseline (Guan                author may want to introduce the subsequent event
+et al., 2020a) in both automatic and human evalu-             B. Meanwhile, if the author introduce the event B
+ation metrics. Further analysis shows that the im-            first, she/he may want to describe the event A as an
+provements of the event transition planning model             explanation for the reason/motivation.
+come in particular from the high-level consistency               Finally, we collect sufficient event paths of
+and diversity in long and difficult generation cases.         variant lengths from ATOMIC via random walk-
+
+                                                         3413
+                                 (1) Event Transition Planner           (2) Event-path-aware Text Generator
+   Input context 𝔁:             Generative event path 𝓻𝔂:                Input event path;
+                                XREACT she feel proud XEFFECT it be      Generative event path
+   Annika saw kids              hard
+   younger than her doing                                                                        Output 𝔂:
+                                                                           Event Query Layer
+   it , and she felt jealous.
+                                    𝓏!   𝓏           GPT-2                                       She felt so proud
+   She decided to practice
+   riding her bike to           Two event prompts                                                of herself for
+   school.                                                                      GPT-2            doing it , even
+                                 Input event path 𝓻𝓍 :                                           though it was
+                                                                                                 hard.
+                                 Annika see younger do it XREACT
+                                 she feel jealous XREACT She decide
+                                                                            Input context 𝔁
+                                 practice riding bike
+
+
+Figure 2: Overall architecture of the proposed coarse-to-fine framework. It consists of two components. (1) Event
+Transition Planner: given a input context, it first extracts corresponding event path and then generates possible
+ensuing event path. The planner directly inherits the pre-trained parameters from GPT-2; (2) Event-path-aware
+Text Generator: another GPT-2-based generator is applied to generate a natural language sentence by attending
+to input context and explicit event transition path.
+
+
+ing1 . We split the sampled paths into train-                   instances are 639,045/35,503/35,502, respectively.
+ing/validation/test with the ratio of 18:1:1. We use            We finally achieve a accuracy score of 85% on the
+these sampled paths to optimize the event transition            test set for the relation prediction.
+planner which is responsible for generative event
+planning (see §3.1). The statistics of sampled paths            3     Methodology
+are shown in Table 6 of Appendix A. We display
+                                                                We focus on the conditional language modeling
+several examples of the randomly sampled event
+                                                                problem in open-ended text generation tasks. For-
+transition paths in Table 7 of Appendix A.
+                                                                mally, given an input context x, models are re-
+Extracting Paths from Specific Dataset. We                      quired to generate a sentence y that is consistent
+use two kinds of event transition paths. A gen-                 with input context and not contradicts itself.
+eral kind is obtained from random walking on a                     In this work, we propose a two-stage model for
+daily commonsense graph, ATOMIC, as mentioned                   the generation process. In the first stage, we ex-
+above. Another kind is extracted from the natural               tract the starting event sequence r x from the input
+language instances of downstream datasets, which                context and employ the event transition planer to
+is used for the training and prediction stage of task-          generates subsequent event transition path r y based
+specific event planning. For example, given the                 on r x . In the second stage, the output text is gen-
+inputs, “When the bride and groom entered, the au-              erated from an auto-regressive model conditioning
+dience cheered”, the extracted event path is “bride             on the path and the preceding context x.
+and groom enter O E FFECT audience cheer”.                         Figure 2 gives an overview of our coarse-to-fine
+   In detail, for each sentence, to ensure the ex-              framework for open-ended text generation. In a nut-
+tracted events have complete semantics and keep                 shell, we first fine-tune a GPT-2 on event transition
+a similar format with the events in ATOMIC, we                  sequences as an event planner (i.e., a conditional
+use ASER event extractor tool2 to distil events                 generative model for event paths). This fine-tuning
+for all sentences of downstream datasets. We fur-               involves event transition sequences extracted from
+ther predict the relations between these events,                both commonsense graphs and the training set. We
+linking these isolated events as event transition               then build a path-aware text generator with an event
+paths. Specifically, we train a BERT (Devlin et al.,            query layer specifically designed to refer to the
+2019) classifier using event triples and relations              planned path when generating the output.
+in ATOMIC. The sizes of training/validation/test
+                                                                3.1    Generative Event Transition Planner
+   1
+    The hops of these sampled paths fall in between 1 and 5.
+  2
+    https://hkust-knowcomp.github.io/                           In this section, we describe the event transition
+ASER/html/index.html                                            planner which completes the partial event path
+
+                                                             3414
+

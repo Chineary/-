@@ -1,0 +1,228 @@
+                                         Published in Transactions on Machine Learning Research (05/2025)
+
+
+
+
+                                         A Survey on Large Language Model-Based Social Agents
+                                         in Game-Theoretic Scenarios
+
+                                         Xiachong Fengµ Longxu Dous Ella Liαγ Qinghao Wangδ Haochuan Wangβ
+                                         Yu Guoβ Chang Maµ Lingpeng Kongµ
+                                         µ
+                                           The University of Hong Kong s Independent Researcher α National University of Singapore
+                                         γ
+                                           Institute for Infocomm Research (I2R), A*STAR δ Peking University β Harbin Institute of Technology
+                                         fengxc@hku.hk,lpk@cs.hku.hk
+
+                                         Reviewed on OpenReview: https://openreview.net/forum?id=CsoSWpR5xC
+
+
+
+
+arXiv:2412.03920v2 [cs.CL] 20 Jul 2025
+                                                                                           Abstract
+
+                                                 Game-theoretic scenarios have become pivotal in evaluating the social intelligence of Large
+                                                 Language Model (LLM)-based social agents. While numerous studies have explored these
+                                                 agents in such settings, there is a lack of a comprehensive survey summarizing the current
+                                                 progress. To address this gap, we systematically review existing research on LLM-based so-
+                                                 cial agents within game-theoretic scenarios. Our survey organizes the findings into three core
+                                                 components: Game Framework, Social Agent, and Evaluation Protocol. The game frame-
+                                                 work encompasses diverse game scenarios, ranging from choice-focusing to communication-
+                                                 focusing games. The social agent part explores agents’ preferences, beliefs, and reasoning
+                                                 abilities, as well as their interactions and synergistic effects on decision-making. The eval-
+                                                 uation protocol covers both game-agnostic and game-specific metrics for assessing agent
+                                                 performance. Additionally, we analyze the performance of current social agents across var-
+                                                 ious game scenarios. By reflecting on the current research and identifying future research
+                                                 directions, this survey provides insights to advance the development and evaluation of social
+                                                 agents in game-theoretic scenarios.
+
+
+                                         1   Introduction
+                                         The rapid advancement of Large Language Models (LLMs) (Achiam et al., 2023; Team et al., 2023; Jiang
+                                         et al., 2023; Yang et al., 2024a; Dubey et al., 2024) has achieved exceptional performance across a wide array
+                                         of applications, including personal assistant (Li et al., 2024b), search engines (Chen et al., 2024b), code
+                                         generation (Wang et al., 2024b) and embodied intelligence (Liu et al., 2024a). Building on this capability,
+                                         a growing area of research focuses on employing LLMs as central controllers to develop autonomous agents
+                                         with human-like decision-making abilities (Sumers et al., 2023; Wang et al., 2024a). This progress brings the
+                                         realization of Artificial General Intelligence (AGI) within reach (Bubeck et al., 2023), paving the way for a
+                                         future where human-AI interaction, collaboration, and coexistence shape a shared, symbiotic society (Mah-
+                                         mud et al., 2023; Ren et al., 2024). Therefore, it is crucial to evaluate and enhance the social intelligence of
+                                         AI, particularly LLM-based social agents, as it determines their ability to engage effectively in sophisticated
+                                         social scenarios (Mathur et al., 2024).
+                                         Social intelligence is the foundation of all successful interpersonal relationships and is also a prerequisite
+                                         for AGI (Hunt, 1928; Kihlstrom & Cantor, 2000; Hovy & Yang, 2021). Drawing on insights from both
+                                         social science and AI research, Li et al. (2024a) has established a comprehensive Social AI Taxonomy, which
+                                         categorizes social intelligence into three dimensions: situational intelligence, the ability to comprehend the
+                                         social environment (Derks et al., 2007); cognitive intelligence, the ability to understand others’ intents and
+                                         beliefs (Barnes & Sternberg, 1989); and behavioural intelligence, the ability to behave and interact appro-
+                                         priately (Ford & Tisak, 1983). To evaluate artificial social intelligence, researchers have conducted extensive
+                                         studies, with particular focus on game-theoretic scenarios, as these studies simultaneously encompass all
+
+
+                                                                                                1
+Published in Transactions on Machine Learning Research (05/2025)
+
+
+
+
+                                                     Opponent Opponent Opponent                Action
+                                                ……
+                                                      𝑡𝑛−3     𝑡𝑛−2       𝑡𝑛−1
+                                                                                   Opponent
+                                            Historical Records
+
+                                                                                     LLM
+                           Choice-    Percept                                                            Game-
+                                                       Belief
+                        Focusing Game                                                                   Agnostic
+                                                                                             Action
+                                                                                 Reasoning
+                        Communication                                                                   Game-
+                                                 Preference
+                        -Focusing Game                                                                  Specific
+
+                       Game Framework                         Social Agent                      Evaluation Protocol
+
+                Figure 1: Taxonomy of LLM-based social agents in game-theoretic scenarios.
+
+
+above three dimensions of social intelligence (Aher et al., 2022; Horton, 2023; Phelps & Russell, 2023; Akata
+et al., 2023; Brookins & DeBacker, 2023).
+Game theory, a long-established field in microeconomics, offers a robust mathematical framework for analyz-
+ing social interactions among cooperating and competing players, with wide-ranging applications (Fudenberg
+& Tirole, 1991; Camerer, 2011). Specifically, evaluations in game-theoretic scenarios require social agents to
+understand the game scenario, infer opponents’ actions, and adopt appropriate responses, representing an
+advanced form of social intelligence (Van Der Hoek et al., 2005; Zhang et al., 2024b). Moreover, the multi-
+agent participation and dynamic nature of the environment in game scenarios present additional challenges
+for social agents. Consequently, extensive research has examined social agents within game-theoretic sce-
+narios, offering substantial empirical evidence for understanding their social intelligence (Guo, 2023; Meng,
+2024; Mei et al., 2024). However, there is currently a lack of a comprehensive review that summarizes the
+current progress in this area and considers future directions.
+To address this gap, we have thoroughly reviewed the existing research on LLM-based social agents in
+game-theoretic scenarios and have organized the findings according to a meticulously designed taxonomy, as
+illustrated in Figure 1. Specifically, the taxonomy comprises three main components: Game Framework (§2),
+Social Agent (§3), and Evaluation Protocol (§4). The Game Framework section includes two parts: Choice-
+Focusing Game (§2.1) and Communication-Focusing Game (§2.2). Choice-Focusing Game refers to a series
+of scenarios where participants engage with little to no communication, such as prisoner’s dilemma (Brookins
+& DeBacker, 2023) and poker (Yim et al., 2024). Communication-Focusing Game refers to games where
+communication among participants is a core component, such as negotiation (Bianchi et al., 2024) and diplo-
+macy (Bakhtin et al., 2022). The Social Agent section comprises four parts: Preference Module (§3.1), Belief
+Module (§3.2), Reasoning Module (§3.3), and PBR-Triangular Interaction (§3.4). Preference Module focuses
+on research analyzing the intrinsic preferences of LLMs and their ability to follow internal or pre-defined
+preferences (Guo, 2023). Belief Module explores studies on the internal beliefs of models, belief enhancement,
+and belief revision (Fan et al., 2023). Reasoning Module examines research on strategic reasoning, particu-
+larly involving theory-of-mind capabilities and reinforcement learning (Guo et al., 2023). PBR-Triangular
+Interaction focus on the interaction among different modules and their influence on final decision-making.
+The Evaluation Protocol section comprises three components: Game-Agnostic Evaluation (§4.1), Game-
+Specific Evaluation (§4.2), and Performance Assessment of Social Agents (§4.3). Game-Agnostic Evaluation
+focuses on universal metrics that can be used to assess game outcomes (Duan et al., 2024b). Game-Specific
+Evaluation emphasizes context-specific metrics tailored to the evaluation dimensions of particular game sce-
+narios (Qi et al., 2024). Performance Assessment of Social Agents summarizes the performance of current
+social agents across various game scenarios and analyzes the strengths and weaknesses of these agents, as
+well as their comparison with human players.
+Based on the above taxonomy, we provide a detailed summary of current research progress, reflect on each
+part, and offer insights into potential future research directions (§6), with the aim of inspiring further studies
+in this evolving field.
+We summarize the core contributions of this survey as follows: (1) A well-structured literature taxonomy: We
+conduct a comprehensive review and categorization of existing research on social agents in game-theoretic
+
+
+                                                                      2
+Published in Transactions on Machine Learning Research (05/2025)
+
+
+
+
+                                                                                                                          Aher et al. (2022), Brookins & DeBacker (2023), Guo (2023), Horton (2023),
+                                                                                                         Classic          Xu et al. (2023a), Akata et al. (2023), Phelps & Russell (2023),
+                                                                                                                          Fan et al. (2023), Li et al. (2023b), Hua et al. (2024a), Ma (2024)
+
+                                                                                                                          Gupta (2023), Guo et al. (2023), Huang et al. (2024),
+                                                                                     Choice-Focusing     Poker
+                                                                                                                          Yim et al. (2024), Zhuang et al. (2025)
+                                                                                     (§2.1)
+                                                                                                         Auction          Mao et al. (2023), Chen et al. (2023), Guo et al. (2024),
+
+                                                                                                                          Duan et al. (2024b), tse Huang et al. (2024), Ma et al. (2023),
+                                                                                                         Others
+                                                                                                                          Feng et al. (2024), Shao et al. (2024), Li et al. (2024c)
+                                                                    Game Framework
+                                                                    (§2)                                                  Zhao et al. (2023), Abdelnabi et al. (2023), Fu et al. (2023), Zhan et al. (2024)
+                                                                                                         Negotiation      Bianchi et al. (2024), Piatti et al. (2024), Shapira et al. (2024),
+                                                                                                                          Hua et al. (2024b), Duan et al. (2024b), Xia et al. (2024), Liao et al. (2024)
+
+                                                                                                         Diplomacy        Bakhtin et al. (2022), Guan et al. (2024), Qi et al. (2024)
+
+                                                                                     Communication-                       Lai et al. (2022), Xu et al. (2023d), Xu et al. (2023c), Shibata et al. (2023),
+
+
+
+
+ A Survey on LLM-based Social Agents in Game-Theoretic Scenarios
+                                                                                                         Werewolf
+                                                                                     Focusing (§2.2)                      Wu et al. (2024b), Jin et al. (2024), Bailis et al. (2024), Bailis et al. (2024)
+
+                                                                                                                          Light et al. (2023a), Light et al. (2023b), Shi et al. (2023),
+                                                                                                         Avalon
+                                                                                                                          Wang et al. (2023), Lan et al. (2023), Light et al. (2024)
+
+                                                                                                         Others           Chi et al. (2024), Zhu et al. (2024a), Wu et al. (2024a)
+
+                                                                                                         Intrinsic
+                                                                                                                          Leng & Yuan (2023)
+                                                                                     Preference Module   Preference
+                                                                                     (§3.1)              Preference       Guo (2023), Phelps & Russell (2023), Suzuki & Arita (2023), Fan et al. (2023),
+                                                                                                         Following        Mao et al. (2023) Noh & Chang (2024), Wang et al. (2024c), Jia et al. (2024)
+
+                                                                                                         Internal         Zhu et al. (2024b), Bortoletto et al. (2024), Schouten et al. (2024),
+                                                                                                         Belief           Herrmann & Levinstein (2024), Scherrer et al. (2024), Gandhi et al. (2024)
+
+                                                                                     Belief Module       Belief
+                                                                    Social Agent                                          Sclar et al. (2023), Kassner et al. (2023), Li et al. (2023a), Jung et al. (2024)
+                                                                                     (§3.2)              Enhancement
+                                                                    (§3)
+                                                                                                         Belief
+                                                                                                                          Fan et al. (2023), Xu et al. (2023b)
+                                                                                                         Revision
+                                                                                                                          Wei et al. (2022), Akata et al. (2023), Yao et al. (2024),
+                                                                                                         Classic
+                                                                                                                          Costarelli et al. (2024), tse Huang et al. (2024)
+
+                                                                                     Reasoning Module    Theory-of-       Bubeck et al. (2023), Kosinski (2023), Guo et al. (2023), Wang et al. (2023),
+                                                                                     (§3.3)              Mind             Xu et al. (2023a), Liu et al. (2024b), Yim et al. (2024), Zhang et al. (2024d)
+
+                                                                                                                          Zhao et al. (2023), Abdelnabi et al. (2023), Fu et al. (2023),
+                                                                                                         RL               Bianchi et al. (2024), Piatti et al. (2024), Xia et al. (2024), Hua et al. (2024b),
+                                                                                                                          Duan et al. (2024b), Zhan et al. (2024), Liao et al. (2024)
+
+                                                                                                         Li et al. (2023c), Ma et al. (2023), Wang et al. (2023), Shi et al. (2023), Xu et al. (2023d),
+                                                                                     Game-Agnostic
+                                                                                                         Xu et al. (2023c), Guo et al. (2023), Light et al. (2023a), Shao et al. (2024), Zhu et al. (2024a)
+                                                                                     (§4.1)
+                                                                                                         Huang et al. (2024), Yim et al. (2024), Wu et al. (2024b), Duan et al. (2024b)
+                                                                    Evaluation
+                                                                    Protocol(§4)
+                                                                                                         Mao et al. (2023), Chen et al. (2023), Ma et al. (2023), Guo et al. (2024), Xia et al. (2024),
+                                                                                     Game-Specific
+                                                                                                         Zhang et al. (2024e), Qi et al. (2024), Ross et al. (2024), Fontana et al. (2024),
+                                                                                     (§4.2)
+                                                                                                         Zhu et al. (2024a), Wu et al. (2024a)
+
+
+                                                                   Figure 2: Taxonomy of recent research on LLM-based social agents in game-theoretic scenarios.
+
+
+
+
+settings, providing a clear framework to support future research positioning. (2) A unified and comprehensive
+performance comparison: We summarize the performance of current social agents across a range of games,
+identifying both strengths and limitations in different scenarios to guide subsequent investigations. (3)
+Detailed development guidelines: Drawing on existing findings, we offer practical research recommendations
+from both the design and evaluation perspectives. (4) Concrete future directions: We highlight current
+research gaps and propose feasible future directions along with preliminary solutions to encourage continued
+exploration in this area.
+
+
+                                                                                                                              3
+

@@ -1,0 +1,184 @@
+                                         VL-RewardBench: A Challenging Benchmark for Vision-Language Generative
+                                                                    Reward Models
+
+                                             Lei Li1∗ Yuancheng Wei2∗                  Zhihui Xie1∗ Xuqing Yang3∗                        Yifan Song4 Peiyi Wang4
+                                             Chenxin An1 Tianyu Liu4                   Sujian Li4 Bill Yuchen Lin5,6                     Lingpeng Kong1 Qi Liu1
+                                                                        1         2          3          4             5              6
+                                                                            HKU       SCUT       SJTU       PKU           UW             Allen AI
+                                                                 {nlp.lilei, wyc528813339, zhxieml, catalpabungeiyang}@gmail.com
+
+
+
+
+arXiv:2411.17451v2 [cs.CV] 2 Jun 2025
+                                                                    Abstract                                                                         Query: How many sinks and mirrors
+                                                                                                                                                     are there in the public restroom?
+                                                                                                                                                     Answer 1 (Chosen)       :
+                                                                                                                                                     There are three sinks and three mirrors
+                                           Vision-language generative reward models (VL-                                                             in the public restroom.
+                                        GenRMs) play a crucial role in aligning and evaluating                                                       Answer 2 (Rejected)       :
+                                        multimodal AI systems, yet their own evaluation remains                                                      In the image, there are two sinks and
+                                                                                                                                                     four mirrors equipped with sensor taps
+                                        under-explored. Current assessment methods primarily                                                         alongside a matching set of hand dryers
+                                        rely on AI-annotated preference labels from traditional VL                                                   hanging above.
+
+                                        tasks, which can introduce biases and often fail to effec-            Qwen2-VL-7B
+                                                                                                              Answer 2 is better, which accurately       Claude-3.5-Sonnet
+                                        tively challenge state-of-the-art models. To address these            states that there are two sinks and        Answer 2 provides a more accurate,
+                                                                                                              four mirrors in the image.                 complete, and informative response
+                                        limitations, we introduce VL-RewardBench, a compre-                                                              to the question while maintaining
+                                                                                                                                                         clarity and relevance. It correctly
+                                        hensive benchmark spanning general multimodal queries,                Llama-3.2-90B
+                                                                                                                                                         identifies the number of sinks and
+                                                                                                              Answer 2 is better because it
+                                        visual hallucination detection, and complex reasoning                                                            mirrors and offers additional details
+                                                                                                              accurately describes the visual
+                                                                                                                                                         about the restroom that enhance the
+                                                                                                              elements in the image, fully addresses
+                                        tasks. Through our AI-assisted annotation pipeline that                                                          overall understanding of the space.
+                                                                                                              all aspects of the question.
+                                        combines sample selection with human verification, we
+                                        curate 1,250 high-quality examples specifically designed            Figure 1. An example from our VL-RewardBench asking the vi-
+                                        to probe VL-GenRMs limitations. Comprehensive eval-                 sual details in a restroom. Open-source VL-GenRMs (Qwen2-
+                                        uation across 16 leading large vision-language models               VL-7B [48] and Llama-3.2-90B [13]) and the commercial model
+                                        demonstrates VL-RewardBench’s effectiveness as a chal-              (Claude-3.5-Sonnet [3]) all fail to provide accurate judgments.
+                                        lenging testbed, where even GPT-4o achieves only 65.4%
+                                        accuracy, and state-of-the-art open-source models such
+                                        as Qwen2-VL-72B, struggle to surpass random-guessing.               1. Introduction
+                                        Importantly, performance on VL-RewardBench strongly                 Large vision-language models (LVLMs) such as GPT-
+                                        correlates (Pearson’s r > 0.9) with MMMU-Pro accuracy               4o [34] have demonstrated remarkable capabilities across
+                                        using Best-of-N sampling with VL-GenRMs. Analysis                   diverse multimodal perception and cognition tasks [15, 16,
+                                        experiments uncover three critical insights for improving           61]. Building on these capabilities, LVLMs are increas-
+                                        VL-GenRMs: (i) models predominantly fail at basic                   ingly being deployed as vision-language generative reward
+                                        visual perception tasks rather than reasoning tasks; (ii)           models (VL-GenRMs) to automatically assess model re-
+                                        inference-time scaling benefits vary dramatically by model          sponses [27, 55, 65]. This LVLM-as-a-judge paradigm has
+                                        capacity; and (iii) training VL-GenRMs to learn to judge            emerged as a scalable solution for model alignment, en-
+                                        substantially boosts judgment capability (+14.7% accuracy           abling efficient model ranking and high-quality sample se-
+                                        for a 7B VL-GenRM). We believe VL-RewardBench along                 lection [21, 60, 71].
+                                        with the experimental insights will become a valuable
+                                                                                                                The development of reliable VL-GenRMs is fundamen-
+                                        resource for advancing VL-GenRMs.           Project page:
+                                                                                                            tal to three key aspects of LVLM advancement. First, robust
+                                        https://vl-rewardbench.github.io.
+                                                                                                            evaluation metrics enable systematic and scalable assess-
+                                                                                                            ment of model performance, crucial for tracking progress
+                                                                                                            and identifying areas for improvement [17, 19]. Second,
+                                          ∗ Core contributors.                                              high-quality automated judges facilitate synthetic training
+data generation by identifying the most instructive ex-           and GPT-4o. Our benchmark reveals significant challenges
+amples, accelerating the data flywheel for better align-          for current VL-GenRMs: even leading commercial mod-
+ment [13, 51]. Third, as the field progresses toward re-          els achieve only moderate performance (GPT-4o: 62.4%,
+inforcement learning from human feedback (RLHF) for               Gemini-1.5-Pro: 62.5%), while state-of-the-art open-source
+LVLMs [23, 43], objective and automated evaluation be-            models like Qwen2-VL-72B and LLaMA-3.2-90B struggle
+comes essential for reward modeling. Despite these criti-         to surpass chance level (43.0% and 53.9%, respectively).
+cal needs and growing applications, the community lacks a         Notably, performance on VL-RewardBench strongly cor-
+comprehensive benchmark for assessing VL-GenRMs’ reli-            relates (Pearson’s r>0.9) with downstream MMMU-Pro
+ability and effectiveness.                                        results when using VL-GenRMs for Best-of-N sampling
+    Prior work in evaluating VL-GenRMs has taken two              guidance [42]. Our analysis uncovers three critical in-
+main approaches, each with significant limitations. The           sights for advancing VL-GenRMs: (1) The primary per-
+first approach relies on AI-generated preferences, such as        formance bottleneck lies in visual perception rather than
+using GPT-4V annotations for assessment [7, 55]. The sec-         reasoning - models show significantly higher error rates on
+ond approach adapts traditional academic benchmarks with          existence/recognition tasks (> 67%) compared to reason-
+predefined labels [6], focusing on preference alignment in        ing tasks (41.8%); (2) The effectiveness of test-time scal-
+traditional vision-language tasks such as image caption-          ing varies with model capacity, providing benefits to larger
+ing [29]. However, these methods face critical challenges.        models while potentially degrading smaller models’ perfor-
+AI-annotated preferences introduce systematic biases, ei-         mance; (3) Training VL-GenRMs to learn to judge [55] sub-
+ther favoring model-generated responses [37, 56] or exhibit-      stantially improves judgment capabilities, demonstrated by
+ing stylistic preferences [14, 52]. Meanwhile, conventional       a 14.7% accuracy gain for LLaVA-OneVision-7B-ov [25],
+task-based evaluations often use simplistic queries that fail     with pointwise evaluation outperforming pairwise scoring
+to capture the nuanced requirements of real-world applica-        on average. These findings establish VL-RewardBench as a
+tions [67] and therefore lack the complexity needed to dif-       valuable benchmark for advancing VL-GenRMs while pro-
+ferentiate between rapidly evolving LVLMs. Ideally, an ef-        viding clear directions for future improvements.
+fective benchmark for VL-GenRMs should satisfy three key
+requirements: (a) diverse coverage of real-world applica-         2. VL-RewardBench
+tions [69], (b) sufficient difficulty to expose current models’   In this section, we introduce the construction process of VL-
+limitations [44], and (c) objective ground truth labels [23].     RewardBench as illustrated in Fig. 2. Following previous
+However, existing studies fall short of these criteria. In this   benchmarks [23, 27], VL-RewardBench consists of pref-
+paper, we present VL-RewardBench, designed to meet all            erence pairs (x, yw , yl ), where x represents a multimodal
+three requirements through careful dataset curation and val-      query containing an image and a user prompt, and (yw , yl )
+idation. To satisfy criterion (a), our benchmark evaluates        denotes the preferred (chosen) and rejected responses, re-
+VL-GenRMs across three key application domains: (1) gen-          spectively. For simplicity, we focus on single-image, single-
+eral multimodal queries from real scenarios [27, 33], (2) vi-     turn interactions, though our framework can be extended to
+sual hallucination detection tasks [59, 60, 70], and (3) mul-     multi-turn dialogues and multiple images. In later subsec-
+timodal knowledge and mathematical reasoning [62, 64].            tions, we first describe our diverse data sources (Sec. 2.1),
+To ensure criterion (b), we employ targeted curation strate-      followed by specific AI-aided pipelines for datasets with
+gies. For source datasets with preference pairs, we employ        originally annotated preference labels and reasoning tasks
+small LVLMs collaboratively to filter out challenging sam-        without labels (Sec. 2.2). Finally, we present comprehen-
+ples, which our evaluation shows remain difficult even for        sive dataset statistics and analysis (Sec. 2.3).
+much larger models. For reasoning tasks without annotated
+labels, we leverage strong commercial models to generate          2.1. Dataset Source
+responses with explicit reasoning paths, followed by GPT-         To ensure our benchmarks cover real-world scenarios, we
+4o’s quality assessment. To fulfill (c), all preference labels    choose datasets from three domains: general multimodal
+undergo human verification to eliminate ambiguous or in-          instructions, hallucination-oriented tasks, and multimodal
+correct pairs. The resulting VL-RewardBench comprises             reasoning tasks.
+1,250 high-quality samples from 7 diverse datasets, offering      General Multimodal Instructions (General), which en-
+a rigorous and comprehensive testbed for advancing VL-            compass diverse multimodal instructions from different do-
+GenRM development.                                                mains to ensure comprehensive coverage of general queries.
+   We conduct a comprehensive evaluation of 16 state-of-          VLFeedback [27] and WildVision [33] are two general mul-
+the-art VL-GenRMs on VL-RewardBench, ranging from                 timodal preference datasets with annotated AI/human feed-
+open-source models (7B to 90B parameters) to commer-              back. VLFeedback employs GPT-4V as the preference an-
+cial systems including Gemini-1.5-Pro, Claude-3.5-Sonnet,         notator with predefined templates and WildVision collects
+                                                          Ensemble Filtering                                         VL-RewardBench
+              General Instructions                          Q: How many buses are there?                                           Question
+                                                            R1: Outside the airport terminal, there is a
+          WildVision    VLFeedback                          big bus parked.                                                       Response A
+                                                            R2: There are three minibuses parked                                  Response B
+                                                            outside the airport terminal.                  Human
+              Hallucination Oriented                                                                       Verify   A is better      B is better
+                                                                            R2 is better
+          POVID    RLHF-V     RLAIF-V             LLaVA
+
+                                           Small LVLMs       Identify Challenge Samples
+
+
+                                                     AI-Aided Preference Labeling
+                                                              Q: What is the height of the flagpole?
+              Multimodal Reasoning
+                                                                  GPT-4o: First, we need to get the...
+
+                            MathVerse                             Sonnet 3.5: To find the height of...     Human
+          MMMU-Pro
+                                                                      GPT-4o > Sonnet 3.5      Rationale   Verify
+
+
+
+Figure 2. Construction process overview of VL-RewardBench. Two strategies for different datasets: (1) Ensemble filtering process using
+small LVLMs to identify challenging samples from general and hallucination queries (Sec. 2.2.1); (2) AI-aided preference labeling for
+multimodal reasoning tasks, where commercial models generate candidate responses and preference labels (Sec. 2.2.2). All labels are
+verified by human annotators to ensure correctness.
+
+
+human preferences by hosting online demos for real-world                   timodal instructions and hallucination-oriented queries that
+users. We use the human-verified subset of VLFeedback                      become easier for advanced LVLMs, we design a collabora-
+with 681 samples, and select 6,484 samples in English from                 tive filtering strategy to filter out challenging samples with
+the WildVision dataset for later processing.                               small models. (ii) For challenging multimodal reasoning
+Hallucination-oriented Queries (Hallucination), which                      tasks without preference labels, we design an AI-assisted
+focus on the hallucination issues of LVLMs, involving ques-                preference labeling framework to curate high-quality pref-
+tions regarding the visual content in the image. We select                 erence pairs for these samples. Five graduate students with
+public available POVID [70], RLAIF-V [60], and RLHF-                       expertise in vision-language research volunteered to serve
+V [59] with annotated preference labels. For the preference                as annotators, annotation guidelines were iteratively refined
+annotation, POVID injects noise into oracle image descrip-                 through group discussions until consensus was reached, en-
+tions to create rejected responses, RLAIF-V innovatively                   suring consistent evaluation criteria. We elaborate on the
+develops a divide-and-conquer framework for annotating                     detailed process below.
+the faithfulness of responses, and RLHF-V relies on hu-
+mans to label the preference. All samples in these datasets                2.2.1. Ensemble Filtering with Small Models
+are included to serve as initial candidates.                               Creating effective benchmarks requires careful calibration
+Multimodal Reasoning Tasks (Reasoning), aim to eval-                       - tasks that are too easy or impossibly difficult fail to dif-
+uate the LVLMs with challenging multimodal reason-                         ferentiate model capabilities [36]. However, simply select-
+ing tasks.      We select the recent MMMU-Pro [62]                         ing tasks that current frontier models cannot solve poses
+and MathVerse [64] to reduce the dataset contamination                     two key challenges: (i) these tasks might become obso-
+risk. MMMU-Pro is a robust version of the massive                          lete as models rapidly evolve, and (ii) model-specific fail-
+multi-discipline multimodal understanding and reasoning                    ures do not reflect fundamental visual reasoning challenges.
+(MMMU) benchmark [61], where 1,568 single-image sam-                       Instead, we propose using an ensemble of small models
+ples are adopted. MathVerse serves as a comprehen-                         to identify examples that are universally challenging to
+sive visual mathematical reasoning benchmark for LVLMs.                    LVLMs. Our hypothesis is that when multiple small models
+We select subsets of Vision Dominant and Vision                            fail in certain cases, these failures likely stem from funda-
+Intensive to ensure high reliance on the visual inputs,                    mental limitations rather than model-specific model weak-
+resulting in 1,546 samples.                                                nesses - a claim validated by our experiments showing these
+                                                                           cases challenge even state-of-the-art models. The strategy
+2.2. Preference Annotation                                                 consists of three steps, ensemble construction, difficulty as-
+To ensure our VL-RewardBench presents meaningful chal-                     sessment, and human verification.
+lenges and separatability for current state-of-the-art mod-                Ensemble Construction We begin by assembling a di-
+els, given the rapidly evolving landscape, we design an AI-                verse ensemble of small vision-language models as weak
+assisted framework with two strategies to obtain challeng-                 judges, including LLaVA-1.5-7B [30], LLaVA-1.6-7B [31],
+ing samples and annotate preferences: (i) For general mul-                 LLaVA-OneVision-7B-si [25], and Qwen2-VL-7B [48].
+

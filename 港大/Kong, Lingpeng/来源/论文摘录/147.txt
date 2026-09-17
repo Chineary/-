@@ -1,0 +1,196 @@
+                                        Under Review
+
+
+
+
+                                        U NCERTAINTY RAG: S PAN -L EVEL U NCERTAINTY E N -
+                                        HANCED L ONG -C ONTEXT M ODELING FOR R ETRIEVAL -
+                                        AUGMENTED G ENERATION
+                                          Zixuan Li1∗, Jing Xiong2∗, Fanghua Ye3 , Chuanyang Zheng4 , Jianqiao Lu2 , Zhongwei Wan8 ,
+                                          Xun Wu7 , Xiaodan Liang1†, Chengming Li5†, Zhenan Sun6 , Lingpeng Kong2 , Ngai Wong2
+                                         1
+                                           SYSU 2 HKU 3 UCL 4 CUHK 5 SMBU 6 CAS 7 MSRA 8 OSU
+                                                            lizx76@mail2.sysu.edu.cn, junexiong@connect.hku.hk
+
+
+
+
+arXiv:2410.02719v1 [cs.CL] 3 Oct 2024
+                                                                                       A BSTRACT
+
+                                                     We present UncertaintyRAG, a novel approach for long-context Retrieval-
+                                                     Augmented Generation (RAG) that utilizes Signal-to-Noise Ratio (SNR)-based
+                                                     span uncertainty to estimate similarity between text chunks. This span uncertainty
+                                                     enhances model calibration, improving robustness and mitigating semantic incon-
+                                                     sistencies introduced by random chunking. Leveraging this insight, we propose
+                                                     an efficient unsupervised learning technique to train the retrieval model, alongside
+                                                     an effective data sampling and scaling strategy. UncertaintyRAG outperforms
+                                                     baselines by 2.03% on LLaMA-2-7B, achieving state-of-the-art results while using
+                                                     only 4% of the training data compared to other advanced open-source retrieval
+                                                     models under distribution shift settings. Our method demonstrates strong calibra-
+                                                     tion through span uncertainty, leading to improved generalization and robustness
+                                                     in long-context RAG tasks. Additionally, UncertaintyRAG provides a lightweight
+                                                     retrieval model that can be integrated into any large language model with varying
+                                                     context window lengths, without the need for fine-tuning, showcasing the flexibility
+                                                     of our approach.
+
+
+                                        1       I NTRODUCTION
+
+                                        Large Language Models (LLMs) have shown impressive capabilities across various natural language
+                                        tasks, including long-context question-answering (QA), where the model processes a lengthy text
+                                        and a question to generate a response (Caciularu et al., 2022). The QA paradigm encompasses a
+                                        wide range of tasks, such as commonsense reasoning (Yang et al., 2018; Geva et al., 2021) and
+                                        mathematical reasoning (Cobbe et al., 2021; Amini et al., 2019). However, due to the limitations in
+                                        computational resources and the model’s lack of ability to extrapolate context length, handling long-
+                                        context settings remains a challenge for large language models, although continuous improvements
+                                        are being made in this area.
+                                        Recent advances seek to overcome this limitation by designing linear attention mecha-
+                                        nisms (Katharopoulos et al., 2020; Wang et al., 2020; Gu & Dao, 2023), which improve the memory
+                                        and time efficiency for long sequences. Pruning the KV cache (Ge et al., 2023; Zhang et al., 2024;
+                                        Agarwal et al., 2024) and quantizing the KV cache (Hooper et al., 2024; Liu et al., 2024) are other
+                                        approaches to enhancing long context generation by compressing the model’s KV-cache, providing a
+                                        training-free, lightweight solution to reduce memory and computational overhead. However, these
+                                        methods are generally difficult to achieve context length extrapolation. Moreover, the aforementioned
+                                        approaches usually truncate the long-context to just fit the context window of LLMs, which not only
+                                        prevents LLMs from actually seeing the entire input text but also faces an unacceptable memory
+                                        overhead in resource-constrained environments. The efficient positional encoding strategy (Liu et al.,
+                                        2023a; Su et al., 2024) is a solution that can achieve length extrapolation, but it often requires training
+                                        the entire LLMs.
+                                            ∗
+                                                These authors contributed equally.
+                                            †
+                                                Corresponding author.
+
+
+                                                                                              1
+Under Review
+
+
+
+
+Another lightweight solution for handling long contexts is to utilize long-context Retrieval-Augmented
+Generation (RAG) for long-context chunking (Xu et al., 2023b; Jiang et al., 2024b; Sarthi et al.,
+2024; Xu et al., 2023a), which avoids the need for LLMs to have length extrapolation capability.
+Long-context retrieval-augmented generation refers to a method in natural language processing where
+a model retrieves relevant information from large external sources to assist in generating responses. It
+extends the traditional RAG by handling much longer input contexts, enabling effective processing
+of broader and more detailed information for tasks like question answering, summarization, and
+document understanding. Typically, RAG employs existing LLMs with limited context windows
+to retrieve relevant chunks, either with or without semantic truncation (Sarthi et al., 2024; Li et al.,
+2024a; Jiang et al., 2024b; Xu et al., 2023b;a). Retrieval models (Izacard et al., 2021; Xiao et al.,
+2023b; Chen et al., 2024; Lin et al., 2023a) are commonly used for this purpose; however, they require
+a large amount of high-quality labeled data for training, which limits their scalability and adaptability.
+Modern RAG systems rely on complex chunking methods (Sarthi et al., 2024) and require LLMs
+to have relatively long context windows (Jiang et al., 2024b; Xu et al., 2024). Furthermore, the
+lack of labeled data to determine if (query, chunk) pairs are related (Lewis et al., 2020a;b) poses
+significant limitations for training retrieval models in RAG systems. Recent research combines
+RAG with long-context LLMs to handle extended contexts and mitigate semantic incoherence in
+chunk processing (Xu et al., 2023b; Jiang et al., 2024b; Xu et al., 2024; Li et al., 2024c; Luo
+et al., 2024; Sarthi et al., 2024; Duarte et al., 2024). Some of the latest work also attempts to
+inject retrieval capabilities into LLMs through training, enabling them to process and generate long
+contexts directly (He et al., 2024; Cheng et al., 2024). However, these approaches often require either
+sophisticated chunking strategies, which are time-consuming during inference, or fine-tuning adapters
+for specific LLMs to manage chunk representation compression. Additionally, the complexity of
+these methods makes them vulnerable to distribution shifts. Some methods also necessitate training
+an LLM with an extended context window or new architecture, which is highly resource-intensive.
+In contrast, improving a lightweight retrieval model that can be seamlessly integrated into various
+LLMs without additional training would be a more efficient solution.
+Unlike previous work, our focus is on utilizing calibrated uncertainty quantification to estimate
+similarity between chunks, thereby training robust retrieval models within RAG. Specifically, we
+introduce a novel uncertainty estimation technique based on the Signal-to-Noise Ratio (SNR), which
+stabilizes predictions and reduces biases from random chunk splitting. Our analysis shows that
+when two chunks are concatenated and fed into the model to estimate similarity, the uncertainty
+measured by SNR can better reflect their alignment in the semantic space, which we have confirmed
+in our experiments. Building on this finding, we develop an unsupervised learning technique to
+train chunk embeddings. This method is decoupled from the long-context modeling capabilities of
+LLMs and can be adapted to any fixed-length context window, enhancing retrieval robustness without
+requiring additional fine-tuning or retraining of the LLM itself. By leveraging the LLM’s calibrated
+self-information, we effectively measure similarity between text chunks, construct accurate positive
+and negative samples, and train a robust retrieval model. This approach enhances generalization under
+distribution shifts in long-context retrieval-augmented generation tasks. Moreover, it seamlessly
+integrates with existing methods by relying solely on external retrieval models, thus avoiding LLM-
+specific performance dependencies. Specifically, our contributions are as follows:
+
+      1. We propose a novel SNR uncertainty measurement technique to achieve better calibration
+         by addressing prediction errors arising from random chunk splitting, thereby improving
+         performance in similarity estimation between chunks.
+
+      2. We propose an unsupervised learning approach and train a retrieval model that outperforms
+         strong open-source embedding models in long-context RAG tasks under distribution-shift
+         settings.
+
+      3. We design an efficient data sampling strategy to scale data, enhancing our retrieval model
+         training and significantly boosting performance. Compared to models such as BGE-M3, our
+         method improves LLaMA-2-7B by 2.03% after SNR calibration while using only 4% of
+         their data size.
+
+      4. We provide an in-depth analysis of the retrieval model, demonstrating continuous improve-
+         ments across two key metrics. We explain how uncertainty measurement enhances chunk
+         representation modeling and why data sample scaling contributes to improved performance.
+                                                    2
+Under Review
+
+
+
+
+2     R ELATED W ORK
+2.1   ATTENTION M ECHANISMS IN L ONG C ONTEXTS
+
+An effective approach to facilitating long context is to avoid the O(n2 ) computational complexity
+of the standard attention mechanism by designing linear attention mechanisms, sparse attention
+mechanisms, or low-rank attention mechanisms. These works can be categorized into the following
+four types: i) Sparse Attention Mechanisms: Reduce the computational burden of attention by
+exploiting inherent patterns within the attention mechanism (Jiang et al., 2024a; Ribar et al., 2023;
+Chen et al., 2023), or alternatively, by pruning the KV cache (Liu et al., 2023b; Xiao et al., 2023a;
+Pang et al., 2024; Zhang et al., 2024). ii) The attention mechanism with linear complexity: This
+typically involves transforming models with O(n2 ) complexity into O(n) or O(n log n) linear
+attention (Zheng et al., 2022; Kitaev et al., 2020; Qin et al., 2022; Katharopoulos et al., 2020), or
+efficient long-sequence recurrent neural networks (Gu & Dao, 2023; Dao & Gu, 2024; Peng et al.,
+2023a; Yang et al., 2023). iii) Memory-augmented attention mechanisms: This typically involves
+encoding long-context text using additional memory blocks (He et al., 2024; Bertsch et al., 2024;
+Wang et al., 2024). iv) Hardware-friendly attention mechanisms: FlashAttention (Dao et al., 2022;
+Dao, 2023; Shah et al., 2024) accelerates precise attention computations by optimizing reads and
+writes across different levels of GPU memory. FlashAttention is especially effective for processing
+longer sequences. Among previous works, memory-augmented LLMs are most relevant to this study,
+as they involve memory retrieval. However, they typically require modifying the original model
+architecture and retraining the LLM or fine-tuning some parameters, which can be an impractical
+overhead in certain settings.
+
+2.2   P OSITION E NCODING
+
+Extending the context window from scratch is challenging (Liu et al., 2023a; Su et al., 2024) because
+it requires significant computational resources. As a result, efficient position encoding methods (Peng
+et al., 2023b; Li et al., 2023a; Chi et al., 2022; Press et al., 2021; Peng & Quesnelle, 2023) have
+gained attention for improving length extrapolation. These works attempt to expand the context
+window on pre-trained LLMs using a small amount of data.
+However, considering that many LLMs are closed-source, fine-tuning these models specifically
+for a retrieval model is impractical. Additionally, fully fine-tuning LLMs on long-context data
+remains costly. Fully fine-tuning models such as LLaMA (Touvron et al., 2023), especially with
+sequences longer than 16,000 tokens, is prohibitively expensive due to the quadratic time and memory
+complexities associated with precise attention mechanisms. Therefore, extending the model’s context
+window by continual training through position encoding remains unacceptable.
+Recent RAG systems (Xu et al., 2023b; 2024) combining RAG with long context LLMs have utilized
+position encoding to fine-tune LLMs for context window extrapolation, either requiring LLMs to
+handle retrieved chunks as long-context inputs (Jiang et al., 2024b; Xu et al., 2024) or flexibly
+combining the strengths of both through a routing mechanism (Li et al., 2024c). These works consider
+combining the strengths of long context LLMs and RAG. They demonstrate that, when resources
+are abundant, long context LLMs consistently outperform RAG in terms of average performance.
+However, the significantly reduced cost of RAG remains a notable advantage. They also find that long-
+context window LLMs can effectively alleviate the context fragmentation issue in RAG. However,
+further extending the context window of LLMs still is challenging, as it requires a significant amount
+of computational resources. Therefore, how to expand the boundaries of RAG systems given the
+limited context window of LLMs remains a question worth exploring. Our work primarily focuses
+on optimizing the retrieval model in RAG, given the context window length of LLMs, to extend the
+boundaries of the RAG system’s ability to handle long contexts.
+
+2.3   R ETRIEVAL -AUGMENTED G ENERATION
+
+The existing RAG frameworks heavily rely on the quality of the retrieval model. Due to retrieval
+model’s context window limitations, they often tend to use short retrieval units in open-domain QA
+tasks (Lewis et al., 2020a; Karpukhin et al., 2020; Ni et al., 2021). These models rely on a bi-encoder
+and typically require manual query-passage annotations for training the encoder.
+
+
+                                                  3
+

@@ -1,0 +1,209 @@
+                                               Exploring the Reliability of Large Language Models as Customized
+                                                               Evaluators for Diverse NLP Tasks
+
+                                                             Qintong Li♡ * Leyang Cui♣ Lingpeng Kong♡ Wei Bi♣
+                                                                  ♡
+                                                                    The University of Hong Kong ♣ Tencent AI lab
+                                                                              {qtli,lpk}@cs.hku.hk
+                                                                       {leyangcui,victoriabi}@tencent.com
+
+
+
+                                                                 Abstract                               where meticulous verification or logical reasoning
+                                                                                                        are the main evaluation criteria (Ling et al., 2023;
+                                              Previous work adopts large language models
+                                                                                                        Zeng et al., 2023). There is an urgent need for a
+                                              (LLMs) as evaluators to evaluate natural lan-
+                                                                                                        systematic investigation on the reliability of LLMs
+
+
+
+
+arXiv:2310.19740v2 [cs.CL] 18 Jan 2025
+                                              guage process (NLP) tasks. However, cer-
+                                              tain shortcomings, e.g., fairness, scope, and             as trustworthy and universal evaluators capable of
+                                              accuracy, persist for current LLM evaluators.             replacing humans in various NLP tasks.
+                                              To analyze whether LLMs can serve as reli-                   Investigating whether LLMs are capable of gen-
+                                              able alternatives to humans, we examine the               erating various yet adequate evaluation criteria
+                                              fine-grained alignment between LLM evalu-                 across different tasks is a necessary first step, so
+                                              ators and human annotators, particularly in
+                                                                                                        that we can understand the extent of agreement be-
+                                              understanding the target evaluation tasks and
+                                              conducting evaluations that meet diverse cri-             tween LLM evaluators and humans in interpreting
+                                              teria. This paper explores both conventional              the instruction of “evaluating a task”. Furthermore,
+                                              tasks (e.g., story generation) and alignment              with the evolving nature of NLP tasks, it is im-
+                                              tasks (e.g., math reasoning), each with differ-           portant for LLM evaluators to flexibly meet new
+                                              ent evaluation criteria. Our analysis shows               requirements and diverse criteria. This raises the
+                                              that 1) LLM evaluators can generate unnec-                pertinent question of whether the evaluation results
+                                              essary criteria or omit crucial criteria, result-         of LLMs can be trusted and aligned with specific
+                                              ing in a slight deviation from the experts. 2)
+                                                                                                        criteria. If the answer is negative, is there a way to
+                                              LLM evaluators excel in general criteria, such
+                                              as fluency, but face challenges with complex              enhance the LLM evaluators?
+                                              criteria, such as numerical reasoning. We also               We aim to provide separate and clear responses
+                                              find that LLM-pre-drafting before human eval-             to both questions. To gauge the task comprehension
+                                              uation can help reduce the impact of human                ability of an LLM evaluator, we prompt an LLM to
+                                              subjectivity and minimize annotation outliers             offer a variety of evaluation criteria for the assigned
+                                              in pure human evaluation, leading to more ob-             tasks, followed by an examination of how well the
+                                              jective evaluation. All resources are available
+                                                                                                        LLM’s criteria align with human expertise. We
+                                              at https://github.com/qtli/CoEval.
+                                                                                                        consider three benchmarks, including question an-
+                                         1    Introduction                                              swering, story generation, and math word problem-
+                                                                                                        solving, as well as 252 instruction-following tasks,
+                                         The success of Large Language Models (LLMs)                    across 692 distinct criteria that experts manually
+                                         in executing real-world tasks according to instruc-            curate. We find that LLMs can generate mostly con-
+                                         tions (Gravitas, 2023; Liu et al., 2023b) has spurred          sistent, valid and sufficient task-specific evaluation
+                                         increased interest in using LLMs as evaluators,                criteria. LLMs occasionally overlook critical crite-
+                                         with task examples treated as specific instructions            ria, such as “conciseness” for writing a brief report,
+                                         during evaluation (Liu et al., 2023c; Zhang et al.,            which experts would prioritize (Section 4.3). This
+                                         2023b; Zheng et al., 2023, i.a.). However, current             oversight could introduce biases in the subsequent
+                                         LLM evaluators still have certain shortcomings.                sample evaluation.
+                                         For example, an LLM evaluator for math reason-                    To measure the evaluation quality of LLMs, we
+                                         ing tasks may not penalize deceptive solutions that            discuss several methods for instructing an LLM
+                                         contain incorrect steps (Toh et al., 2023). This is-           evaluator to score samples of a particular task, with
+                                         sue is particularly severe for those intricate tasks           or without evaluation criteria. Meta-evaluation
+                                             * Work was done during the internship at Tencent AI lab.   shows that when LLMs thoroughly consider cri-
+teria before summarizing an overall score, they can      2020; Liu et al., 2023a).
+achieve a higher correlation with human assess-             As research in LLMs continues to accelerate,
+ments than when they directly evaluate.                  LLM-based evaluation has emerged as a scalable
+   Currently, LLMs still have a long way to go be-       and cost-effective alternative to human evalua-
+fore they can replace humans. For example, in            tions (Jain et al., 2023; Taori et al., 2023; Chiang
+evaluating the “analogy usage” on the long-form          et al., 2023; Wu and Aji, 2023). Fu et al. (2023)
+QA task, LLM tends to hallucinate and generate           uses LLM’s predicted text probability as the au-
+more positive scores; and in evaluating the “logical     tomated score. Along a more black-box line, the
+reasonability” on the math reasoning task, the LLM       community (Wang et al., 2023; Chiang and Lee,
+evaluator easily fails to detect simple logical errors   2023; Zeng et al., 2023; Zhang et al., 2023a,b) has
+(Section 5.2). We further explore the potential for      turned to induce LLM to directly generate evalu-
+an LLM to serve as a cost-effective auxiliary to hu-     ation scores for diverse tasks, such as summariza-
+man annotators by allowing humans to edit the re-        tion (Liu et al., 2023c) and dialogue (Zheng et al.,
+sults generated by the LLM evaluator (Section 5.3).      2023), with superior human correlation compared
+Compared with human-only evaluation, the inter-          to conventional metrics. Prior studies primarily
+annotation agreement of Krippendorff’s α notably         focus on devising efficient prompting strategies to
+improves from 0.64 to 0.71. However, directly re-        elicit high correlations between LLMs and human
+placing pure human evaluation with this method           annotators, reaching conclusions regarding the ef-
+may have some potential risks. LLM evaluations           ficacy of LLMs as evaluators in a straightforward
+may inhibit certain aspects of human subjectivity        manner. Different from previous work, we not tar-
+while mitigating certain annotation outliers.            get any particular new task. Rather, our primary
+   Based on the efforts and outcomes of this study,      focus lies in how well LLMs align with human
+we encourage further research on LLMs as evalu-          experts in understanding evaluation tasks and eval-
+ators. This includes exploring their usage in chal-      uating samples based on specific criteria.
+lenging new tasks, designing proper prompts for
+evaluation, and conducting rigorous tests to assess      3   Evaluation Setup
+their trustworthiness as evaluators for the task.        Tasks We consider three benchmarks and 252
+                                                         instruction-following tasks that exhibit distinct
+2   Related Work                                         characteristics and necessitate distinct criteria for
+                                                         evaluating their output. Investigating the behaviors
+Traditional automatic metrics are well estab-
+                                                         of the LLM evaluator on these tasks enables us to
+lished for judging specific NLP tasks, such as
+                                                         derive broad observations. Specifically, these tasks
+BLEU (Papineni et al., 2002) for machine trans-
+                                                         include: (i) a long-formed QA task ELI5 (Fan et al.,
+lation, ROUGE (Lin, 2004) and METEOR (Baner-
+                                                         2019) where the main focus is on the factuality and
+jee and Lavie, 2005) for text summarization, and
+                                                         comprehensibility of the generated answers; (ii) a
+CIDEr (Vedantam et al., 2015) for image cap-
+                                                         story generation task ROCStories (Mostafazadeh
+tioning. To improve the correlation with human
+                                                         et al., 2016) that primarily emphasizes on the co-
+judgments, several approaches integrate contextual
+                                                         herence and relevance and other quality aspects
+word embeddings, including MoverScore (Zhao
+                                                         of the generated story; (iii) a math word problem
+et al., 2019), Sentence Mover’s Similarity (Clark
+                                                         task GSM8K (Cobbe et al., 2021) that people are
+et al., 2019), BERTscore (Zhang et al., 2020), and
+                                                         often concerned with its reasoning ability, such as
+Bartscore (Yuan et al., 2021). Other related works
+                                                         logic and correctness; (iv) an instruction-following
+propose task-specific metrics to align specific hu-
+                                                         dataset Self-Instruct (Wang et al., 2022), which in-
+man assessments, e.g., consistency (Durmus et al.,
+                                                         volves various daily scenarios (e.g., email writing
+2020; Honovich et al., 2021; Fabbri et al., 2022),
+                                                         and film review), and thus we may require distinct
+coherence (Durmus et al., 2020; Ye et al., 2021),
+                                                         evaluation perspectives for different instructions
+and grammar (Pratapa et al., 2021). However, no
+                                                         within this dataset.
+universal metric exists that can accommodate all
+generation tasks and capture all desirable proper-       Evaluation Configurations This paper consid-
+ties of language (Reiter and Belz, 2009; Garbacea        ers gpt-3.5-turbo the representative LLM eval-
+and Mei, 2020). Human evaluation is prevalent in         uator due to its efficacy and economic benefits.
+generation tasks (Mathur et al., 2020; Belz et al.,      We also examine a more powerful model, i.e.,
+gpt-4, when conducting evaluation, and the re-                   Metric     ELI5        ROCStories   GSM8K        Self-Instruct
+sults are shown in Table 9. For the benchmark                    CC         0.75           0.82        0.80           0.78
+tasks (ELI5, ROCStories, and GSM8K), the LLM                     ICC        0.78           0.81        0.77           0.76
+
+evaluator and human annotators are instructed to
+                                                              Table 1: The consistency of the criteria generated by the
+assess the quality of outputs from three generation           LLM evaluator, as defined in Equations 1 and 2, across
+models1 (gpt-3.5-turbo, text-davinci-002,                     various sampling instances for four distinct domains.
+and text-curie-001), as well as human-written
+ground truth. Each task includes 200 evaluation
+samples derived from 50 randomly selected inputs.             a specific task based on the properties with 100%
+For Self-Instruct, we use the model outputs and hu-           completion. Therefore, our study mainly focuses
+man evaluations provided by its authors2 because              on the quality of the generated criteria.
+different tasks require different expertise, and it           4.2    Consistency of LLM-generated Criteria
+is extremely challenging to find qualified human
+annotators.                                                   Firstly, we explicitly measure the consistency
+                                                              of the criteria generated by the LLM evaluator
+4       LLM-Generated Criteria                                when given the same task. We use the prompt-
+                                                              ing template as described in §4.1 and instruct
+We first investigate the divergence between LLM
+                                                              gpt-3.5-turbo 10 times at a temperature of 0.7,
+evaluators and human experts in explaining the
+                                                              generating multiple criteria sets {C1 , . . . , C10 }.
+evaluated tasks and examine if an LLM evaluator
+                                                              We also set the temperature as 0 for a deterministic
+can generate various yet adequate evaluation crite-
+                                                              result C̃ as reference. We desire that LLMs can
+ria for various tasks.
+                                                              perform robustly to generate mostly similar criteria
+4.1      Prompt for Evaluation Criteria                       across different samplings and hyperparameters.
+                                                                 Here, we design two embedding-based metrics
+Given the substantial ability of gpt-3.5-turbo to
+                                                              to estimate the consistency. Criteria Consistency
+adhere to directions, we utilize the prompt below
+                                                              (CC) quantifies the average similarities of matched
+to request it to generate evaluation criteria based
+                                                              criteria pairs between the deterministic criteria set
+on the task description and a task example. The
+                                                              C̃ and a sampled criteria set Cn . Inter-criteria Con-
+example includes the input x and an output y.
+                                                              sistency (ICC) measures the average similarities of
+        Now, we have a task [task desc.].                     matched criteria pairs between any two sampled
+        Here is a demonstration example of the task:          set Cn and Cm .
+        Input: [x] Output: [y]
+                                                                       PN       P|C̃|
+        Please make sure you read and understand how                      n=1      i=1 maxcj ∈Cn sim(c̃i , cj )
+        to do this task.                                      CC =                                                ,               (1)
+                                                                                    |C̃| × N
+        But your real task is to tell me how to evaluate               PN        PN        P|Cm |
+        this task. The evaluation criteria should include                 m=1       n=1,m̸=n  i=1 maxcj ∈Cn sim(ci , cj )
+                                                              ICC =                   PN                                  ,
+        general criteria used in natural language tasks, as                             m=1 |Cm | × (N − 1)
+        well as task-specific criteria about this evaluated                                                                       (2)
+        task. Please provide a clear and comprehensive
+        list of your evaluation criteria.                     where c is a singular criterion and N is the number
+        Evaluation Criteria:                                  of samplings (10 in our study). The sim(·) repre-
+                                                              sents cosine similarity based on the SimCSE (Gao
+For benchmark datasets, [task desc.] is writ-
+                                                              et al., 2021) embeddings of criteria ci and cj .
+ten by human experts. For the Self-Instruct task,
+[task desc.] represents each instruction, such as             Results As shown in Table 1, we observe a sub-
+“Change the response to have a more empathetic                stantial level of consensus in both CC and ICC,
+tone in the chat.”. The demonstrated input [x]                especially for story evaluation (ROCStories). We
+and output [y] are randomly selected from the                 can safely conclude that LLM can generate consis-
+task dataset. As gpt-3.5-turbo possesses strong               tent criteria for the same task, which may benefit
+instruction-following abilities, it can easily under-         subsequent evaluation stability.
+stand the instruction to output a set of criteria for
+                                                              4.3    Alignment with Human Experts
+    1
+     https://platform.openai.com/docs/models
+   2
+     https://github.com/yizhongw/self-instruct/               Next, we examine whether the LLM-generated cri-
+tree/main/human_eval                                          teria align with human expertise. Human experts re-
+

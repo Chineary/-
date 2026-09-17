@@ -1,0 +1,225 @@
+                                           Multitask Learning with CTC and Segmental CRF for Speech Recognition
+                                                                    Liang Lu† , Lingpeng Kong‡ , Chris Dyer§ , and Noah A. Smith
+                                                                          †
+                                                                     Toyota Technological Institute at Chicago, USA
+                                                                ‡
+                                                              School of Computer Science, Carnegie Mellon University, USA
+                                                                            §
+                                                                              Google DeepMind, London, UK
+                                                        
+                                                          Computer Science & Engineering, University of Washington, Seattle, USA
+                                                llu@ttic.edu, lingpenk@cs.cmu.edu, cdyer@google.com, nasmith@cs.washington.edu
+
+
+                                                                    Abstract                               end models simplify the pipeline of speech recognition signifi-
+                                        Segmental conditional random fields (SCRFs) and connection-        cantly. They do not require intermediate alignment or segmen-
+                                        ist temporal classification (CTC) are two sequence labeling        tation like HMMs, instead, the alignment or segmentation is
+                                        methods used for end-to-end training of speech recognition         marginalized out during training for CTC and SCRF or inferred
+                                        models. Both models define a transcription probability by          by the attention mechanism. In terms of the recognition accu-
+
+
+
+
+arXiv:1702.06378v4 [cs.CL] 5 Jun 2017
+                                        marginalizing decisions about latent segmentation alternatives     racy, however, the end-to-end models usually lag behind their
+                                        to derive a sequence probability: the former uses a globally       HMM-based counterparts. Though CTC has been shown to out-
+                                        normalized joint model of segment labels and durations, and        perform HMM systems [14], the improvement is based on the
+                                        the latter classifies each frame as either an output symbol or a   use of context-dependent phone targets and a very large amount
+                                        “continuation” of the previous label. In this paper, we train a    of training data. Therefore, it has almost the same system com-
+                                        recognition model by optimizing an interpolation between the       plexity as HMM acoustic models. When the training data is less
+                                        SCRF and CTC losses, where the same recurrent neural net-          abundant, it has been shown that the accuracy of CTC systems
+                                        work (RNN) encoder is used for feature extraction for both out-    degrades significantly [15].
+                                        puts. We find that this multitask objective improves recognition        However, end-to-end models have the flexibility to be com-
+                                        accuracy when decoding with either the SCRF or CTC models.         bined to mitigate their individual weaknesses. For instance,
+                                        Additionally, we show that CTC can also be used to pretrain        multitask learning with attention models has been investigated
+                                        the RNN encoder, which improves the convergence rate when          for machine translation [16], and Mandarin speech recognition
+                                        learning the joint model.                                          using joint Character-Pinyin training [17]. In [18], Kim et al.
+                                        Index Terms: speech recognition, end-to-end training, CTC,         proposed a multitask learning approach to train a joint atten-
+                                        segmental RNN                                                      tion model and a CTC model using a shared encoder. They
+                                                                                                           showed that the CTC auxiliary task can help the attention model
+                                                                                                           to overcome the misalignment problem in the initial few epochs,
+                                                            1. Introduction                                and speed up the convergence of the attention model. Another
+                                        State-of-the-art speech recognition accuracy has significantly     nice property of the multitask learning approach is that the joint
+                                        improved over the past few years since the application of deep     model can still be trained end-to-end. Inspired by this work, we
+                                        neural networks [1, 2]. Recently, it has been shown that           study end-to-end training of a joint CTC and SCRF model using
+                                        with the application of both neural network acoustic model         an interpolated loss function. The key difference of our study
+                                        and language model, an automatic speech recognizer can ap-         from [18] is that the two loss functions of the CTC and attention
+                                        proach human-level accuracy on the Switchboard conversa-           models are locally normalized for each output token, and they
+                                        tional speech recognition benchmark using around 2,000 hours       are both trained using the cross entropy criterion. However, the
+                                        of transcribed data [3]. While progress is mainly driven by well   SCRF loss function is normalized at the sequence-level, which
+                                        engineered neural network architectures and a large amount of      is similar to the sequence discriminative training objective func-
+                                        training data, the hidden Markov model (HMM) that has been         tion for HMMs. From this perspective, the interpolation of CTC
+                                        the backbone for speech recognition for decades is still playing   and SCRF loss functions is analogous to the sequence discrim-
+                                        a central role. Though tremendously successful for the problem     inative training of HMMs with CE regularization to overcome
+                                        of speech recognition, the HMM-based pipeline factorizes the       overfitting, where a sequence-level loss is also interpolated with
+                                        whole system into several components, and building these com-      a frame-level loss, e.g., [19]. Similar to the observations in [18],
+                                        ponents separately may be less computationally efficient when      we demonstrate that the joint training approach improves the
+                                        developing a large-scale system from thousands to hundred of       recognition accuracies of both CTC and SCRF acoustic mod-
+                                        thousands of examples [4].                                         els. Further, we also show that CTC can be used to pretrain the
+                                             Recently, along with hybrid HMM/NN frameworks for             neural network feature extractor to speed up the convergence
+                                        speech recognition, there has been increasing interest in end-     of the joint model. Experiments were performed on the TIMIT
+                                        to-end training approaches. The key idea is to directly map        database.
+                                        the input acoustic frames to output characters or words without
+                                        the intermediate alignment to context-dependent phones used          2. Segmental Conditional Random Fields
+                                        by HMMs. In particular, three architectures have been pro-
+                                        posed for the goal of end-to-end learning: connectionist tem-      SCRF is a variant of the linear-chain CRF model where each
+                                        poral classification (CTC) [5, 6, 7, 8], sequence-to-sequence      output token corresponds to a segment of input tokens instead
+                                        with attention model [9, 10, 11], and neural network segmen-       of a single input instance. In the context of speech recog-
+                                        tal conditional random field (SCRF) [12, 13]. These end-to-        nition, given a sequence of input vectors of T frames X =
+(x1 , · · · , xT ) and its corresponding sequence of output labels    updated hidden state vector. Given the recurrent hidden states,
+y = (y1 , · · · , yJ ), the zero-order linear-chain CRF defines the   the embedding vector can be simply defined as x̄j = hnj as
+sequence-level conditional probability as                             in our previous work [13]. However, the drawback of this im-
+                                                                      plementation is the large memory cost, as we need to store the
+                                     T
+                             1 Y                                      array of hidden states (hsj , · · · , hnj ) for all the possible seg-
+           P (y | X) =              exp f (yt , xt ) ,         (1)    ments hsj , nj i. If we denote H as the dimension of an RNN
+                           Z(X) t=1
+                                                                      hidden state, the memory cost will be on the order of O(T 2 H),
+where Z(X) denotes the normalization term, and T = J.                 where T is the length of X. It is especially problematic for
+Extension to higher order models is straightforward, but it is        the joint model as the CTC model requires additional memory
+usually computationally much more expensive. The model de-            space. In this work, we adopt another approach that requires
+fined in Eq. (1) requires the length of X and y to be equal,          much less memory. In this approach, we use an RNN to read
+which makes it inappropriate for speech recognition because the       the whole input sequence as
+lengths of the input and output sequences are not equal. For the                    
+                                                                                        h1
+                                                                                             
+                                                                                                      RNN(h0 , x1 )
+                                                                                                                            
+case where T ≥ J as in speech recognition, SCRF defines the                          h2   RNN(h1 , x2 )                  
+sequence-level conditional probability with the auxiliary seg-                       ..  = 
+                                                                                            
+                                                                                                               ..
+                                                                                                                            
+                                                                                                                                       (6)
+ment labels E = (e1 , · · · , eJ ) as                                                .                       .           
+                                                                                        hT            RNN(hT −1 , xT )
+                                     J
+                             1 Y
+        P (y, E | X) =              exp f (yj , ej , x̄j ) ,   (2)    and we define the embedding vector for segment e = hk, ti as
+                           Z(X) j=1
+                                                                                                         
+                                                                                                    h sj
+where ej = hsj , nj i is a tuple of the beginning (sj ) and the                             x̄j =                               (7)
+                                                                                                    hnj
+end (nj ) time tag for the segment of yj , and nj > sj while
+nj , sj ∈ [1, T ]; yj ∈ Y and Y denotes the vocabulary set; x̄j is    In this case, we only provide the context information for the fea-
+the embedding vector of the segment corresponding to the token        ture function Φ(·) to extract segmental features. We refer this
+yj . In this case, Z(X) sums over all the possible (y, E) pairs,      approach as context-aware embedding. Since we only need to
+i.e.,                                                                 read the input sequence once, the memory requirement is on the
+                                                                      order of O(T H), which is much smaller. The cost, however, is
+                      J
+                     XY                                               the slightly degradation of the recognition accuracy. This model
+          Z(X) =               exp f (yj , ej , x̄j ) .        (3)
+                                                                      is illustrated by Figure 1.
+                     y,E j=1
+                                                                            The feature function Φ(·) also requires a vector represen-
+Similar to other CRFs, the function f (·) is defined as               tation of the label yj . This embedding vector can be obtained
+                                                                      using a linear embedding matrix, following common practice
+           f (yj , ej , x̄t ) = w> Φ(yj , ej , x̄j ),          (4)    for RNN language models. More specifically, yj is first rep-
+                                                                      resented as a one-hot vector vj , and it is then mapped into a
+where Φ(·) denotes the feature function, and w is the weight          continuous space by a linear embedding matrix M as
+vector. Most of conventional approaches for SCRF-based
+acoustic models use a manually defined feature function Φ(·),                                 uj = M v j                               (8)
+where the features and segment boundary information are pro-          Given the acoustic embedding x̄j and label embedding uj , the
+vided by an auxiliary system [20, 21]. In [22, 13], we proposed       feature function Φ(·) can be represented as
+an end-to-end training approach for SCRFs, where Φ(·) was
+defined with neural networks, and the segmental level features                   Φ(yj , ej , x̄j ) = σ(W1 uj + W2 x̄j + b),            (9)
+were learned by RNNs. The model was referred to as the seg-
+mental RNN (SRNN), and it will be used as the implementation          where σ denotes a non-linear activation function (e.g., sigmoid
+of the SCRF acoustic model for multitask learning in this study.      or tanh); W1 , W2 and b are weight matrices and a bias vector.
+                                                                      Eq. (9) corresponds to one layer of non-linear transformation.
+2.1. Feature Function and Acoustic Embedding                          In fact, it is straightforward to stack multiple nonlinear layers in
+                                                                      this feature function.
+SRNN uses an RNN to learn segmental level acoustic embed-
+dings. Given the input sequence X = (x1 , · · · , xT ), and
+                                                                      2.2. Loss Function
+we need to compute the embedding vector x̄j in Eq. (4) cor-
+responding to the segment ej = hsj , nj i. Since the segment          For speech recognition, the segmentation labels E are usually
+boundaries are known, it is straightforward to employ an RNN          unknown in the training set. In this case, we cannot train the
+to map the segment into a vector as                                   model directly by maximizing the conditional probability in Eq.
+                                                                  (2). However, the problem can be addressed by marginalizing
+              hsj              RNN(h0 , xsj )                         out the segmentation variable as
+            hsj +1   RNN(hsj , xsj +1 ) 
+                     =                                  (5)           Lscrf = − log P (y | X)
+                                               
+            ..                        ..         
+            .                        .                                            X
+              hnj              RNN(hnj −1 , xnj )                             = − log     P (y, E | X)
+                                                                                         E
+where h0 denotes the initial hidden state, which is initialized
+                                                                                        XY
+                                                                              = − log             exp f (yj , ej , x̄j ) + log Z(X), (10)
+to be zero. RNN(·) denotes the nonlinear recurrence operation                            E    j
+used in an RNN, which takes the previous hidden state and the                           |             {z           }
+feature vector at the current timestep as inputs, and produce an                                   Z(X,y)
+           y1                      y2                 y3              Table 1: Phone error rates of baseline CTC and SRNN models.
+
+                                                                           Model     Features     #Layer    Dim      dev     eval
+                                                                           SRNN      FBANK          3       128      19.2    20.5
+                                                                           SRNN      fMLLR          3       128      17.6    19.2
+                                                                           SRNN      FBANK          3       250      18.1    20.0
+                                                                           SRNN      fMLLR          3       250      16.6    17.9
+                                                                            CTC      FBANK          3       128      20.0    21.8
+                                                                            CTC      fMLLR          3       128      17.7    18.4
+                                                                            CTC      FBANK          3       250      17.7    19.9
+                                                                            CTC      fMLLR          3       250      16.7    17.8
+
+
+      x1        x2       x3       x4          x5      x6                    Table 2: Results of three types of acoustic features.
+
+                                                                               Model        Features    Dim     dev     eval
+                copy action             copied hidden state
+                                                                               SRNN         FBANK       250     18.1    20.0
+Figure 1: A segmental RNN with context-aware embedding. The                      +MTL       FBANK       250     17.5    18.7
+acoustic segmental embedding vector is composed by the hid-                    SRNN         fMLLR       250     16.6    17.9
+den states from the RNN encoder corresponding to the begin-                      +MTL       fMLLR       250     15.9    17.5
+ning and end time tags.                                                        CTC          FBANK       250     17.7    19.9
+                                                                                 +MTL       FBANK       250     17.2    18.9
+where Z(X, y) denotes the summation over all the possible                      CTC          fMLLR       250     16.7    17.8
+segmentations when only y is observed. To simplify notation,                     +MTL       fMLLR       250     16.2    17.4
+the objective function Lscrf is defined here with only one train-
+ing utterance.
+     However, the number of possible segmentations is exponen-        which can be reformulated as the CE criterion. More details
+tial in the length of X, which makes the naı̈ve computation of        regarding the computation of the loss and the backpropagation
+both Z(X, y) and Z(X) impractical. To address this problem,           algorithm to train CTC models can be found in [24].
+a dynamic programming algorithm can be applied, which can
+reduce the computational complexity to O(T 2 · |Y|) [23]. The
+computational cost can be further reduced by limiting the maxi-
+                                                                                     4. Joint Training Loss
+mum length of all the possible segments. The reader is referred       Training the two models jointly is trivial. We can simply inter-
+to [13] for further details including the decoding algorithm.         polate the CTC and SCRF loss functions as
+
+  3. Connectionist Temporal Classification                                             L = λLctc + (1 − λ)Lscrf ,                   (14)
+CTC also directly computes the conditional probability P (y |
+X), with the key difference from SCRF in that it normalizes           where λ ∈ [0, 1] is the interpolation weight. The two mod-
+the probabilistic distribution at the frame level. To address the     els share the same neural network for feature extraction. In
+problem of length mismatch between the input and output se-           this work, we focus on the RNN with long short-term memory
+quences, CTC allows repetitions of output labels and introduces       (LSTM) [25] units for feature extraction. Other types of neural
+a special blank token (−), which represents the probability of        architecture, e.g., convolutional neural network (CNN) or com-
+not emitting any label at a particular time step. The conditional     binations of CNN and RNN, may be considered in future work.
+probability is then obtained by summing over all the probabil-
+ities of all the paths that corresponding to y after merging the
+repeated labels and removing the blank tokens, i.e.,                                      5. Experiments
+                                 X
+                 P (y | X) =           P (π | X),            (11)     Our experiments were performed on the TIMIT database, and
+                              π∈Ψ(y)
+                                                                      both the SRNN and CTC models were implemented using the
+                                                                      DyNet toolkit [26]. We followed the standard protocol of the
+where Ψ(y) denotes the set of all possible paths that correspond      TIMIT dataset, and our experiments were based on the Kaldi
+to y after repetitions of labels and insertions of the blank token.   recipe [27]. We used the core test set as our evaluation set,
+Now the length of π is the same as X, the probability P (π |          which has 192 utterances. Our models were trained with 48
+X) is then approximated by the independence assumption as             phonemes, and their predictions were converted to 39 phonemes
+                                                                      before scoring. The dimension of uj was fixed to be 64, and the
+                                T
+                                Y                                     dimension of w in Eq. (4) is also 64. We set the initial SGD
+                  P (π | X) ≈         P (πt | xt ),           (12)
+                                                                      learning rate to be 0.1, and we exponentially decay the learning
+                                t=1
+                                                                      rate by 0.75 when the validation error stopped decreasing. We
+where πt ranges over Y ∪{−}, and P (πt | xt ) can be computed         also subsampled the acoustic sequence by a factor of 4 using
+using the softmax function. The training criterion for CTC is to      the hierarchical RNN as in [13]. Our models were trained with
+maximize the conditional probability of the ground truth labels,      dropout regularization [28], using a specific implementation for
+which is equivalent to minimizing the negative log likelihood:        recurrent networks [29]. The dropout rate was 0.2 unless spec-
+                                                                      ified otherwise. Our models were randomly initialized with the
+                     Lctc = − log P (y | X),                  (13)    same random seed.
+
